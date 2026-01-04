@@ -33,8 +33,8 @@ export default function GameProvider({ children }) {
   
   const loadGameState = async () => {
     try {
-      const states = await base44.entities.GameState.list();
-      if (states.length === 0) {
+      const states = await base44.entities.GameState.list('-created_date', 1);
+      if (!states || states.length === 0) {
         // Initialize new game
         const newState = await base44.entities.GameState.create({
           credits: 5000,
@@ -51,13 +51,27 @@ export default function GameProvider({ children }) {
           highestTier: 'Unregistered'
         });
         setGameState(newState);
-        addMessage('M.A.N.I. system initialized. Welcome, Commander.');
+        setMessages(['M.A.N.I. system initialized. Welcome, Commander.']);
       } else {
         setGameState(states[0]);
-        addMessage('M.A.N.I. system online. Status: Operational.');
+        setMessages(['M.A.N.I. system online. Status: Operational.']);
       }
     } catch (error) {
       console.error('Failed to load game state:', error);
+      // Initialize with default state if network fails
+      setGameState({
+        credits: 5000,
+        fuel: 100,
+        parts: {
+          'Box of Tangled Wire': 5,
+          'Rusty Screws': 3,
+          'Wire Splice (Gum)': 2
+        },
+        tutorialCompleted: false,
+        autoResolve: false,
+        highestTier: 'Unregistered'
+      });
+      setMessages(['M.A.N.I. system online (offline mode).']);
     } finally {
       setLoading(false);
     }
@@ -79,10 +93,11 @@ export default function GameProvider({ children }) {
   };
   
   const processTick = async () => {
-    // Process active missions
-    const missions = await base44.entities.Mission.filter({ status: 'active' });
-    
-    for (const mission of missions) {
+    try {
+      // Process active missions
+      const missions = await base44.entities.Mission.filter({ status: 'active' }, '-created_date', 50);
+      
+      for (const mission of missions) {
       const startTime = new Date(mission.startTime);
       const now = new Date();
       const hoursElapsed = Math.floor((now - startTime) / (1000 * 60 * 60));
@@ -113,58 +128,65 @@ export default function GameProvider({ children }) {
     // Check for daily fuel refill
     await checkDailyFuelRefill();
     
-    // Check for market reset (every 6 hours)
-    await checkMarketReset();
+      // Check for market reset (every 6 hours)
+      await checkMarketReset();
+    } catch (error) {
+      console.error('Error processing tick:', error);
+    }
   };
   
   const rollForDamage = async (ship, mission) => {
-    const tierDamageChance = {
-      'Unregistered': 0.30,
-      'Known': 0.25,
-      'Notorious': 0.20,
-      'Esteemed': 0.15,
-      'Renowned': 0.10,
-      'Legendary': 0.05
-    };
-    
-    const damageChance = tierDamageChance[ship.tier] || 0.30;
-    
-    if (Math.random() < damageChance) {
-      if (ship.damaged) {
-        // Ship was already damaged - destroy it
-        await base44.entities.Ship.update(ship.id, { 
-          status: 'destroyed',
-          health: 0
-        });
-        await base44.entities.Mission.update(mission.id, { status: 'failed' });
-        addMessage(`${ship.name} has been destroyed!`);
-        setCurrentEvent({
-          type: 'explosion',
-          shipName: ship.name,
-          intensity: 2
-        });
-      } else {
-        // First damage
-        await base44.entities.Ship.update(ship.id, { 
-          damaged: true,
-          health: 50,
-          status: 'damaged'
-        });
-        addMessage(`${ship.name} has taken damage!`);
-        
-        // Create decision event
-        setCurrentEvent({
-          title: `${ship.name} Damaged`,
-          description: 'The ship has sustained damage. Recall for repairs or continue mission?',
-          choices: [
-            { id: 'recall', label: 'RECALL', primary: true },
-            { id: 'continue', label: 'CARRY ON' }
-          ],
-          shipId: ship.id,
-          missionId: mission.id,
-          type: 'damage'
-        });
+    try {
+      const tierDamageChance = {
+        'Unregistered': 0.30,
+        'Known': 0.25,
+        'Notorious': 0.20,
+        'Esteemed': 0.15,
+        'Renowned': 0.10,
+        'Legendary': 0.05
+      };
+      
+      const damageChance = tierDamageChance[ship.tier] || 0.30;
+      
+      if (Math.random() < damageChance) {
+        if (ship.damaged) {
+          // Ship was already damaged - destroy it
+          await base44.entities.Ship.update(ship.id, { 
+            status: 'destroyed',
+            health: 0
+          });
+          await base44.entities.Mission.update(mission.id, { status: 'failed' });
+          addMessage(`${ship.name} has been destroyed!`);
+          setCurrentEvent({
+            type: 'explosion',
+            shipName: ship.name,
+            intensity: 2
+          });
+        } else {
+          // First damage
+          await base44.entities.Ship.update(ship.id, { 
+            damaged: true,
+            health: 50,
+            status: 'damaged'
+          });
+          addMessage(`${ship.name} has taken damage!`);
+          
+          // Create decision event
+          setCurrentEvent({
+            title: `${ship.name} Damaged`,
+            description: 'The ship has sustained damage. Recall for repairs or continue mission?',
+            choices: [
+              { id: 'recall', label: 'RECALL', primary: true },
+              { id: 'continue', label: 'CARRY ON' }
+            ],
+            shipId: ship.id,
+            missionId: mission.id,
+            type: 'damage'
+          });
+        }
       }
+    } catch (error) {
+      console.error('Error rolling for damage:', error);
     }
   };
   

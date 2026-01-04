@@ -16,8 +16,13 @@ export default function FleetManagement() {
   }, []);
   
   const loadShips = async () => {
-    const allShips = await base44.entities.Ship.filter({ isHired: true });
-    setShips(allShips);
+    try {
+      const allShips = await base44.entities.Ship.filter({ isHired: true }, '-created_date', 50);
+      setShips(allShips || []);
+    } catch (error) {
+      console.error('Error loading ships:', error);
+      setShips([]);
+    }
   };
   
   const getRepairCost = (ship) => {

@@ -33,9 +33,10 @@ export default function Main() {
   }, [gameState]);
   
   const loadActiveMissions = async () => {
-    const missions = await base44.entities.Mission.filter({ status: 'active' });
-    
-    const missionsWithTime = missions.map(mission => {
+    try {
+      const missions = await base44.entities.Mission.filter({ status: 'active' }, '-created_date', 20);
+      
+      const missionsWithTime = missions.map(mission => {
       const startTime = new Date(mission.startTime);
       const now = new Date();
       const elapsed = Math.floor((now - startTime) / (1000 * 60 * 60));
@@ -45,9 +46,13 @@ export default function Main() {
         ...mission,
         timeRemaining: `${Math.floor(remaining)}h ${Math.floor((remaining % 1) * 60)}m`
       };
-    });
-    
-    setActiveMissions(missionsWithTime);
+      });
+      
+      setActiveMissions(missionsWithTime);
+    } catch (error) {
+      console.error('Error loading missions:', error);
+      setActiveMissions([]);
+    }
   };
   
   const loadMarketPreview = () => {

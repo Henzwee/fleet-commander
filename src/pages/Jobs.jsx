@@ -18,8 +18,13 @@ export default function Jobs() {
   
   const loadData = async () => {
     generateMissions();
-    const ships = await base44.entities.Ship.filter({ status: 'idle', isHired: true });
-    setIdleShips(ships);
+    try {
+      const ships = await base44.entities.Ship.filter({ status: 'idle', isHired: true }, '-created_date', 50);
+      setIdleShips(ships || []);
+    } catch (error) {
+      console.error('Error loading ships:', error);
+      setIdleShips([]);
+    }
   };
   
   const generateMissions = () => {
