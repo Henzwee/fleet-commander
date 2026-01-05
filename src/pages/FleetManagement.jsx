@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useGame } from '../components/game/GameProvider';
 import DeviceFrame from '../components/game/DeviceFrame';
+import BottomNav from '../components/game/BottomNav';
 import ShipCard from '../components/game/ShipCard';
-import { Wrench, UserMinus, Package } from 'lucide-react';
+import { Heart, Wrench, UserMinus, Package } from 'lucide-react';
 
 export default function FleetManagement() {
   const { gameState, updateGameState, addMessage } = useGame();
@@ -99,7 +100,7 @@ export default function FleetManagement() {
   
   return (
     <DeviceFrame title="FLEET">
-      <div className="p-4 overflow-y-auto h-full">
+      <div className="p-4 pb-24 overflow-y-auto h-full">
         <div className="bg-gradient-to-r from-gray-900 to-gray-800 border-2 border-cyan-500/50 rounded-lg p-4 mb-4">
           <div className="flex items-center justify-between">
             <div className="text-cyan-400 font-bold">YOUR FLEET</div>
@@ -176,8 +177,10 @@ export default function FleetManagement() {
               </div>
             ))}
           </div>
-          )}
-          </div>
-          </DeviceFrame>
-          );
-          }
+        )}
+      </div>
+      
+      <BottomNav active="ships" />
+    </DeviceFrame>
+  );
+}

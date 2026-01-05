@@ -6,16 +6,57 @@ import { Home } from 'lucide-react';
 export default function DeviceFrame({ children, title = "M.A.N.I.", debug = false }) {
   const navigate = useNavigate();
   
+  const frameVars = {
+    '--frame-slice': '72px',
+    '--title-x': '50%',
+    '--title-y': '3.8%',
+    '--home-x': '88.5%',
+    '--home-y': '3.8%',
+    '--fleet-x': '18.5%',
+    '--fleet-y': '96.2%',
+    '--jobs-x': '81.5%',
+    '--jobs-y': '96.2%',
+    '--title-nudge-x': '0px',
+    '--title-nudge-y': '0px',
+    '--home-nudge-x': '0px',
+    '--home-nudge-y': '0px',
+    '--fleet-nudge-x': '0px',
+    '--fleet-nudge-y': '0px',
+    '--jobs-nudge-x': '0px',
+    '--jobs-nudge-y': '0px'
+  };
+  
   return (
-    <div className="app">
-      <div className={`frame-wrap ${debug ? 'debug' : ''}`}>
-        {/* Main Content Screen - fills interior opening */}
-        <div className={`screen ${debug ? 'debug-outline' : ''}`}>
-          {children}
-        </div>
+    <div className="min-h-screen bg-black flex items-center justify-center p-2 overflow-hidden">
+      <div 
+        className={`frame-wrap relative ${debug ? 'debug' : ''}`}
+        style={{
+          width: 'min(430px, 96vw)',
+          height: 'min(930px, 96svh)',
+          ...frameVars
+        }}
+      >
+        {/* Frame overlay using border-image */}
+        <div 
+          className="frame-overlay absolute inset-0 pointer-events-none"
+          style={{
+            borderImage: 'url(https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695af5ca435140b76c0dadc9/4bbe613b0_framebeta.png) 72 fill stretch',
+            borderWidth: '72px',
+            borderStyle: 'solid'
+          }}
+        />
         
-        {/* Overlay elements */}
-        <div className={`overlay overlay-title ${debug ? 'debug-outline' : ''}`}>
+        {/* Top Center Screen - M.A.N.I. Title */}
+        <div 
+          className={`top-title absolute z-20 flex items-center justify-center ${debug ? 'debug-outline' : ''}`}
+          style={{
+            left: 'calc(var(--title-x) + var(--title-nudge-x))',
+            top: 'calc(var(--title-y) + var(--title-nudge-y))',
+            transform: 'translate(-50%, -50%)',
+            width: '30%',
+            height: '5%'
+          }}
+        >
           <h1 
             className="font-bold text-white tracking-[0.3em] uppercase"
             style={{ 
@@ -28,10 +69,17 @@ export default function DeviceFrame({ children, title = "M.A.N.I.", debug = fals
           </h1>
         </div>
         
+        {/* Top Right Screen - Home Button */}
         <button
           onClick={() => navigate(createPageUrl('Main'))}
-          className={`overlay overlay-home ${debug ? 'debug-outline' : ''}`}
-          aria-label="Home"
+          className={`home-btn absolute z-20 flex items-center justify-center hover:opacity-80 transition-opacity ${debug ? 'debug-outline' : ''}`}
+          style={{
+            left: 'calc(var(--home-x) + var(--home-nudge-x))',
+            top: 'calc(var(--home-y) + var(--home-nudge-y))',
+            transform: 'translate(-50%, -50%)',
+            width: 'clamp(40px, 8%, 60px)',
+            height: 'clamp(30px, 5%, 45px)'
+          }}
         >
           <Home 
             className="text-amber-400" 
@@ -39,9 +87,30 @@ export default function DeviceFrame({ children, title = "M.A.N.I.", debug = fals
           />
         </button>
         
+        {/* Main Content Screen - Center scrollable area */}
+        <div 
+          className="screen absolute bg-gradient-to-br from-[#0a1628] to-[#050a14] scanline overflow-hidden"
+          style={{
+            top: 'calc(var(--frame-slice) + 2%)',
+            left: 'calc(var(--frame-slice) - 8px)',
+            right: 'calc(var(--frame-slice) - 8px)',
+            bottom: 'calc(var(--frame-slice) + 18%)'
+          }}
+        >
+          {children}
+        </div>
+        
+        {/* Bottom Left Screen - Fleet Button (blue-ish) */}
         <button
           onClick={() => navigate(createPageUrl('FleetManagement'))}
-          className={`overlay overlay-fleet ${debug ? 'debug-outline' : ''}`}
+          className={`nav-fleet absolute z-20 flex items-center justify-center bg-cyan-500/20 hover:bg-cyan-500/40 border border-cyan-500/50 rounded transition-all ${debug ? 'debug-outline' : ''}`}
+          style={{
+            left: 'calc(var(--fleet-x) + var(--fleet-nudge-x))',
+            top: 'calc(var(--fleet-y) + var(--fleet-nudge-y))',
+            transform: 'translate(-50%, -50%)',
+            width: 'clamp(60px, 18%, 90px)',
+            height: 'clamp(35px, 6%, 50px)'
+          }}
         >
           <span 
             className="font-bold text-cyan-100 uppercase tracking-wider"
@@ -51,9 +120,17 @@ export default function DeviceFrame({ children, title = "M.A.N.I.", debug = fals
           </span>
         </button>
         
+        {/* Bottom Right Screen - Jobs Button (orange-ish) */}
         <button
           onClick={() => navigate(createPageUrl('Jobs'))}
-          className={`overlay overlay-jobs ${debug ? 'debug-outline' : ''}`}
+          className={`nav-jobs absolute z-20 flex items-center justify-center bg-amber-500/20 hover:bg-amber-500/40 border border-amber-500/50 rounded transition-all ${debug ? 'debug-outline' : ''}`}
+          style={{
+            left: 'calc(var(--jobs-x) + var(--jobs-nudge-x))',
+            top: 'calc(var(--jobs-y) + var(--jobs-nudge-y))',
+            transform: 'translate(-50%, -50%)',
+            width: 'clamp(60px, 18%, 90px)',
+            height: 'clamp(35px, 6%, 50px)'
+          }}
         >
           <span 
             className="font-bold text-amber-100 uppercase tracking-wider"
@@ -62,9 +139,6 @@ export default function DeviceFrame({ children, title = "M.A.N.I.", debug = fals
             Jobs
           </span>
         </button>
-        
-        {/* CRITICAL: Frame overlay - must exist for border-image to render */}
-        <div className="frame"></div>
       </div>
     </div>
   );
