@@ -34,7 +34,9 @@ export default function FleetManagement() {
       'Renowned': 7,
       'Legendary': 8
     };
-    return tierCosts[ship.tier] || 3;
+    const baseCost = tierCosts[ship.tier] || 3;
+    const damagePercent = (100 - ship.health) / 100;
+    return Math.ceil(baseCost * damagePercent);
   };
   
   const handleRepair = async (ship) => {
