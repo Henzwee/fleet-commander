@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useGame } from '../components/game/GameProvider';
 import DeviceFrame from '../components/game/DeviceFrame';
-import BottomNav from '../components/game/BottomNav';
 import ShipCard from '../components/game/ShipCard';
 import { Heart, Wrench, UserMinus, Package, Check, X } from 'lucide-react';
 import { getRequiredPartCountFromDamage, generateRequiredParts, hasParts, consumeParts } from '../components/game/PartsCatalog';
