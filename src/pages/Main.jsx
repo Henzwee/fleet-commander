@@ -94,7 +94,7 @@ export default function Main() {
         />
       )}
       
-      <div className="p-4 pb-20 overflow-y-auto" style={{ height: 'calc(100vh - 180px)' }}>
+      <div className="p-4 pb-20 overflow-y-auto h-full">
         <MANIConsole 
           messages={messages}
           autoResolve={gameState?.autoResolve}
@@ -137,9 +137,7 @@ export default function Main() {
         />
       </div>
       
-      <div className="fixed bottom-0 left-0 right-0">
-        <BottomNav active="main" />
-      </div>
+      <BottomNav active="main" />
     </DeviceFrame>
   );
 }

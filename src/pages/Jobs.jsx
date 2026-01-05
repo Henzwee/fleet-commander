@@ -99,7 +99,7 @@ export default function Jobs() {
   
   return (
     <DeviceFrame title="JOBS">
-      <div className="p-4 pb-24 overflow-y-auto" style={{ height: 'calc(100vh - 180px)' }}>
+      <div className="p-4 pb-24 overflow-y-auto h-full">
         <div className="bg-gradient-to-r from-gray-900 to-gray-800 border-2 border-cyan-500/50 rounded-lg p-4 mb-4">
           <div className="flex items-center justify-between">
             <div className="text-cyan-400 font-bold">AVAILABLE MISSIONS</div>
@@ -188,9 +188,7 @@ export default function Jobs() {
         )}
       </div>
       
-      <div className="fixed bottom-0 left-0 right-0">
-        <BottomNav active="jobs" />
-      </div>
+      <BottomNav active="jobs" />
     </DeviceFrame>
   );
 }

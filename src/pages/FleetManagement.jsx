@@ -100,7 +100,7 @@ export default function FleetManagement() {
   
   return (
     <DeviceFrame title="FLEET">
-      <div className="p-4 pb-24 overflow-y-auto" style={{ height: 'calc(100vh - 180px)' }}>
+      <div className="p-4 pb-24 overflow-y-auto h-full">
         <div className="bg-gradient-to-r from-gray-900 to-gray-800 border-2 border-cyan-500/50 rounded-lg p-4 mb-4">
           <div className="flex items-center justify-between">
             <div className="text-cyan-400 font-bold">YOUR FLEET</div>
@@ -180,9 +180,7 @@ export default function FleetManagement() {
         )}
       </div>
       
-      <div className="fixed bottom-0 left-0 right-0">
-        <BottomNav active="ships" />
-      </div>
+      <BottomNav active="ships" />
     </DeviceFrame>
   );
 }

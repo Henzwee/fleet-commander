@@ -135,7 +135,7 @@ export default function Market() {
   
   return (
     <DeviceFrame title="STORE">
-      <div className="p-4 pb-24 overflow-y-auto" style={{ height: 'calc(100vh - 180px)' }}>
+      <div className="p-4 pb-24 overflow-y-auto h-full">
         <div className="bg-gradient-to-r from-gray-900 to-gray-800 border-2 border-cyan-500/50 rounded-lg p-4 mb-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <ShoppingCart className="w-5 h-5 text-amber-400" />
@@ -200,9 +200,7 @@ export default function Market() {
         </div>
       </div>
       
-      <div className="fixed bottom-0 left-0 right-0">
-        <BottomNav active="market" />
-      </div>
+      <BottomNav active="market" />
     </DeviceFrame>
   );
 }

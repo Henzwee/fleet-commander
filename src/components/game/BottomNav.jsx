@@ -11,7 +11,7 @@ export default function BottomNav({ active }) {
   ];
   
   return (
-    <div className="bg-gradient-to-r from-gray-900 to-gray-800 border-t-2 border-cyan-500/30 p-2 flex items-center justify-around">
+    <div className="absolute bottom-0 left-0 right-0 p-3 flex items-center justify-around gap-2">
       {tabs.map(tab => {
         const Icon = tab.icon;
         const isActive = active === tab.id;
@@ -20,14 +20,14 @@ export default function BottomNav({ active }) {
           <Link
             key={tab.id}
             to={createPageUrl(tab.page)}
-            className={`flex flex-col items-center gap-1 px-4 py-2 rounded-lg transition-all ${
+            className={`flex flex-col items-center gap-1 px-3 py-2 rounded transition-all ${
               isActive 
-                ? 'bg-cyan-500/20 border border-cyan-500 text-cyan-400' 
-                : 'text-gray-500 hover:text-cyan-400 hover:bg-cyan-500/10'
+                ? 'bg-amber-500/30 text-amber-400' 
+                : 'text-gray-400 hover:text-cyan-400 hover:bg-cyan-500/20'
             }`}
           >
-            <Icon className="w-5 h-5" />
-            <span className="text-xs font-bold tracking-wide">{tab.label}</span>
+            <Icon className="w-4 h-4" />
+            <span className="text-[0.6rem] font-bold tracking-wider uppercase">{tab.label}</span>
           </Link>
         );
       })}

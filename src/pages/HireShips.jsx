@@ -86,7 +86,7 @@ export default function HireShips() {
   
   return (
     <DeviceFrame title="HIRE SHIPS">
-      <div className="p-4 pb-20 overflow-y-auto" style={{ height: 'calc(100vh - 180px)' }}>
+      <div className="p-4 pb-20 overflow-y-auto h-full">
         <div className="flex items-center justify-between mb-4">
           <button
             onClick={() => navigate(createPageUrl('Main'))}
