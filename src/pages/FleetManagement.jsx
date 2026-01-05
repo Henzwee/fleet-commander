@@ -58,18 +58,16 @@ export default function FleetManagement() {
     return tierParts[tier] || 3;
   };
   
-  const getUsableParts = (ship) => {
-    const baseParts = getBaseParts(ship.tier);
-    const damagePercent = 100 - ship.health;
-    
-    if (damagePercent >= 100) return 0;
-    
-    const penalty =
-      damagePercent >= 75 ? 3 :
-      damagePercent >= 50 ? 2 :
-      damagePercent >= 25 ? 1 : 0;
-    
-    return Math.max(0, baseParts - penalty);
+  const getRange = (tier) => {
+    const tierRanges = {
+      'Unregistered': 500,
+      'Known': 1000,
+      'Notorious': 5000,
+      'Esteemed': 10000,
+      'Renowned': 50000,
+      'Legendary': 100000
+    };
+    return tierRanges[tier] || 500;
   };
   
   const getRepairCost = (ship) => {
@@ -214,9 +212,9 @@ export default function FleetManagement() {
                             </div>
                           </div>
                           <div>
-                            <div className="text-gray-400">Usable Parts</div>
+                            <div className="text-gray-400">Range</div>
                             <div className="text-cyan-400 font-bold">
-                              {getUsableParts(ship)}/{getBaseParts(ship.tier)}
+                              {getRange(ship.tier).toLocaleString()} ly
                             </div>
                           </div>
                         </div>
