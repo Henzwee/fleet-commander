@@ -92,7 +92,7 @@ export default function Main() {
         />
       )}
 
-      <div className="flex flex-col h-full p-4 space-y-4 overflow-y-auto pb-24">
+      <div className="flex flex-col h-full p-4 space-y-4 overflow-y-auto">
         {/* Message Console */}
         <div className="bg-gradient-to-br from-cyan-900/30 to-blue-900/30 border-2 border-cyan-600/50 rounded-2xl p-4">
           <div className="space-y-2 text-sm text-cyan-100/90 font-mono max-h-32 overflow-y-auto">

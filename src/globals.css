@@ -90,6 +90,7 @@ body {
 
   /* ==============================================
      FRAME OVERLAY POSITIONING SYSTEM
+     DO NOT DELETE - Controls device frame sizing and overlay alignment
      ============================================== */
 
   :root {
@@ -123,26 +124,25 @@ body {
     --jobs-nudge-y: 0px;
   }
 
-  /* Frame container - scalable wrapper */
+  /* Frame container - phone-sized device wrapper */
   .frame-wrap {
     position: relative;
     width: min(430px, 96vw);
     height: min(930px, 96svh);
+    height: min(930px, 96dvh); /* fallback for dynamic viewport */
   }
 
   /* Main content screen - fills interior opening */
   .frame-wrap .screen {
     position: absolute;
-    top: var(--screen-inset-top);
-    right: var(--screen-inset-right);
-    bottom: var(--screen-inset-bottom);
-    left: var(--screen-inset-left);
+    inset: var(--screen-inset-top) var(--screen-inset-right) var(--screen-inset-bottom) var(--screen-inset-left);
     overflow-y: auto;
     overflow-x: hidden;
-    background: linear-gradient(to bottom right, #0a1628, #050a14);
+    background: linear-gradient(135deg, #0a1628 0%, #050a14 100%);
+    z-index: 1;
   }
 
-  /* Add scanline effect */
+  /* Add scanline effect to screen */
   .frame-wrap .screen::before {
     content: '';
     position: absolute;
@@ -158,7 +158,7 @@ body {
     z-index: 1;
   }
 
-  /* Frame overlay (border-image) */
+  /* Frame overlay (9-slice border-image) - MUST be visible */
   .frame-wrap .frame-overlay {
     position: absolute;
     inset: 0;
