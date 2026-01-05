@@ -25,8 +25,8 @@ export default function FleetManagement() {
     }
   };
   
-  const getRepairCost = (ship) => {
-    const tierCosts = {
+  const getBaseParts = (tier) => {
+    const tierParts = {
       'Unregistered': 3,
       'Known': 4,
       'Notorious': 5,
@@ -34,9 +34,34 @@ export default function FleetManagement() {
       'Renowned': 7,
       'Legendary': 8
     };
-    const baseCost = tierCosts[ship.tier] || 3;
+    return tierParts[tier] || 3;
+  };
+  
+  const getUsableParts = (ship) => {
+    const baseParts = getBaseParts(ship.tier);
+    const damagePercent = 100 - ship.health;
+    
+    if (damagePercent >= 100) return 0;
+    
+    const penalty =
+      damagePercent >= 75 ? 3 :
+      damagePercent >= 50 ? 2 :
+      damagePercent >= 25 ? 1 : 0;
+    
+    return Math.max(0, baseParts - penalty);
+  };
+  
+  const getRepairCost = (ship) => {
+    const baseParts = getBaseParts(ship.tier);
     const damagePercent = (100 - ship.health) / 100;
-    return Math.ceil(baseCost * damagePercent);
+    return Math.ceil(baseParts * damagePercent);
+  };
+  
+  const getDamageColor = (health) => {
+    if (health >= 75) return 'text-green-400';
+    if (health >= 50) return 'text-yellow-400';
+    if (health >= 25) return 'text-amber-400';
+    return 'text-red-400';
   };
   
   const handleRepair = async (ship) => {
@@ -129,7 +154,11 @@ export default function FleetManagement() {
                 />
                 
                 {selectedShip?.id === ship.id && (
-                  <div className="bg-gradient-to-br from-gray-900 to-gray-950 border-2 border-cyan-500/30 rounded-lg p-4 mt-2">
+                  <div className={`bg-gradient-to-br from-gray-900 to-gray-950 rounded-lg p-4 mt-2 ${
+                    ship.health <= 25 ? 'border-2 border-red-500/60' :
+                    ship.health <= 50 ? 'border-2 border-amber-500/60' :
+                    'border-2 border-cyan-500/30'
+                  }`}>
                     <div className="grid grid-cols-2 gap-3 mb-4 text-xs">
                       <div>
                         <div className="text-gray-400">Status</div>
@@ -142,15 +171,23 @@ export default function FleetManagement() {
                         <div className="text-amber-400 font-bold">${ship.hourlyPay}</div>
                       </div>
                       <div>
-                        <div className="text-gray-400">Health</div>
-                        <div className={`font-bold ${ship.health === 100 ? 'text-green-400' : 'text-red-400'}`}>
-                          {ship.health}%
+                        <div className="text-gray-400">Damage</div>
+                        <div className={`font-bold ${getDamageColor(ship.health)}`}>
+                          {100 - ship.health}%
                         </div>
                       </div>
                       <div>
-                        <div className="text-gray-400">Repair Cost</div>
-                        <div className="text-cyan-400 font-bold">{getRepairCost(ship)} parts</div>
+                        <div className="text-gray-400">Usable Parts</div>
+                        <div className="text-cyan-400 font-bold">
+                          {getUsableParts(ship)}/{getBaseParts(ship.tier)}
+                        </div>
                       </div>
+                      {ship.damaged && (
+                        <div className="col-span-2">
+                          <div className="text-gray-400">Repair Cost</div>
+                          <div className="text-green-400 font-bold">{getRepairCost(ship)} parts</div>
+                        </div>
+                      )}
                     </div>
                     
                     <div className="grid grid-cols-2 gap-2">
