@@ -10,6 +10,7 @@ export default function DeviceFrame({ children, debug = false }) {
     '--content-pad-bottom': '105px',
     '--content-pad-left': '22px',
     '--content-pad-right': '22px',
+    '--safe-x': '16px',
     '--home-x': '78%',
     '--home-y': '3.8%',
     '--home-w': '18%',
@@ -36,7 +37,7 @@ export default function DeviceFrame({ children, debug = false }) {
       >
         {/* Main app content underneath */}
         <main 
-          className="app-content h-full overflow-y-auto bg-gradient-to-br from-[#0a1628] to-[#050a14]"
+          className="app-content h-full overflow-y-auto overflow-x-hidden bg-gradient-to-br from-[#0a1628] to-[#050a14]"
           style={{
             WebkitOverflowScrolling: 'touch'
           }}

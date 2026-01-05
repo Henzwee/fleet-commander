@@ -13,6 +13,7 @@ export default function Main() {
   const { gameState, loading, messages, currentEvent, handleEventChoice } = useGame();
   const [activeMissions, setActiveMissions] = useState([]);
   const [showExplosion, setShowExplosion] = useState(false);
+  const messageLogRef = React.useRef(null);
 
   // Tutorial redirect disabled - allow direct access to main page
 
@@ -21,6 +22,17 @@ export default function Main() {
       loadActiveMissions();
     }
   }, [gameState]);
+
+  useEffect(() => {
+    // Auto-scroll to bottom when messages change
+    if (messageLogRef.current) {
+      const el = messageLogRef.current;
+      const isNearBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 50;
+      if (isNearBottom || el.scrollTop === 0) {
+        el.scrollTop = el.scrollHeight;
+      }
+    }
+  }, [messages]);
 
   const loadActiveMissions = async () => {
     try {
@@ -69,19 +81,23 @@ export default function Main() {
         />
       )}
 
-      <div className="flex flex-col min-h-full space-y-3 pb-6">
+      <div className="flex flex-col min-h-full space-y-3 pb-6" style={{ maxWidth: '100%', paddingLeft: 'var(--safe-x)', paddingRight: 'var(--safe-x)', boxSizing: 'border-box' }}>
         {/* Message Console */}
-        <div className="bg-gradient-to-br from-cyan-900/30 to-blue-900/30 border-2 border-cyan-600/50 rounded-2xl p-4 min-h-[160px]">
-          <div className="space-y-2 text-sm text-cyan-100/90 font-mono">
+        <div className="bg-gradient-to-br from-cyan-900/30 to-blue-900/30 border-2 border-cyan-600/50 rounded-2xl p-4 w-full" style={{ height: '160px', boxSizing: 'border-box' }}>
+          <div 
+            ref={messageLogRef}
+            className="h-full overflow-y-auto space-y-2 text-sm text-cyan-100/90 font-mono"
+            style={{ scrollBehavior: 'smooth' }}
+          >
             {messages.length === 0 ? (
               <div className="text-gray-500 italic">System standby...</div>
             ) : (
-              messages.slice(-5).map((msg, idx) => (
+              messages.map((msg, idx) => (
                 <div key={idx} className="flex gap-2">
                   <span className="text-cyan-500 flex-shrink-0 text-xs">
                     {new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false })}
                   </span>
-                  <span>{msg}</span>
+                  <span className="break-words">{msg}</span>
                 </div>
               ))
             )}
@@ -92,17 +108,19 @@ export default function Main() {
         <MarketTicker />
 
         {/* Action Buttons */}
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-3 w-full" style={{ minWidth: 0 }}>
           <button
             onClick={() => navigate(createPageUrl('Market'))}
-            className="bg-gradient-to-br from-cyan-600/80 to-blue-600/80 border-2 border-cyan-500/50 rounded-xl py-4 text-white font-bold text-sm hover:from-cyan-500/80 hover:to-blue-500/80 transition-all"
+            className="bg-gradient-to-br from-cyan-600/80 to-blue-600/80 border-2 border-cyan-500/50 rounded-xl py-4 text-white font-bold text-sm hover:from-cyan-500/80 hover:to-blue-500/80 transition-all w-full"
+            style={{ minWidth: 0 }}
           >
             Ship Market
           </button>
 
           <button
             onClick={() => navigate(createPageUrl('FleetManagement'))}
-            className="bg-gradient-to-br from-cyan-600/80 to-blue-600/80 border-2 border-cyan-500/50 rounded-xl py-4 text-white font-bold text-sm hover:from-cyan-500/80 hover:to-blue-500/80 transition-all"
+            className="bg-gradient-to-br from-cyan-600/80 to-blue-600/80 border-2 border-cyan-500/50 rounded-xl py-4 text-white font-bold text-sm hover:from-cyan-500/80 hover:to-blue-500/80 transition-all w-full"
+            style={{ minWidth: 0 }}
           >
             Manage Fleet
           </button>
