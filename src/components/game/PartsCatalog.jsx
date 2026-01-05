@@ -1,12 +1,16 @@
 // Ship part catalog
-export const PARTS_CATALOG = {
-  hull: ['Hull Plating', 'Sealant', 'Rivets'],
-  power: ['Power Cell', 'Wiring Bundle', 'Fuse'],
-  navigation: ['Antenna', 'Gyro', 'Circuit Board'],
-  propulsion: ['Thruster Nozzle', 'Fuel Line', 'Coolant Pump']
-};
-
-export const ALL_PARTS = Object.values(PARTS_CATALOG).flat();
+export const ALL_PARTS = [
+  'Box of tangled wire',
+  'Formerly evil AI',
+  'Cracked glass',
+  'Wire splice (gum)',
+  'Rusty screws',
+  'Stripped bolts',
+  'Outdated map',
+  'Mostly stable antimatter',
+  'Expired food rations',
+  'Sci-fi looking panel'
+];
 
 export function getRequiredPartCountFromDamage(damagePercent) {
   if (damagePercent >= 75) return 3;
