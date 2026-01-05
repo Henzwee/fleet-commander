@@ -3,17 +3,37 @@ import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '../../utils';
 import { Home } from 'lucide-react';
 
-export default function DeviceFrame({ children, title = "M.A.N.I." }) {
+export default function DeviceFrame({ children, title = "M.A.N.I.", debug = false }) {
   const navigate = useNavigate();
+  
+  const frameVars = {
+    '--frame-slice': '72px',
+    '--title-x': '50%',
+    '--title-y': '4.2%',
+    '--home-x': '87%',
+    '--home-y': '4.2%',
+    '--fleet-x': '19%',
+    '--fleet-y': '95%',
+    '--jobs-x': '81%',
+    '--jobs-y': '95%',
+    '--title-nudge-x': '0px',
+    '--title-nudge-y': '0px',
+    '--home-nudge-x': '0px',
+    '--home-nudge-y': '0px',
+    '--fleet-nudge-x': '0px',
+    '--fleet-nudge-y': '0px',
+    '--jobs-nudge-x': '0px',
+    '--jobs-nudge-y': '0px'
+  };
   
   return (
     <div className="min-h-screen bg-black flex items-center justify-center p-2 overflow-hidden">
       <div 
-        className="frame-wrap relative"
+        className={`frame-wrap relative ${debug ? 'debug' : ''}`}
         style={{
           width: 'min(430px, 96vw)',
           height: 'min(930px, 96svh)',
-          '--frame-slice': '72px'
+          ...frameVars
         }}
       >
         {/* Frame overlay using border-image */}
@@ -28,19 +48,20 @@ export default function DeviceFrame({ children, title = "M.A.N.I." }) {
         
         {/* Top Center Screen - M.A.N.I. Title */}
         <div 
-          className="absolute z-20 flex items-center justify-center"
+          className={`top-title absolute z-20 flex items-center justify-center ${debug ? 'debug-outline' : ''}`}
           style={{
-            top: '2.5%',
-            left: '35%',
+            left: 'calc(var(--title-x) + var(--title-nudge-x))',
+            top: 'calc(var(--title-y) + var(--title-nudge-y))',
+            transform: 'translate(-50%, -50%)',
             width: '30%',
-            height: '4%'
+            height: '5%'
           }}
         >
           <h1 
             className="font-bold text-white tracking-[0.3em] uppercase"
             style={{ 
               fontFamily: 'Orbitron, sans-serif',
-              fontSize: 'clamp(0.75rem, 2.5vw, 1rem)',
+              fontSize: 'clamp(14px, 2.2vw, 20px)',
               textShadow: '0 0 10px rgba(0, 212, 255, 0.8), 0 2px 4px rgba(0, 0, 0, 0.8)'
             }}
           >
@@ -51,17 +72,18 @@ export default function DeviceFrame({ children, title = "M.A.N.I." }) {
         {/* Top Right Screen - Home Button */}
         <button
           onClick={() => navigate(createPageUrl('Main'))}
-          className="absolute z-20 flex items-center justify-center hover:opacity-80 transition-opacity"
+          className={`home-btn absolute z-20 flex items-center justify-center hover:opacity-80 transition-opacity ${debug ? 'debug-outline' : ''}`}
           style={{
-            top: '2.5%',
-            right: '8%',
-            width: '8%',
-            height: '4%'
+            left: 'calc(var(--home-x) + var(--home-nudge-x))',
+            top: 'calc(var(--home-y) + var(--home-nudge-y))',
+            transform: 'translate(-50%, -50%)',
+            width: 'clamp(40px, 8%, 60px)',
+            height: 'clamp(30px, 5%, 45px)'
           }}
         >
           <Home 
             className="text-amber-400" 
-            style={{ width: 'clamp(16px, 4vw, 24px)', height: 'clamp(16px, 4vw, 24px)' }}
+            style={{ width: 'clamp(18px, 3.5vw, 28px)', height: 'clamp(18px, 3.5vw, 28px)' }}
           />
         </button>
         
@@ -81,17 +103,18 @@ export default function DeviceFrame({ children, title = "M.A.N.I." }) {
         {/* Bottom Left Screen - Fleet Button (blue-ish) */}
         <button
           onClick={() => navigate(createPageUrl('FleetManagement'))}
-          className="absolute z-20 flex items-center justify-center bg-cyan-500/20 hover:bg-cyan-500/40 border border-cyan-500/50 rounded transition-all"
+          className={`nav-fleet absolute z-20 flex items-center justify-center bg-cyan-500/20 hover:bg-cyan-500/40 border border-cyan-500/50 rounded transition-all ${debug ? 'debug-outline' : ''}`}
           style={{
-            bottom: '4%',
-            left: '10%',
-            width: '18%',
-            height: '6%'
+            left: 'calc(var(--fleet-x) + var(--fleet-nudge-x))',
+            top: 'calc(var(--fleet-y) + var(--fleet-nudge-y))',
+            transform: 'translate(-50%, -50%)',
+            width: 'clamp(60px, 18%, 90px)',
+            height: 'clamp(35px, 6%, 50px)'
           }}
         >
           <span 
             className="font-bold text-cyan-100 uppercase tracking-wider"
-            style={{ fontSize: 'clamp(0.6rem, 2vw, 0.85rem)' }}
+            style={{ fontSize: 'clamp(11px, 2vw, 16px)' }}
           >
             Fleet
           </span>
@@ -100,17 +123,18 @@ export default function DeviceFrame({ children, title = "M.A.N.I." }) {
         {/* Bottom Right Screen - Jobs Button (orange-ish) */}
         <button
           onClick={() => navigate(createPageUrl('Jobs'))}
-          className="absolute z-20 flex items-center justify-center bg-amber-500/20 hover:bg-amber-500/40 border border-amber-500/50 rounded transition-all"
+          className={`nav-jobs absolute z-20 flex items-center justify-center bg-amber-500/20 hover:bg-amber-500/40 border border-amber-500/50 rounded transition-all ${debug ? 'debug-outline' : ''}`}
           style={{
-            bottom: '4%',
-            right: '10%',
-            width: '18%',
-            height: '6%'
+            left: 'calc(var(--jobs-x) + var(--jobs-nudge-x))',
+            top: 'calc(var(--jobs-y) + var(--jobs-nudge-y))',
+            transform: 'translate(-50%, -50%)',
+            width: 'clamp(60px, 18%, 90px)',
+            height: 'clamp(35px, 6%, 50px)'
           }}
         >
           <span 
             className="font-bold text-amber-100 uppercase tracking-wider"
-            style={{ fontSize: 'clamp(0.6rem, 2vw, 0.85rem)' }}
+            style={{ fontSize: 'clamp(11px, 2vw, 16px)' }}
           >
             Jobs
           </span>
