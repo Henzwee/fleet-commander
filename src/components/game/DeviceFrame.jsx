@@ -38,14 +38,20 @@ export default function DeviceFrame({ children, debug = false }) {
         <main 
           className="app-content h-full overflow-y-auto bg-gradient-to-br from-[#0a1628] to-[#050a14]"
           style={{
-            paddingTop: 'var(--content-pad-top)',
-            paddingBottom: 'var(--content-pad-bottom)',
-            paddingLeft: 'var(--content-pad-left)',
-            paddingRight: 'var(--content-pad-right)',
             WebkitOverflowScrolling: 'touch'
           }}
         >
-          {children}
+          <div 
+            className="app-panel min-h-full"
+            style={{
+              paddingTop: 'var(--content-pad-top)',
+              paddingBottom: 'var(--content-pad-bottom)',
+              paddingLeft: 'var(--content-pad-left)',
+              paddingRight: 'var(--content-pad-right)'
+            }}
+          >
+            {children}
+          </div>
         </main>
         
         {/* Frame overlay (non-interactive) */}
