@@ -88,7 +88,170 @@ body {
     );
   }
 
-  /* Debug mode for alignment */
+  /* ==============================================
+     FRAME OVERLAY POSITIONING SYSTEM
+     ============================================== */
+
+  :root {
+    /* Frame structure */
+    --frame-slice: 72px;
+
+    /* Screen insets (interior content fill) */
+    --screen-inset-top: 14.5%;
+    --screen-inset-bottom: 17.5%;
+    --screen-inset-left: 11.5%;
+    --screen-inset-right: 11.5%;
+
+    /* Overlay element positions (% from top-left) */
+    --title-x: 50%;
+    --title-y: 6.4%;
+    --home-x: 92.6%;
+    --home-y: 6.4%;
+    --fleet-x: 22%;
+    --fleet-y: 92.9%;
+    --jobs-x: 78%;
+    --jobs-y: 92.9%;
+
+    /* Fine-tune nudges (px adjustments) */
+    --title-nudge-x: 0px;
+    --title-nudge-y: 0px;
+    --home-nudge-x: 0px;
+    --home-nudge-y: 0px;
+    --fleet-nudge-x: 0px;
+    --fleet-nudge-y: 0px;
+    --jobs-nudge-x: 0px;
+    --jobs-nudge-y: 0px;
+  }
+
+  /* Frame container - scalable wrapper */
+  .frame-wrap {
+    position: relative;
+    width: min(430px, 96vw);
+    height: min(930px, 96svh);
+  }
+
+  /* Main content screen - fills interior opening */
+  .frame-wrap .screen {
+    position: absolute;
+    top: var(--screen-inset-top);
+    right: var(--screen-inset-right);
+    bottom: var(--screen-inset-bottom);
+    left: var(--screen-inset-left);
+    overflow-y: auto;
+    overflow-x: hidden;
+    background: linear-gradient(to bottom right, #0a1628, #050a14);
+  }
+
+  /* Add scanline effect */
+  .frame-wrap .screen::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.15),
+      rgba(0, 0, 0, 0.15) 1px,
+      transparent 1px,
+      transparent 2px
+    );
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* Frame overlay (border-image) */
+  .frame-wrap .frame-overlay {
+    position: absolute;
+    inset: 0;
+    border-image: url(https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695af5ca435140b76c0dadc9/4bbe613b0_framebeta.png) 72 fill stretch;
+    border-width: var(--frame-slice);
+    border-style: solid;
+    pointer-events: none;
+    z-index: 10;
+  }
+
+  /* Title overlay - top center black panel */
+  .frame-wrap .overlay-title {
+    position: absolute;
+    left: calc(var(--title-x) + var(--title-nudge-x));
+    top: calc(var(--title-y) + var(--title-nudge-y));
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 20;
+    width: 30%;
+    height: 5%;
+  }
+
+  /* Home button - top right black panel */
+  .frame-wrap .overlay-home {
+    position: absolute;
+    left: calc(var(--home-x) + var(--home-nudge-x));
+    top: calc(var(--home-y) + var(--home-nudge-y));
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 20;
+    width: clamp(40px, 8%, 60px);
+    height: clamp(30px, 5%, 45px);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+
+  .frame-wrap .overlay-home:hover {
+    opacity: 0.8;
+  }
+
+  /* Fleet button - bottom left blue panel */
+  .frame-wrap .overlay-fleet {
+    position: absolute;
+    left: calc(var(--fleet-x) + var(--fleet-nudge-x));
+    top: calc(var(--fleet-y) + var(--fleet-nudge-y));
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 20;
+    width: clamp(60px, 18%, 90px);
+    height: clamp(35px, 6%, 50px);
+    background: rgba(6, 182, 212, 0.2);
+    border: 1px solid rgba(6, 182, 212, 0.5);
+    border-radius: 0.25rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .frame-wrap .overlay-fleet:hover {
+    background: rgba(6, 182, 212, 0.4);
+  }
+
+  /* Jobs button - bottom right orange panel */
+  .frame-wrap .overlay-jobs {
+    position: absolute;
+    left: calc(var(--jobs-x) + var(--jobs-nudge-x));
+    top: calc(var(--jobs-y) + var(--jobs-nudge-y));
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 20;
+    width: clamp(60px, 18%, 90px);
+    height: clamp(35px, 6%, 50px);
+    background: rgba(245, 158, 11, 0.2);
+    border: 1px solid rgba(245, 158, 11, 0.5);
+    border-radius: 0.25rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .frame-wrap .overlay-jobs:hover {
+    background: rgba(245, 158, 11, 0.4);
+  }
+
+  /* Debug mode - visualize overlay alignment */
   .frame-wrap.debug .debug-outline {
     outline: 2px solid rgba(0, 255, 255, 0.5) !important;
     background: rgba(0, 255, 255, 0.08) !important;
