@@ -7,9 +7,10 @@ export default function MarketTicker() {
   const navigate = useNavigate();
   const containerRef = useRef(null);
   const [items, setItems] = useState([]);
-  const positionsRef = useRef([]);
+  const [offset, setOffset] = useState(0);
   const animationRef = useRef(null);
-  const scrollSpeed = 0.5; // pixels per frame
+  const itemWidthRef = useRef(160); // Fixed width for each item including gap
+  const scrollSpeed = 1; // pixels per frame
 
   useEffect(() => {
     // Initialize MarketEngine with base items
@@ -32,10 +33,6 @@ export default function MarketTicker() {
     // Initial load
     setItems(MarketEngine.getAll());
 
-    // Initialize positions (duplicate items for seamless loop)
-    const allItems = [...MarketEngine.getAll(), ...MarketEngine.getAll()];
-    positionsRef.current = allItems.map((_, idx) => idx * 200); // 200px spacing
-
     return () => {
       unsubscribe();
       if (animationRef.current) {
@@ -47,39 +44,28 @@ export default function MarketTicker() {
   useEffect(() => {
     if (items.length === 0) return;
 
-    const animate = () => {
-      if (!containerRef.current) return;
+    let lastTime = performance.now();
+    const totalWidth = items.length * itemWidthRef.current;
 
-      const containerWidth = containerRef.current.offsetWidth;
-      const itemWidth = 200; // approximate item width
-
-      // Move all positions left
-      positionsRef.current = positionsRef.current.map(pos => pos - scrollSpeed);
-
-      // Check for items that scrolled off screen and recycle them
-      positionsRef.current.forEach((pos, idx) => {
-        if (pos < -itemWidth) {
-          // Recycle: move to the right end
-          const maxPos = Math.max(...positionsRef.current);
-          positionsRef.current[idx] = maxPos + itemWidth;
-
-          // Reprice the item (use modulo to map back to original item)
-          const itemIdx = idx % items.length;
-          const item = items[itemIdx];
-          if (item) {
-            MarketEngine.reprice(item.id);
+    const animate = (currentTime) => {
+      const deltaTime = currentTime - lastTime;
+      
+      // Update every ~16ms for smoother animation
+      if (deltaTime >= 16) {
+        setOffset(prev => {
+          const newOffset = prev - scrollSpeed;
+          
+          // When scrolled past one full set, reprice and reset
+          if (Math.abs(newOffset) >= totalWidth) {
+            // Reprice all items
+            items.forEach(item => MarketEngine.reprice(item.id));
+            return 0;
           }
-        }
-      });
-
-      // Re-render by forcing update (we'll use inline styles)
-      if (containerRef.current) {
-        const itemElements = containerRef.current.children;
-        positionsRef.current.forEach((pos, idx) => {
-          if (itemElements[idx]) {
-            itemElements[idx].style.transform = `translateX(${pos}px)`;
-          }
+          
+          return newOffset;
         });
+        
+        lastTime = currentTime;
       }
 
       animationRef.current = requestAnimationFrame(animate);
@@ -92,27 +78,34 @@ export default function MarketTicker() {
         cancelAnimationFrame(animationRef.current);
       }
     };
-  }, [items]);
+  }, [items, scrollSpeed]);
 
   if (items.length === 0) return null;
 
-  // Duplicate items for seamless loop
-  const displayItems = [...items, ...items];
+  // Triple items for seamless loop
+  const displayItems = [...items, ...items, ...items];
 
   return (
     <div>
       <div className="text-cyan-400 font-bold text-lg mb-3 tracking-wider">Market</div>
       
       <div className="relative overflow-hidden h-12">
-        <div ref={containerRef} className="absolute top-0 left-0 flex gap-4">
+        <div 
+          ref={containerRef} 
+          className="flex gap-3 will-change-transform"
+          style={{ 
+            transform: `translateX(${offset}px)`,
+            transition: 'none'
+          }}
+        >
           {displayItems.map((item, idx) => (
             <div
               key={`${item.id}-${idx}`}
               onClick={() => navigate(createPageUrl('Market'))}
-              className="absolute flex-shrink-0 bg-gradient-to-br from-cyan-900/20 to-blue-900/20 border border-cyan-600/40 rounded-lg px-4 py-2 cursor-pointer hover:border-cyan-500 hover:bg-cyan-500/10 transition-all"
-              style={{ transform: `translateX(${positionsRef.current[idx] || 0}px)` }}
+              className="flex-shrink-0 bg-gradient-to-br from-cyan-900/20 to-blue-900/20 border border-cyan-600/40 rounded-lg px-4 py-2 cursor-pointer hover:border-cyan-500 hover:bg-cyan-500/10 transition-colors"
+              style={{ width: '150px' }}
             >
-              <div className="text-cyan-100 font-bold text-sm whitespace-nowrap">
+              <div className="text-cyan-100 font-bold text-sm whitespace-nowrap overflow-hidden text-ellipsis">
                 {item.name}
                 {item.deltaPercent !== 0 && (
                   <span 
