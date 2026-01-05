@@ -15,11 +15,7 @@ export default function Main() {
   const [showExplosion, setShowExplosion] = useState(false);
   const scrollRef = React.useRef(null);
 
-  useEffect(() => {
-    if (!loading && gameState && !gameState.tutorialCompleted) {
-      navigate(createPageUrl('Tutorial'));
-    }
-  }, [loading, gameState, navigate]);
+  // Tutorial redirect disabled - allow direct access to main page
 
   useEffect(() => {
     if (gameState) {
