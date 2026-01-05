@@ -8,6 +8,10 @@ export default function DeviceFrame({ children, title = "M.A.N.I.", debug = fals
   
   const frameVars = {
     '--frame-slice': '72px',
+    '--screen-top': '12.8%',
+    '--screen-right': '10.8%',
+    '--screen-bottom': '18.2%',
+    '--screen-left': '10.8%',
     '--title-x': '50%',
     '--title-y': '3.8%',
     '--home-x': '88.5%',
@@ -89,12 +93,11 @@ export default function DeviceFrame({ children, title = "M.A.N.I.", debug = fals
         
         {/* Main Content Screen - Center scrollable area */}
         <div 
-          className="screen absolute bg-gradient-to-br from-[#0a1628] to-[#050a14] scanline overflow-hidden"
+          className={`screen absolute bg-gradient-to-br from-[#0a1628] to-[#050a14] scanline ${debug ? 'debug-screen' : ''}`}
           style={{
-            top: 'calc(var(--frame-slice) + 2%)',
-            left: 'calc(var(--frame-slice) - 8px)',
-            right: 'calc(var(--frame-slice) - 8px)',
-            bottom: 'calc(var(--frame-slice) + 18%)'
+            inset: 'var(--screen-top) var(--screen-right) var(--screen-bottom) var(--screen-left)',
+            overflowY: 'auto',
+            WebkitOverflowScrolling: 'touch'
           }}
         >
           {children}
