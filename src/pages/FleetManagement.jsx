@@ -4,7 +4,8 @@ import { useGame } from '../components/game/GameProvider';
 import DeviceFrame from '../components/game/DeviceFrame';
 import BottomNav from '../components/game/BottomNav';
 import ShipCard from '../components/game/ShipCard';
-import { Heart, Wrench, UserMinus, Package } from 'lucide-react';
+import { Heart, Wrench, UserMinus, Package, Check, X } from 'lucide-react';
+import { getRequiredPartCountFromDamage, generateRequiredParts, hasParts, consumeParts } from '../components/game/PartsCatalog';
 
 export default function FleetManagement() {
   const { gameState, updateGameState, addMessage } = useGame();
@@ -17,7 +18,20 @@ export default function FleetManagement() {
   
   const loadShips = async () => {
     try {
-      const allShips = await base44.entities.Ship.filter({ isHired: true }, '-created_date', 50);
+      let allShips = await base44.entities.Ship.filter({ isHired: true }, '-created_date', 50);
+      
+      // Generate required parts for damaged ships that don't have them
+      for (const ship of allShips) {
+        if (ship.damaged && (!ship.requiredParts || ship.requiredParts.length === 0)) {
+          const damagePercent = 100 - ship.health;
+          const partCount = getRequiredPartCountFromDamage(damagePercent);
+          const requiredParts = generateRequiredParts(partCount);
+          
+          await base44.entities.Ship.update(ship.id, { requiredParts });
+          ship.requiredParts = requiredParts;
+        }
+      }
+      
       setShips(allShips || []);
     } catch (error) {
       console.error('Error loading ships:', error);
@@ -65,36 +79,24 @@ export default function FleetManagement() {
   };
   
   const handleRepair = async (ship) => {
-    const partsNeeded = getRepairCost(ship);
-    const parts = gameState.parts;
+    const requiredParts = ship.requiredParts || [];
+    const parts = gameState.parts || {};
     
-    // Check if player has enough parts
-    const totalParts = Object.values(parts).reduce((sum, count) => sum + count, 0);
-    if (totalParts < partsNeeded) {
-      addMessage(`Need ${partsNeeded} parts to repair ${ship.name}!`);
+    // Check if player has all required parts
+    if (!hasParts(requiredParts, parts)) {
+      addMessage(`Missing required parts to repair ${ship.name}!`);
       return;
     }
     
-    // Deduct parts
-    const newParts = { ...parts };
-    let remaining = partsNeeded;
-    for (const partName in newParts) {
-      if (remaining <= 0) break;
-      const available = newParts[partName];
-      const toUse = Math.min(available, remaining);
-      newParts[partName] -= toUse;
-      remaining -= toUse;
-      
-      if (newParts[partName] <= 0) {
-        delete newParts[partName];
-      }
-    }
+    // Deduct required parts
+    const newParts = consumeParts(requiredParts, parts);
     
-    // Repair ship
+    // Repair ship (reset to 100% health)
     await base44.entities.Ship.update(ship.id, {
       health: 100,
       damaged: false,
-      status: 'idle'
+      status: 'idle',
+      requiredParts: []
     });
     
     await updateGameState({ parts: newParts });
@@ -182,19 +184,38 @@ export default function FleetManagement() {
                           {getUsableParts(ship)}/{getBaseParts(ship.tier)}
                         </div>
                       </div>
-                      {ship.damaged && (
-                        <div className="col-span-2">
-                          <div className="text-gray-400">Repair Cost</div>
-                          <div className="text-green-400 font-bold">{getRepairCost(ship)} parts</div>
-                        </div>
-                      )}
                     </div>
+                    
+                    {ship.damaged && ship.status !== 'active' && ship.requiredParts && ship.requiredParts.length > 0 && (
+                      <div className="mb-3 bg-gray-900/50 rounded-lg p-3 border border-cyan-500/30">
+                        <div className="text-cyan-400 text-xs font-bold mb-2">Required Parts</div>
+                        <div className="space-y-1">
+                          {ship.requiredParts.map((part, idx) => {
+                            const available = (gameState?.parts || {})[part.name] || 0;
+                            const hasEnough = available >= part.qty;
+                            return (
+                              <div key={idx} className="flex items-center gap-2 text-xs">
+                                {hasEnough ? (
+                                  <Check className="w-4 h-4 text-green-400" />
+                                ) : (
+                                  <X className="w-4 h-4 text-red-400" />
+                                )}
+                                <span className={hasEnough ? 'text-green-400' : 'text-red-400'}>
+                                  {part.name} ({part.qty})
+                                </span>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
                     
                     <div className="grid grid-cols-2 gap-2">
                       {ship.damaged && ship.status !== 'active' && (
                         <button
                           onClick={() => handleRepair(ship)}
-                          className="bg-green-600 hover:bg-green-700 border-2 border-green-500 rounded-lg py-2 px-3 text-white font-bold text-xs flex items-center justify-center gap-2 transition-all"
+                          disabled={!hasParts(ship.requiredParts || [], gameState?.parts || {})}
+                          className="bg-green-600 hover:bg-green-700 border-2 border-green-500 rounded-lg py-2 px-3 text-white font-bold text-xs flex items-center justify-center gap-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                           <Wrench className="w-4 h-4" />
                           <span>REPAIR</span>
