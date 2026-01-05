@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Share+Tech+Mono&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=VT323&family=Share+Tech+Mono&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -28,8 +28,9 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6, .font-bold {
-  font-family: 'Press Start 2P', cursive;
+  font-family: 'VT323', monospace;
   font-weight: 400;
+  letter-spacing: 0.5px;
 }
 
 * {
