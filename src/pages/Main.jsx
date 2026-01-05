@@ -69,7 +69,7 @@ export default function Main() {
         />
       )}
 
-      <div className="flex flex-col h-full p-3 space-y-3 overflow-y-auto pb-24">
+      <div className="flex flex-col h-full px-4 py-3 space-y-3 overflow-y-auto pb-24">
         {/* Message Console */}
         <div className="bg-gradient-to-br from-cyan-900/30 to-blue-900/30 border-2 border-cyan-600/50 rounded-2xl p-4 min-h-[160px]">
           <div className="space-y-2 text-sm text-cyan-100/90 font-mono">
@@ -117,12 +117,12 @@ export default function Main() {
         </button>
 
         {/* Active Missions */}
-        <div className="bg-gradient-to-br from-cyan-900/30 to-blue-900/30 border-2 border-cyan-600/50 rounded-2xl p-4 flex-1">
+        <div className="bg-gradient-to-br from-cyan-900/30 to-blue-900/30 border-2 border-cyan-600/50 rounded-2xl p-4 flex-1 flex flex-col min-h-0">
           {activeMissions.length === 0 ? (
             <div className="text-center text-gray-500 py-8">No active missions</div>
           ) : (
-            <div className="space-y-3">
-              {activeMissions.slice(0, 3).map((mission) => (
+            <div className="space-y-3 overflow-y-auto">
+              {activeMissions.map((mission) => (
                 <div
                   key={mission.id}
                   onClick={() => navigate(createPageUrl('Jobs'))}
@@ -133,15 +133,6 @@ export default function Main() {
                   </div>
                 </div>
               ))}
-
-              {activeMissions.length > 3 && (
-                <button
-                  onClick={() => navigate(createPageUrl('Jobs'))}
-                  className="w-full text-cyan-400 text-sm hover:text-cyan-300 transition-all pt-2"
-                >
-                  See available jobs
-                </button>
-              )}
             </div>
           )}
         </div>
