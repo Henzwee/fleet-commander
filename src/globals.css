@@ -58,28 +58,28 @@ button,
   .glow-cyan {
     text-shadow: 0 0 10px var(--cyan-glow), 0 0 20px var(--cyan-glow);
   }
-  
+
   .glow-amber {
     text-shadow: 0 0 10px var(--amber-warn), 0 0 20px var(--amber-warn);
   }
-  
+
   .glow-red {
     text-shadow: 0 0 10px var(--red-alert), 0 0 20px var(--red-alert);
   }
-  
+
   .border-glow-cyan {
     box-shadow: 0 0 10px rgba(0, 212, 255, 0.5), inset 0 0 10px rgba(0, 212, 255, 0.2);
   }
-  
+
   .border-glow-amber {
     box-shadow: 0 0 10px rgba(255, 170, 0, 0.5), inset 0 0 10px rgba(255, 170, 0, 0.2);
   }
-  
+
   .scanline {
     position: relative;
     overflow: hidden;
   }
-  
+
   .scanline::before {
     content: '';
     position: absolute;
@@ -96,12 +96,12 @@ button,
     pointer-events: none;
     animation: scan 8s linear infinite;
   }
-  
+
   @keyframes scan {
     0% { transform: translateY(-100%); }
     100% { transform: translateY(100%); }
   }
-  
+
   .pixel-corners {
     clip-path: polygon(
       0 8px, 8px 8px, 8px 0,
@@ -111,14 +111,23 @@ button,
     );
   }
 
-  /* Debug mode for hotspots */
-  .app-shell.debug .hotspot {
-    outline: 2px solid rgba(0, 255, 255, 0.9) !important;
-    background: rgba(0, 255, 255, 0.12) !important;
+  /* Z-Index Layering */
+  .app-content {
+    position: relative;
+    z-index: 1;
   }
 
-  /* Hotspot base styles */
+  .frame-layer {
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+    pointer-events: none;
+  }
+
   .hotspot {
+    position: absolute;
+    z-index: 10;
+    pointer-events: auto;
     background: transparent;
     border: none;
     transition: opacity 0.2s ease;
@@ -130,5 +139,32 @@ button,
 
   .hotspot:active {
     opacity: 0.6;
+  }
+
+  /* Ensure hidden elements don't block clicks */
+  [hidden], 
+  .hidden, 
+  .is-hidden, 
+  .sr-only,
+  [style*="display: none"],
+  [style*="visibility: hidden"] {
+    pointer-events: none !important;
+  }
+
+  /* Debug mode */
+  .debug * {
+    outline: 1px dashed rgba(255, 0, 255, 0.25);
+  }
+
+  .debug a,
+  .debug button,
+  .debug [role="button"],
+  .debug .hotspot {
+    outline: 2px solid rgba(0, 255, 255, 0.9) !important;
+    background: rgba(0, 255, 255, 0.1) !important;
+  }
+
+  .debug .frame-layer {
+    outline: 2px solid rgba(255, 0, 0, 0.5) !important;
   }
 }

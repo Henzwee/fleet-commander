@@ -2,8 +2,20 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '../../utils';
 
-export default function DeviceFrame({ children, debug = false }) {
+export default function DeviceFrame({ children }) {
   const navigate = useNavigate();
+  const [debugMode, setDebugMode] = React.useState(false);
+  
+  React.useEffect(() => {
+    const handleKeyPress = (e) => {
+      if (e.key === 'd' || e.key === 'D') {
+        setDebugMode(prev => !prev);
+      }
+    };
+    
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+  }, []);
   
   const frameVars = {
     '--content-pad-top': '65px',
@@ -28,7 +40,7 @@ export default function DeviceFrame({ children, debug = false }) {
   return (
     <div className="min-h-screen bg-black flex items-center justify-center p-2 overflow-hidden">
       <div 
-        className={`app-shell relative overflow-hidden ${debug ? 'debug' : ''}`}
+        className={`app-shell relative overflow-hidden ${debugMode ? 'debug' : ''}`}
         style={{
           width: 'min(430px, 96vw)',
           height: 'min(930px, 96svh)',
