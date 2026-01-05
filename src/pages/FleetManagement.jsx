@@ -142,23 +142,23 @@ export default function FleetManagement() {
     <DeviceFrame title="FLEET">
       <div className="p-4 pb-24 overflow-y-auto h-full">
         {/* Tab Switcher */}
-        <div className="flex justify-center gap-3 mb-4">
+        <div className="flex gap-2 mb-4">
           <button
             onClick={() => handleTabChange('ships')}
-            className={`px-8 py-3 rounded-lg border-2 font-bold text-sm transition-all ${
+            className={`flex-1 py-3 rounded-lg font-bold text-sm border-2 transition-all ${
               activeTab === 'ships'
-                ? 'bg-cyan-600/80 border-cyan-500 text-white'
-                : 'bg-gray-800/50 border-gray-700 text-gray-400'
+                ? 'bg-cyan-500/20 border-cyan-500 text-cyan-400'
+                : 'bg-gray-800 border-gray-600 text-gray-400'
             }`}
           >
             SHIPS
           </button>
           <button
             onClick={() => handleTabChange('inventory')}
-            className={`px-8 py-3 rounded-lg border-2 font-bold text-sm transition-all ${
+            className={`flex-1 py-3 rounded-lg font-bold text-sm border-2 transition-all ${
               activeTab === 'inventory'
-                ? 'bg-cyan-600/80 border-cyan-500 text-white'
-                : 'bg-gray-800/50 border-gray-700 text-gray-400'
+                ? 'bg-cyan-500/20 border-cyan-500 text-cyan-400'
+                : 'bg-gray-800 border-gray-600 text-gray-400'
             }`}
           >
             INVENTORY
