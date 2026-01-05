@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useGame } from '../components/game/GameProvider';
 import DeviceFrame from '../components/game/DeviceFrame';
-import BottomNav from '../components/game/BottomNav';
 import { Clock, ShoppingCart } from 'lucide-react';
 
 export default function Market() {
@@ -135,7 +134,7 @@ export default function Market() {
   
   return (
     <DeviceFrame title="STORE">
-      <div className="p-4 pb-24 overflow-y-auto h-full">
+      <div className="p-4 overflow-y-auto h-full">
         <div className="bg-gradient-to-r from-gray-900 to-gray-800 border-2 border-cyan-500/50 rounded-lg p-4 mb-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <ShoppingCart className="w-5 h-5 text-amber-400" />
@@ -199,8 +198,6 @@ export default function Market() {
           ))}
         </div>
       </div>
-      
-      <BottomNav active="market" />
     </DeviceFrame>
   );
 }
