@@ -88,13 +88,24 @@ body {
     );
   }
 
-  /* Debug mode for alignment */
-  .frame-wrap.debug .debug-outline {
-    outline: 2px solid rgba(0, 255, 255, 0.5) !important;
-    background: rgba(0, 255, 255, 0.08) !important;
+  /* Debug mode for hotspots */
+  .app-shell.debug .hotspot {
+    outline: 2px solid rgba(0, 255, 255, 0.9) !important;
+    background: rgba(0, 255, 255, 0.12) !important;
   }
 
-  .frame-wrap.debug .debug-screen {
-    outline: 3px solid rgba(0, 255, 255, 0.7) !important;
+  /* Hotspot base styles */
+  .hotspot {
+    background: transparent;
+    border: none;
+    transition: opacity 0.2s ease;
+  }
+
+  .hotspot:hover {
+    opacity: 0.8;
+  }
+
+  .hotspot:active {
+    opacity: 0.6;
   }
 }
