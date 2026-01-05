@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useGame } from '../components/game/GameProvider';
 import DeviceFrame from '../components/game/DeviceFrame';
-import BottomNav from '../components/game/BottomNav';
 import { Clock, ShoppingCart } from 'lucide-react';
 import { MarketEngine } from '../components/game/MarketEngine';
 
@@ -248,8 +247,6 @@ export default function Market() {
           ))}
         </div>
       </div>
-      
-      <BottomNav active="market" />
     </DeviceFrame>
   );
 }

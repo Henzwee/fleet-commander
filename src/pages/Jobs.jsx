@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useGame } from '../components/game/GameProvider';
 import DeviceFrame from '../components/game/DeviceFrame';
-import BottomNav from '../components/game/BottomNav';
 import { MapPin, Clock, Zap, Fuel } from 'lucide-react';
 
 export default function Jobs() {
@@ -187,8 +186,6 @@ export default function Jobs() {
           </div>
         )}
       </div>
-      
-      <BottomNav active="jobs" />
     </DeviceFrame>
   );
 }
