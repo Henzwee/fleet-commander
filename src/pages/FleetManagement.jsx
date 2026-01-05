@@ -141,21 +141,11 @@ export default function FleetManagement() {
   return (
     <DeviceFrame title="FLEET">
       <div className="p-4 pb-24 overflow-y-auto h-full">
-        <div className="bg-gradient-to-r from-gray-900 to-gray-800 border-2 border-cyan-500/50 rounded-lg p-4 mb-4">
-          <div className="flex items-center justify-between">
-            <div className="text-cyan-400 font-bold">YOUR FLEET</div>
-            <div className="flex items-center gap-2 text-gray-400 text-xs">
-              <Package className="w-4 h-4" />
-              <span>{totalParts} parts</span>
-            </div>
-          </div>
-        </div>
-        
         {/* Tab Switcher */}
-        <div className="flex gap-2 mb-4" style={{ maxWidth: 'calc(100% - 2 * var(--safe-x))' }}>
+        <div className="flex justify-center gap-3 mb-4">
           <button
             onClick={() => handleTabChange('ships')}
-            className={`flex-1 py-3 rounded-lg border-2 font-bold text-sm transition-all ${
+            className={`px-8 py-3 rounded-lg border-2 font-bold text-sm transition-all ${
               activeTab === 'ships'
                 ? 'bg-cyan-600/80 border-cyan-500 text-white'
                 : 'bg-gray-800/50 border-gray-700 text-gray-400'
@@ -165,7 +155,7 @@ export default function FleetManagement() {
           </button>
           <button
             onClick={() => handleTabChange('inventory')}
-            className={`flex-1 py-3 rounded-lg border-2 font-bold text-sm transition-all ${
+            className={`px-8 py-3 rounded-lg border-2 font-bold text-sm transition-all ${
               activeTab === 'inventory'
                 ? 'bg-cyan-600/80 border-cyan-500 text-white'
                 : 'bg-gray-800/50 border-gray-700 text-gray-400'
@@ -178,6 +168,16 @@ export default function FleetManagement() {
         {/* Ships Tab */}
         {activeTab === 'ships' && (
           <section id="fleetShipsPanel">
+            <div className="bg-gradient-to-r from-gray-900 to-gray-800 border-2 border-cyan-500/50 rounded-lg p-4 mb-4">
+              <div className="flex items-center justify-between">
+                <div className="text-cyan-400 font-bold">YOUR FLEET</div>
+                <div className="flex items-center gap-2 text-gray-400 text-xs">
+                  <Package className="w-4 h-4" />
+                  <span>{totalParts} parts</span>
+                </div>
+              </div>
+            </div>
+            
             {ships.length === 0 ? (
               <div className="text-center text-gray-500 py-8">
                 No ships in fleet. Hire ships from the market!
@@ -280,33 +280,39 @@ export default function FleetManagement() {
         {/* Inventory Tab */}
         {activeTab === 'inventory' && (
           <section id="fleetInventoryPanel">
-            <div className="bg-gradient-to-br from-gray-900/80 to-gray-950/80 border-2 border-cyan-500/30 rounded-lg p-4 mb-4">
-              <div className="text-cyan-400 font-bold text-lg mb-4">INVENTORY</div>
-              
-              {Object.keys(inventoryParts).length === 0 ? (
-                <div className="text-center text-gray-500 py-8">
-                  No parts in inventory. Buy from market!
+            <div className="bg-gradient-to-r from-gray-900 to-gray-800 border-2 border-cyan-500/50 rounded-lg p-4 mb-4">
+              <div className="flex items-center justify-between">
+                <div className="text-cyan-400 font-bold">INVENTORY</div>
+                <div className="flex items-center gap-2 text-gray-400 text-xs">
+                  <Package className="w-4 h-4" />
+                  <span>{totalParts} parts</span>
                 </div>
-              ) : (
-                <div className="space-y-2">
-                  {Object.entries(inventoryParts)
-                    .filter(([_, qty]) => qty > 0)
-                    .sort(([a], [b]) => a.localeCompare(b))
-                    .map(([partName, qty]) => (
-                      <div
-                        key={partName}
-                        className="bg-gradient-to-r from-gray-800/60 to-gray-900/60 border border-cyan-500/20 rounded-lg p-3 flex items-center justify-between hover:border-cyan-500/40 transition-all"
-                      >
-                        <div className="flex items-center gap-3">
-                          <Package className="w-5 h-5 text-cyan-400" />
-                          <span className="text-cyan-100 text-sm">{partName}</span>
-                        </div>
-                        <div className="text-cyan-400 font-bold text-sm">x{qty}</div>
-                      </div>
-                    ))}
-                </div>
-              )}
+              </div>
             </div>
+            
+            {Object.keys(inventoryParts).length === 0 ? (
+              <div className="text-center text-gray-500 py-8">
+                No parts in inventory. Buy from market!
+              </div>
+            ) : (
+              <div className="space-y-2">
+                {Object.entries(inventoryParts)
+                  .filter(([_, qty]) => qty > 0)
+                  .sort(([a], [b]) => a.localeCompare(b))
+                  .map(([partName, qty]) => (
+                    <div
+                      key={partName}
+                      className="bg-gradient-to-r from-gray-800/60 to-gray-900/60 border border-cyan-500/20 rounded-lg p-3 flex items-center justify-between hover:border-cyan-500/40 transition-all"
+                    >
+                      <div className="flex items-center gap-3">
+                        <Package className="w-5 h-5 text-cyan-400" />
+                        <span className="text-cyan-100 text-sm">{partName}</span>
+                      </div>
+                      <div className="text-cyan-400 font-bold text-sm">x{qty}</div>
+                    </div>
+                  ))}
+              </div>
+            )}
           </section>
         )}
       </div>
