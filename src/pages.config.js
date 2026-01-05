@@ -1,19 +1,19 @@
-import Main from './pages/Main';
-import Tutorial from './pages/Tutorial';
-import Market from './pages/Market';
-import Jobs from './pages/Jobs';
 import FleetManagement from './pages/FleetManagement';
 import HireShips from './pages/HireShips';
+import Jobs from './pages/Jobs';
+import Main from './pages/Main';
+import Market from './pages/Market';
+import Tutorial from './pages/Tutorial';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
-    "Main": Main,
-    "Tutorial": Tutorial,
-    "Market": Market,
-    "Jobs": Jobs,
     "FleetManagement": FleetManagement,
     "HireShips": HireShips,
+    "Jobs": Jobs,
+    "Main": Main,
+    "Market": Market,
+    "Tutorial": Tutorial,
 }
 
 export const pagesConfig = {
