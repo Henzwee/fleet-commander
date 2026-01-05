@@ -6,7 +6,7 @@ export default function DeviceFrame({ children, title = "M.A.N.I." }) {
       <div className="relative w-full max-w-md" style={{ aspectRatio: '640/1138' }}>
         {/* Device Frame Background Image */}
         <img 
-          src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695af5ca435140b76c0dadc9/22a189f1f_framebeta.png"
+          src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695af5ca435140b76c0dadc9/4bbe613b0_framebeta.png"
           alt="Device Frame"
           className="absolute inset-0 w-full h-full object-contain pointer-events-none select-none"
           draggable="false"
