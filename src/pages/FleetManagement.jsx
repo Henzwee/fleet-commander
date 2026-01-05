@@ -316,8 +316,6 @@ export default function FleetManagement() {
           </section>
         )}
       </div>
-      
-      <BottomNav active="ships" />
     </DeviceFrame>
   );
 }
