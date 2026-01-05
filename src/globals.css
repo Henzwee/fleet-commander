@@ -95,13 +95,13 @@ body {
 
   :root {
     /* Frame structure */
-    --frame-slice: 72px;
+    --slice: 72px;
 
     /* Screen insets (interior content fill) */
-    --screen-inset-top: 14.5%;
-    --screen-inset-bottom: 17.5%;
-    --screen-inset-left: 11.5%;
-    --screen-inset-right: 11.5%;
+    --screen-top: 14.5%;
+    --screen-right: 11.5%;
+    --screen-bottom: 17.5%;
+    --screen-left: 11.5%;
 
     /* Overlay element positions (% from top-left) */
     --title-x: 50%;
@@ -124,18 +124,30 @@ body {
     --jobs-nudge-y: 0px;
   }
 
+  /* App container - centers frame on page */
+  .app {
+    min-height: 100vh;
+    min-height: 100dvh;
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    overflow: hidden;
+  }
+
   /* Frame container - phone-sized device wrapper */
   .frame-wrap {
     position: relative;
     width: min(430px, 96vw);
     height: min(930px, 96svh);
-    height: min(930px, 96dvh); /* fallback for dynamic viewport */
+    height: min(930px, 96dvh);
   }
 
   /* Main content screen - fills interior opening */
   .frame-wrap .screen {
     position: absolute;
-    inset: var(--screen-inset-top) var(--screen-inset-right) var(--screen-inset-bottom) var(--screen-inset-left);
+    inset: var(--screen-top) var(--screen-right) var(--screen-bottom) var(--screen-left);
     overflow-y: auto;
     overflow-x: hidden;
     background: linear-gradient(135deg, #0a1628 0%, #050a14 100%);
@@ -158,41 +170,41 @@ body {
     z-index: 1;
   }
 
-  /* Frame overlay (9-slice border-image) - MUST be visible */
-  .frame-wrap .frame-overlay {
+  /* CRITICAL: Frame overlay using 9-slice border-image */
+  .frame-wrap .frame {
     position: absolute;
     inset: 0;
-    border-image: url(https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695af5ca435140b76c0dadc9/4bbe613b0_framebeta.png) 72 fill stretch;
-    border-width: var(--frame-slice);
-    border-style: solid;
+    border: var(--slice) solid transparent;
+    border-image: url(https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695af5ca435140b76c0dadc9/4bbe613b0_framebeta.png) var(--slice) fill stretch;
     pointer-events: none;
     z-index: 10;
+    /* DEBUG: Temporary lime outline to confirm frame is rendering */
+    outline: 4px solid lime;
+  }
+
+  /* Overlay elements - positioned on top of frame */
+  .frame-wrap .overlay {
+    position: absolute;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   /* Title overlay - top center black panel */
   .frame-wrap .overlay-title {
-    position: absolute;
     left: calc(var(--title-x) + var(--title-nudge-x));
     top: calc(var(--title-y) + var(--title-nudge-y));
     transform: translate(-50%, -50%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 20;
     width: 30%;
     height: 5%;
   }
 
   /* Home button - top right black panel */
   .frame-wrap .overlay-home {
-    position: absolute;
     left: calc(var(--home-x) + var(--home-nudge-x));
     top: calc(var(--home-y) + var(--home-nudge-y));
     transform: translate(-50%, -50%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 20;
     width: clamp(40px, 8%, 60px);
     height: clamp(30px, 5%, 45px);
     background: transparent;
@@ -207,14 +219,9 @@ body {
 
   /* Fleet button - bottom left blue panel */
   .frame-wrap .overlay-fleet {
-    position: absolute;
     left: calc(var(--fleet-x) + var(--fleet-nudge-x));
     top: calc(var(--fleet-y) + var(--fleet-nudge-y));
     transform: translate(-50%, -50%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 20;
     width: clamp(60px, 18%, 90px);
     height: clamp(35px, 6%, 50px);
     background: rgba(6, 182, 212, 0.2);
@@ -230,14 +237,9 @@ body {
 
   /* Jobs button - bottom right orange panel */
   .frame-wrap .overlay-jobs {
-    position: absolute;
     left: calc(var(--jobs-x) + var(--jobs-nudge-x));
     top: calc(var(--jobs-y) + var(--jobs-nudge-y));
     transform: translate(-50%, -50%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 20;
     width: clamp(60px, 18%, 90px);
     height: clamp(35px, 6%, 50px);
     background: rgba(245, 158, 11, 0.2);

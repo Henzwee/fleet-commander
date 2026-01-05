@@ -7,18 +7,15 @@ export default function DeviceFrame({ children, title = "M.A.N.I.", debug = fals
   const navigate = useNavigate();
   
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center p-2 overflow-hidden">
+    <div className="app">
       <div className={`frame-wrap ${debug ? 'debug' : ''}`}>
         {/* Main Content Screen - fills interior opening */}
         <div className={`screen ${debug ? 'debug-outline' : ''}`}>
           {children}
         </div>
         
-        {/* Frame overlay using border-image - pointer-events: none */}
-        <div className="frame-overlay" />
-        
-        {/* Top Center Screen - M.A.N.I. Title */}
-        <div className={`overlay-title ${debug ? 'debug-outline' : ''}`}>
+        {/* Overlay elements */}
+        <div className={`overlay overlay-title ${debug ? 'debug-outline' : ''}`}>
           <h1 
             className="font-bold text-white tracking-[0.3em] uppercase"
             style={{ 
@@ -31,10 +28,10 @@ export default function DeviceFrame({ children, title = "M.A.N.I.", debug = fals
           </h1>
         </div>
         
-        {/* Top Right Screen - Home Button */}
         <button
           onClick={() => navigate(createPageUrl('Main'))}
-          className={`overlay-home ${debug ? 'debug-outline' : ''}`}
+          className={`overlay overlay-home ${debug ? 'debug-outline' : ''}`}
+          aria-label="Home"
         >
           <Home 
             className="text-amber-400" 
@@ -42,10 +39,9 @@ export default function DeviceFrame({ children, title = "M.A.N.I.", debug = fals
           />
         </button>
         
-        {/* Bottom Left Screen - Fleet Button */}
         <button
           onClick={() => navigate(createPageUrl('FleetManagement'))}
-          className={`overlay-fleet ${debug ? 'debug-outline' : ''}`}
+          className={`overlay overlay-fleet ${debug ? 'debug-outline' : ''}`}
         >
           <span 
             className="font-bold text-cyan-100 uppercase tracking-wider"
@@ -55,10 +51,9 @@ export default function DeviceFrame({ children, title = "M.A.N.I.", debug = fals
           </span>
         </button>
         
-        {/* Bottom Right Screen - Jobs Button */}
         <button
           onClick={() => navigate(createPageUrl('Jobs'))}
-          className={`overlay-jobs ${debug ? 'debug-outline' : ''}`}
+          className={`overlay overlay-jobs ${debug ? 'debug-outline' : ''}`}
         >
           <span 
             className="font-bold text-amber-100 uppercase tracking-wider"
@@ -67,6 +62,9 @@ export default function DeviceFrame({ children, title = "M.A.N.I.", debug = fals
             Jobs
           </span>
         </button>
+        
+        {/* CRITICAL: Frame overlay - must exist for border-image to render */}
+        <div className="frame"></div>
       </div>
     </div>
   );
