@@ -5,7 +5,7 @@ import { base44 } from '@/api/base44Client';
 import DeviceFrame from '../components/game/DeviceFrame';
 import ExplosionEffect from '../components/game/ExplosionEffect';
 import { useGame } from '../components/game/GameProvider';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+
 
 export default function Main() {
   const navigate = useNavigate();
@@ -13,7 +13,10 @@ export default function Main() {
   const [activeMissions, setActiveMissions] = useState([]);
   const [marketItems, setMarketItems] = useState([]);
   const [showExplosion, setShowExplosion] = useState(false);
-  const scrollRef = React.useRef(null);
+  const [currentMarketIndex, setCurrentMarketIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const carouselIntervalRef = React.useRef(null);
+  const pauseTimeoutRef = React.useRef(null);
 
   // Tutorial redirect disabled - allow direct access to main page
 
@@ -50,26 +53,86 @@ export default function Main() {
   };
 
   const loadMarketPreview = () => {
-    const items = [
-      { name: 'Cracked Glass', price: 150 },
-      { name: 'Evil A.I.', price: 200 },
-      { name: 'Rusty Screws', price: 120 },
-      { name: 'Wire Splice', price: 180 },
-      { name: 'Antimatter', price: 600 },
-      { name: 'Sci-Fi Panel', price: 800 }
+    const basePrices = [
+      { name: 'Cracked Glass', basePrice: 150 },
+      { name: 'Evil A.I.', basePrice: 200 },
+      { name: 'Rusty Screws', basePrice: 120 },
+      { name: 'Wire Splice', basePrice: 180 },
+      { name: 'Antimatter', basePrice: 600 },
+      { name: 'Sci-Fi Panel', basePrice: 800 }
     ];
 
-    setMarketItems(items);
+    // Load previous prices from localStorage
+    const storedPrices = localStorage.getItem('market_prices_v1');
+    const previousPrices = storedPrices ? JSON.parse(storedPrices) : {};
+    
+    const newPrices = {};
+    const itemsWithPrices = basePrices.map(item => {
+      // Generate price with ±10% fluctuation
+      const fluctuation = (Math.random() - 0.5) * 0.2; // -10% to +10%
+      const newPrice = Math.round(item.basePrice * (1 + fluctuation));
+      
+      // Calculate percent change
+      const previousPrice = previousPrices[item.name];
+      let percentChange = 0;
+      if (previousPrice) {
+        percentChange = ((newPrice - previousPrice) / previousPrice) * 100;
+        // Clamp to ±25%
+        percentChange = Math.max(-25, Math.min(25, percentChange));
+        percentChange = Math.round(percentChange);
+      }
+      
+      // Store new price
+      newPrices[item.name] = newPrice;
+      
+      return {
+        name: item.name,
+        price: newPrice,
+        percentChange
+      };
+    });
+    
+    // Save prices to localStorage
+    localStorage.setItem('market_prices_v1', JSON.stringify(newPrices));
+    
+    setMarketItems(itemsWithPrices);
   };
 
-  const scroll = (direction) => {
-    if (scrollRef.current) {
-      const scrollAmount = 200;
-      scrollRef.current.scrollBy({
-        left: direction === 'left' ? -scrollAmount : scrollAmount,
-        behavior: 'smooth'
-      });
+  // Auto-carousel logic
+  useEffect(() => {
+    if (marketItems.length === 0) return;
+    
+    const startCarousel = () => {
+      if (carouselIntervalRef.current) {
+        clearInterval(carouselIntervalRef.current);
+      }
+      
+      carouselIntervalRef.current = setInterval(() => {
+        if (!isPaused) {
+          setCurrentMarketIndex(prev => (prev + 1) % marketItems.length);
+        }
+      }, 3000);
+    };
+    
+    startCarousel();
+    
+    return () => {
+      if (carouselIntervalRef.current) {
+        clearInterval(carouselIntervalRef.current);
+      }
+    };
+  }, [marketItems.length, isPaused]);
+  
+  const handleCarouselInteraction = () => {
+    setIsPaused(true);
+    
+    if (pauseTimeoutRef.current) {
+      clearTimeout(pauseTimeoutRef.current);
     }
+    
+    pauseTimeoutRef.current = setTimeout(() => {
+      setIsPaused(false);
+    }, 8000);
   };
 
   if (loading) {
@@ -110,36 +173,34 @@ export default function Main() {
         <div>
           <div className="text-cyan-400 font-bold text-lg mb-3 tracking-wider">Market</div>
 
-          <div className="relative">
-            <button
-              onClick={() => scroll('left')}
-              className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 bg-cyan-500/30 border border-cyan-500 rounded flex items-center justify-center text-cyan-400 hover:bg-cyan-500/50"
-            >
-              <ChevronLeft className="w-5 h-5" />
-            </button>
-
-            <div
-              ref={scrollRef}
-              className="flex gap-3 overflow-x-auto pb-2 px-10 scrollbar-hide"
-              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-            >
-              {marketItems.map((item, idx) => (
-                <div
-                  key={idx}
-                  onClick={() => navigate(createPageUrl('Market'))}
-                  className="flex-shrink-0 bg-gradient-to-br from-cyan-900/20 to-blue-900/20 border border-cyan-600/40 rounded-lg px-4 py-3 cursor-pointer hover:border-cyan-500 hover:bg-cyan-500/10 transition-all"
-                >
-                  <div className="text-cyan-100 font-bold text-sm whitespace-nowrap">{item.name}</div>
+          <div 
+            className="relative flex justify-center"
+            onClick={handleCarouselInteraction}
+            onMouseEnter={() => setIsPaused(true)}
+            onMouseLeave={() => setIsPaused(false)}
+          >
+            {marketItems.length > 0 && (
+              <div
+                onClick={() => navigate(createPageUrl('Market'))}
+                className="bg-gradient-to-br from-cyan-900/20 to-blue-900/20 border border-cyan-600/40 rounded-lg px-6 py-3 cursor-pointer hover:border-cyan-500 hover:bg-cyan-500/10 transition-all"
+              >
+                <div className="text-cyan-100 font-bold text-sm whitespace-nowrap">
+                  {marketItems[currentMarketIndex].name}
+                  {marketItems[currentMarketIndex].percentChange !== 0 && (
+                    <span 
+                      className={`ml-2 ${
+                        marketItems[currentMarketIndex].percentChange > 0 
+                          ? 'text-red-400' 
+                          : 'text-green-400'
+                      }`}
+                    >
+                      {marketItems[currentMarketIndex].percentChange > 0 ? '+' : ''}
+                      {marketItems[currentMarketIndex].percentChange}%
+                    </span>
+                  )}
                 </div>
-              ))}
-            </div>
-
-            <button
-              onClick={() => scroll('right')}
-              className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 bg-cyan-500/30 border border-cyan-500 rounded flex items-center justify-center text-cyan-400 hover:bg-cyan-500/50"
-            >
-              <ChevronRight className="w-5 h-5" />
-            </button>
+              </div>
+            )}
           </div>
         </div>
 
