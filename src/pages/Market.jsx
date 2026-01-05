@@ -4,6 +4,7 @@ import { useGame } from '../components/game/GameProvider';
 import DeviceFrame from '../components/game/DeviceFrame';
 import BottomNav from '../components/game/BottomNav';
 import { Clock, ShoppingCart } from 'lucide-react';
+import { MarketEngine } from '../components/game/MarketEngine';
 
 export default function Market() {
   const { gameState, updateGameState, addMessage, rollShipTier } = useGame();
@@ -13,8 +14,32 @@ export default function Market() {
   
   useEffect(() => {
     if (gameState) {
+      // Initialize MarketEngine if not already done
+      if (MarketEngine.getAll().length === 0) {
+        const baseItems = [
+          { id: 'cracked_glass', name: 'Cracked Glass', basePrice: 150 },
+          { id: 'evil_ai', name: 'Totally Not Evil A.I.', basePrice: 100 },
+          { id: 'rusty_screws', name: 'Rusty Screws', basePrice: 300 },
+          { id: 'wire_splice', name: 'Wire Splice (Gum)', basePrice: 200 },
+          { id: 'antimatter', name: 'Mostly Stable Antimatter', basePrice: 600 },
+          { id: 'sci_fi_panel', name: 'Sci-Fi Looking Panel', basePrice: 800 },
+          { id: 'tangled_wire', name: 'Box of Tangled Wire', basePrice: 60 },
+          { id: 'stripped_bolts', name: 'Stripped Bolts', basePrice: 400 },
+          { id: 'outdated_map', name: 'Outdated Map', basePrice: 500 },
+          { id: 'expired_food', name: 'Expired Food Rations', basePrice: 700 }
+        ];
+        MarketEngine.init(baseItems);
+      }
+      
       generateMarketItems();
       updateResetTimer();
+      
+      // Subscribe to market updates
+      const unsubscribe = MarketEngine.subscribe(() => {
+        generateMarketItems();
+      });
+      
+      return () => unsubscribe();
     }
   }, [gameState, activeTab]);
   
@@ -43,18 +68,28 @@ export default function Market() {
   
   const generateMarketItems = () => {
     if (activeTab === 'scrap') {
-      const parts = [
-        { name: 'Box of Tangled Wire', price: 60, icon: '📦' },
-        { name: 'Totally Not Evil A.I.', price: 100, icon: '🤖' },
-        { name: 'Cracked Glass', price: 150, icon: '🔷' },
-        { name: 'Wire Splice (Gum)', price: 200, icon: '🔧' },
-        { name: 'Rusty Screws', price: 300, icon: '🔩' },
-        { name: 'Stripped Bolts', price: 400, icon: '⚙️' },
-        { name: 'Outdated Map', price: 500, icon: '🗺️' },
-        { name: 'Mostly Stable Antimatter', price: 600, icon: '⚛️' },
-        { name: 'Expired Food Rations', price: 700, icon: '🥫' },
-        { name: 'Sci-Fi Looking Panel', price: 800, icon: '🖥️' }
-      ];
+      // Get prices from MarketEngine
+      const iconMap = {
+        'Box of Tangled Wire': '📦',
+        'Totally Not Evil A.I.': '🤖',
+        'Cracked Glass': '🔷',
+        'Wire Splice (Gum)': '🔧',
+        'Rusty Screws': '🔩',
+        'Stripped Bolts': '⚙️',
+        'Outdated Map': '🗺️',
+        'Mostly Stable Antimatter': '⚛️',
+        'Expired Food Rations': '🥫',
+        'Sci-Fi Looking Panel': '🖥️'
+      };
+      
+      const parts = MarketEngine.getAll().map(item => ({
+        id: item.id,
+        name: item.name,
+        price: item.currentPrice,
+        deltaPercent: item.deltaPercent,
+        icon: iconMap[item.name] || '📦'
+      }));
+      
       setMarketItems(parts);
     } else if (activeTab === 'ships') {
       // Generate ships based on player's highest tier
@@ -181,7 +216,21 @@ export default function Market() {
               <div className="flex items-center gap-3">
                 <div className="text-3xl">{item.icon}</div>
                 <div>
-                  <div className="text-cyan-100 font-bold text-sm">{item.name}</div>
+                  <div className="text-cyan-100 font-bold text-sm">
+                    {item.name}
+                    {activeTab === 'scrap' && item.deltaPercent !== 0 && (
+                      <span 
+                        className={`ml-2 text-xs ${
+                          item.deltaPercent > 0 
+                            ? 'text-red-400' 
+                            : 'text-green-400'
+                        }`}
+                      >
+                        {item.deltaPercent > 0 ? '+' : ''}
+                        {item.deltaPercent}%
+                      </span>
+                    )}
+                  </div>
                   {item.tier && (
                     <div className="text-xs text-gray-400">{item.tier}</div>
                   )}
