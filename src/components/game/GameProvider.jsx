@@ -225,17 +225,35 @@ export default function GameProvider({ children }) {
   
   const completeMission = async (mission) => {
     await base44.entities.Mission.update(mission.id, { status: 'completed' });
-    
+
     const ship = await base44.entities.Ship.filter({ id: mission.shipId });
     if (ship.length > 0) {
       await base44.entities.Ship.update(ship[0].id, { status: 'idle' });
     }
-    
-    // Award credits
+
+    // Roll for fuel reward
+    const rand = Math.random();
+    let fuelReward = 0;
+    if (rand < 0.25) {
+      fuelReward = 0;
+    } else if (rand < 0.65) {
+      fuelReward = 10;
+    } else if (rand < 0.90) {
+      fuelReward = 15;
+    } else {
+      fuelReward = 20;
+    }
+
+    // Award credits and fuel
     const newCredits = gameState.credits + mission.reward;
-    await updateGameState({ credits: newCredits });
-    
-    addMessage(`Mission completed! ${mission.shipName} earned $${mission.reward}.`);
+    const newFuel = gameState.fuel + fuelReward;
+    await updateGameState({ credits: newCredits, fuel: newFuel });
+
+    if (fuelReward > 0) {
+      addMessage(`Mission completed! ${mission.shipName} earned $${mission.reward} and ${fuelReward} fuel.`);
+    } else {
+      addMessage(`Mission completed! ${mission.shipName} earned $${mission.reward}.`);
+    }
   };
   
   const handleEventChoice = async (choiceId) => {
