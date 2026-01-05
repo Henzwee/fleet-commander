@@ -6,8 +6,8 @@ export default function DeviceFrame({ children, debug = false }) {
   const navigate = useNavigate();
   
   const frameVars = {
-    '--content-pad-top': '140px',
-    '--content-pad-bottom': '165px',
+    '--content-pad-top': '90px',
+    '--content-pad-bottom': '105px',
     '--content-pad-left': '22px',
     '--content-pad-right': '22px',
     '--home-x': '78%',
