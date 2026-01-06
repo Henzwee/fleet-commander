@@ -120,11 +120,20 @@ export default function Market() {
         const tier = rollShipTier();
         const tierPrices = {
           'Unregistered': [1000, 2000],
-          'Known': [3000, 5000],
-          'Notorious': [6000, 10000],
-          'Esteemed': [12000, 18000],
-          'Renowned': [20000, 30000],
+          'Civilian': [3000, 5000],
+          'Industrial': [6000, 10000],
+          'Military': [12000, 18000],
+          'Experimental': [20000, 30000],
           'Legendary': [40000, 60000]
+        };
+        
+        const tierMaxLY = {
+          'Unregistered': 100,
+          'Civilian': 500,
+          'Industrial': 1500,
+          'Military': 3500,
+          'Experimental': 6000,
+          'Legendary': 10000
         };
         
         const [min, max] = tierPrices[tier];
@@ -134,6 +143,7 @@ export default function Market() {
         ships.push({
           name: names[i] + '-' + Math.floor(Math.random() * 1000),
           tier,
+          maxLY: tierMaxLY[tier],
           price,
           icon: '🚀',
           stock: 1,
@@ -229,10 +239,10 @@ export default function Market() {
       // Create ship
       const tierPay = {
         'Unregistered': [200, 500],
-        'Known': [250, 750],
-        'Notorious': [300, 900],
-        'Esteemed': [500, 1100],
-        'Renowned': [750, 1800],
+        'Civilian': [250, 750],
+        'Industrial': [300, 900],
+        'Military': [500, 1100],
+        'Experimental': [750, 1800],
         'Legendary': [1000, 2000]
       };
       
@@ -242,6 +252,7 @@ export default function Market() {
       await base44.entities.Ship.create({
         name: item.name,
         tier: item.tier,
+        maxLY: item.maxLY,
         health: 100,
         damaged: false,
         status: 'idle',
@@ -337,7 +348,7 @@ export default function Market() {
                     )}
                   </div>
                   {item.tier && (
-                    <div className="text-xs text-gray-400">{item.tier}</div>
+                    <div className="text-xs text-gray-400">{item.tier} • {item.maxLY} LY</div>
                   )}
                   {item.stock !== undefined && (
                     <div className="text-xs text-gray-500">Stock: {item.stock}</div>

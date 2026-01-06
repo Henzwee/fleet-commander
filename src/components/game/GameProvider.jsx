@@ -143,13 +143,13 @@ export default function GameProvider({ children }) {
     try {
       const tierDamageChance = {
         'Unregistered': 0.30,
-        'Known': 0.25,
-        'Notorious': 0.20,
-        'Esteemed': 0.15,
-        'Renowned': 0.10,
+        'Civilian': 0.25,
+        'Industrial': 0.20,
+        'Military': 0.15,
+        'Experimental': 0.10,
         'Legendary': 0.05
       };
-      
+
       const damageChance = tierDamageChance[ship.tier] || 0.30;
       
       if (Math.random() < damageChance) {
@@ -320,32 +320,42 @@ export default function GameProvider({ children }) {
   const rollShipTier = () => {
     const rand = Math.random();
     if (rand < 0.30) return 'Unregistered';
-    if (rand < 0.55) return 'Known';
-    if (rand < 0.75) return 'Notorious';
-    if (rand < 0.90) return 'Esteemed';
-    if (rand < 0.98) return 'Renowned';
+    if (rand < 0.55) return 'Civilian';
+    if (rand < 0.75) return 'Industrial';
+    if (rand < 0.90) return 'Military';
+    if (rand < 0.98) return 'Experimental';
     return 'Legendary';
   };
   
   const createRandomShip = async (tier) => {
     const names = ['Starlight', 'Nebula', 'Phoenix', 'Ranger', 'Comet', 'Eclipse'];
     const name = names[Math.floor(Math.random() * names.length)] + ' ' + Math.floor(Math.random() * 1000);
-    
+
     const tierPay = {
       'Unregistered': [200, 500],
-      'Known': [250, 750],
-      'Notorious': [300, 900],
-      'Esteemed': [500, 1100],
-      'Renowned': [750, 1800],
+      'Civilian': [250, 750],
+      'Industrial': [300, 900],
+      'Military': [500, 1100],
+      'Experimental': [750, 1800],
       'Legendary': [1000, 2000]
     };
-    
+
+    const tierMaxLY = {
+      'Unregistered': 100,
+      'Civilian': 500,
+      'Industrial': 1500,
+      'Military': 3500,
+      'Experimental': 6000,
+      'Legendary': 10000
+    };
+
     const [min, max] = tierPay[tier];
     const hourlyPay = Math.floor(Math.random() * (max - min + 1)) + min;
-    
+
     return await base44.entities.Ship.create({
       name,
       tier,
+      maxLY: tierMaxLY[tier],
       health: 100,
       damaged: false,
       status: 'idle',

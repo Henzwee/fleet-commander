@@ -17,17 +17,24 @@ export default function Jobs() {
   }, []);
   
   const loadData = async () => {
-    generateMissions();
     try {
       const ships = await base44.entities.Ship.filter({ status: 'idle', isHired: true }, '-created_date', 50);
       setIdleShips(ships || []);
+      
+      // Generate missions based on best ship
+      const allShips = await base44.entities.Ship.filter({ isHired: true }, '-created_date', 100);
+      const bestShipMaxLY = allShips.length > 0 
+        ? Math.max(...allShips.map(s => s.maxLY || 100))
+        : 100;
+      generateMissions(bestShipMaxLY);
     } catch (error) {
       console.error('Error loading ships:', error);
       setIdleShips([]);
+      generateMissions(100); // Default to Unregistered range
     }
   };
   
-  const generateMissions = () => {
+  const generateMissions = (maxLY) => {
     const missions = [];
     const descriptions = [
       'Routine cargo delivery',
@@ -38,8 +45,12 @@ export default function Jobs() {
       'Passenger transport'
     ];
     
+    // Generate missions within player's best ship range
+    // Mix of easier and challenging missions
     for (let i = 0; i < 8; i++) {
-      const distance = Math.floor(Math.random() * 10000) + 100;
+      const minDistance = Math.max(50, Math.floor(maxLY * 0.1));
+      const maxDistance = maxLY;
+      const distance = Math.floor(Math.random() * (maxDistance - minDistance)) + minDistance;
       const duration = Math.floor(distance / 500) + 1;
       const reward = Math.floor(distance * (Math.random() * 2 + 1));
       const fuelCost = Math.floor(distance / 100);
@@ -60,6 +71,12 @@ export default function Jobs() {
   const handleAssignMission = async () => {
     if (!selectedMission || !selectedShip) {
       addMessage('Select a mission and ship first!');
+      return;
+    }
+    
+    // Check if ship can handle the distance
+    if (selectedShip.maxLY < selectedMission.distance) {
+      addMessage(`${selectedShip.name} cannot travel ${selectedMission.distance} LY! (Max: ${selectedShip.maxLY} LY)`);
       return;
     }
     
@@ -157,25 +174,34 @@ export default function Jobs() {
               </div>
             ) : (
               <div className="grid grid-cols-1 gap-2">
-                {idleShips.map((ship) => (
-                  <div
-                    key={ship.id}
-                    onClick={() => setSelectedShip(ship)}
-                    className={`bg-gray-800 border-2 rounded-lg p-3 cursor-pointer transition-all ${
-                      selectedShip?.id === ship.id
-                        ? 'border-green-500 bg-green-500/10'
-                        : 'border-gray-600 hover:border-green-500/50'
-                    }`}
-                  >
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <div className="text-cyan-100 font-bold text-sm">{ship.name}</div>
-                        <div className="text-xs text-gray-400">{ship.tier}</div>
+                {idleShips.map((ship) => {
+                  const canHandle = ship.maxLY >= selectedMission.distance;
+                  return (
+                    <div
+                      key={ship.id}
+                      onClick={() => canHandle && setSelectedShip(ship)}
+                      className={`bg-gray-800 border-2 rounded-lg p-3 transition-all ${
+                        !canHandle
+                          ? 'border-red-500/30 opacity-50 cursor-not-allowed'
+                          : selectedShip?.id === ship.id
+                          ? 'border-green-500 bg-green-500/10 cursor-pointer'
+                          : 'border-gray-600 hover:border-green-500/50 cursor-pointer'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <div className="text-cyan-100 font-bold text-sm">{ship.name}</div>
+                          <div className="text-xs text-gray-400">{ship.tier} • {ship.maxLY} LY</div>
+                        </div>
+                        {canHandle ? (
+                          <div className="text-green-400 text-xs">IDLE</div>
+                        ) : (
+                          <div className="text-red-400 text-xs">OUT OF RANGE</div>
+                        )}
                       </div>
-                      <div className="text-green-400 text-xs">IDLE</div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             )}
             
