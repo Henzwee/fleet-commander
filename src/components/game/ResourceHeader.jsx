@@ -6,14 +6,22 @@ export default function ResourceHeader() {
   const { gameState } = useGame();
   
   return (
-    <div className="fixed z-30 bg-gradient-to-r from-gray-900/95 to-gray-800/95 backdrop-blur-sm rounded-full px-4 py-3" style={{ 
-      top: 'calc(var(--content-pad-top) - 10px)',
-      left: '50%',
-      transform: 'translateX(-50%)',
-      width: 'calc(100% - 48px)',
-      maxWidth: '452px'
+    <div className="fixed z-30 bg-gradient-to-r from-gray-900/95 to-gray-800/95 backdrop-blur-sm" style={{ 
+      top: 'var(--content-pad-top)',
+      left: 'var(--content-pad-left)',
+      right: 'var(--content-pad-right)',
+      bottom: 'var(--content-pad-bottom)',
+      width: 'auto',
+      height: 'auto'
     }}>
-      <div className="flex items-center justify-between gap-3">
+      <div className="flex items-center justify-between gap-3 rounded-full px-4 py-3" style={{
+        position: 'absolute',
+        top: '-10px',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        width: 'calc(100% - 48px)',
+        maxWidth: '452px'
+      }}>
         <div className="flex items-center gap-1.5">
           <DollarSign className="w-4 h-4 text-amber-400" />
           <span className="text-amber-400 font-bold text-sm">
