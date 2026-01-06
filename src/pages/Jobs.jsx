@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useGame } from '../components/game/GameProvider';
 import DeviceFrame from '../components/game/DeviceFrame';
+import ResourceHeader from '../components/game/ResourceHeader';
 import { MapPin, Clock, Zap, Fuel } from 'lucide-react';
 
 export default function Jobs() {
@@ -98,6 +99,7 @@ export default function Jobs() {
   
   return (
     <DeviceFrame title="JOBS">
+      <ResourceHeader />
       <div className="p-4 pb-24 overflow-y-auto h-full">
         <div className="bg-gradient-to-r from-gray-900 to-gray-800 border-2 border-cyan-500/50 rounded-lg p-4 mb-4">
           <div className="flex items-center justify-between">
