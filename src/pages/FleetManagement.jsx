@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useGame } from '../components/game/GameProvider';
 import DeviceFrame from '../components/game/DeviceFrame';
+import ResourceHeader from '../components/game/ResourceHeader';
 import ShipCard from '../components/game/ShipCard';
 import { Heart, Wrench, UserMinus, Package, Check, X } from 'lucide-react';
 import { getRequiredPartCountFromDamage, generateRequiredParts, hasParts, consumeParts } from '../components/game/PartsCatalog';
@@ -137,6 +138,7 @@ export default function FleetManagement() {
   
   return (
     <DeviceFrame title="FLEET">
+      <ResourceHeader />
       <div className="p-4 pb-24 overflow-y-auto h-full">
         {/* Tab Switcher */}
         <div className="flex gap-2 mb-4">

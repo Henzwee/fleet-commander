@@ -1,5 +1,6 @@
 import React from 'react';
 import DeviceFrame from '../components/game/DeviceFrame';
+import ResourceHeader from '../components/game/ResourceHeader';
 
 export default function Settings() {
   return (
