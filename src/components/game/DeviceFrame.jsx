@@ -42,8 +42,8 @@ export default function DeviceFrame({ children }) {
       <div 
         className={`app-shell relative overflow-hidden ${debugMode ? 'debug' : ''}`}
         style={{
-          width: 'min(430px, 96vw)',
-          height: 'min(930px, 96svh)',
+          width: 'min(500px, 98vw)',
+          height: 'min(1000px, 98svh)',
           ...frameVars
         }}
       >
