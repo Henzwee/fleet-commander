@@ -120,19 +120,19 @@ export default function Market() {
         const tier = rollShipTier();
         const tierPrices = {
           'Unregistered': [1000, 2000],
-          'Civilian': [3000, 5000],
-          'Industrial': [6000, 10000],
-          'Military': [12000, 18000],
-          'Experimental': [20000, 30000],
+          'Known': [3000, 5000],
+          'Notorious': [6000, 10000],
+          'Esteemed': [12000, 18000],
+          'Renowned': [20000, 30000],
           'Legendary': [40000, 60000]
         };
         
         const tierMaxLY = {
           'Unregistered': 100,
-          'Civilian': 500,
-          'Industrial': 1500,
-          'Military': 3500,
-          'Experimental': 6000,
+          'Known': 500,
+          'Notorious': 1500,
+          'Esteemed': 3500,
+          'Renowned': 6000,
           'Legendary': 10000
         };
         
@@ -239,10 +239,10 @@ export default function Market() {
       // Create ship
       const tierPay = {
         'Unregistered': [200, 500],
-        'Civilian': [250, 750],
-        'Industrial': [300, 900],
-        'Military': [500, 1100],
-        'Experimental': [750, 1800],
+        'Known': [250, 750],
+        'Notorious': [300, 900],
+        'Esteemed': [500, 1100],
+        'Renowned': [750, 1800],
         'Legendary': [1000, 2000]
       };
       
