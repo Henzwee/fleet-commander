@@ -315,6 +315,7 @@ export default function FleetManagement() {
             )}
           </section>
         )}
+        </div>
       </div>
     </DeviceFrame>
   );
