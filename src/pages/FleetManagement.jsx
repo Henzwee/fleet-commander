@@ -138,8 +138,9 @@ export default function FleetManagement() {
   
   return (
     <DeviceFrame title="FLEET">
-      <ResourceHeader />
-      <div className="p-4 pb-24 overflow-y-auto h-full">
+      <div className="flex flex-col min-h-full pb-6" style={{ maxWidth: '100%', paddingLeft: 'var(--safe-x)', paddingRight: 'var(--safe-x)', boxSizing: 'border-box' }}>
+        <ResourceHeader />
+        <div className="p-4 pb-24 overflow-y-auto h-full" style={{ paddingLeft: '0', paddingRight: '0' }}>
         {/* Tab Switcher */}
         <div className="flex gap-2 mb-4">
           <button
