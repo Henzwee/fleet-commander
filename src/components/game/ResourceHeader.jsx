@@ -7,7 +7,7 @@ export default function ResourceHeader() {
   
   return (
     <div className="fixed z-30 bg-gradient-to-r from-gray-900/95 to-gray-800/95 backdrop-blur-sm rounded-full px-4 py-3" style={{ 
-      top: 'var(--content-pad-top)',
+      top: 'calc(var(--content-pad-top) - 10px)',
       left: '50%',
       transform: 'translateX(-50%)',
       width: 'calc(100% - 48px)',
