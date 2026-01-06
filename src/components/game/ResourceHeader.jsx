@@ -6,7 +6,13 @@ export default function ResourceHeader() {
   const { gameState } = useGame();
   
   return (
-    <div className="sticky z-30 bg-gradient-to-r from-gray-900/95 to-gray-800/95 backdrop-blur-sm rounded-full px-4 py-3 mx-4 mb-4" style={{ top: 'calc(var(--content-pad-top) - 10px)' }}>
+    <div className="fixed z-30 bg-gradient-to-r from-gray-900/95 to-gray-800/95 backdrop-blur-sm rounded-full px-4 py-3" style={{ 
+      top: 'calc(var(--content-pad-top) - 10px)',
+      left: '50%',
+      transform: 'translateX(-50%)',
+      width: 'calc(100% - 48px)',
+      maxWidth: '452px'
+    }}>
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-1.5">
           <DollarSign className="w-4 h-4 text-amber-400" />
