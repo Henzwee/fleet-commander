@@ -28,9 +28,9 @@ export default function FleetManagement() {
     try {
       let allShips = await base44.entities.Ship.filter({ isHired: true }, '-created_date', 50);
       
-      // Generate/regenerate required parts for damaged ships
+      // Generate required parts for damaged ships (only if not already set)
       for (const ship of allShips) {
-        if (ship.damaged) {
+        if (ship.damaged && (!ship.requiredParts || ship.requiredParts.length === 0)) {
           const damagePercent = 100 - ship.health;
           const partCount = getRequiredPartCountFromDamage(damagePercent);
           const requiredParts = generateRequiredParts(partCount);
