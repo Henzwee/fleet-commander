@@ -41,9 +41,9 @@ export default function GameProvider({ children }) {
           crystals: 50,
           fuel: 100,
           parts: {
-            'Box of Tangled Wire': 5,
-            'Rusty Screws': 3,
-            'Wire Splice (Gum)': 2
+            'Box of tangled wire': 5,
+            'Rusty screws': 3,
+            'Wire splice': 2
           },
           tutorialCompleted: false,
           lastFuelRefill: new Date().toISOString(),
@@ -66,9 +66,9 @@ export default function GameProvider({ children }) {
         crystals: 50,
         fuel: 100,
         parts: {
-          'Box of Tangled Wire': 5,
-          'Rusty Screws': 3,
-          'Wire Splice (Gum)': 2
+          'Box of tangled wire': 5,
+          'Rusty screws': 3,
+          'Wire splice': 2
         },
         tutorialCompleted: false,
         autoResolve: false,
@@ -296,8 +296,8 @@ export default function GameProvider({ children }) {
           // Roll for parts
           const partsFound = Math.random() < 0.5 ? 2 : (Math.random() < 0.75 ? 3 : 4);
           const partNames = [
-            'Box of Tangled Wire', 'Rusty Screws', 'Cracked Glass', 
-            'Wire Splice (Gum)', 'Stripped Bolts'
+            'Box of tangled wire', 'Rusty screws', 'Cracked glass', 
+            'Wire splice', 'Stripped bolts'
           ];
           
           const newParts = { ...gameState.parts };
