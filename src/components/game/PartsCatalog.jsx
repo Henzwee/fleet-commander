@@ -1,9 +1,9 @@
 // Ship part catalog
 export const ALL_PARTS = [
   'Box of tangled wire',
-  'Formerly evil AI',
+  'Reformed evil AI',
   'Cracked glass',
-  'Wire splice (gum)',
+  'Wire splice',
   'Rusty screws',
   'Stripped bolts',
   'Outdated map',
