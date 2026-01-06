@@ -19,16 +19,16 @@ export default function Market() {
       // Initialize MarketEngine if not already done
       if (MarketEngine.getAll().length === 0) {
         const baseItems = [
-          { id: 'cracked_glass', name: 'Cracked Glass', basePrice: 150 },
-          { id: 'evil_ai', name: 'Totally Not Evil A.I.', basePrice: 100 },
-          { id: 'rusty_screws', name: 'Rusty Screws', basePrice: 300 },
-          { id: 'wire_splice', name: 'Wire Splice (Gum)', basePrice: 200 },
-          { id: 'antimatter', name: 'Mostly Stable Antimatter', basePrice: 600 },
-          { id: 'sci_fi_panel', name: 'Sci-Fi Looking Panel', basePrice: 800 },
-          { id: 'tangled_wire', name: 'Box of Tangled Wire', basePrice: 60 },
-          { id: 'stripped_bolts', name: 'Stripped Bolts', basePrice: 400 },
-          { id: 'outdated_map', name: 'Outdated Map', basePrice: 500 },
-          { id: 'expired_food', name: 'Expired Food Rations', basePrice: 700 }
+          { id: 'cracked_glass', name: 'Cracked glass', basePrice: 150 },
+          { id: 'evil_ai', name: 'Reformed evil AI', basePrice: 100 },
+          { id: 'rusty_screws', name: 'Rusty screws', basePrice: 300 },
+          { id: 'wire_splice', name: 'Wire splice', basePrice: 200 },
+          { id: 'antimatter', name: 'Mostly stable antimatter', basePrice: 600 },
+          { id: 'sci_fi_panel', name: 'Sci-fi looking panel', basePrice: 800 },
+          { id: 'tangled_wire', name: 'Box of tangled wire', basePrice: 60 },
+          { id: 'stripped_bolts', name: 'Stripped bolts', basePrice: 400 },
+          { id: 'outdated_map', name: 'Outdated map', basePrice: 500 },
+          { id: 'expired_food', name: 'Expired food rations', basePrice: 700 }
         ];
         MarketEngine.init(baseItems);
       }
@@ -72,16 +72,16 @@ export default function Market() {
     if (activeTab === 'scrap') {
       // Get prices from MarketEngine
       const iconMap = {
-        'Box of Tangled Wire': '📦',
-        'Totally Not Evil A.I.': '🤖',
-        'Cracked Glass': '🔷',
-        'Wire Splice (Gum)': '🔧',
-        'Rusty Screws': '🔩',
-        'Stripped Bolts': '⚙️',
-        'Outdated Map': '🗺️',
-        'Mostly Stable Antimatter': '⚛️',
-        'Expired Food Rations': '🥫',
-        'Sci-Fi Looking Panel': '🖥️'
+        'Box of tangled wire': '📦',
+        'Reformed evil AI': '🤖',
+        'Cracked glass': '🔷',
+        'Wire splice': '🔧',
+        'Rusty screws': '🔩',
+        'Stripped bolts': '⚙️',
+        'Outdated map': '🗺️',
+        'Mostly stable antimatter': '⚛️',
+        'Expired food rations': '🥫',
+        'Sci-fi looking panel': '🖥️'
       };
       
       // Initialize stock if not exists
