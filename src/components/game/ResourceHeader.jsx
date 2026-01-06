@@ -10,9 +10,7 @@ export default function ResourceHeader() {
       top: 'var(--content-pad-top)',
       left: 'var(--content-pad-left)',
       right: 'var(--content-pad-right)',
-      bottom: 'var(--content-pad-bottom)',
-      width: 'auto',
-      height: 'auto'
+      height: '60px'
     }}>
       <div className="flex items-center justify-between gap-3 rounded-full px-4 py-3" style={{
         position: 'absolute',
