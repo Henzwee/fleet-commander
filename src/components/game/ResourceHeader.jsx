@@ -7,14 +7,14 @@ export default function ResourceHeader() {
   
   return (
     <div className="fixed z-30 bg-gradient-to-r from-gray-900/95 to-gray-800/95 backdrop-blur-sm" style={{ 
-      top: 'var(--content-pad-top)',
+      top: 0,
       left: 'var(--content-pad-left)',
       right: 'var(--content-pad-right)',
-      height: '60px'
+      height: 'calc(var(--content-pad-top) + 50px)'
     }}>
       <div className="flex items-center justify-between gap-3 rounded-full px-4 py-3" style={{
         position: 'absolute',
-        top: '-10px',
+        top: 'calc(var(--content-pad-top) - 10px)',
         left: '50%',
         transform: 'translateX(-50%)',
         width: 'calc(100% - 48px)',
