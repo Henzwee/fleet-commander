@@ -38,6 +38,7 @@ export default function GameProvider({ children }) {
         // Initialize new game
         const newState = await base44.entities.GameState.create({
           credits: 5000,
+          crystals: 50,
           fuel: 100,
           parts: {
             'Box of Tangled Wire': 5,
@@ -48,7 +49,8 @@ export default function GameProvider({ children }) {
           lastFuelRefill: new Date().toISOString(),
           lastMarketReset: new Date().toISOString(),
           autoResolve: false,
-          highestTier: 'Unregistered'
+          highestTier: 'Unregistered',
+          marketStock: {}
         });
         setGameState(newState);
         setMessages(['M.A.N.I. system initialized. Welcome, Commander.']);
@@ -61,6 +63,7 @@ export default function GameProvider({ children }) {
       // Initialize with default state if network fails
       setGameState({
         credits: 5000,
+        crystals: 50,
         fuel: 100,
         parts: {
           'Box of Tangled Wire': 5,
@@ -69,7 +72,8 @@ export default function GameProvider({ children }) {
         },
         tutorialCompleted: false,
         autoResolve: false,
-        highestTier: 'Unregistered'
+        highestTier: 'Unregistered',
+        marketStock: {}
       });
       setMessages(['M.A.N.I. system online (offline mode).']);
     } finally {
