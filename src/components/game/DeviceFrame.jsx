@@ -18,19 +18,19 @@ export default function DeviceFrame({ children }) {
   }, []);
   
   const frameVars = {
-    '--content-pad-top': '85px',
-    '--content-pad-bottom': '105px',
+    '--content-pad-top': '95px',
+    '--content-pad-bottom': '115px',
     '--content-pad-left': '22px',
     '--content-pad-right': '22px',
     '--safe-x': '16px',
-    '--home-x': '78%',
-    '--home-y': '3.8%',
-    '--home-w': '18%',
-    '--home-h': '5.8%',
-    '--jobs-x': '38%',
-    '--jobs-y': '92.4%',
-    '--jobs-w': '25%',
-    '--jobs-h': '6.2%',
+    '--settings-x': '78%',
+    '--settings-y': '3.8%',
+    '--settings-w': '18%',
+    '--settings-h': '5.8%',
+    '--home-x': '38%',
+    '--home-y': '92.4%',
+    '--home-w': '25%',
+    '--home-h': '6.2%',
     '--fleet-x': '68%',
     '--fleet-y': '92.4%',
     '--fleet-w': '25%',
@@ -81,6 +81,19 @@ export default function DeviceFrame({ children }) {
         
         {/* Clickable hotspots */}
         <button
+          onClick={() => navigate(createPageUrl('Settings'))}
+          className="hotspot hs-settings absolute cursor-pointer"
+          aria-label="Settings"
+          style={{
+            left: 'var(--settings-x)',
+            top: 'var(--settings-y)',
+            width: 'var(--settings-w)',
+            height: 'var(--settings-h)',
+            zIndex: 20
+          }}
+        />
+
+        <button
           onClick={() => navigate(createPageUrl('Main'))}
           className="hotspot hs-home absolute cursor-pointer"
           aria-label="Home"
@@ -92,20 +105,7 @@ export default function DeviceFrame({ children }) {
             zIndex: 20
           }}
         />
-        
-        <button
-          onClick={() => navigate(createPageUrl('Jobs'))}
-          className="hotspot hs-jobs absolute cursor-pointer"
-          aria-label="Jobs"
-          style={{
-            left: 'var(--jobs-x)',
-            top: 'var(--jobs-y)',
-            width: 'var(--jobs-w)',
-            height: 'var(--jobs-h)',
-            zIndex: 20
-          }}
-        />
-        
+
         <button
           onClick={() => navigate(createPageUrl('FleetManagement'))}
           className="hotspot hs-fleet absolute cursor-pointer"
