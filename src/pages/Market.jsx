@@ -16,20 +16,29 @@ export default function Market() {
   
   useEffect(() => {
     if (gameState) {
-      // Initialize MarketEngine if not already done
-      if (MarketEngine.getAll().length === 0) {
-        const baseItems = [
-          { id: 'cracked_glass', name: 'Cracked glass', basePrice: 150 },
-          { id: 'evil_ai', name: 'Reformed evil AI', basePrice: 100 },
-          { id: 'rusty_screws', name: 'Rusty screws', basePrice: 300 },
-          { id: 'wire_splice', name: 'Wire splice', basePrice: 200 },
-          { id: 'antimatter', name: 'Mostly stable antimatter', basePrice: 600 },
-          { id: 'sci_fi_panel', name: 'Sci-fi looking panel', basePrice: 800 },
-          { id: 'tangled_wire', name: 'Box of tangled wire', basePrice: 60 },
-          { id: 'stripped_bolts', name: 'Stripped bolts', basePrice: 400 },
-          { id: 'outdated_map', name: 'Outdated map', basePrice: 500 },
-          { id: 'expired_food', name: 'Expired food rations', basePrice: 700 }
-        ];
+      // Initialize MarketEngine with correct names (force re-init if names are wrong)
+      const baseItems = [
+        { id: 'cracked_glass', name: 'Cracked glass', basePrice: 150 },
+        { id: 'evil_ai', name: 'Reformed evil AI', basePrice: 100 },
+        { id: 'rusty_screws', name: 'Rusty screws', basePrice: 300 },
+        { id: 'wire_splice', name: 'Wire splice', basePrice: 200 },
+        { id: 'antimatter', name: 'Mostly stable antimatter', basePrice: 600 },
+        { id: 'sci_fi_panel', name: 'Sci-fi looking panel', basePrice: 800 },
+        { id: 'tangled_wire', name: 'Box of tangled wire', basePrice: 60 },
+        { id: 'stripped_bolts', name: 'Stripped bolts', basePrice: 400 },
+        { id: 'outdated_map', name: 'Outdated map', basePrice: 500 },
+        { id: 'expired_food', name: 'Expired food rations', basePrice: 700 }
+      ];
+      
+      // Check if we need to re-initialize due to name changes
+      const existing = MarketEngine.getAll();
+      const needsReinit = existing.length === 0 || 
+        existing.some(item => {
+          const correct = baseItems.find(b => b.id === item.id);
+          return correct && correct.name !== item.name;
+        });
+      
+      if (needsReinit) {
         MarketEngine.init(baseItems);
       }
       
