@@ -28,11 +28,11 @@ export default function DeviceFrame({ children }) {
     '--settings-w': '28%',
     '--settings-h': '5.8%',
     '--home-x': '38%',
-    '--home-y': '89.2%',
+    '--home-y': '87.5%',
     '--home-w': '25%',
     '--home-h': '6.2%',
     '--fleet-x': '68%',
-    '--fleet-y': '89.2%',
+    '--fleet-y': '87.5%',
     '--fleet-w': '25%',
     '--fleet-h': '6.2%'
   };
