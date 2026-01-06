@@ -4,6 +4,7 @@ import Jobs from './pages/Jobs';
 import Main from './pages/Main';
 import Market from './pages/Market';
 import Tutorial from './pages/Tutorial';
+import Settings from './pages/Settings';
 import __Layout from './Layout.jsx';
 
 
@@ -14,6 +15,7 @@ export const PAGES = {
     "Main": Main,
     "Market": Market,
     "Tutorial": Tutorial,
+    "Settings": Settings,
 }
 
 export const pagesConfig = {
