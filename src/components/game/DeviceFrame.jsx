@@ -18,7 +18,7 @@ export default function DeviceFrame({ children }) {
   }, []);
   
   const frameVars = {
-    '--content-pad-top': '65px',
+    '--content-pad-top': '85px',
     '--content-pad-bottom': '105px',
     '--content-pad-left': '22px',
     '--content-pad-right': '22px',
