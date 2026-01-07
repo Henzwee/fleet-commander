@@ -59,7 +59,7 @@ export default function Jobs() {
       'Retrieve artifact from "haunted" station',
       'Escort convoy through "totally safe" nebula',
       'Deliver barely expired medical supplies',
-      'Salvage wreck with "good vibes only"'
+      'Deliver waste to trash planet'
     ];
     
     const tierBands = [
