@@ -39,7 +39,7 @@ export default function Main() {
     try {
       const missions = await base44.entities.Mission.filter({ status: 'active' }, '-created_date', 20);
 
-      const missionsWithTime = missions.map(mission => {
+      const missionsWithTime = await Promise.all(missions.map(async mission => {
         const startTime = new Date(mission.startTime);
         const now = new Date();
         const elapsed = Math.floor((now - startTime) / (1000 * 60 * 60));
@@ -47,11 +47,23 @@ export default function Main() {
         const hours = Math.floor(remaining);
         const minutes = Math.floor((remaining % 1) * 60);
 
+        // Get ship image
+        let shipImage = null;
+        try {
+          const ships = await base44.entities.Ship.filter({ id: mission.shipId });
+          if (ships.length > 0 && ships[0].imageUrl) {
+            shipImage = ships[0].imageUrl;
+          }
+        } catch (err) {
+          console.error('Error loading ship image:', err);
+        }
+
         return {
           ...mission,
+          shipImage,
           timeRemaining: `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:00`
         };
-      });
+      }));
 
       setActiveMissions(missionsWithTime);
     } catch (error) {
@@ -149,8 +161,13 @@ export default function Main() {
                   onClick={() => navigate(createPageUrl('Jobs'))}
                   className="bg-gradient-to-r from-cyan-800/20 to-blue-800/20 border border-cyan-600/30 rounded-lg p-4 cursor-pointer hover:border-cyan-500 transition-all"
                 >
-                  <div className="text-cyan-100 font-bold text-base">
-                    {mission.shipName} - {mission.distance}ly - {mission.timeRemaining}
+                  <div className="flex items-center gap-3">
+                    {mission.shipImage && (
+                      <img src={mission.shipImage} alt={mission.shipName} className="w-10 h-10 object-contain" />
+                    )}
+                    <div className="text-cyan-100 font-bold text-base flex-1">
+                      {mission.shipName} - {mission.distance}ly - {mission.timeRemaining}
+                    </div>
                   </div>
                 </div>
               ))}
