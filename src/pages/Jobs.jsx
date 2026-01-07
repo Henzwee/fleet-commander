@@ -21,28 +21,45 @@ export default function Jobs() {
       const ships = await base44.entities.Ship.filter({ status: 'idle', isHired: true }, '-created_date', 50);
       setIdleShips(ships || []);
       
-      // Generate missions based on best ship
+      // Generate missions based on all ship tiers owned
       const allShips = await base44.entities.Ship.filter({ isHired: true }, '-created_date', 100);
       const bestShipMaxLY = allShips.length > 0 
         ? Math.max(...allShips.map(s => s.maxLY || 100))
         : 100;
-      generateMissions(bestShipMaxLY);
+      
+      // Get unique tiers owned by player
+      const ownedTiers = [...new Set(allShips.map(s => s.tier))];
+      generateMissions(bestShipMaxLY, ownedTiers);
     } catch (error) {
       console.error('Error loading ships:', error);
       setIdleShips([]);
-      generateMissions(100); // Default to Unregistered range
+      generateMissions(100, ['Unregistered']); // Default to Unregistered range
     }
   };
   
-  const generateMissions = (maxLY) => {
+  const generateMissions = (maxLY, ownedTiers = ['Unregistered']) => {
     const missions = [];
     const descriptions = [
-      'Routine cargo delivery',
-      'Emergency supply run',
-      'Escort mission',
-      'Salvage operation',
-      'Scientific survey',
-      'Passenger transport'
+      'Deliver mystery meat to Station 7',
+      'Rescue cat stuck in airlock',
+      'Transport live chickens (they escape easily)',
+      'Haul cursed cargo (probably fine)',
+      'Escort paranoid merchant',
+      'Salvage "totally not stolen" goods',
+      'Find lost space tourist',
+      'Deliver overdue library books',
+      'Transport experimental cheese',
+      'Investigate suspicious beeping',
+      'Retrieve escape pod full of regrets',
+      'Escort celebrity on "incognito" trip',
+      'Deliver antique weapons to museum',
+      'Survey planet that keeps disappearing',
+      'Transport philosopher who won\'t stop talking',
+      'Haul defective AI cores',
+      'Retrieve artifact from "haunted" station',
+      'Escort convoy through "totally safe" nebula',
+      'Deliver urgent medical supplies (expired)',
+      'Salvage wreck with "good vibes only"'
     ];
     
     const tierBands = [
@@ -62,38 +79,22 @@ export default function Jobs() {
       }
     }
     
-    // ALWAYS include 2-3 Unregistered missions
-    for (let i = 0; i < 3; i++) {
-      const distance = Math.floor(Math.random() * 90) + 10; // 10-100 LY
-      missions.push({
-        id: 'mission_' + missions.length,
-        distance,
-        duration: 1,
-        reward: Math.floor(distance * (Math.random() * 2 + 1)),
-        fuelCost: Math.floor(distance / 100) || 1,
-        description: descriptions[Math.floor(Math.random() * descriptions.length)],
-        tier: 'Unregistered',
-        locked: false
-      });
-    }
-    
-    // Generate 1-2 missions per tier up to player's level
-    for (let tierIdx = 1; tierIdx <= playerTierIndex; tierIdx++) {
-      const tier = tierBands[tierIdx];
-      const count = Math.random() < 0.5 ? 1 : 2;
-      
-      for (let i = 0; i < count; i++) {
-        const distance = Math.floor(Math.random() * (tier.max - tier.min)) + tier.min;
-        missions.push({
-          id: 'mission_' + missions.length,
-          distance,
-          duration: Math.floor(distance / 500) + 1,
-          reward: Math.floor(distance * (Math.random() * 2 + 1)),
-          fuelCost: Math.floor(distance / 100),
-          description: descriptions[Math.floor(Math.random() * descriptions.length)],
-          tier: tier.name,
-          locked: false
-        });
+    // Generate at least 3 missions for each tier the player owns ships in
+    for (const tier of tierBands) {
+      if (ownedTiers.includes(tier.name)) {
+        for (let i = 0; i < 3; i++) {
+          const distance = Math.floor(Math.random() * (tier.max - tier.min)) + tier.min;
+          missions.push({
+            id: 'mission_' + missions.length,
+            distance,
+            duration: Math.floor(distance / 500) + 1,
+            reward: Math.floor(distance * (Math.random() * 2 + 1)),
+            fuelCost: Math.floor(distance / 100) || 1,
+            description: descriptions[Math.floor(Math.random() * descriptions.length)],
+            tier: tier.name,
+            locked: false
+          });
+        }
       }
     }
     
