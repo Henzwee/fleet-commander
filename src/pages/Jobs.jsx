@@ -48,8 +48,8 @@ export default function Jobs() {
       'Salvage "totally not stolen" goods',
       'Find lost space tourist',
       'Deliver overdue library books',
-      'Transport experimental cheese',
-      'Investigate suspicious beeping',
+      'Transport experimental goo',
+      'Deliver lug nuts to hostile robot planet',
       'Retrieve escape pod full of regrets',
       'Escort celebrity on "incognito" trip',
       'Deliver antique weapons to museum',
@@ -58,7 +58,7 @@ export default function Jobs() {
       'Haul defective AI cores',
       'Retrieve artifact from "haunted" station',
       'Escort convoy through "totally safe" nebula',
-      'Deliver urgent medical supplies (expired)',
+      'Deliver barely expired medical supplies',
       'Salvage wreck with "good vibes only"'
     ];
     
