@@ -15,7 +15,11 @@ export const SHIP_IMAGES = {
     'https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695af5ca435140b76c0dadc9/2b8aab57c_notorious2.png',
     'https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695af5ca435140b76c0dadc9/dfec9ff9a_notorious3.png'
   ],
-  'Esteemed': [],
+  'Esteemed': [
+    'https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695af5ca435140b76c0dadc9/eea71e744_esteemed1.png',
+    'https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695af5ca435140b76c0dadc9/202b3e6f3_notorious2.png',
+    'https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695af5ca435140b76c0dadc9/15fae6ff0_notorious3.png'
+  ],
   'Renowned': [],
   'Legendary': []
 };
