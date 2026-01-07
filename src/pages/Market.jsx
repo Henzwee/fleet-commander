@@ -94,19 +94,33 @@ export default function Market() {
         'Sci-fi looking panel': '🖥️'
       };
       
-      // Randomly select 6 items from all available
-      const allItems = MarketEngine.getAll();
-      const shuffled = [...allItems].sort(() => Math.random() - 0.5);
-      const selectedItems = shuffled.slice(0, 6);
+      // Initialize or use existing market rotation
+      if (!gameState.marketStock) {
+        const allItems = MarketEngine.getAll();
+        const shuffled = [...allItems].sort(() => Math.random() - 0.5);
+        const selectedItems = shuffled.slice(0, 6);
+        
+        const newStock = {};
+        selectedItems.forEach(item => {
+          newStock[item.id] = Math.floor(Math.random() * 5) + 1; // 1-5 stock
+        });
+        updateGameState({ marketStock: newStock });
+        return;
+      }
       
-      const parts = selectedItems.map(item => ({
-        id: item.id,
-        name: item.name,
-        price: item.currentPrice,
-        deltaPercent: item.deltaPercent,
-        icon: iconMap[item.name] || '📦',
-        currency: 'credits'
-      }));
+      // Use existing rotation
+      const parts = Object.keys(gameState.marketStock).map(itemId => {
+        const item = MarketEngine.get(itemId);
+        return {
+          id: item.id,
+          name: item.name,
+          price: item.currentPrice,
+          deltaPercent: item.deltaPercent,
+          icon: iconMap[item.name] || '📦',
+          stock: gameState.marketStock[itemId],
+          currency: 'credits'
+        };
+      });
       
       setMarketItems(parts);
     } else if (activeTab === 'ships') {
@@ -220,7 +234,10 @@ export default function Market() {
       const newParts = { ...gameState.parts };
       newParts[item.name] = (newParts[item.name] || 0) + quantity;
       
-      const updates = { parts: newParts };
+      const newStock = { ...gameState.marketStock };
+      newStock[item.id] = (newStock[item.id] || 0) - quantity;
+      
+      const updates = { parts: newParts, marketStock: newStock };
       if (currency === 'crystals') {
         updates.crystals = gameState.crystals - totalCost;
       } else {
@@ -290,15 +307,22 @@ export default function Market() {
                   addMessage('Need 10 crystals to reset market!');
                   return;
                 }
+                // Select new random items with new stock
+                const allItems = MarketEngine.getAll();
+                const shuffled = [...allItems].sort(() => Math.random() - 0.5);
+                const selectedItems = shuffled.slice(0, 6);
+                
+                const newStock = {};
+                selectedItems.forEach(item => {
+                  MarketEngine.reprice(item.id);
+                  newStock[item.id] = Math.floor(Math.random() * 5) + 1; // 1-5 stock
+                });
+                
                 await updateGameState({
                   crystals: gameState.crystals - 10,
-                  lastMarketReset: new Date().toISOString()
+                  lastMarketReset: new Date().toISOString(),
+                  marketStock: newStock
                 });
-                // Reprice all items
-                MarketEngine.getAll().forEach(item => {
-                  MarketEngine.reprice(item.id);
-                });
-                generateMarketItems();
                 addMessage('Market reset!');
               }}
               disabled={!gameState || gameState.crystals < 10}
@@ -347,7 +371,11 @@ export default function Market() {
           {marketItems.map((item, idx) => (
             <div
               key={idx}
-              className="bg-gradient-to-r from-gray-800 to-gray-900 border border-cyan-500/30 rounded-lg p-4 flex items-center justify-between hover:border-cyan-500 transition-all"
+              className={`bg-gradient-to-r from-gray-800 to-gray-900 border rounded-lg p-4 flex items-center justify-between transition-all ${
+                item.stock === 0 
+                  ? 'border-gray-700 opacity-50' 
+                  : 'border-cyan-500/30 hover:border-cyan-500'
+              }`}
             >
               <div className="flex items-center gap-3">
                 {item.imageUrl ? (
@@ -374,15 +402,23 @@ export default function Market() {
                   {item.tier && (
                     <div className="text-xs text-gray-400">{item.tier} • {item.maxLY} LY</div>
                   )}
+                  {item.stock !== undefined && (
+                    <div className={`text-xs ${item.stock === 0 ? 'text-red-500' : 'text-gray-500'}`}>
+                      Stock: {item.stock}
+                    </div>
+                  )}
                 </div>
               </div>
               
               <button
                 onClick={() => handleBuyClick(item)}
-                disabled={item.currency === 'crystals' ? gameState?.crystals < item.price : gameState?.credits < item.price}
+                disabled={
+                  (item.currency === 'crystals' ? gameState?.crystals < item.price : gameState?.credits < item.price) ||
+                  item.stock === 0
+                }
                 className="bg-green-600 hover:bg-green-700 disabled:bg-gray-600 disabled:cursor-not-allowed border-2 border-green-500 disabled:border-gray-500 rounded-lg px-6 py-2 text-white font-bold text-sm transition-all"
               >
-                {item.currency === 'crystals' ? '◆' : '$'}{item.price}
+                {item.stock === 0 ? 'OUT' : `${item.currency === 'crystals' ? '◆' : '$'}${item.price}`}
               </button>
             </div>
           ))}
