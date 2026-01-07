@@ -23,11 +23,16 @@ export default function ActiveJobsList({ missions = [], onMissionClick }) {
             onClick={() => onMissionClick(mission)}
             className="bg-gradient-to-r from-gray-800 to-gray-900 border border-cyan-500/30 rounded-lg p-3 cursor-pointer hover:border-cyan-500 hover:bg-cyan-500/10 transition-all"
           >
-            <div className="flex items-center justify-between mb-2">
-              <div className="text-cyan-100 font-bold text-sm">{mission.shipName}</div>
-              <div className="text-amber-400 font-bold text-xs flex items-center gap-1">
-                <Zap className="w-3 h-3" />
-                <span>${mission.reward}</span>
+            <div className="flex items-center gap-3 mb-2">
+              {mission.shipImage && (
+                <img src={mission.shipImage} alt={mission.shipName} className="w-10 h-10 object-contain" />
+              )}
+              <div className="flex items-center justify-between flex-1">
+                <div className="text-cyan-100 font-bold text-sm">{mission.shipName}</div>
+                <div className="text-amber-400 font-bold text-xs flex items-center gap-1">
+                  <Zap className="w-3 h-3" />
+                  <span>${mission.reward}</span>
+                </div>
               </div>
             </div>
             

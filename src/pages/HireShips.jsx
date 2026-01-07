@@ -6,6 +6,7 @@ import { ArrowLeft, ShoppingCart } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '../utils';
 import ShipCard from '../components/game/ShipCard';
+import { getRandomShipImage, SHIP_IMAGES } from '../components/game/ShipImages';
 
 export default function HireShips() {
   const navigate = useNavigate();
@@ -46,9 +47,20 @@ export default function HireShips() {
       const [minPay, maxPay] = tierPay[tier];
       const hourlyPay = Math.floor(Math.random() * (maxPay - minPay + 1)) + minPay;
       
+      const tierMaxLY = {
+        'Unregistered': 100,
+        'Known': 500,
+        'Notorious': 1500,
+        'Esteemed': 3500,
+        'Renowned': 6000,
+        'Legendary': 10000
+      };
+      
       ships.push({
         name: names[i] + '-' + Math.floor(Math.random() * 1000),
         tier,
+        imageUrl: getRandomShipImage(tier),
+        maxLY: tierMaxLY[tier],
         price,
         hourlyPay,
         health: 100
@@ -67,6 +79,8 @@ export default function HireShips() {
     await base44.entities.Ship.create({
       name: ship.name,
       tier: ship.tier,
+      imageUrl: ship.imageUrl,
+      maxLY: ship.maxLY,
       health: 100,
       damaged: false,
       status: 'idle',
