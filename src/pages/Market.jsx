@@ -302,7 +302,11 @@ export default function Market() {
                   crystals: gameState.crystals - 10,
                   lastMarketReset: new Date().toISOString()
                 });
-                MarketEngine.repriceAll();
+                // Reprice all items
+                MarketEngine.getAll().forEach(item => {
+                  MarketEngine.reprice(item.id);
+                });
+                generateMarketItems();
                 addMessage('Market reset!');
               }}
               disabled={gameState?.crystals < 10}
