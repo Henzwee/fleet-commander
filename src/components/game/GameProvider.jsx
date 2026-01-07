@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { base44 } from '@/api/base44Client';
+import { getRandomShipImage } from './ShipImages';
 
 const GameContext = createContext();
 
@@ -355,6 +356,7 @@ export default function GameProvider({ children }) {
     return await base44.entities.Ship.create({
       name,
       tier,
+      imageUrl: getRandomShipImage(tier),
       maxLY: tierMaxLY[tier],
       health: 100,
       damaged: false,

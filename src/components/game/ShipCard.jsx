@@ -1,5 +1,5 @@
 import React from 'react';
-import { Heart, Zap, Package, MapPin } from 'lucide-react';
+import { Heart } from 'lucide-react';
 
 const tierColors = {
   'Unregistered': 'text-gray-400 border-gray-500',
@@ -27,6 +27,16 @@ export default function ShipCard({ ship, onClick, showPrice = false }) {
       onClick={onClick}
       className={`bg-gradient-to-b from-gray-800 to-gray-900 border-2 ${colorClass} rounded-lg p-4 cursor-pointer hover:scale-105 transition-all`}
     >
+      {ship.imageUrl && (
+        <div className="flex justify-center mb-3">
+          <img 
+            src={ship.imageUrl} 
+            alt={ship.name}
+            className="w-20 h-20 object-contain"
+          />
+        </div>
+      )}
+      
       <div className="flex items-start justify-between mb-3">
         <div>
           <div className="text-cyan-100 font-bold text-sm mb-1">{ship.name}</div>

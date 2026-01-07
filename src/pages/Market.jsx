@@ -6,6 +6,7 @@ import ResourceHeader from '../components/game/ResourceHeader';
 import PurchaseConfirmDialog from '../components/game/PurchaseConfirmDialog';
 import { Clock, ShoppingCart, Zap } from 'lucide-react';
 import { MarketEngine } from '../components/game/MarketEngine';
+import { getRandomShipImage } from '../components/game/ShipImages';
 
 export default function Market() {
   const { gameState, updateGameState, addMessage, rollShipTier } = useGame();
@@ -143,6 +144,7 @@ export default function Market() {
         ships.push({
           name: names[i] + '-' + Math.floor(Math.random() * 1000),
           tier,
+          imageUrl: getRandomShipImage(tier),
           maxLY: tierMaxLY[tier],
           price,
           icon: '🚀',
@@ -252,6 +254,7 @@ export default function Market() {
       await base44.entities.Ship.create({
         name: item.name,
         tier: item.tier,
+        imageUrl: item.imageUrl,
         maxLY: item.maxLY,
         health: 100,
         damaged: false,
@@ -330,7 +333,11 @@ export default function Market() {
               className="bg-gradient-to-r from-gray-800 to-gray-900 border border-cyan-500/30 rounded-lg p-4 flex items-center justify-between hover:border-cyan-500 transition-all"
             >
               <div className="flex items-center gap-3">
-                <div className="text-3xl">{item.icon}</div>
+                {item.imageUrl ? (
+                  <img src={item.imageUrl} alt={item.name} className="w-12 h-12 object-contain" />
+                ) : (
+                  <div className="text-3xl">{item.icon}</div>
+                )}
                 <div>
                   <div className="text-cyan-100 font-bold text-sm">
                     {item.name}
