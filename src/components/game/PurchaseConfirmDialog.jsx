@@ -60,7 +60,7 @@ export default function PurchaseConfirmDialog({ item, onConfirm, onCancel }) {
             </button>
           </div>
           
-          <div className="text-center mb-2">
+          <div className="text-center mb-8">
             <div className="text-gray-400 text-xs mb-1">Total Cost</div>
             <div className={`text-2xl font-bold ${currency === 'crystals' ? 'text-purple-400' : 'text-amber-400'}`}>
               {currency === 'crystals' ? '◆' : '$'}{totalCost.toLocaleString()}
@@ -68,7 +68,7 @@ export default function PurchaseConfirmDialog({ item, onConfirm, onCancel }) {
           </div>
         </div>
         
-        <div className="grid grid-cols-2 gap-2" style={{ marginTop: 'auto', marginBottom: 'auto' }}>
+        <div className="grid grid-cols-2 gap-2 mb-8">
           <button
             onClick={onCancel}
             className="bg-gray-700 hover:bg-gray-600 border-2 border-gray-500 rounded-lg py-2.5 text-white font-bold text-sm"

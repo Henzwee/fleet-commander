@@ -24,7 +24,7 @@ export default function ShipPurchaseDialog({ ship, onConfirm, onCancel }) {
           />
         )}
 
-        <div className="space-y-2 mb-4 flex-1">
+        <div className="space-y-2 mb-8 flex-1">
           <div className="text-cyan-100 font-bold text-base">{ship.name}</div>
           
           <div className="bg-gray-800/50 border border-cyan-500/30 rounded-lg p-2.5 space-y-1.5">
@@ -47,7 +47,7 @@ export default function ShipPurchaseDialog({ ship, onConfirm, onCancel }) {
           </div>
         </div>
 
-        <div className="flex gap-2" style={{ marginTop: 'auto', marginBottom: 'auto' }}>
+        <div className="flex gap-2 mb-8">
           <button
             onClick={onCancel}
             className="flex-1 bg-gray-700 hover:bg-gray-600 border-2 border-gray-600 rounded-lg py-2.5 text-white font-bold text-sm transition-all"
