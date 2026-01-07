@@ -4,7 +4,7 @@ import { useGame } from '../components/game/GameProvider';
 import DeviceFrame from '../components/game/DeviceFrame';
 import ResourceHeader from '../components/game/ResourceHeader';
 import PurchaseConfirmDialog from '../components/game/PurchaseConfirmDialog';
-import { Clock, ShoppingCart, Zap } from 'lucide-react';
+import { Clock, ShoppingCart, Zap, RefreshCw } from 'lucide-react';
 import { MarketEngine } from '../components/game/MarketEngine';
 import { getRandomShipImage } from '../components/game/ShipImages';
 
@@ -308,7 +308,7 @@ export default function Market() {
               disabled={gameState?.crystals < 10}
               className="bg-purple-600 hover:bg-purple-700 disabled:bg-gray-600 disabled:cursor-not-allowed border-2 border-purple-500 disabled:border-gray-500 rounded-lg px-3 py-1 text-white font-bold text-xs transition-all flex items-center gap-1"
             >
-              <Zap className="w-3 h-3" />
+              <RefreshCw className="w-3 h-3" />
               <span>◆10</span>
             </button>
           </div>
