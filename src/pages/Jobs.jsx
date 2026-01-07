@@ -45,23 +45,71 @@ export default function Jobs() {
       'Passenger transport'
     ];
     
-    // Generate missions within player's best ship range
-    // Mix of easier and challenging missions
-    for (let i = 0; i < 8; i++) {
-      const minDistance = Math.max(50, Math.floor(maxLY * 0.1));
-      const maxDistance = maxLY;
-      const distance = Math.floor(Math.random() * (maxDistance - minDistance)) + minDistance;
-      const duration = Math.floor(distance / 500) + 1;
-      const reward = Math.floor(distance * (Math.random() * 2 + 1));
-      const fuelCost = Math.floor(distance / 100);
-      
+    const tierBands = [
+      { name: 'Unregistered', min: 10, max: 100 },
+      { name: 'Known', min: 100, max: 500 },
+      { name: 'Notorious', min: 500, max: 1500 },
+      { name: 'Esteemed', min: 1500, max: 3500 },
+      { name: 'Renowned', min: 3500, max: 6000 },
+      { name: 'Legendary', min: 6000, max: 10000 }
+    ];
+    
+    // Find player's current tier based on maxLY
+    let playerTierIndex = 0;
+    for (let i = 0; i < tierBands.length; i++) {
+      if (maxLY >= tierBands[i].max) {
+        playerTierIndex = i;
+      }
+    }
+    
+    // ALWAYS include 2-3 Unregistered missions
+    for (let i = 0; i < 3; i++) {
+      const distance = Math.floor(Math.random() * 90) + 10; // 10-100 LY
       missions.push({
-        id: 'mission_' + i,
+        id: 'mission_' + missions.length,
         distance,
-        duration,
-        reward,
-        fuelCost,
-        description: descriptions[Math.floor(Math.random() * descriptions.length)]
+        duration: 1,
+        reward: Math.floor(distance * (Math.random() * 2 + 1)),
+        fuelCost: Math.floor(distance / 100) || 1,
+        description: descriptions[Math.floor(Math.random() * descriptions.length)],
+        tier: 'Unregistered',
+        locked: false
+      });
+    }
+    
+    // Generate 1-2 missions per tier up to player's level
+    for (let tierIdx = 1; tierIdx <= playerTierIndex; tierIdx++) {
+      const tier = tierBands[tierIdx];
+      const count = Math.random() < 0.5 ? 1 : 2;
+      
+      for (let i = 0; i < count; i++) {
+        const distance = Math.floor(Math.random() * (tier.max - tier.min)) + tier.min;
+        missions.push({
+          id: 'mission_' + missions.length,
+          distance,
+          duration: Math.floor(distance / 500) + 1,
+          reward: Math.floor(distance * (Math.random() * 2 + 1)),
+          fuelCost: Math.floor(distance / 100),
+          description: descriptions[Math.floor(Math.random() * descriptions.length)],
+          tier: tier.name,
+          locked: false
+        });
+      }
+    }
+    
+    // Add exactly 1 aspirational mission (one tier above, locked)
+    if (playerTierIndex < tierBands.length - 1) {
+      const nextTier = tierBands[playerTierIndex + 1];
+      const distance = Math.floor(Math.random() * (nextTier.max - nextTier.min)) + nextTier.min;
+      missions.push({
+        id: 'mission_aspirational',
+        distance,
+        duration: Math.floor(distance / 500) + 1,
+        reward: Math.floor(distance * (Math.random() * 2 + 1)),
+        fuelCost: Math.floor(distance / 100),
+        description: descriptions[Math.floor(Math.random() * descriptions.length)],
+        tier: nextTier.name,
+        locked: true
       });
     }
     
@@ -133,14 +181,23 @@ export default function Jobs() {
           {availableMissions.map((mission) => (
             <div
               key={mission.id}
-              onClick={() => setSelectedMission(mission)}
-              className={`bg-gradient-to-r from-gray-800 to-gray-900 border-2 rounded-lg p-4 cursor-pointer transition-all ${
-                selectedMission?.id === mission.id
-                  ? 'border-cyan-500 bg-cyan-500/10'
-                  : 'border-gray-600 hover:border-cyan-500/50'
+              onClick={() => !mission.locked && setSelectedMission(mission)}
+              className={`bg-gradient-to-r from-gray-800 to-gray-900 border-2 rounded-lg p-4 transition-all ${
+                mission.locked
+                  ? 'border-red-500/30 opacity-60 cursor-not-allowed'
+                  : selectedMission?.id === mission.id
+                  ? 'border-cyan-500 bg-cyan-500/10 cursor-pointer'
+                  : 'border-gray-600 hover:border-cyan-500/50 cursor-pointer'
               }`}
             >
-              <div className="text-cyan-100 font-bold mb-2">{mission.description}</div>
+              <div className="flex items-center justify-between mb-2">
+                <div className="text-cyan-100 font-bold">{mission.description}</div>
+                {mission.locked && (
+                  <div className="text-red-400 text-xs font-bold">🔒 LOCKED</div>
+                )}
+              </div>
+              
+              <div className="text-xs text-gray-500 mb-2">{mission.tier}</div>
               
               <div className="grid grid-cols-2 gap-2 text-xs">
                 <div className="flex items-center gap-1 text-gray-400">
