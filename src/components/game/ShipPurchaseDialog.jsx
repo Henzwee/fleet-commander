@@ -12,14 +12,9 @@ export default function ShipPurchaseDialog({ ship, onConfirm, onCancel }) {
       right: 'var(--content-pad-right)'
     }}>
       <div className="flex-1 flex flex-col px-6 py-4 relative">
-        <button
-          onClick={onCancel}
-          className="absolute top-0 right-0 text-gray-400 hover:text-cyan-400 transition-colors"
-        >
-          <X className="w-5 h-5" />
-        </button>
-
-        <h2 className="text-cyan-400 font-bold text-base mb-3">CONFIRM PURCHASE</h2>
+        <div className="mb-6 mt-6">
+          <h2 className="text-cyan-400 font-bold text-base">CONFIRM PURCHASE</h2>
+        </div>
 
         {ship.imageUrl && (
           <img 
@@ -52,7 +47,7 @@ export default function ShipPurchaseDialog({ ship, onConfirm, onCancel }) {
           </div>
         </div>
 
-        <div className="flex gap-2 mt-auto">
+        <div className="flex gap-2 mt-6">
           <button
             onClick={onCancel}
             className="flex-1 bg-gray-700 hover:bg-gray-600 border-2 border-gray-600 rounded-lg py-2.5 text-white font-bold text-sm transition-all"

@@ -28,11 +28,8 @@ export default function PurchaseConfirmDialog({ item, onConfirm, onCancel }) {
       right: 'var(--content-pad-right)'
     }}>
       <div className="flex-1 flex flex-col px-6 py-4">
-        <div className="flex items-center justify-between mb-3">
+        <div className="mb-6 mt-6">
           <h3 className="text-cyan-400 font-bold text-base">CONFIRM PURCHASE</h3>
-          <button onClick={onCancel} className="text-gray-400 hover:text-white">
-            <X className="w-5 h-5" />
-          </button>
         </div>
         
         <div className="flex-1 flex flex-col justify-center">
@@ -63,7 +60,7 @@ export default function PurchaseConfirmDialog({ item, onConfirm, onCancel }) {
             </button>
           </div>
           
-          <div className="text-center mb-4">
+          <div className="text-center mb-2">
             <div className="text-gray-400 text-xs mb-1">Total Cost</div>
             <div className={`text-2xl font-bold ${currency === 'crystals' ? 'text-purple-400' : 'text-amber-400'}`}>
               {currency === 'crystals' ? '◆' : '$'}{totalCost.toLocaleString()}
@@ -71,7 +68,7 @@ export default function PurchaseConfirmDialog({ item, onConfirm, onCancel }) {
           </div>
         </div>
         
-        <div className="grid grid-cols-2 gap-2 mt-auto">
+        <div className="grid grid-cols-2 gap-2 mt-6">
           <button
             onClick={onCancel}
             className="bg-gray-700 hover:bg-gray-600 border-2 border-gray-500 rounded-lg py-2.5 text-white font-bold text-sm"
