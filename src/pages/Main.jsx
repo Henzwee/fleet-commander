@@ -12,7 +12,7 @@ import MissionReportScreen from '../components/game/MissionReportScreen';
 
 export default function Main() {
   const navigate = useNavigate();
-  const { gameState, loading, messages, currentEvent, handleEventChoice } = useGame();
+  const { gameState, loading, messages, currentEvent, handleEventChoice, updateGameState, addMessage } = useGame();
   const [activeMissions, setActiveMissions] = useState([]);
   const [showExplosion, setShowExplosion] = useState(false);
   const [selectedMission, setSelectedMission] = useState(null);
@@ -24,6 +24,13 @@ export default function Main() {
     if (gameState) {
       loadActiveMissions();
     }
+  }, [gameState]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      loadActiveMissions();
+    }, 1000);
+    return () => clearInterval(interval);
   }, [gameState]);
 
   useEffect(() => {
@@ -40,14 +47,18 @@ export default function Main() {
   const loadActiveMissions = async () => {
     try {
       const missions = await base44.entities.Mission.filter({ status: 'active' }, '-created_date', 20);
+      const completed = await base44.entities.Mission.filter({ status: 'completed' }, '-created_date', 20);
 
-      const missionsWithTime = await Promise.all(missions.map(async mission => {
+      const allMissions = [...missions, ...completed];
+
+      const missionsWithTime = await Promise.all(allMissions.map(async mission => {
         const startTime = new Date(mission.startTime);
         const now = new Date();
-        const elapsed = Math.floor((now - startTime) / (1000 * 60 * 60));
+        const elapsed = (now - startTime) / (1000 * 60 * 60);
         const remaining = Math.max(0, mission.duration - elapsed);
         const hours = Math.floor(remaining);
         const minutes = Math.floor((remaining % 1) * 60);
+        const seconds = Math.floor(((remaining % 1) * 60 % 1) * 60);
 
         // Get ship image
         let shipImage = null;
@@ -63,7 +74,8 @@ export default function Main() {
         return {
           ...mission,
           shipImage,
-          timeRemaining: `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:00`
+          isComplete: mission.status === 'completed' || remaining <= 0,
+          timeRemaining: `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
         };
       }));
 
@@ -157,22 +169,47 @@ export default function Main() {
             <div className="text-center text-gray-500 py-8">No active missions</div>
           ) : (
             <div className="space-y-3 overflow-y-auto">
-              {activeMissions.map((mission) => (
-                <div
-                  key={mission.id}
-                  onClick={() => setSelectedMission(mission)}
-                  className="bg-gradient-to-r from-cyan-800/20 to-blue-800/20 border border-cyan-600/30 rounded-lg p-4 cursor-pointer hover:border-cyan-500 transition-all"
-                >
-                  <div className="flex items-center gap-3">
-                    {mission.shipImage && (
-                      <img src={mission.shipImage} alt={mission.shipName} className="w-10 h-10 object-contain" />
-                    )}
-                    <div className="text-cyan-100 font-bold text-base flex-1">
-                      {mission.shipName} - {mission.distance}ly - {mission.timeRemaining}
+              {activeMissions.map((mission) => {
+                const hasEvent = currentEvent?.missionId === mission.id;
+                return (
+                  <div
+                    key={mission.id}
+                    className={`bg-gradient-to-r from-cyan-800/20 to-blue-800/20 border rounded-lg p-4 cursor-pointer transition-all ${
+                      hasEvent 
+                        ? 'border-amber-500 animate-pulse' 
+                        : 'border-cyan-600/30 hover:border-cyan-500'
+                    }`}
+                  >
+                    <div className="flex items-center gap-3" onClick={() => setSelectedMission(mission)}>
+                      {mission.shipImage && (
+                        <img src={mission.shipImage} alt={mission.shipName} className="w-10 h-10 object-contain" />
+                      )}
+                      <div className="text-cyan-100 font-bold text-sm flex-1">
+                        {mission.shipName} - {mission.distance}ly
+                      </div>
+                      {mission.isComplete ? (
+                        <button
+                          onClick={async (e) => {
+                            e.stopPropagation();
+                            const newCredits = gameState.credits + mission.reward;
+                            await base44.entities.Mission.delete(mission.id);
+                            await updateGameState({ credits: newCredits });
+                            addMessage(`Collected $${mission.reward} from ${mission.shipName}!`);
+                            loadActiveMissions();
+                          }}
+                          className="bg-green-600 hover:bg-green-700 border-2 border-green-500 rounded px-3 py-1 text-white font-bold text-xs"
+                        >
+                          COLLECT
+                        </button>
+                      ) : (
+                        <div className="text-cyan-400 text-xs font-mono">
+                          {mission.timeRemaining}
+                        </div>
+                      )}
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </div>
