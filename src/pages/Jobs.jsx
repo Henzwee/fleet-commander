@@ -42,7 +42,7 @@ export default function Jobs() {
     const descriptions = [
       'Deliver mystery meat to Station 7',
       'Rescue cat stuck in airlock',
-      'Transport live chickens (they escape easily)',
+      'Get an oil change, thruster rotation, and new antimatter filter',
       'Haul cursed cargo (probably fine)',
       'Escort paranoid merchant',
       'Salvage "totally not stolen" goods',
