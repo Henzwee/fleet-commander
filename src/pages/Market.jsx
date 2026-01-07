@@ -94,22 +94,17 @@ export default function Market() {
         'Sci-fi looking panel': '🖥️'
       };
       
-      // Initialize stock if not exists
-      if (!gameState.marketStock) {
-        const initialStock = {};
-        MarketEngine.getAll().forEach(item => {
-          initialStock[item.id] = Math.floor(Math.random() * 16) + 5; // 5-20 stock
-        });
-        updateGameState({ marketStock: initialStock });
-      }
+      // Randomly select 6 items from all available
+      const allItems = MarketEngine.getAll();
+      const shuffled = [...allItems].sort(() => Math.random() - 0.5);
+      const selectedItems = shuffled.slice(0, 6);
       
-      const parts = MarketEngine.getAll().map(item => ({
+      const parts = selectedItems.map(item => ({
         id: item.id,
         name: item.name,
         price: item.currentPrice,
         deltaPercent: item.deltaPercent,
         icon: iconMap[item.name] || '📦',
-        stock: gameState?.marketStock?.[item.id] || 0,
         currency: 'credits'
       }));
       
@@ -225,10 +220,7 @@ export default function Market() {
       const newParts = { ...gameState.parts };
       newParts[item.name] = (newParts[item.name] || 0) + quantity;
       
-      const newStock = { ...gameState.marketStock };
-      newStock[item.id] = (newStock[item.id] || 0) - quantity;
-      
-      const updates = { parts: newParts, marketStock: newStock };
+      const updates = { parts: newParts };
       if (currency === 'crystals') {
         updates.crystals = gameState.crystals - totalCost;
       } else {
@@ -294,7 +286,7 @@ export default function Market() {
             </div>
             <button
               onClick={async () => {
-                if (gameState.crystals < 10) {
+                if (!gameState || gameState.crystals < 10) {
                   addMessage('Need 10 crystals to reset market!');
                   return;
                 }
@@ -309,7 +301,7 @@ export default function Market() {
                 generateMarketItems();
                 addMessage('Market reset!');
               }}
-              disabled={gameState?.crystals < 10}
+              disabled={!gameState || gameState.crystals < 10}
               className="bg-purple-600 hover:bg-purple-700 disabled:bg-gray-600 disabled:cursor-not-allowed border-2 border-purple-500 disabled:border-gray-500 rounded-lg px-3 py-1 text-white font-bold text-xs transition-all flex items-center gap-1"
             >
               <RefreshCw className="w-3 h-3" />
@@ -382,18 +374,12 @@ export default function Market() {
                   {item.tier && (
                     <div className="text-xs text-gray-400">{item.tier} • {item.maxLY} LY</div>
                   )}
-                  {item.stock !== undefined && (
-                    <div className="text-xs text-gray-500">Stock: {item.stock}</div>
-                  )}
                 </div>
               </div>
               
               <button
                 onClick={() => handleBuyClick(item)}
-                disabled={
-                  (item.currency === 'crystals' ? gameState?.crystals < item.price : gameState?.credits < item.price) ||
-                  item.stock === 0
-                }
+                disabled={item.currency === 'crystals' ? gameState?.crystals < item.price : gameState?.credits < item.price}
                 className="bg-green-600 hover:bg-green-700 disabled:bg-gray-600 disabled:cursor-not-allowed border-2 border-green-500 disabled:border-gray-500 rounded-lg px-6 py-2 text-white font-bold text-sm transition-all"
               >
                 {item.currency === 'crystals' ? '◆' : '$'}{item.price}
