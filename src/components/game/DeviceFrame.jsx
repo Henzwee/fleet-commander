@@ -57,7 +57,7 @@ export default function DeviceFrame({ children }) {
           <div 
             className="app-panel min-h-full"
             style={{
-              paddingTop: 'var(--content-pad-top)',
+              paddingTop: '75px',
               paddingBottom: 'var(--content-pad-bottom)',
               paddingLeft: 'var(--content-pad-left)',
               paddingRight: 'var(--content-pad-right)'
