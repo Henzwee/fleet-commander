@@ -4,6 +4,7 @@ import { useGame } from '../components/game/GameProvider';
 import DeviceFrame from '../components/game/DeviceFrame';
 import ResourceHeader from '../components/game/ResourceHeader';
 import PurchaseConfirmDialog from '../components/game/PurchaseConfirmDialog';
+import ShipPurchaseDialog from '../components/game/ShipPurchaseDialog';
 import { Clock, ShoppingCart, Zap, RefreshCw } from 'lucide-react';
 import { MarketEngine } from '../components/game/MarketEngine';
 import { getRandomShipImage } from '../components/game/ShipImages';
@@ -124,6 +125,19 @@ export default function Market() {
       
       setMarketItems(parts);
     } else if (activeTab === 'ships') {
+      // Initialize ship stock if needed
+      if (!gameState.marketStock?.shipStock) {
+        const newStock = { ...gameState.marketStock, shipStock: 5 };
+        updateGameState({ marketStock: newStock });
+        return;
+      }
+
+      // Check if ships are sold out
+      if (gameState.marketStock.shipStock <= 0) {
+        setMarketItems([]);
+        return;
+      }
+
       // Generate ships based on player's highest tier
       const ships = [];
       for (let i = 0; i < 5; i++) {
@@ -157,7 +171,6 @@ export default function Market() {
           maxLY: tierMaxLY[tier],
           price,
           icon: '🚀',
-          stock: 1,
           currency: 'credits'
         });
       }
@@ -272,8 +285,12 @@ export default function Market() {
         hourlyPay
       });
       
+      const newStock = { ...gameState.marketStock };
+      newStock.shipStock = (newStock.shipStock || 5) - 1;
+
       await updateGameState({
-        credits: gameState.credits - totalCost
+        credits: gameState.credits - totalCost,
+        marketStock: newStock
       });
       
       addMessage(`Hired ${item.name} for $${totalCost}`);
@@ -317,6 +334,7 @@ export default function Market() {
                   MarketEngine.reprice(item.id);
                   newStock[item.id] = Math.floor(Math.random() * 5) + 1; // 1-5 stock
                 });
+                newStock.shipStock = 5; // Reset ship stock
                 
                 await updateGameState({
                   crystals: gameState.crystals - 10,
@@ -368,6 +386,12 @@ export default function Market() {
         </div>
         
         <div className="space-y-3">
+          {activeTab === 'ships' && marketItems.length === 0 && gameState?.marketStock?.shipStock <= 0 && (
+            <div className="bg-gradient-to-r from-gray-800 to-gray-900 border-2 border-cyan-500/30 rounded-lg p-8 text-center">
+              <div className="text-cyan-400 font-bold text-lg mb-2">SOLD OUT</div>
+              <div className="text-gray-400 text-sm">Come back later, money bags</div>
+            </div>
+          )}
           {marketItems.map((item, idx) => (
             <div
               key={idx}
@@ -402,7 +426,7 @@ export default function Market() {
                   {item.tier && (
                     <div className="text-xs text-gray-400">{item.tier} • {item.maxLY} LY</div>
                   )}
-                  {item.stock !== undefined && (
+                  {activeTab === 'scrap' && item.stock !== undefined && (
                     <div className={`text-xs ${item.stock === 0 ? 'text-red-500' : 'text-gray-500'}`}>
                       Stock: {item.stock}
                     </div>
@@ -424,7 +448,15 @@ export default function Market() {
           ))}
         </div>
         
-        {purchaseDialog && (
+        {purchaseDialog && activeTab === 'ships' && (
+          <ShipPurchaseDialog
+            ship={purchaseDialog}
+            onConfirm={handleConfirmPurchase}
+            onCancel={() => setPurchaseDialog(null)}
+          />
+        )}
+
+        {purchaseDialog && activeTab !== 'ships' && (
           <PurchaseConfirmDialog
             item={purchaseDialog}
             onConfirm={handleConfirmPurchase}
