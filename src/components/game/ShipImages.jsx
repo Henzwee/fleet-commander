@@ -25,7 +25,11 @@ export const SHIP_IMAGES = {
     'https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695af5ca435140b76c0dadc9/bf35a0d02_renowned2.png',
     'https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695af5ca435140b76c0dadc9/c932e178e_renowned3.png'
   ],
-  'Legendary': []
+  'Legendary': [
+    'https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695af5ca435140b76c0dadc9/92e840ff8_legendary1.png',
+    'https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695af5ca435140b76c0dadc9/9b9b016b2_legendary2.png',
+    'https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695af5ca435140b76c0dadc9/eb11405c6_legendary3.png'
+  ]
 };
 
 export function getRandomShipImage(tier) {
