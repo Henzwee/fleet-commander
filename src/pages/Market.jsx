@@ -110,18 +110,22 @@ export default function Market() {
       }
       
       // Use existing rotation
-      const parts = Object.keys(gameState.marketStock).map(itemId => {
-        const item = MarketEngine.get(itemId);
-        return {
-          id: item.id,
-          name: item.name,
-          price: item.currentPrice,
-          deltaPercent: item.deltaPercent,
-          icon: iconMap[item.name] || '📦',
-          stock: gameState.marketStock[itemId],
-          currency: 'credits'
-        };
-      });
+      const parts = Object.keys(gameState.marketStock)
+        .filter(itemId => itemId !== 'shipStock') // Skip shipStock
+        .map(itemId => {
+          const item = MarketEngine.get(itemId);
+          if (!item) return null; // Skip if item doesn't exist
+          return {
+            id: item.id,
+            name: item.name,
+            price: item.currentPrice,
+            deltaPercent: item.deltaPercent,
+            icon: iconMap[item.name] || '📦',
+            stock: gameState.marketStock[itemId],
+            currency: 'credits'
+          };
+        })
+        .filter(Boolean); // Remove null entries
       
       setMarketItems(parts);
     } else if (activeTab === 'ships') {
@@ -397,7 +401,7 @@ export default function Market() {
             <div
               key={idx}
               className={`bg-gradient-to-r from-gray-800 to-gray-900 border rounded-lg p-4 flex items-center justify-between transition-all ${
-                item.stock === 0 
+                (activeTab === 'scrap' && item.stock === 0) 
                   ? 'border-gray-700 opacity-50' 
                   : 'border-cyan-500/30 hover:border-cyan-500'
               }`}
@@ -439,11 +443,11 @@ export default function Market() {
                 onClick={() => handleBuyClick(item)}
                 disabled={
                   (item.currency === 'crystals' ? gameState?.crystals < item.price : gameState?.credits < item.price) ||
-                  item.stock === 0
+                  (activeTab === 'scrap' && item.stock === 0)
                 }
                 className="bg-green-600 hover:bg-green-700 disabled:bg-gray-600 disabled:cursor-not-allowed border-2 border-green-500 disabled:border-gray-500 rounded-lg px-6 py-2 text-white font-bold text-sm transition-all"
               >
-                {item.stock === 0 ? 'OUT' : `${item.currency === 'crystals' ? '◆' : '$'}${item.price}`}
+                {(activeTab === 'scrap' && item.stock === 0) ? 'OUT' : `${item.currency === 'crystals' ? '◆' : '$'}${item.price}`}
               </button>
             </div>
           ))}
