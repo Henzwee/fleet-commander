@@ -21,7 +21,7 @@ export default function PurchaseConfirmDialog({ item, onConfirm, onCancel }) {
   };
   
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80">
+    <div className="fixed inset-0 z-[4] flex items-center justify-center bg-black/80">
       <div className="bg-gradient-to-br from-gray-900 to-gray-950 border-2 border-cyan-500 rounded-lg p-6 max-w-sm w-full mx-4">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-cyan-400 font-bold text-lg">CONFIRM PURCHASE</h3>
