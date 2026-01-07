@@ -28,7 +28,7 @@ export default function PurchaseConfirmDialog({ item, onConfirm, onCancel }) {
       right: 'var(--content-pad-right)'
     }}>
       <div className="flex-1 flex flex-col px-6 py-4">
-        <div className="mb-6 mt-6">
+        <div className="mb-6 mt-12">
           <h3 className="text-cyan-400 font-bold text-base">CONFIRM PURCHASE</h3>
         </div>
         
@@ -68,7 +68,7 @@ export default function PurchaseConfirmDialog({ item, onConfirm, onCancel }) {
           </div>
         </div>
         
-        <div className="grid grid-cols-2 gap-2 mt-3">
+        <div className="grid grid-cols-2 gap-2" style={{ marginTop: 'auto', marginBottom: 'auto' }}>
           <button
             onClick={onCancel}
             className="bg-gray-700 hover:bg-gray-600 border-2 border-gray-500 rounded-lg py-2.5 text-white font-bold text-sm"
