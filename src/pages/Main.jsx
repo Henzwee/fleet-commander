@@ -7,6 +7,7 @@ import ExplosionEffect from '../components/game/ExplosionEffect';
 import { useGame } from '../components/game/GameProvider';
 import MarketTicker from '../components/game/MarketTicker';
 import ResourceHeader from '../components/game/ResourceHeader';
+import MissionReportScreen from '../components/game/MissionReportScreen';
 
 
 export default function Main() {
@@ -14,6 +15,7 @@ export default function Main() {
   const { gameState, loading, messages, currentEvent, handleEventChoice } = useGame();
   const [activeMissions, setActiveMissions] = useState([]);
   const [showExplosion, setShowExplosion] = useState(false);
+  const [selectedMission, setSelectedMission] = useState(null);
   const messageLogRef = React.useRef(null);
 
   // Tutorial redirect disabled - allow direct access to main page
@@ -158,7 +160,7 @@ export default function Main() {
               {activeMissions.map((mission) => (
                 <div
                   key={mission.id}
-                  onClick={() => navigate(createPageUrl('Jobs'))}
+                  onClick={() => setSelectedMission(mission)}
                   className="bg-gradient-to-r from-cyan-800/20 to-blue-800/20 border border-cyan-600/30 rounded-lg p-4 cursor-pointer hover:border-cyan-500 transition-all"
                 >
                   <div className="flex items-center gap-3">
@@ -176,6 +178,15 @@ export default function Main() {
         </div>
       </div>
       </div>
+
+      {selectedMission && (
+        <MissionReportScreen
+          mission={selectedMission}
+          event={currentEvent?.missionId === selectedMission.id ? currentEvent : null}
+          onClose={() => setSelectedMission(null)}
+          onChoice={handleEventChoice}
+        />
+      )}
     </DeviceFrame>
   );
 }
