@@ -117,6 +117,28 @@ export default function Jobs() {
     setAvailableMissions(missions);
   };
   
+  const calculateReward = (missionTier, shipTier, distance) => {
+    const tierRanking = {
+      'Unregistered': 0,
+      'Known': 1,
+      'Notorious': 2,
+      'Esteemed': 3,
+      'Renowned': 4,
+      'Legendary': 5
+    };
+    
+    const missionRank = tierRanking[missionTier] || 0;
+    const shipRank = tierRanking[shipTier] || 0;
+    
+    // Calculate multiplier based on tier match
+    // Better match = higher multiplier (closer to 3x)
+    // Worse match = lower multiplier (closer to 1x)
+    const tierDiff = Math.abs(missionRank - shipRank);
+    const multiplier = 3 - (tierDiff * 0.33); // Range: 3x to ~1x
+    
+    return Math.floor(distance * multiplier);
+  };
+
   const handleAssignMission = async () => {
     if (!selectedMission || !selectedShip) {
       addMessage('Select a mission and ship first!');
@@ -134,13 +156,16 @@ export default function Jobs() {
       return;
     }
     
+    // Calculate reward based on ship tier vs mission tier
+    const adjustedReward = calculateReward(selectedMission.tier, selectedShip.tier, selectedMission.distance);
+    
     // Create mission
     await base44.entities.Mission.create({
       shipId: selectedShip.id,
       shipName: selectedShip.name,
       distance: selectedMission.distance,
       duration: selectedMission.duration,
-      reward: selectedMission.reward,
+      reward: adjustedReward,
       fuelCost: selectedMission.fuelCost,
       startTime: new Date().toISOString(),
       status: 'active',
@@ -234,6 +259,7 @@ export default function Jobs() {
               <div className="grid grid-cols-1 gap-2">
                 {idleShips.map((ship) => {
                   const canHandle = ship.maxLY >= selectedMission.distance;
+                  const estimatedReward = calculateReward(selectedMission.tier, ship.tier, selectedMission.distance);
                   return (
                     <div
                       key={ship.id}
@@ -250,6 +276,9 @@ export default function Jobs() {
                         <div>
                           <div className="text-cyan-100 font-bold text-sm">{ship.name}</div>
                           <div className="text-xs text-gray-400">{ship.tier} • {ship.maxLY} LY</div>
+                          {canHandle && (
+                            <div className="text-xs text-amber-400 mt-1">Reward: ${estimatedReward}</div>
+                          )}
                         </div>
                         {canHandle ? (
                           <div className="text-green-400 text-xs">IDLE</div>
