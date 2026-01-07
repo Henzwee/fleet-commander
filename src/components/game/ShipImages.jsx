@@ -10,7 +10,11 @@ export const SHIP_IMAGES = {
     'https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695af5ca435140b76c0dadc9/b3af572e1_known2.png',
     'https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695af5ca435140b76c0dadc9/fab1a9948_known3.png'
   ],
-  'Notorious': [],
+  'Notorious': [
+    'https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695af5ca435140b76c0dadc9/4c79b41c3_notorious1.png',
+    'https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695af5ca435140b76c0dadc9/2b8aab57c_notorious2.png',
+    'https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695af5ca435140b76c0dadc9/dfec9ff9a_notorious3.png'
+  ],
   'Esteemed': [],
   'Renowned': [],
   'Legendary': []
