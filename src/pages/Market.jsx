@@ -287,9 +287,30 @@ export default function Market() {
         <ResourceHeader />
         <div className="p-4 pb-24 overflow-y-auto h-full" style={{ paddingLeft: '0', paddingRight: '0', paddingTop: '70px' }}>
         <div className="bg-gradient-to-r from-gray-900 to-gray-800 border-2 border-cyan-500/50 rounded-lg p-4 mb-4">
-          <div className="flex items-center justify-center gap-2 text-cyan-400 text-sm">
-            <Clock className="w-4 h-4" />
-            <span>Resets: {timeUntilReset}</span>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2 text-cyan-400 text-sm">
+              <Clock className="w-4 h-4" />
+              <span>Resets: {timeUntilReset}</span>
+            </div>
+            <button
+              onClick={async () => {
+                if (gameState.crystals < 10) {
+                  addMessage('Need 10 crystals to reset market!');
+                  return;
+                }
+                await updateGameState({
+                  crystals: gameState.crystals - 10,
+                  lastMarketReset: new Date().toISOString()
+                });
+                MarketEngine.repriceAll();
+                addMessage('Market reset!');
+              }}
+              disabled={gameState?.crystals < 10}
+              className="bg-purple-600 hover:bg-purple-700 disabled:bg-gray-600 disabled:cursor-not-allowed border-2 border-purple-500 disabled:border-gray-500 rounded-lg px-3 py-1 text-white font-bold text-xs transition-all flex items-center gap-1"
+            >
+              <Zap className="w-3 h-3" />
+              <span>◆10</span>
+            </button>
           </div>
         </div>
         
