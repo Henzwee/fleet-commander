@@ -1,9 +1,10 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { createPageUrl } from '../../utils';
 
 export default function DeviceFrame({ children }) {
   const navigate = useNavigate();
+  const location = useLocation();
   const [debugMode, setDebugMode] = React.useState(false);
   
   React.useEffect(() => {
@@ -57,7 +58,7 @@ export default function DeviceFrame({ children }) {
           <div 
             className="app-panel min-h-full"
             style={{
-              paddingTop: '75px',
+              paddingTop: location.pathname === '/Main' ? '95px' : '55px',
               paddingBottom: 'var(--content-pad-bottom)',
               paddingLeft: 'var(--content-pad-left)',
               paddingRight: 'var(--content-pad-right)'
