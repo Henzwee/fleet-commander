@@ -178,11 +178,11 @@ export default function GameProvider({ children }) {
           
           // Create decision event
           setCurrentEvent({
-            title: `${ship.name} Damaged`,
-            description: `Uh oh! ${ship.name} took a hit and she's lookin' rough. Pull 'em back for repairs or tough it out?`,
+            title: `${ship.name} Taking Damage`,
+            description: `${ship.name} took some damage out there. She's still flying but... barely. Recommend immediate recall, but we could risk it if you're feeling lucky.`,
             choices: [
-              { id: 'recall', label: 'BRING EM BACK', primary: true },
-              { id: 'continue', label: 'PUSH THROUGH' }
+              { id: 'recall', label: 'RECALL NOW', primary: true },
+              { id: 'continue', label: 'RISK IT' }
             ],
             shipId: ship.id,
             missionId: mission.id,
@@ -201,17 +201,17 @@ export default function GameProvider({ children }) {
 
     setCurrentEvent({
       title: 'Distress Signal Detected',
-      description: `${shipName} discovered some pirates! What do you say? Should we blow 'em to bits, or just a warning this time?`,
+      description: `${shipName} picked up a distress signal. They could check it out but policy is to ignore it. Your call, boss.`,
       choices: [
-        { id: 'investigate', label: 'BLOW EM UP', primary: true },
-        { id: 'ignore', label: 'SCARE EM OFF' }
+        { id: 'investigate', label: 'CHECK IT OUT', primary: true },
+        { id: 'ignore', label: 'FOLLOW POLICY' }
       ],
       missionId: mission.id,
       type: 'distress',
       expiresAt: new Date(Date.now() + 15 * 60 * 1000).toISOString()
     });
 
-    addMessage(`${shipName} spotted some pirates. Awaiting orders.`);
+    addMessage(`${shipName} detected distress signal. Awaiting orders.`);
   };
   
   const createScavengeEvent = async (mission) => {
@@ -219,17 +219,17 @@ export default function GameProvider({ children }) {
     const shipName = ship[0]?.name || 'Unknown Ship';
 
     setCurrentEvent({
-      title: 'Long-Forgotten Ship Found',
-      description: `${shipName} stumbled upon a crusty old derelict! Wanna poke around for spare parts or keep movin'?`,
+      title: 'Derelict Vessel Located',
+      description: `${shipName} found a beat-up wreck floating around. Looks like scrap material, but it'll take time to salvage. We got time for this?`,
       choices: [
-        { id: 'scavenge', label: 'GRAB THE LOOT', primary: true },
-        { id: 'leave', label: 'NAH, KEEP GOING' }
+        { id: 'scavenge', label: 'SALVAGE IT', primary: true },
+        { id: 'leave', label: 'LEAVE IT' }
       ],
       missionId: mission.id,
       type: 'scavenge'
     });
 
-    addMessage(`${shipName} found a derelict vessel.`);
+    addMessage(`${shipName} found salvageable wreckage.`);
   };
   
   const completeMission = async (mission) => {

@@ -14,9 +14,9 @@ export default function MissionReportScreen({ mission, event, onClose, onChoice 
           <X className="w-6 h-6" />
         </button>
 
-        <div className="flex items-center gap-3 mb-4">
-          <Radio className="w-6 h-6 text-cyan-400" />
-          <h2 className="text-cyan-400 font-bold text-lg">M.A.N.I. TRANSMISSION</h2>
+        <div className="flex items-center gap-3 mb-6">
+          <Radio className="w-6 h-6 text-cyan-400 animate-pulse" />
+          <h2 className="text-cyan-400 font-bold text-lg">M.A.N.I. REPORT</h2>
         </div>
 
         {mission.shipImage && (
