@@ -47,7 +47,7 @@ export default function ShipPurchaseDialog({ ship, onConfirm, onCancel }) {
           </div>
         </div>
 
-        <div className="flex gap-2 mt-6">
+        <div className="flex gap-2 mt-3">
           <button
             onClick={onCancel}
             className="flex-1 bg-gray-700 hover:bg-gray-600 border-2 border-gray-600 rounded-lg py-2.5 text-white font-bold text-sm transition-all"

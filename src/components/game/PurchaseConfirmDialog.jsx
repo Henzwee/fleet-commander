@@ -44,7 +44,7 @@ export default function PurchaseConfirmDialog({ item, onConfirm, onCancel }) {
               disabled={quantity <= 1}
               className="w-10 h-10 bg-gray-800 border-2 border-gray-600 rounded hover:border-cyan-500 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
             >
-              <Minus className="w-4 h-4" />
+              <Minus className="w-4 h-4 text-gray-400" />
             </button>
             
             <div className="text-white text-2xl font-bold w-16 text-center">
@@ -56,7 +56,7 @@ export default function PurchaseConfirmDialog({ item, onConfirm, onCancel }) {
               disabled={quantity >= maxQuantity}
               className="w-10 h-10 bg-gray-800 border-2 border-gray-600 rounded hover:border-cyan-500 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
             >
-              <Plus className="w-4 h-4" />
+              <Plus className="w-4 h-4 text-gray-400" />
             </button>
           </div>
           
@@ -68,7 +68,7 @@ export default function PurchaseConfirmDialog({ item, onConfirm, onCancel }) {
           </div>
         </div>
         
-        <div className="grid grid-cols-2 gap-2 mt-6">
+        <div className="grid grid-cols-2 gap-2 mt-3">
           <button
             onClick={onCancel}
             className="bg-gray-700 hover:bg-gray-600 border-2 border-gray-500 rounded-lg py-2.5 text-white font-bold text-sm"
