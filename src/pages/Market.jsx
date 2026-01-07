@@ -160,6 +160,18 @@ export default function Market() {
           'Legendary': 10000
         };
         
+        const tierPay = {
+          'Unregistered': [200, 500],
+          'Known': [250, 750],
+          'Notorious': [300, 900],
+          'Esteemed': [500, 1100],
+          'Renowned': [750, 1800],
+          'Legendary': [1000, 2000]
+        };
+        
+        const [minPay, maxPay] = tierPay[tier];
+        const hourlyPay = Math.floor(Math.random() * (maxPay - minPay + 1)) + minPay;
+
         const [min, max] = tierPrices[tier];
         const price = Math.floor(Math.random() * (max - min + 1)) + min;
         
@@ -170,6 +182,7 @@ export default function Market() {
           imageUrl: getRandomShipImage(tier),
           maxLY: tierMaxLY[tier],
           price,
+          hourlyPay,
           icon: '🚀',
           currency: 'credits'
         });
@@ -261,18 +274,6 @@ export default function Market() {
       addMessage(`Purchased ${quantity}x ${item.name}`);
     } else if (activeTab === 'ships') {
       // Create ship
-      const tierPay = {
-        'Unregistered': [200, 500],
-        'Known': [250, 750],
-        'Notorious': [300, 900],
-        'Esteemed': [500, 1100],
-        'Renowned': [750, 1800],
-        'Legendary': [1000, 2000]
-      };
-      
-      const [min, max] = tierPay[item.tier];
-      const hourlyPay = Math.floor(Math.random() * (max - min + 1)) + min;
-      
       await base44.entities.Ship.create({
         name: item.name,
         tier: item.tier,
@@ -282,7 +283,7 @@ export default function Market() {
         damaged: false,
         status: 'idle',
         isHired: true,
-        hourlyPay
+        hourlyPay: item.hourlyPay
       });
       
       const newStock = { ...gameState.marketStock };

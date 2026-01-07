@@ -37,6 +37,10 @@ export default function ShipPurchaseDialog({ ship, onConfirm, onCancel }) {
               <span className="text-cyan-300 font-bold">{ship.maxLY} LY</span>
             </div>
             <div className="flex justify-between text-sm">
+              <span className="text-gray-400">Hourly Pay:</span>
+              <span className="text-amber-400 font-bold">${ship.hourlyPay}/hr</span>
+            </div>
+            <div className="flex justify-between text-sm">
               <span className="text-gray-400">Price:</span>
               <span className="text-green-400 font-bold">${ship.price}</span>
             </div>
@@ -54,7 +58,7 @@ export default function ShipPurchaseDialog({ ship, onConfirm, onCancel }) {
             onClick={() => onConfirm(1)}
             className="flex-1 bg-green-600 hover:bg-green-700 border-2 border-green-500 rounded-lg py-3 text-white font-bold transition-all"
           >
-            CONFIRM
+            BUY ${ship.price}
           </button>
         </div>
       </div>
