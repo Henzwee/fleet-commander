@@ -22,12 +22,12 @@ export default function PurchaseConfirmDialog({ item, onConfirm, onCancel }) {
   
   return (
     <div className="fixed z-[4] bg-gradient-to-br from-gray-900 to-gray-950 flex flex-col" style={{
-      top: 'var(--content-pad-top)',
-      bottom: 'var(--content-pad-bottom)',
+      top: 'calc(var(--content-pad-top) - 40px)',
+      bottom: 'calc(var(--content-pad-bottom) - 30px)',
       left: 'var(--content-pad-left)',
       right: 'var(--content-pad-right)'
     }}>
-      <div className="flex-1 flex flex-col p-5">
+      <div className="flex-1 flex flex-col px-6 py-4">
         <div className="flex items-center justify-between mb-3">
           <h3 className="text-cyan-400 font-bold text-base">CONFIRM PURCHASE</h3>
           <button onClick={onCancel} className="text-gray-400 hover:text-white">

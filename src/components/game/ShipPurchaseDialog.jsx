@@ -6,12 +6,12 @@ export default function ShipPurchaseDialog({ ship, onConfirm, onCancel }) {
 
   return (
     <div className="fixed z-[4] bg-gradient-to-br from-gray-900 to-gray-950 flex flex-col" style={{
-      top: 'var(--content-pad-top)',
-      bottom: 'var(--content-pad-bottom)',
+      top: 'calc(var(--content-pad-top) - 40px)',
+      bottom: 'calc(var(--content-pad-bottom) - 30px)',
       left: 'var(--content-pad-left)',
       right: 'var(--content-pad-right)'
     }}>
-      <div className="flex-1 flex flex-col p-5 relative">
+      <div className="flex-1 flex flex-col px-6 py-4 relative">
         <button
           onClick={onCancel}
           className="absolute top-0 right-0 text-gray-400 hover:text-cyan-400 transition-colors"
