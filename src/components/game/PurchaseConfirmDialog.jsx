@@ -29,58 +29,58 @@ export default function PurchaseConfirmDialog({ item, onConfirm, onCancel }) {
     }}>
       <div className="flex-1 flex flex-col p-5">
         <div className="flex items-center justify-between mb-3">
-          <h3 className="text-cyan-400 font-bold text-xl">CONFIRM PURCHASE</h3>
+          <h3 className="text-cyan-400 font-bold text-base">CONFIRM PURCHASE</h3>
           <button onClick={onCancel} className="text-gray-400 hover:text-white">
-            <X className="w-6 h-6" />
+            <X className="w-5 h-5" />
           </button>
         </div>
         
         <div className="flex-1 flex flex-col justify-center">
-          <div className="text-white text-lg mb-2 font-bold">{item.name}</div>
-          <div className="text-gray-400 text-sm mb-6">
+          <div className="text-white text-base mb-1 font-bold">{item.name}</div>
+          <div className="text-gray-400 text-xs mb-4">
             Stock Available: {item.stock}
           </div>
           
-          <div className="flex items-center justify-center gap-6 mb-8">
+          <div className="flex items-center justify-center gap-4 mb-4">
             <button
               onClick={handleDecrease}
               disabled={quantity <= 1}
-              className="w-14 h-14 bg-gray-800 border-2 border-gray-600 rounded hover:border-cyan-500 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+              className="w-10 h-10 bg-gray-800 border-2 border-gray-600 rounded hover:border-cyan-500 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
             >
-              <Minus className="w-5 h-5" />
+              <Minus className="w-4 h-4" />
             </button>
             
-            <div className="text-white text-4xl font-bold w-20 text-center">
+            <div className="text-white text-2xl font-bold w-16 text-center">
               {quantity}
             </div>
             
             <button
               onClick={handleIncrease}
               disabled={quantity >= maxQuantity}
-              className="w-14 h-14 bg-gray-800 border-2 border-gray-600 rounded hover:border-cyan-500 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+              className="w-10 h-10 bg-gray-800 border-2 border-gray-600 rounded hover:border-cyan-500 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
             >
-              <Plus className="w-5 h-5" />
+              <Plus className="w-4 h-4" />
             </button>
           </div>
           
-          <div className="text-center mb-8">
-            <div className="text-gray-400 text-sm mb-2">Total Cost</div>
-            <div className={`text-4xl font-bold ${currency === 'crystals' ? 'text-purple-400' : 'text-amber-400'}`}>
+          <div className="text-center mb-4">
+            <div className="text-gray-400 text-xs mb-1">Total Cost</div>
+            <div className={`text-2xl font-bold ${currency === 'crystals' ? 'text-purple-400' : 'text-amber-400'}`}>
               {currency === 'crystals' ? '◆' : '$'}{totalCost.toLocaleString()}
             </div>
           </div>
         </div>
         
-        <div className="grid grid-cols-2 gap-3 mt-auto">
+        <div className="grid grid-cols-2 gap-2 mt-auto">
           <button
             onClick={onCancel}
-            className="bg-gray-700 hover:bg-gray-600 border-2 border-gray-500 rounded-lg py-3 text-white font-bold text-base"
+            className="bg-gray-700 hover:bg-gray-600 border-2 border-gray-500 rounded-lg py-2.5 text-white font-bold text-sm"
           >
             CANCEL
           </button>
           <button
             onClick={() => onConfirm(quantity)}
-            className="bg-cyan-600 hover:bg-cyan-700 border-2 border-cyan-500 rounded-lg py-3 text-white font-bold text-base"
+            className="bg-cyan-600 hover:bg-cyan-700 border-2 border-cyan-500 rounded-lg py-2.5 text-white font-bold text-sm"
           >
             CONFIRM
           </button>
