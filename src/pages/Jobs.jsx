@@ -64,11 +64,11 @@ export default function Jobs() {
     
     const tierBands = [
       { name: 'Unregistered', min: 10, max: 100 },
-      { name: 'Known', min: 100, max: 500 },
-      { name: 'Notorious', min: 500, max: 1500 },
-      { name: 'Esteemed', min: 1500, max: 3500 },
-      { name: 'Renowned', min: 3500, max: 6000 },
-      { name: 'Legendary', min: 6000, max: 10000 }
+      { name: 'Known', min: 10, max: 500 },
+      { name: 'Notorious', min: 10, max: 1500 },
+      { name: 'Esteemed', min: 10, max: 3500 },
+      { name: 'Renowned', min: 10, max: 6000 },
+      { name: 'Legendary', min: 10, max: 10000 }
     ];
     
     // Find player's current tier based on maxLY
