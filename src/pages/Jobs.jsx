@@ -60,6 +60,7 @@ export default function Jobs() {
       'Escort convoy through "totally safe" nebula',
       'Deliver barely expired medical supplies',
       'Make up new constellations',
+      'Scrub space barnacles off ship',
       'Deliver waste to trash planet'
     ];
     
