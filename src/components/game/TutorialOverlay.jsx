@@ -51,17 +51,17 @@ export default function TutorialOverlay() {
         break;
 
       case 3:
-        // Step 4: Force navigate to home
+        // Step 4: Navigate to Main and wait for Jobs button click
         navigate(createPageUrl('Main'));
         break;
 
-      case 4:
-        // Step 5: Force navigate to Jobs
+      case 5:
+        // Step 6: Force navigate to Jobs
         navigate(createPageUrl('Jobs'));
         break;
 
-      case 6:
-        // Step 6: Encounter explanation
+      case 7:
+        // Step 7: Encounter explanation
         setDialogMessages([
           "Space is a dangerous place.",
           "Your ships will let you know\nif they find anything interesting.",
@@ -70,8 +70,8 @@ export default function TutorialOverlay() {
         setShowDialog(true);
         break;
 
-      case 8:
-        // Step 8: Crystal tutorial
+      case 9:
+        // Step 9: Crystal tutorial
         setDialogMessages([
           "Rare crystals can be found out in space.",
           "Sometimes they're on planets,\nsometimes wrecked ships,\nand sometimes in other people's pockets.",
@@ -81,8 +81,8 @@ export default function TutorialOverlay() {
         setShowDialog(true);
         break;
 
-      case 10:
-        // Step 10: Tutorial completion
+      case 11:
+        // Step 11: Tutorial completion
         setDialogMessages([
           "Just like that!",
           "Now that I've shown you the ropes,\nShip Faced Co. approves you\nto work at your own pace…",
@@ -107,17 +107,17 @@ export default function TutorialOverlay() {
         advanceTutorial();
         break;
 
-      case 6:
+      case 7:
         // After encounter explanation, advance to force encounter resolution
         advanceTutorial();
         break;
 
-      case 8:
+      case 9:
         // After crystal tutorial, advance to time-skip mechanic
         advanceTutorial();
         break;
 
-      case 10:
+      case 11:
         // Tutorial complete - give rewards
         const newCredits = gameState.credits + 1000;
         const newCrystals = gameState.crystals + 5;
