@@ -292,7 +292,7 @@ export default function Market() {
       addMessage(`Hired ${item.name} for $${totalCost}`);
       
       // Tutorial: advance after first ship purchase
-      if (tutorialActive && tutorialStep === 2) {
+      if (tutorialActive && tutorialStep === 1) {
         advanceTutorial();
       }
     } else if (activeTab === 'fuel') {
