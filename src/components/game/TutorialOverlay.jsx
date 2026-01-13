@@ -12,6 +12,13 @@ export default function TutorialOverlay() {
   const [showDialog, setShowDialog] = useState(false);
   const [dialogMessages, setDialogMessages] = useState([]);
 
+  // Redirect to Main page when tutorial starts
+  useEffect(() => {
+    if (tutorialActive && tutorialStep === 0 && !showDialog) {
+      navigate(createPageUrl('Main'));
+    }
+  }, [tutorialActive, tutorialStep]);
+
   useEffect(() => {
     if (!tutorialActive) return;
 
