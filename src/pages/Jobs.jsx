@@ -4,6 +4,7 @@ import { useGame } from '../components/game/GameProvider';
 import DeviceFrame from '../components/game/DeviceFrame';
 import ResourceHeader from '../components/game/ResourceHeader';
 import { MapPin, Clock, Zap, Fuel } from 'lucide-react';
+import { SHIP_TIERS, TIER_ORDER, getTierConfig, getMaxLYForTier } from '../components/game/ShipTierConfig';
 
 export default function Jobs() {
   const { gameState, ships: allShips, updateShip, addMessage, updateGameState } = useGame();
@@ -20,22 +21,19 @@ export default function Jobs() {
   
   const loadData = async () => {
     try {
-      
-      // Generate missions based on all ship tiers owned
-      const bestShipMaxLY = allShips.length > 0 
+      // Get player's maximum ship range
+      const maxLY = allShips.length > 0 
         ? Math.max(...allShips.map(s => s.maxLY || 100))
         : 100;
       
-      // Get unique tiers owned by player
-      const ownedTiers = [...new Set(allShips.map(s => s.tier))];
-      generateMissions(bestShipMaxLY, ownedTiers);
+      generateMissions(maxLY);
     } catch (error) {
       console.error('Error loading missions:', error);
-      generateMissions(100, ['Unregistered']); // Default to Unregistered range
+      generateMissions(100);
     }
   };
   
-  const generateMissions = (maxLY, ownedTiers = ['Unregistered']) => {
+  const generateMissions = (playerMaxLY) => {
     const missions = [];
     const descriptions = [
       'Deliver mystery meat to Station 7',
@@ -62,56 +60,59 @@ export default function Jobs() {
       'Deliver waste to trash planet'
     ];
     
-    const tierBands = [
-      { name: 'Unregistered', min: 10, max: 100 },
-      { name: 'Known', min: 10, max: 500 },
-      { name: 'Notorious', min: 10, max: 1500 },
-      { name: 'Esteemed', min: 10, max: 3500 },
-      { name: 'Renowned', min: 10, max: 6000 },
-      { name: 'Legendary', min: 10, max: 10000 }
-    ];
-    
-    // Find player's current tier based on maxLY
+    // Find player's current tier index based on maxLY
     let playerTierIndex = 0;
-    for (let i = 0; i < tierBands.length; i++) {
-      if (maxLY >= tierBands[i].max) {
+    for (let i = 0; i < TIER_ORDER.length; i++) {
+      if (playerMaxLY >= getMaxLYForTier(TIER_ORDER[i])) {
         playerTierIndex = i;
       }
     }
     
-    // Generate at least 3 missions for each tier the player owns ships in
-    for (const tier of tierBands) {
-      if (ownedTiers.includes(tier.name)) {
-        for (let i = 0; i < 3; i++) {
-          const distance = Math.floor(Math.random() * (tier.max - tier.min)) + tier.min;
-          missions.push({
-            id: 'mission_' + missions.length,
-            distance,
-            duration: Math.floor(distance / 500) + 1,
-            reward: Math.floor(distance * (Math.random() * 2 + 1)),
-            fuelCost: Math.floor(distance / 100) || 1,
-            description: descriptions[Math.floor(Math.random() * descriptions.length)],
-            tier: tier.name,
-            locked: false
-          });
-        }
+    // Generate missions for current tier and below (3-4 missions per accessible tier)
+    for (let i = 0; i <= playerTierIndex; i++) {
+      const tier = TIER_ORDER[i];
+      const tierMaxLY = getMaxLYForTier(tier);
+      const tierMinLY = i > 0 ? getMaxLYForTier(TIER_ORDER[i - 1]) : 10;
+      
+      const missionsForTier = i === playerTierIndex ? 4 : 3;
+      
+      for (let j = 0; j < missionsForTier; j++) {
+        const distance = Math.floor(Math.random() * (tierMaxLY - tierMinLY)) + tierMinLY;
+        missions.push({
+          id: `mission_${tier}_${j}`,
+          distance,
+          duration: Math.floor(distance / 500) + 1,
+          reward: Math.floor(distance * (Math.random() * 1.5 + 1.5)),
+          fuelCost: Math.floor(distance / 100) || 1,
+          description: descriptions[Math.floor(Math.random() * descriptions.length)],
+          tier,
+          requiredLY: distance
+        });
       }
     }
     
-    // Add exactly 1 aspirational mission (one tier above, locked)
-    if (playerTierIndex < tierBands.length - 1) {
-      const nextTier = tierBands[playerTierIndex + 1];
-      const distance = Math.floor(Math.random() * (nextTier.max - nextTier.min)) + nextTier.min;
-      missions.push({
-        id: 'mission_aspirational',
-        distance,
-        duration: Math.floor(distance / 500) + 1,
-        reward: Math.floor(distance * (Math.random() * 2 + 1)),
-        fuelCost: Math.floor(distance / 100),
-        description: descriptions[Math.floor(Math.random() * descriptions.length)],
-        tier: nextTier.name,
-        locked: true
-      });
+    // Add 1-2 aspirational missions (next tier above player)
+    if (playerTierIndex < TIER_ORDER.length - 1) {
+      const nextTier = TIER_ORDER[playerTierIndex + 1];
+      const tierMaxLY = getMaxLYForTier(nextTier);
+      const tierMinLY = getMaxLYForTier(TIER_ORDER[playerTierIndex]);
+      
+      const numAspirational = playerTierIndex < TIER_ORDER.length - 2 ? 2 : 1;
+      
+      for (let i = 0; i < numAspirational; i++) {
+        const distance = Math.floor(Math.random() * (tierMaxLY - tierMinLY)) + tierMinLY;
+        missions.push({
+          id: `mission_aspirational_${i}`,
+          distance,
+          duration: Math.floor(distance / 500) + 1,
+          reward: Math.floor(distance * (Math.random() * 1.5 + 2)),
+          fuelCost: Math.floor(distance / 100),
+          description: descriptions[Math.floor(Math.random() * descriptions.length)],
+          tier: nextTier,
+          requiredLY: distance,
+          aspirational: true
+        });
+      }
     }
     
     setAvailableMissions(missions);
@@ -124,8 +125,8 @@ export default function Jobs() {
     }
     
     // Check if ship can handle the distance
-    if (selectedShip.maxLY < selectedMission.distance) {
-      addMessage(`${selectedShip.name} cannot travel ${selectedMission.distance} LY! (Max: ${selectedShip.maxLY} LY)`);
+    if (selectedShip.maxLY < selectedMission.requiredLY) {
+      addMessage(`${selectedShip.name} cannot travel ${selectedMission.requiredLY} LY! (Max: ${selectedShip.maxLY} LY)`);
       return;
     }
     
@@ -162,6 +163,11 @@ export default function Jobs() {
     setSelectedShip(null);
   };
   
+  // Check if any ship can handle the selected mission
+  const canAnyShipHandleMission = selectedMission 
+    ? idleShips.some(ship => ship.maxLY >= selectedMission.requiredLY)
+    : true;
+  
   return (
     <DeviceFrame title="JOBS">
       <div className="flex flex-col min-h-full pb-6" style={{ maxWidth: '100%', paddingLeft: 'var(--safe-x)', paddingRight: 'var(--safe-x)', boxSizing: 'border-box' }}>
@@ -181,23 +187,23 @@ export default function Jobs() {
           {availableMissions.map((mission) => (
             <div
               key={mission.id}
-              onClick={() => !mission.locked && setSelectedMission(mission)}
-              className={`bg-gradient-to-r from-gray-800 to-gray-900 border-2 rounded-lg p-4 transition-all ${
-                mission.locked
-                  ? 'border-red-500/30 opacity-60 cursor-not-allowed'
-                  : selectedMission?.id === mission.id
-                  ? 'border-cyan-500 bg-cyan-500/10 cursor-pointer'
-                  : 'border-gray-600 hover:border-cyan-500/50 cursor-pointer'
+              onClick={() => setSelectedMission(mission)}
+              className={`bg-gradient-to-r from-gray-800 to-gray-900 border-2 rounded-lg p-4 transition-all cursor-pointer ${
+                selectedMission?.id === mission.id
+                  ? 'border-cyan-500 bg-cyan-500/10'
+                  : mission.aspirational
+                  ? 'border-amber-500/30 hover:border-amber-500/50'
+                  : 'border-gray-600 hover:border-cyan-500/50'
               }`}
             >
               <div className="flex items-center justify-between mb-2">
                 <div className="text-cyan-100 font-bold">{mission.description}</div>
-                {mission.locked && (
-                  <div className="text-red-400 text-xs font-bold">🔒 LOCKED</div>
+                {mission.aspirational && (
+                  <div className="text-amber-400 text-xs font-bold">⭐ ASPIRATIONAL</div>
                 )}
               </div>
               
-              <div className="text-xs text-gray-500 mb-2">{mission.tier}</div>
+              <div className="text-xs text-gray-400 mb-2">{mission.tier} • Requires {mission.requiredLY} LY</div>
               
               <div className="grid grid-cols-2 gap-2 text-xs">
                 <div className="flex items-center gap-1 text-gray-400">
@@ -229,10 +235,14 @@ export default function Jobs() {
               <div className="text-gray-500 text-sm text-center py-4">
                 No ships available. Hire more ships or wait for active missions to complete.
               </div>
+            ) : !canAnyShipHandleMission ? (
+              <div className="text-red-400 text-sm text-center py-4 font-bold">
+                with that crew? I dont think so, pal.
+              </div>
             ) : (
               <div className="grid grid-cols-1 gap-2">
                 {idleShips.map((ship) => {
-                  const canHandle = ship.maxLY >= selectedMission.distance;
+                  const canHandle = ship.maxLY >= selectedMission.requiredLY;
                   return (
                     <div
                       key={ship.id}
@@ -262,13 +272,15 @@ export default function Jobs() {
               </div>
             )}
             
-            <button
-              onClick={handleAssignMission}
-              disabled={!selectedShip || gameState.fuel < selectedMission.fuelCost}
-              className="w-full mt-4 bg-green-600 hover:bg-green-700 disabled:bg-gray-600 disabled:cursor-not-allowed border-2 border-green-500 disabled:border-gray-500 rounded-lg py-3 text-white font-bold transition-all"
-            >
-              LAUNCH MISSION
-            </button>
+            {canAnyShipHandleMission && (
+              <button
+                onClick={handleAssignMission}
+                disabled={!selectedShip || gameState.fuel < selectedMission.fuelCost}
+                className="w-full mt-4 bg-green-600 hover:bg-green-700 disabled:bg-gray-600 disabled:cursor-not-allowed border-2 border-green-500 disabled:border-gray-500 rounded-lg py-3 text-white font-bold transition-all"
+              >
+                LAUNCH MISSION
+              </button>
+            )}
           </div>
         )}
         </div>
