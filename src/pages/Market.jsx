@@ -107,7 +107,8 @@ export default function Market() {
         
         const newStock = {};
         selectedIds.forEach(itemId => {
-          newStock[itemId] = Math.floor(Math.random() * 5) + 1; // 1-5 stock
+          const stockAmount = Math.floor(Math.random() * 5) + 1; // 1-5 stock
+          newStock[itemId] = Math.max(1, stockAmount); // Ensure at least 1
         });
         
         // Store rotation history
@@ -353,7 +354,8 @@ export default function Market() {
                 const newStock = {};
                 selectedIds.forEach(itemId => {
                   MarketEngine.reprice(itemId);
-                  newStock[itemId] = Math.floor(Math.random() * 5) + 1; // 1-5 stock
+                  const stockAmount = Math.floor(Math.random() * 5) + 1; // 1-5 stock
+                  newStock[itemId] = Math.max(1, stockAmount); // Ensure at least 1
                 });
                 newStock.shipStock = 5; // Reset ship stock
                 
