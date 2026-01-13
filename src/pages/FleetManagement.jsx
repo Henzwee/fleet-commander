@@ -228,26 +228,25 @@ export default function FleetManagement() {
                         )}
                         
                         <div className="grid grid-cols-2 gap-2">
-                          {ship.damaged && ship.status !== 'active' && (
+                          {ship.damaged && ship.status !== 'active' ? (
                             <button
                               onClick={() => handleRepair(ship)}
                               disabled={!hasParts(ship.requiredParts || [], gameState?.parts || {})}
-                              className="bg-green-600 hover:bg-green-700 border-2 border-green-500 rounded-lg py-2 px-3 text-white font-bold text-xs flex items-center justify-center gap-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                              className="bg-green-600 border-2 border-green-500 rounded-lg py-2 px-3 text-white font-bold text-xs flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                               <Wrench className="w-4 h-4" />
                               <span>REPAIR</span>
                             </button>
-                          )}
+                          ) : null}
                           
-                          {ship.status !== 'active' && (
-                            <button
-                              onClick={() => handleFire(ship)}
-                              className="bg-red-600 hover:bg-red-700 border-2 border-red-500 rounded-lg py-2 px-3 text-white font-bold text-xs flex items-center justify-center gap-2 transition-all"
-                            >
-                              <UserMinus className="w-4 h-4" />
-                              <span>FIRE</span>
-                            </button>
-                          )}
+                          <button
+                            onClick={() => handleFire(ship)}
+                            disabled={ship.status === 'active'}
+                            className={`bg-red-600 border-2 border-red-500 rounded-lg py-2 px-3 text-white font-bold text-xs flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed ${ship.damaged && ship.status !== 'active' ? '' : 'col-span-2'}`}
+                          >
+                            <UserMinus className="w-4 h-4" />
+                            <span>FIRE</span>
+                          </button>
                         </div>
                       </div>
                     )}
@@ -283,7 +282,7 @@ export default function FleetManagement() {
                   .map(([partName, qty]) => (
                     <div
                       key={partName}
-                      className="bg-gradient-to-r from-gray-800/60 to-gray-900/60 border border-cyan-500/20 rounded-lg p-3 flex items-center justify-between hover:border-cyan-500/40 transition-all"
+                      className="bg-gradient-to-r from-gray-800/60 to-gray-900/60 border border-cyan-500/20 rounded-lg p-3 flex items-center justify-between"
                     >
                       <div className="flex items-center gap-3">
                         <Package className="w-5 h-5 text-cyan-400" />
