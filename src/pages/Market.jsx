@@ -8,6 +8,7 @@ import ShipPurchaseDialog from '../components/game/ShipPurchaseDialog';
 import { Clock, ShoppingCart, Zap, RefreshCw } from 'lucide-react';
 import { MarketEngine } from '../components/game/MarketEngine';
 import { getRandomShipImage } from '../components/game/ShipImages';
+import { generateWeightedRotation, updateRotationHistory } from '../components/game/MarketRotation';
 
 export default function Market() {
   const { gameState, addShip, updateGameState, addMessage, rollShipTier } = useGame();
@@ -98,14 +99,25 @@ export default function Market() {
       // Initialize or use existing market rotation
       if (!gameState.marketStock) {
         const allItems = MarketEngine.getAll();
-        const shuffled = [...allItems].sort(() => Math.random() - 0.5);
-        const selectedItems = shuffled.slice(0, 6);
+        const allItemIds = allItems.map(item => item.id);
+        
+        // Use weighted rotation with no history (first time)
+        const seed = Date.now();
+        const selectedIds = generateWeightedRotation(allItemIds, [], 6, seed);
         
         const newStock = {};
-        selectedItems.forEach(item => {
-          newStock[item.id] = Math.floor(Math.random() * 5) + 1; // 1-5 stock
+        selectedIds.forEach(itemId => {
+          newStock[itemId] = Math.floor(Math.random() * 5) + 1; // 1-5 stock
         });
-        updateGameState({ marketStock: newStock });
+        
+        // Store rotation history
+        const rotationHistory = updateRotationHistory(selectedIds, []);
+        
+        updateGameState({ 
+          marketStock: newStock,
+          marketRotationHistory: rotationHistory,
+          lastMarketRotationSeed: seed
+        });
         return;
       }
       
@@ -329,22 +341,31 @@ export default function Market() {
                   addMessage('Need 10 crystals to reset market!');
                   return;
                 }
-                // Select new random items with new stock
+                
+                // Use weighted rotation based on history
                 const allItems = MarketEngine.getAll();
-                const shuffled = [...allItems].sort(() => Math.random() - 0.5);
-                const selectedItems = shuffled.slice(0, 6);
+                const allItemIds = allItems.map(item => item.id);
+                const rotationHistory = gameState.marketRotationHistory || [];
+                const seed = Date.now();
+                
+                const selectedIds = generateWeightedRotation(allItemIds, rotationHistory, 6, seed);
                 
                 const newStock = {};
-                selectedItems.forEach(item => {
-                  MarketEngine.reprice(item.id);
-                  newStock[item.id] = Math.floor(Math.random() * 5) + 1; // 1-5 stock
+                selectedIds.forEach(itemId => {
+                  MarketEngine.reprice(itemId);
+                  newStock[itemId] = Math.floor(Math.random() * 5) + 1; // 1-5 stock
                 });
                 newStock.shipStock = 5; // Reset ship stock
+                
+                // Update rotation history
+                const newRotationHistory = updateRotationHistory(selectedIds, rotationHistory);
                 
                 await updateGameState({
                   crystals: gameState.crystals - 10,
                   lastMarketReset: new Date().toISOString(),
-                  marketStock: newStock
+                  marketStock: newStock,
+                  marketRotationHistory: newRotationHistory,
+                  lastMarketRotationSeed: seed
                 });
                 addMessage('Market reset!');
               }}
