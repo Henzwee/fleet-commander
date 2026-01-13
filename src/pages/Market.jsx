@@ -9,6 +9,7 @@ import { Clock, ShoppingCart, Zap, RefreshCw } from 'lucide-react';
 import { MarketEngine } from '../components/game/MarketEngine';
 import { getRandomShipImage } from '../components/game/ShipImages';
 import { generateWeightedRotation, updateRotationHistory } from '../components/game/MarketRotation';
+import { SHIP_TIERS, getTierConfig } from '../components/game/ShipTierConfig';
 
 export default function Market() {
   const { gameState, addShip, updateGameState, addMessage, rollShipTier } = useGame();
@@ -159,45 +160,20 @@ export default function Market() {
       const ships = [];
       for (let i = 0; i < 5; i++) {
         const tier = rollShipTier();
-        const tierPrices = {
-          'Unregistered': [1000, 2000],
-          'Known': [3000, 5000],
-          'Notorious': [6000, 10000],
-          'Esteemed': [12000, 18000],
-          'Renowned': [20000, 30000],
-          'Legendary': [40000, 60000]
-        };
-        
-        const tierMaxLY = {
-          'Unregistered': 100,
-          'Known': 500,
-          'Notorious': 1500,
-          'Esteemed': 3500,
-          'Renowned': 6000,
-          'Legendary': 10000
-        };
-        
-        const tierPay = {
-          'Unregistered': [200, 500],
-          'Known': [250, 750],
-          'Notorious': [300, 900],
-          'Esteemed': [500, 1100],
-          'Renowned': [750, 1800],
-          'Legendary': [1000, 2000]
-        };
-        
-        const [minPay, maxPay] = tierPay[tier];
+        const tierConfig = getTierConfig(tier);
+
+        const [minPay, maxPay] = tierConfig.payRange;
         const hourlyPay = Math.floor(Math.random() * (maxPay - minPay + 1)) + minPay;
 
-        const [min, max] = tierPrices[tier];
+        const [min, max] = tierConfig.priceRange;
         const price = Math.floor(Math.random() * (max - min + 1)) + min;
-        
+
         const names = ['Vanguard', 'Sentinel', 'Pathfinder', 'Explorer', 'Voyager'];
         ships.push({
           name: names[i] + '-' + Math.floor(Math.random() * 1000),
           tier,
           imageUrl: getRandomShipImage(tier),
-          maxLY: tierMaxLY[tier],
+          maxLY: tierConfig.maxLY,
           price,
           hourlyPay,
           icon: '🚀',

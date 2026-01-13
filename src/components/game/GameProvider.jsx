@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { getRandomShipImage } from './ShipImages';
+import { getTierConfig } from './ShipTierConfig';
 
 const GameContext = createContext();
 
@@ -424,32 +425,15 @@ export default function GameProvider({ children }) {
     const names = ['Starlight', 'Nebula', 'Phoenix', 'Ranger', 'Comet', 'Eclipse'];
     const name = names[Math.floor(Math.random() * names.length)] + ' ' + Math.floor(Math.random() * 1000);
 
-    const tierPay = {
-      'Unregistered': [200, 500],
-      'Known': [250, 750],
-      'Notorious': [300, 900],
-      'Esteemed': [500, 1100],
-      'Renowned': [750, 1800],
-      'Legendary': [1000, 2000]
-    };
-
-    const tierMaxLY = {
-      'Unregistered': 100,
-      'Known': 500,
-      'Notorious': 1500,
-      'Esteemed': 3500,
-      'Renowned': 6000,
-      'Legendary': 10000
-    };
-
-    const [min, max] = tierPay[tier];
+    const tierConfig = getTierConfig(tier);
+    const [min, max] = tierConfig.payRange;
     const hourlyPay = Math.floor(Math.random() * (max - min + 1)) + min;
 
     return await base44.entities.Ship.create({
       name,
       tier,
       imageUrl: getRandomShipImage(tier),
-      maxLY: tierMaxLY[tier],
+      maxLY: tierConfig.maxLY,
       health: 100,
       damaged: false,
       status: 'idle',
