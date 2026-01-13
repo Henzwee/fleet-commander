@@ -191,19 +191,14 @@ export default function Jobs() {
               className={`bg-gradient-to-r from-gray-800 to-gray-900 border-2 rounded-lg p-4 transition-all cursor-pointer ${
                 selectedMission?.id === mission.id
                   ? 'border-cyan-500 bg-cyan-500/10'
-                  : mission.aspirational
-                  ? 'border-amber-500/30 hover:border-amber-500/50'
                   : 'border-gray-600 hover:border-cyan-500/50'
               }`}
             >
               <div className="flex items-center justify-between mb-2">
                 <div className="text-cyan-100 font-bold">{mission.description}</div>
-                {mission.aspirational && (
-                  <div className="text-amber-400 text-xs font-bold">⭐ ASPIRATIONAL</div>
-                )}
               </div>
               
-              <div className="text-xs text-gray-400 mb-2">{mission.tier} • Requires {mission.requiredLY} LY</div>
+              <div className="text-xs text-gray-400 mb-2">{mission.tier} and higher</div>
               
               <div className="grid grid-cols-2 gap-2 text-xs">
                 <div className="flex items-center gap-1 text-gray-400">
