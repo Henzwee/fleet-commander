@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { X } from 'lucide-react';
 
 export default function MissionShipSelection({ mission, ships, onConfirm, onCancel }) {
   const [selectedShip, setSelectedShip] = useState(null);
@@ -11,30 +10,28 @@ export default function MissionShipSelection({ mission, ships, onConfirm, onCanc
   const canAnyShipHandle = eligibleShips.length > 0;
   
   return (
-    <div className="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-gradient-to-br from-gray-900 to-gray-950 border-2 border-cyan-500 rounded-xl max-w-md w-full shadow-2xl">
-        <div className="p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-cyan-400 font-bold text-lg">SELECT SHIP</h3>
-            <button
-              onClick={onCancel}
-              className="text-gray-400 hover:text-cyan-400 transition-colors"
-            >
-              <X className="w-5 h-5" />
-            </button>
+    <div className="fixed z-[4] bg-gradient-to-br from-gray-900 to-gray-950 flex flex-col" style={{
+      top: 'calc(var(--content-pad-top) - 40px)',
+      bottom: 'calc(var(--content-pad-bottom) - 30px)',
+      left: 'var(--content-pad-left)',
+      right: 'var(--content-pad-right)'
+    }}>
+      <div className="flex-1 flex flex-col px-6 py-4 relative">
+          <div className="mb-6 mt-6">
+            <h2 className="text-cyan-400 font-bold text-base">SELECT SHIP</h2>
           </div>
           
           <div className="mb-4 bg-gray-800/50 rounded-lg p-3 border border-cyan-500/30">
-            <div className="text-cyan-100 font-bold text-sm mb-1">{mission.description}</div>
+            <div className="text-cyan-100 font-bold text-base mb-1">{mission.description}</div>
             <div className="text-xs text-gray-400">{mission.tier} and higher • {mission.distance} LY</div>
           </div>
           
           {!canAnyShipHandle ? (
-            <div className="text-red-400 text-sm text-center py-8 font-bold">
+            <div className="text-red-400 text-sm text-center py-8 font-bold flex-1 flex items-center justify-center">
               with that crew? I dont think so, pal.
             </div>
           ) : (
-            <div className="max-h-64 overflow-y-auto space-y-2 mb-4">
+            <div className="flex-1 overflow-y-auto space-y-2 mb-4">
               {eligibleShips.map((ship) => (
                 <div
                   key={ship.id}
@@ -72,17 +69,17 @@ export default function MissionShipSelection({ mission, ships, onConfirm, onCanc
             </div>
           )}
           
-          <div className="grid grid-cols-2 gap-3">
+          <div className="flex gap-2 mb-8">
             <button
               onClick={onCancel}
-              className="bg-gray-700 hover:bg-gray-600 border-2 border-gray-600 rounded-lg py-3 text-white font-bold transition-all"
+              className="flex-1 bg-gray-700 hover:bg-gray-600 border-2 border-gray-600 rounded-lg py-2.5 text-white font-bold text-sm transition-all"
             >
               BACK
             </button>
             <button
               onClick={() => selectedShip && onConfirm(selectedShip)}
               disabled={!selectedShip}
-              className="bg-green-600 hover:bg-green-700 disabled:bg-gray-600 disabled:cursor-not-allowed border-2 border-green-500 disabled:border-gray-500 rounded-lg py-3 text-white font-bold transition-all"
+              className="flex-1 bg-green-600 hover:bg-green-700 disabled:bg-gray-600 disabled:cursor-not-allowed border-2 border-green-500 disabled:border-gray-500 rounded-lg py-2.5 text-white font-bold text-sm transition-all"
             >
               CONFIRM
             </button>

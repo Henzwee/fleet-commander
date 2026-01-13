@@ -218,15 +218,22 @@ export default function Jobs() {
         )}
         
         {selectedMission && idleShips.length === 0 && (
-          <div className="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-            <div className="bg-gradient-to-br from-gray-900 to-gray-950 border-2 border-cyan-500 rounded-xl max-w-md w-full shadow-2xl p-6">
-              <div className="text-cyan-400 font-bold text-lg mb-4">SELECT SHIP</div>
-              <div className="text-gray-500 text-sm text-center py-8">
+          <div className="fixed z-[4] bg-gradient-to-br from-gray-900 to-gray-950 flex flex-col" style={{
+            top: 'calc(var(--content-pad-top) - 40px)',
+            bottom: 'calc(var(--content-pad-bottom) - 30px)',
+            left: 'var(--content-pad-left)',
+            right: 'var(--content-pad-right)'
+          }}>
+            <div className="flex-1 flex flex-col px-6 py-4 relative">
+              <div className="mb-6 mt-6">
+                <h2 className="text-cyan-400 font-bold text-base">SELECT SHIP</h2>
+              </div>
+              <div className="text-gray-500 text-sm text-center py-8 flex-1 flex items-center justify-center">
                 No ships available. Hire more ships or wait for active missions to complete.
               </div>
               <button
                 onClick={() => setSelectedMission(null)}
-                className="w-full bg-gray-700 hover:bg-gray-600 border-2 border-gray-600 rounded-lg py-3 text-white font-bold transition-all"
+                className="bg-gray-700 hover:bg-gray-600 border-2 border-gray-600 rounded-lg py-2.5 text-white font-bold text-sm transition-all mb-8"
               >
                 BACK
               </button>
