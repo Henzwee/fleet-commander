@@ -5,17 +5,21 @@ import { base44 } from '@/api/base44Client';
 import DeviceFrame from '../components/game/DeviceFrame';
 import ExplosionEffect from '../components/game/ExplosionEffect';
 import { useGame } from '../components/game/GameProvider';
+import { useTutorial } from '../components/game/TutorialProvider';
 import MarketTicker from '../components/game/MarketTicker';
 import ResourceHeader from '../components/game/ResourceHeader';
 import MissionReportScreen from '../components/game/MissionReportScreen';
+import CrystalTimeSkip from '../components/game/CrystalTimeSkip';
 
 
 export default function Main() {
   const navigate = useNavigate();
-  const { gameState, loading, messages, currentEvent, handleEventChoice, updateGameState, addMessage } = useGame();
+  const { gameState, loading, messages, currentEvent, handleEventChoice, updateGameState, addMessage, updateShip } = useGame();
+  const { tutorialActive, tutorialStep, advanceTutorial } = useTutorial();
   const [activeMissions, setActiveMissions] = useState([]);
   const [showExplosion, setShowExplosion] = useState(false);
   const [selectedMission, setSelectedMission] = useState(null);
+  const [timeSkipMission, setTimeSkipMission] = useState(null);
   const messageLogRef = React.useRef(null);
 
   // Tutorial redirect disabled - allow direct access to main page
@@ -75,7 +79,8 @@ export default function Main() {
           ...mission,
           shipImage,
           isComplete: mission.status === 'completed' || remaining <= 0,
-          timeRemaining: `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
+          timeRemaining: `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`,
+          timeRemainingMinutes: remaining * 60
         };
       }));
 
@@ -83,6 +88,30 @@ export default function Main() {
     } catch (error) {
       console.error('Error loading missions:', error);
       setActiveMissions([]);
+    }
+  };
+
+  const handleCrystalBoost = async (mission) => {
+    const hoursRemaining = Math.ceil(mission.timeRemainingMinutes / 60);
+    const crystalCost = hoursRemaining * 5;
+    
+    if (gameState.crystals < crystalCost) {
+      addMessage('Not enough crystals!');
+      return;
+    }
+    
+    // Complete mission immediately
+    await base44.entities.Mission.update(mission.id, { status: 'completed' });
+    await updateShip(mission.shipId, { status: 'idle' });
+    await updateGameState({ crystals: gameState.crystals - crystalCost });
+    
+    addMessage(`${mission.shipName} mission boosted! Used ${crystalCost} crystals.`);
+    setTimeSkipMission(null);
+    loadActiveMissions();
+    
+    // Tutorial: advance after using crystal boost
+    if (tutorialActive && tutorialStep === 9) {
+      advanceTutorial();
     }
   };
 
@@ -158,7 +187,9 @@ export default function Main() {
         {/* Available Jobs Button */}
         <button
           onClick={() => navigate(createPageUrl('Jobs'))}
-          className="w-full bg-gradient-to-br from-cyan-700/60 to-blue-700/60 border-2 border-cyan-600/60 rounded-2xl py-6 text-cyan-100 font-bold text-xl tracking-wider hover:from-cyan-600/60 hover:to-blue-600/60 transition-all"
+          className={`w-full bg-gradient-to-br from-cyan-700/60 to-blue-700/60 border-2 border-cyan-600/60 rounded-2xl py-6 text-cyan-100 font-bold text-xl tracking-wider hover:from-cyan-600/60 hover:to-blue-600/60 transition-all ${
+            (tutorialActive && tutorialStep === 4) ? 'animate-pulse' : ''
+          }`}
         >
           Available Jobs
         </button>
@@ -202,8 +233,19 @@ export default function Main() {
                           COLLECT
                         </button>
                       ) : (
-                        <div className="text-cyan-400 text-xs font-mono">
-                          {mission.timeRemaining}
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setTimeSkipMission(mission);
+                            }}
+                            className="bg-purple-600 hover:bg-purple-700 border-2 border-purple-500 rounded px-2 py-1 text-white font-bold text-xs flex items-center gap-1"
+                          >
+                            ⚡
+                          </button>
+                          <div className="text-cyan-400 text-xs font-mono">
+                            {mission.timeRemaining}
+                          </div>
                         </div>
                       )}
                     </div>
@@ -222,6 +264,16 @@ export default function Main() {
           event={currentEvent?.missionId === selectedMission.id ? currentEvent : null}
           onClose={() => setSelectedMission(null)}
           onChoice={handleEventChoice}
+        />
+      )}
+      
+      {timeSkipMission && (
+        <CrystalTimeSkip
+          mission={timeSkipMission}
+          onConfirm={() => handleCrystalBoost(timeSkipMission)}
+          onCancel={() => setTimeSkipMission(null)}
+          crystals={gameState?.crystals || 0}
+          isTutorial={tutorialActive && tutorialStep === 9}
         />
       )}
     </DeviceFrame>

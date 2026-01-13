@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useGame } from '../components/game/GameProvider';
+import { useTutorial } from '../components/game/TutorialProvider';
 import DeviceFrame from '../components/game/DeviceFrame';
 import ResourceHeader from '../components/game/ResourceHeader';
 import { MapPin, Clock, Zap, Fuel } from 'lucide-react';
@@ -9,6 +10,7 @@ import MissionShipSelection from '../components/game/MissionShipSelection';
 
 export default function Jobs() {
   const { gameState, ships: allShips, updateShip, addMessage, updateGameState } = useGame();
+  const { tutorialActive, tutorialStep, advanceTutorial } = useTutorial();
   const [availableMissions, setAvailableMissions] = useState([]);
   const [selectedMission, setSelectedMission] = useState(null);
   const [selectedShip, setSelectedShip] = useState(null);
@@ -150,6 +152,11 @@ export default function Jobs() {
     
     addMessage(`${ship.name} deployed on mission!`);
     
+    // Tutorial: advance after first mission start
+    if (tutorialActive && tutorialStep === 5) {
+      advanceTutorial();
+    }
+    
     // Reset selection
     setSelectedMission(null);
   };
@@ -170,11 +177,13 @@ export default function Jobs() {
         </div>
         
         <div className="grid grid-cols-1 gap-3 mb-4">
-          {availableMissions.map((mission) => (
+          {availableMissions.slice(0, tutorialActive && tutorialStep === 5 ? 1 : undefined).map((mission, idx) => (
             <div
               key={mission.id}
               onClick={() => setSelectedMission(mission)}
               className={`bg-gradient-to-r from-gray-800 to-gray-900 border-2 rounded-lg p-4 transition-all cursor-pointer ${
+                (tutorialActive && tutorialStep === 5 && idx === 0) ? 'animate-pulse' : ''
+              } ${
                 selectedMission?.id === mission.id
                   ? 'border-cyan-500 bg-cyan-500/10'
                   : 'border-gray-600 hover:border-cyan-500/50'

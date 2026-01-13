@@ -1,11 +1,25 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { createPageUrl } from '../../utils';
+import { useTutorial } from './TutorialProvider';
 
 export default function DeviceFrame({ children }) {
   const navigate = useNavigate();
   const location = useLocation();
+  const { tutorialActive, tutorialStep } = useTutorial();
   const [debugMode, setDebugMode] = React.useState(false);
+  
+  // Block navigation during certain tutorial steps
+  const canNavigate = (target) => {
+    if (!tutorialActive) return true;
+    
+    if (tutorialStep === 1 && target !== 'Market') return false;
+    if (tutorialStep === 2 && target !== 'Market') return false;
+    if (tutorialStep === 4 && target !== 'Main') return false;
+    if (tutorialStep === 5 && target !== 'Jobs') return false;
+    
+    return true;
+  };
   
   React.useEffect(() => {
     const handleKeyPress = (e) => {
@@ -82,8 +96,9 @@ export default function DeviceFrame({ children }) {
         
         {/* Clickable hotspots */}
         <button
-          onClick={() => navigate(createPageUrl('Settings'))}
-          className="hotspot hs-settings absolute cursor-pointer"
+          onClick={() => canNavigate('Settings') && navigate(createPageUrl('Settings'))}
+          disabled={!canNavigate('Settings')}
+          className="hotspot hs-settings absolute cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
           aria-label="Settings"
           style={{
             left: 'var(--settings-x)',
@@ -95,8 +110,9 @@ export default function DeviceFrame({ children }) {
         />
 
         <button
-          onClick={() => navigate(createPageUrl('Main'))}
-          className="hotspot hs-home absolute cursor-pointer"
+          onClick={() => canNavigate('Main') && navigate(createPageUrl('Main'))}
+          disabled={!canNavigate('Main')}
+          className="hotspot hs-home absolute cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
           aria-label="Home"
           style={{
             left: 'var(--home-x)',
@@ -108,8 +124,9 @@ export default function DeviceFrame({ children }) {
         />
 
         <button
-          onClick={() => navigate(createPageUrl('FleetManagement'))}
-          className="hotspot hs-fleet absolute cursor-pointer"
+          onClick={() => canNavigate('FleetManagement') && navigate(createPageUrl('FleetManagement'))}
+          disabled={!canNavigate('FleetManagement')}
+          className="hotspot hs-fleet absolute cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
           aria-label="Fleet"
           style={{
             left: 'var(--fleet-x)',

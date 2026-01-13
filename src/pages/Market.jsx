@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useGame } from '../components/game/GameProvider';
+import { useTutorial } from '../components/game/TutorialProvider';
 import DeviceFrame from '../components/game/DeviceFrame';
 import ResourceHeader from '../components/game/ResourceHeader';
 import PurchaseConfirmDialog from '../components/game/PurchaseConfirmDialog';
@@ -13,6 +14,7 @@ import { SHIP_TIERS, getTierConfig } from '../components/game/ShipTierConfig';
 
 export default function Market() {
   const { gameState, addShip, updateGameState, addMessage, rollShipTier } = useGame();
+  const { tutorialActive, tutorialStep, advanceTutorial } = useTutorial();
   const [activeTab, setActiveTab] = useState('scrap');
   const [marketItems, setMarketItems] = useState([]);
   const [timeUntilReset, setTimeUntilReset] = useState('');
@@ -288,6 +290,11 @@ export default function Market() {
       });
       
       addMessage(`Hired ${item.name} for $${totalCost}`);
+      
+      // Tutorial: advance after first ship purchase
+      if (tutorialActive && tutorialStep === 2) {
+        advanceTutorial();
+      }
     } else if (activeTab === 'fuel') {
       await updateGameState({
         fuel: gameState.fuel + (item.fuelAmount * quantity),
@@ -359,7 +366,8 @@ export default function Market() {
         <div className="flex gap-2 mb-4">
           <button
             onClick={() => setActiveTab('scrap')}
-            className={`flex-1 py-3 rounded-lg font-bold text-sm border-2 transition-all ${
+            disabled={tutorialActive && tutorialStep === 1}
+            className={`flex-1 py-3 rounded-lg font-bold text-sm border-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed ${
               activeTab === 'scrap'
                 ? 'bg-cyan-500/20 border-cyan-500 text-cyan-400'
                 : 'bg-gray-800 border-gray-600 text-gray-400'
@@ -370,6 +378,8 @@ export default function Market() {
           <button
             onClick={() => setActiveTab('ships')}
             className={`flex-1 py-3 rounded-lg font-bold text-sm border-2 transition-all ${
+              (tutorialActive && tutorialStep === 1) ? 'animate-pulse' : ''
+            } ${
               activeTab === 'ships'
                 ? 'bg-cyan-500/20 border-cyan-500 text-cyan-400'
                 : 'bg-gray-800 border-gray-600 text-gray-400'
@@ -379,7 +389,8 @@ export default function Market() {
           </button>
           <button
             onClick={() => setActiveTab('fuel')}
-            className={`flex-1 py-3 rounded-lg font-bold text-sm border-2 transition-all ${
+            disabled={tutorialActive && tutorialStep === 1}
+            className={`flex-1 py-3 rounded-lg font-bold text-sm border-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed ${
               activeTab === 'fuel'
                 ? 'bg-cyan-500/20 border-cyan-500 text-cyan-400'
                 : 'bg-gray-800 border-gray-600 text-gray-400'
@@ -441,6 +452,7 @@ export default function Market() {
               <button
                 onClick={() => handleBuyClick(item)}
                 disabled={
+                  (tutorialActive && tutorialStep === 1 && activeTab === 'ships' && item.tier !== 'Unregistered') ||
                   (item.currency === 'crystals' ? gameState?.crystals < item.price : gameState?.credits < item.price) ||
                   (activeTab === 'scrap' && item.stock === 0)
                 }
