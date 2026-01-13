@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { base44 } from '@/api/base44Client';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { getRandomShipImage } from './ShipImages';
 
 const GameContext = createContext();
@@ -15,6 +16,22 @@ export default function GameProvider({ children }) {
   const [loading, setLoading] = useState(true);
   const [messages, setMessages] = useState([]);
   const [currentEvent, setCurrentEvent] = useState(null);
+  const queryClient = useQueryClient();
+  
+  // Centralized ship inventory with React Query
+  const { data: ships = [], isLoading: shipsLoading } = useQuery({
+    queryKey: ['ships', 'inventory'],
+    queryFn: async () => {
+      console.log('[INVENTORY] Loading ships from database...');
+      const allShips = await base44.entities.Ship.filter({ isHired: true }, '-created_date', 100);
+      console.log('[INVENTORY] Loaded ships:', allShips.length, 'ships');
+      return allShips || [];
+    },
+    staleTime: 30000, // Cache for 30 seconds
+    gcTime: 60000, // Keep in cache for 1 minute
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+  });
   
   // Load or initialize game state
   useEffect(() => {
@@ -93,6 +110,72 @@ export default function GameProvider({ children }) {
     }
   };
   
+  // Update a single ship without refetching all ships
+  const updateShip = async (shipId, updates) => {
+    console.log('[INVENTORY] Updating ship:', shipId, updates);
+    try {
+      const updatedShip = await base44.entities.Ship.update(shipId, updates);
+      
+      // Update the ship in the cache
+      queryClient.setQueryData(['ships', 'inventory'], (oldShips = []) => {
+        const newShips = oldShips.map(ship => 
+          ship.id === shipId ? { ...ship, ...updatedShip } : ship
+        );
+        console.log('[INVENTORY] Ship updated in cache. Total ships:', newShips.length);
+        return newShips;
+      });
+      
+      return updatedShip;
+    } catch (error) {
+      console.error('[INVENTORY] Failed to update ship:', error);
+      throw error;
+    }
+  };
+  
+  // Remove ship from inventory (fire/destroy)
+  const removeShip = async (shipId) => {
+    console.log('[INVENTORY] Removing ship:', shipId);
+    try {
+      await base44.entities.Ship.update(shipId, { isHired: false });
+      
+      // Remove from cache
+      queryClient.setQueryData(['ships', 'inventory'], (oldShips = []) => {
+        const newShips = oldShips.filter(ship => ship.id !== shipId);
+        console.log('[INVENTORY] Ship removed from cache. Remaining ships:', newShips.length);
+        return newShips;
+      });
+    } catch (error) {
+      console.error('[INVENTORY] Failed to remove ship:', error);
+      throw error;
+    }
+  };
+  
+  // Add new ship to inventory
+  const addShip = async (shipData) => {
+    console.log('[INVENTORY] Adding new ship:', shipData.name);
+    try {
+      const newShip = await base44.entities.Ship.create(shipData);
+      
+      // Add to cache
+      queryClient.setQueryData(['ships', 'inventory'], (oldShips = []) => {
+        const newShips = [...oldShips, newShip];
+        console.log('[INVENTORY] Ship added to cache. Total ships:', newShips.length);
+        return newShips;
+      });
+      
+      return newShip;
+    } catch (error) {
+      console.error('[INVENTORY] Failed to add ship:', error);
+      throw error;
+    }
+  };
+  
+  // Refresh ships from database
+  const refreshShips = () => {
+    console.log('[INVENTORY] Manual refresh requested');
+    queryClient.invalidateQueries({ queryKey: ['ships', 'inventory'] });
+  };
+  
   const addMessage = (message) => {
     setMessages(prev => [...prev, message].slice(-10));
   };
@@ -101,34 +184,35 @@ export default function GameProvider({ children }) {
     try {
       // Process active missions
       const missions = await base44.entities.Mission.filter({ status: 'active' }, '-created_date', 50);
-      
+
       for (const mission of missions) {
-      const startTime = new Date(mission.startTime);
-      const now = new Date();
-      const hoursElapsed = Math.floor((now - startTime) / (1000 * 60 * 60));
-      
-      // Check if mission complete
-      if (hoursElapsed >= mission.duration) {
-        await completeMission(mission);
-        continue;
+        const startTime = new Date(mission.startTime);
+        const now = new Date();
+        const hoursElapsed = Math.floor((now - startTime) / (1000 * 60 * 60));
+
+        // Check if mission complete
+        if (hoursElapsed >= mission.duration) {
+          await completeMission(mission);
+          continue;
+        }
+
+        // Roll for damage - use cached ships
+        const currentShips = queryClient.getQueryData(['ships', 'inventory']) || [];
+        const ship = currentShips.find(s => s.id === mission.shipId);
+        if (ship) {
+          await rollForDamage(ship, mission);
+        }
+
+        // Roll for distress signal (5% chance per hour)
+        if (Math.random() < 0.05) {
+          await createDistressEvent(mission);
+        }
+
+        // Roll for forgotten ship (25% chance)
+        if (Math.random() < 0.25) {
+          await createScavengeEvent(mission);
+        }
       }
-      
-      // Roll for damage
-      const ship = await base44.entities.Ship.filter({ id: mission.shipId });
-      if (ship.length > 0) {
-        await rollForDamage(ship[0], mission);
-      }
-      
-      // Roll for distress signal (5% chance per hour)
-      if (Math.random() < 0.05) {
-        await createDistressEvent(mission);
-      }
-      
-      // Roll for forgotten ship (25% chance)
-      if (Math.random() < 0.25) {
-        await createScavengeEvent(mission);
-      }
-    }
     
     // Check for daily fuel refill
     await checkDailyFuelRefill();
@@ -156,7 +240,8 @@ export default function GameProvider({ children }) {
       if (Math.random() < damageChance) {
         if (ship.damaged) {
           // Ship was already damaged - destroy it
-          await base44.entities.Ship.update(ship.id, { 
+          console.log('[INVENTORY] Ship destroyed:', ship.name);
+          await updateShip(ship.id, { 
             status: 'destroyed',
             health: 0
           });
@@ -169,13 +254,14 @@ export default function GameProvider({ children }) {
           });
         } else {
           // First damage
-          await base44.entities.Ship.update(ship.id, { 
+          console.log('[INVENTORY] Ship damaged:', ship.name);
+          await updateShip(ship.id, { 
             damaged: true,
             health: 50,
             status: 'damaged'
           });
           addMessage(`${ship.name} has taken damage!`);
-          
+
           // Create decision event
           setCurrentEvent({
             title: `${ship.name} Taking Damage`,
@@ -233,12 +319,11 @@ export default function GameProvider({ children }) {
   };
   
   const completeMission = async (mission) => {
+    console.log('[INVENTORY] Mission completed:', mission.id);
     await base44.entities.Mission.update(mission.id, { status: 'completed' });
 
-    const ship = await base44.entities.Ship.filter({ id: mission.shipId });
-    if (ship.length > 0) {
-      await base44.entities.Ship.update(ship[0].id, { status: 'idle' });
-    }
+    // Update ship status in cache
+    await updateShip(mission.shipId, { status: 'idle' });
 
     // Roll for fuel reward
     const rand = Math.random();
@@ -271,10 +356,11 @@ export default function GameProvider({ children }) {
     switch (currentEvent.type) {
       case 'damage':
         if (choiceId === 'recall') {
-          const ship = await base44.entities.Ship.filter({ id: currentEvent.shipId });
-          await base44.entities.Ship.update(currentEvent.shipId, { status: 'idle' });
+          const currentShips = queryClient.getQueryData(['ships', 'inventory']) || [];
+          const ship = currentShips.find(s => s.id === currentEvent.shipId);
+          await updateShip(currentEvent.shipId, { status: 'idle' });
           await base44.entities.Mission.update(currentEvent.missionId, { status: 'failed' });
-          addMessage(`${ship[0]?.name} recalled safely.`);
+          addMessage(`${ship?.name} recalled safely.`);
         } else {
           addMessage('Ship continuing mission despite damage...');
         }
@@ -287,7 +373,9 @@ export default function GameProvider({ children }) {
             addMessage('Ship in distress rescued. They\'ve joined your fleet!');
             // Create new ship based on rarity
             const tier = rollShipTier();
-            await createRandomShip(tier);
+            const newShip = await createRandomShip(tier);
+            // Add to inventory cache
+            queryClient.setQueryData(['ships', 'inventory'], (old = []) => [...old, newShip]);
           } else {
             addMessage('False alarm. No ship found.');
           }
@@ -399,10 +487,15 @@ export default function GameProvider({ children }) {
   
   const value = {
     gameState,
-    loading,
+    loading: loading || shipsLoading,
     messages,
     currentEvent,
+    ships,
     updateGameState,
+    updateShip,
+    removeShip,
+    addShip,
+    refreshShips,
     addMessage,
     handleEventChoice,
     createRandomShip,

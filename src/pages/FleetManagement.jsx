@@ -8,43 +8,33 @@ import { Heart, Wrench, UserMinus, Package, Check, X } from 'lucide-react';
 import { getRequiredPartCountFromDamage, generateRequiredParts, hasParts, consumeParts } from '../components/game/PartsCatalog';
 
 export default function FleetManagement() {
-  const { gameState, updateGameState, addMessage } = useGame();
-  const [ships, setShips] = useState([]);
+  const { gameState, ships, updateShip, removeShip, updateGameState, addMessage, refreshShips } = useGame();
   const [selectedShip, setSelectedShip] = useState(null);
   const [activeTab, setActiveTab] = useState(() => {
     return localStorage.getItem('fleet_tab_v1') || 'ships';
   });
   
+  // Generate required parts for damaged ships on mount
   useEffect(() => {
-    loadShips();
-  }, []);
-  
-  const handleTabChange = (tab) => {
-    setActiveTab(tab);
-    localStorage.setItem('fleet_tab_v1', tab);
-  };
-  
-  const loadShips = async () => {
-    try {
-      let allShips = await base44.entities.Ship.filter({ isHired: true }, '-created_date', 50);
-      
-      // Generate required parts for damaged ships (only if not already set)
-      for (const ship of allShips) {
+    const initDamagedShips = async () => {
+      for (const ship of ships) {
         if (ship.damaged && (!ship.requiredParts || ship.requiredParts.length === 0)) {
           const damagePercent = 100 - ship.health;
           const partCount = getRequiredPartCountFromDamage(damagePercent);
           const requiredParts = generateRequiredParts(partCount);
-          
-          await base44.entities.Ship.update(ship.id, { requiredParts });
-          ship.requiredParts = requiredParts;
+          await updateShip(ship.id, { requiredParts });
         }
       }
-      
-      setShips(allShips || []);
-    } catch (error) {
-      console.error('Error loading ships:', error);
-      setShips([]);
+    };
+    
+    if (ships.length > 0) {
+      initDamagedShips();
     }
+  }, [ships.length]);
+  
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+    localStorage.setItem('fleet_tab_v1', tab);
   };
   
   const getBaseParts = (tier) => {
@@ -98,7 +88,7 @@ export default function FleetManagement() {
     const newParts = consumeParts(requiredParts, parts);
     
     // Repair ship (reset to 100% health)
-    await base44.entities.Ship.update(ship.id, {
+    await updateShip(ship.id, {
       health: 100,
       damaged: false,
       status: 'idle',
@@ -108,7 +98,6 @@ export default function FleetManagement() {
     await updateGameState({ parts: newParts });
     
     addMessage(`${ship.name} repaired successfully!`);
-    loadShips();
   };
   
   const handleFire = async (ship) => {
@@ -117,9 +106,8 @@ export default function FleetManagement() {
       return;
     }
     
-    await base44.entities.Ship.update(ship.id, { isHired: false });
+    await removeShip(ship.id);
     addMessage(`${ship.name} has been fired.`);
-    loadShips();
     setSelectedShip(null);
   };
   
