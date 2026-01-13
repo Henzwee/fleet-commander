@@ -17,7 +17,7 @@ export default function MarketTicker() {
     // Initialize MarketEngine with correct full names
     const baseItems = [
       { id: 'cracked_glass', name: 'Cracked glass', basePrice: 150 },
-      { id: 'evil_ai', name: 'Formerly evil AI', basePrice: 100 },
+      { id: 'evil_ai', name: 'Reformed evil AI', basePrice: 100 },
       { id: 'rusty_screws', name: 'Rusty screws', basePrice: 300 },
       { id: 'wire_splice', name: 'Wire splice', basePrice: 200 },
       { id: 'antimatter', name: 'Mostly stable antimatter', basePrice: 600 },
