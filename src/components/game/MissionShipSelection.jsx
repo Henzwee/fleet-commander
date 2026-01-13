@@ -10,13 +10,13 @@ export default function MissionShipSelection({ mission, ships, onConfirm, onCanc
   const canAnyShipHandle = eligibleShips.length > 0;
   
   return (
-    <div className="fixed z-[4] bg-gradient-to-br from-gray-900 to-gray-950 flex flex-col" style={{
+    <div className="fixed z-[4] bg-gradient-to-br from-gray-900 to-gray-950 flex flex-col overflow-hidden" style={{
       top: 'calc(var(--content-pad-top) - 40px)',
       bottom: 'calc(var(--content-pad-bottom) - 30px)',
       left: 'var(--content-pad-left)',
       right: 'var(--content-pad-right)'
     }}>
-      <div className="flex-1 flex flex-col px-6 py-4 relative">
+      <div className="flex-1 flex flex-col px-6 overflow-y-auto" style={{ WebkitOverflowScrolling: 'touch' }}>
           <div className="mb-6 mt-6">
             <h2 className="text-cyan-400 font-bold text-base">SELECT SHIP</h2>
           </div>
@@ -27,11 +27,11 @@ export default function MissionShipSelection({ mission, ships, onConfirm, onCanc
           </div>
           
           {!canAnyShipHandle ? (
-            <div className="text-red-400 text-sm text-center py-8 font-bold flex-1 flex items-center justify-center">
+            <div className="text-red-400 text-sm text-center py-8 font-bold">
               with that crew? I dont think so, pal.
             </div>
           ) : (
-            <div className="flex-1 overflow-y-auto space-y-2 mb-4">
+            <div className="space-y-2 mb-4">
               {eligibleShips.map((ship) => (
                 <div
                   key={ship.id}
@@ -69,7 +69,7 @@ export default function MissionShipSelection({ mission, ships, onConfirm, onCanc
             </div>
           )}
           
-          <div className="flex gap-2 mb-8">
+          <div className="flex gap-2 mb-8 mt-4 flex-shrink-0">
             <button
               onClick={onCancel}
               className="flex-1 bg-gray-700 hover:bg-gray-600 border-2 border-gray-600 rounded-lg py-2.5 text-white font-bold text-sm transition-all"
