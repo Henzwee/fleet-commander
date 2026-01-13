@@ -2,36 +2,61 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '../../utils';
 import { MarketEngine } from './MarketEngine';
+import { useGame } from './GameProvider';
 
 export default function MarketTicker() {
   const navigate = useNavigate();
+  const { gameState } = useGame();
   const containerRef = useRef(null);
   const [items, setItems] = useState([]);
   const [offset, setOffset] = useState(0);
   const animationRef = useRef(null);
-  const itemWidthRef = useRef(160); // Fixed width for each item including gap
   const scrollSpeed = 1; // pixels per frame
 
   useEffect(() => {
-    // Initialize MarketEngine with base items
+    // Initialize MarketEngine with correct full names
     const baseItems = [
-      { id: 'cracked_glass', name: 'Cracked Glass', basePrice: 150 },
-      { id: 'evil_ai', name: 'Evil A.I.', basePrice: 200 },
-      { id: 'rusty_screws', name: 'Rusty Screws', basePrice: 120 },
-      { id: 'wire_splice', name: 'Wire Splice', basePrice: 180 },
-      { id: 'antimatter', name: 'Antimatter', basePrice: 600 },
-      { id: 'sci_fi_panel', name: 'Sci-Fi Panel', basePrice: 800 }
+      { id: 'cracked_glass', name: 'Cracked glass', basePrice: 150 },
+      { id: 'evil_ai', name: 'Formerly evil AI', basePrice: 100 },
+      { id: 'rusty_screws', name: 'Rusty screws', basePrice: 300 },
+      { id: 'wire_splice', name: 'Wire splice', basePrice: 200 },
+      { id: 'antimatter', name: 'Mostly stable antimatter', basePrice: 600 },
+      { id: 'sci_fi_panel', name: 'Sci-fi looking panel', basePrice: 800 },
+      { id: 'tangled_wire', name: 'Box of tangled wire', basePrice: 60 },
+      { id: 'stripped_bolts', name: 'Stripped bolts', basePrice: 400 },
+      { id: 'outdated_map', name: 'Outdated map', basePrice: 500 },
+      { id: 'expired_food', name: 'Expired food rations', basePrice: 700 }
     ];
 
     MarketEngine.init(baseItems);
     
     // Subscribe to price updates
     const unsubscribe = MarketEngine.subscribe((updatedItems) => {
-      setItems(updatedItems);
+      // Filter to only in-stock items
+      if (!gameState?.marketStock) {
+        setItems(updatedItems);
+        return;
+      }
+      
+      const inStockItems = updatedItems.filter(item => {
+        const stock = gameState.marketStock[item.id];
+        return stock !== undefined && stock > 0;
+      });
+      
+      setItems(inStockItems);
     });
 
-    // Initial load
-    setItems(MarketEngine.getAll());
+    // Initial load with filter
+    const allItems = MarketEngine.getAll();
+    if (!gameState?.marketStock) {
+      setItems(allItems);
+    } else {
+      const inStockItems = allItems.filter(item => {
+        const stock = gameState.marketStock[item.id];
+        return stock !== undefined && stock > 0;
+      });
+      setItems(inStockItems);
+    }
 
     return () => {
       unsubscribe();
@@ -39,13 +64,29 @@ export default function MarketTicker() {
         cancelAnimationFrame(animationRef.current);
       }
     };
-  }, []);
+  }, [gameState?.marketStock]);
 
   useEffect(() => {
     if (items.length === 0) return;
 
     let lastTime = performance.now();
-    const totalWidth = items.length * itemWidthRef.current;
+    
+    // Calculate total width dynamically based on rendered items
+    const calculateTotalWidth = () => {
+      if (containerRef.current) {
+        const firstSet = containerRef.current.children;
+        if (firstSet.length >= items.length) {
+          let width = 0;
+          for (let i = 0; i < items.length; i++) {
+            width += firstSet[i].offsetWidth + 12; // 12px gap
+          }
+          return width;
+        }
+      }
+      return items.length * 200; // fallback estimate
+    };
+    
+    const totalWidth = calculateTotalWidth();
 
     const animate = (currentTime) => {
       const deltaTime = currentTime - lastTime;
@@ -80,7 +121,21 @@ export default function MarketTicker() {
     };
   }, [items, scrollSpeed]);
 
-  if (items.length === 0) return null;
+  // If no items, show idle message
+  if (items.length === 0) {
+    return (
+      <div>
+        <div className="text-cyan-400 font-bold text-lg mb-3 tracking-wider">Market</div>
+        <div className="relative overflow-hidden h-12">
+          <div className="flex items-center h-full bg-gradient-to-br from-cyan-900/20 to-blue-900/20 border border-cyan-600/40 rounded-lg px-4">
+            <div className="text-cyan-100 font-bold text-sm whitespace-nowrap">
+              Market idle — awaiting inventory
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   // Triple items for seamless loop
   const displayItems = [...items, ...items, ...items];
