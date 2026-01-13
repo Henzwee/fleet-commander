@@ -6,6 +6,7 @@ import ResourceHeader from '../components/game/ResourceHeader';
 import ShipCard from '../components/game/ShipCard';
 import { Heart, Wrench, UserMinus, Package, Check, X } from 'lucide-react';
 import { getRequiredPartCountFromDamage, generateRequiredParts, hasParts, consumeParts } from '../components/game/PartsCatalog';
+import { getMaxLYForTier } from '../components/game/ShipTierConfig';
 
 export default function FleetManagement() {
   const { gameState, ships, updateShip, removeShip, updateGameState, addMessage, refreshShips } = useGame();
@@ -50,15 +51,7 @@ export default function FleetManagement() {
   };
   
   const getRange = (tier) => {
-    const tierRanges = {
-      'Unregistered': 500,
-      'Known': 1000,
-      'Notorious': 5000,
-      'Esteemed': 10000,
-      'Renowned': 50000,
-      'Legendary': 100000
-    };
-    return tierRanges[tier] || 500;
+    return getMaxLYForTier(tier) || 100;
   };
   
   const getRepairCost = (ship) => {
