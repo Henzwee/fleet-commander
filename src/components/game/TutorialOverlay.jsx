@@ -19,7 +19,8 @@ export default function TutorialOverlay() {
       case 0:
         // Step 1: Welcome
         setDialogMessages([
-          "Hello new franchisee! And welcome to Ship Faced Co.\nWhere we handle all (monetary) intergalactic needs!",
+          "Hello new franchisee! And welcome to Ship Faced Co.",
+          "Where we handle all (monetary) intergalactic needs! Such as shipping, transportation, discovery, theft, bounty hunting",
           "M.A.N.I. updating...",
           "Shipping, transportation, discovery, and so much more\n(within legal limits)!",
           "Let's get you started with your first ship!"

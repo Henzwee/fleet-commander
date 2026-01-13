@@ -13,7 +13,7 @@ export default function MANIDialog({ messages, onComplete, showProgress = false 
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90">
+    <div className="fixed inset-0 z-[5] flex items-center justify-center bg-black/90">
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
