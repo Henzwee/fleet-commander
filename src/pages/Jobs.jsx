@@ -153,7 +153,7 @@ export default function Jobs() {
     addMessage(`${ship.name} deployed on mission!`);
     
     // Tutorial: advance after first mission start
-    if (tutorialActive && tutorialStep === 5) {
+    if (tutorialActive && tutorialStep === 6) {
       advanceTutorial();
     }
     
@@ -177,12 +177,14 @@ export default function Jobs() {
         </div>
         
         <div className="grid grid-cols-1 gap-3 mb-4">
-          {availableMissions.slice(0, tutorialActive && tutorialStep === 5 ? 1 : undefined).map((mission, idx) => (
+          {availableMissions.slice(0, tutorialActive && tutorialStep === 5 ? 1 : undefined).map((mission, idx) => {
+            const highlightTutorial = tutorialActive && tutorialStep === 5 && idx === 0;
+            return (
             <div
               key={mission.id}
               onClick={() => setSelectedMission(mission)}
               className={`bg-gradient-to-r from-gray-800 to-gray-900 border-2 rounded-lg p-4 transition-all cursor-pointer ${
-                (tutorialActive && tutorialStep === 5 && idx === 0) ? 'animate-pulse' : ''
+                highlightTutorial ? 'animate-pulse border-cyan-400 bg-cyan-900/50 shadow-[0_0_20px_rgba(0,212,255,0.6)]' : ''
               } ${
                 selectedMission?.id === mission.id
                   ? 'border-cyan-500 bg-cyan-500/10'
@@ -214,7 +216,8 @@ export default function Jobs() {
                 </div>
               </div>
             </div>
-          ))}
+          )})}
+        
         </div>
         
         {selectedMission && idleShips.length > 0 && (
