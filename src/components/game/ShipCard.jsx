@@ -25,7 +25,7 @@ export default function ShipCard({ ship, onClick, showPrice = false }) {
   return (
     <div
       onClick={onClick}
-      className={`bg-gradient-to-b from-gray-800 to-gray-900 border-2 ${colorClass} rounded-lg p-4 cursor-pointer hover:scale-105 transition-all`}
+      className={`bg-gradient-to-b from-gray-800 to-gray-900 border-2 ${colorClass} rounded-lg p-4 cursor-pointer`}
     >
       {ship.imageUrl && (
         <div className="flex justify-center mb-3">
