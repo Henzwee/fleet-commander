@@ -40,7 +40,7 @@ export default function TutorialOverlay() {
         navigate(createPageUrl('Market'));
         break;
 
-      case 3:
+      case 2:
         // Step 3: First ship purchase confirmation
         setDialogMessages([
           "It's not much to look at,\nor work in,\nor to operate,\nand is a huge legal liability…",
@@ -50,9 +50,14 @@ export default function TutorialOverlay() {
         setShowDialog(true);
         break;
 
-      case 4:
+      case 3:
         // Step 4: Force navigate to home
         navigate(createPageUrl('Main'));
+        break;
+
+      case 4:
+        // Step 5: Force navigate to Jobs
+        navigate(createPageUrl('Jobs'));
         break;
 
       case 6:
@@ -97,7 +102,7 @@ export default function TutorialOverlay() {
         advanceTutorial();
         break;
 
-      case 3:
+      case 2:
         // After ship purchase confirmation, advance to force home
         advanceTutorial();
         break;
