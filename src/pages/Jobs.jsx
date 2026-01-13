@@ -5,6 +5,7 @@ import DeviceFrame from '../components/game/DeviceFrame';
 import ResourceHeader from '../components/game/ResourceHeader';
 import { MapPin, Clock, Zap, Fuel } from 'lucide-react';
 import { SHIP_TIERS, TIER_ORDER, getTierConfig, getMaxLYForTier } from '../components/game/ShipTierConfig';
+import MissionShipSelection from '../components/game/MissionShipSelection';
 
 export default function Jobs() {
   const { gameState, ships: allShips, updateShip, addMessage, updateGameState } = useGame();
@@ -118,17 +119,8 @@ export default function Jobs() {
     setAvailableMissions(missions);
   };
   
-  const handleAssignMission = async () => {
-    if (!selectedMission || !selectedShip) {
-      addMessage('Select a mission and ship first!');
-      return;
-    }
-    
-    // Check if ship can handle the distance
-    if (selectedShip.maxLY < selectedMission.requiredLY) {
-      addMessage(`${selectedShip.name} cannot travel ${selectedMission.requiredLY} LY! (Max: ${selectedShip.maxLY} LY)`);
-      return;
-    }
+  const handleConfirmShip = async (ship) => {
+    if (!selectedMission || !ship) return;
     
     if (gameState.fuel < selectedMission.fuelCost) {
       addMessage('Insufficient fuel!');
@@ -137,8 +129,8 @@ export default function Jobs() {
     
     // Create mission
     await base44.entities.Mission.create({
-      shipId: selectedShip.id,
-      shipName: selectedShip.name,
+      shipId: ship.id,
+      shipName: ship.name,
       distance: selectedMission.distance,
       duration: selectedMission.duration,
       reward: selectedMission.reward,
@@ -149,24 +141,18 @@ export default function Jobs() {
     });
     
     // Update ship status using centralized function
-    await updateShip(selectedShip.id, { status: 'active' });
+    await updateShip(ship.id, { status: 'active' });
     
     // Deduct fuel
     await updateGameState({
       fuel: gameState.fuel - selectedMission.fuelCost
     });
     
-    addMessage(`${selectedShip.name} deployed on mission!`);
+    addMessage(`${ship.name} deployed on mission!`);
     
     // Reset selection
     setSelectedMission(null);
-    setSelectedShip(null);
   };
-  
-  // Check if any ship can handle the selected mission
-  const canAnyShipHandleMission = selectedMission 
-    ? idleShips.some(ship => ship.maxLY >= selectedMission.requiredLY)
-    : true;
   
   return (
     <DeviceFrame title="JOBS">
@@ -222,60 +208,29 @@ export default function Jobs() {
           ))}
         </div>
         
-        {selectedMission && (
-          <div className="bg-gradient-to-br from-gray-900 to-gray-950 border-2 border-cyan-500 rounded-lg p-4 mb-4">
-            <div className="text-cyan-400 font-bold mb-3">SELECT SHIP</div>
-            
-            {idleShips.length === 0 ? (
-              <div className="text-gray-500 text-sm text-center py-4">
+        {selectedMission && idleShips.length > 0 && (
+          <MissionShipSelection
+            mission={selectedMission}
+            ships={idleShips}
+            onConfirm={handleConfirmShip}
+            onCancel={() => setSelectedMission(null)}
+          />
+        )}
+        
+        {selectedMission && idleShips.length === 0 && (
+          <div className="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <div className="bg-gradient-to-br from-gray-900 to-gray-950 border-2 border-cyan-500 rounded-xl max-w-md w-full shadow-2xl p-6">
+              <div className="text-cyan-400 font-bold text-lg mb-4">SELECT SHIP</div>
+              <div className="text-gray-500 text-sm text-center py-8">
                 No ships available. Hire more ships or wait for active missions to complete.
               </div>
-            ) : !canAnyShipHandleMission ? (
-              <div className="text-red-400 text-sm text-center py-4 font-bold">
-                with that crew? I dont think so, pal.
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 gap-2">
-                {idleShips.map((ship) => {
-                  const canHandle = ship.maxLY >= selectedMission.requiredLY;
-                  return (
-                    <div
-                      key={ship.id}
-                      onClick={() => canHandle && setSelectedShip(ship)}
-                      className={`bg-gray-800 border-2 rounded-lg p-3 transition-all ${
-                        !canHandle
-                          ? 'border-red-500/30 opacity-50 cursor-not-allowed'
-                          : selectedShip?.id === ship.id
-                          ? 'border-green-500 bg-green-500/10 cursor-pointer'
-                          : 'border-gray-600 hover:border-green-500/50 cursor-pointer'
-                      }`}
-                    >
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <div className="text-cyan-100 font-bold text-sm">{ship.name}</div>
-                          <div className="text-xs text-gray-400">{ship.tier} • {ship.maxLY} LY</div>
-                        </div>
-                        {canHandle ? (
-                          <div className="text-green-400 text-xs">IDLE</div>
-                        ) : (
-                          <div className="text-red-400 text-xs">OUT OF RANGE</div>
-                        )}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-            
-            {canAnyShipHandleMission && (
               <button
-                onClick={handleAssignMission}
-                disabled={!selectedShip || gameState.fuel < selectedMission.fuelCost}
-                className="w-full mt-4 bg-green-600 hover:bg-green-700 disabled:bg-gray-600 disabled:cursor-not-allowed border-2 border-green-500 disabled:border-gray-500 rounded-lg py-3 text-white font-bold transition-all"
+                onClick={() => setSelectedMission(null)}
+                className="w-full bg-gray-700 hover:bg-gray-600 border-2 border-gray-600 rounded-lg py-3 text-white font-bold transition-all"
               >
-                LAUNCH MISSION
+                BACK
               </button>
-            )}
+            </div>
           </div>
         )}
         </div>
