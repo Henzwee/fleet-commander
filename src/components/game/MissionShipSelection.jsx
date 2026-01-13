@@ -83,7 +83,6 @@ export default function MissionShipSelection({ mission, ships, onConfirm, onCanc
             >
               CONFIRM
             </button>
-          </div>
         </div>
       </div>
     </div>
