@@ -228,21 +228,21 @@ export default function FleetManagement() {
                         )}
                         
                         <div className="grid grid-cols-2 gap-2">
-                          {ship.damaged && ship.status !== 'active' ? (
+                          {ship.health < 100 && (
                             <button
                               onClick={() => handleRepair(ship)}
-                              disabled={!hasParts(ship.requiredParts || [], gameState?.parts || {})}
+                              disabled={ship.status === 'active' || !hasParts(ship.requiredParts || [], gameState?.parts || {})}
                               className="bg-green-600 border-2 border-green-500 rounded-lg py-2 px-3 text-white font-bold text-xs flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                               <Wrench className="w-4 h-4" />
                               <span>REPAIR</span>
                             </button>
-                          ) : null}
+                          )}
                           
                           <button
                             onClick={() => handleFire(ship)}
                             disabled={ship.status === 'active'}
-                            className={`bg-red-600 border-2 border-red-500 rounded-lg py-2 px-3 text-white font-bold text-xs flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed ${ship.damaged && ship.status !== 'active' ? '' : 'col-span-2'}`}
+                            className={`bg-red-600 border-2 border-red-500 rounded-lg py-2 px-3 text-white font-bold text-xs flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed ${ship.health < 100 ? '' : 'col-span-2'}`}
                           >
                             <UserMinus className="w-4 h-4" />
                             <span>FIRE</span>
