@@ -17,7 +17,7 @@ export default function MissionShipSelection({ mission, ships, onConfirm, onCanc
       right: 'var(--content-pad-right)'
     }}>
       <div className="flex-1 flex flex-col px-6 overflow-y-auto" style={{ WebkitOverflowScrolling: 'touch' }}>
-          <div className="mb-6 mt-6">
+          <div className="mb-6 mt-12">
             <h2 className="text-cyan-400 font-bold text-base">SELECT SHIP</h2>
           </div>
           
