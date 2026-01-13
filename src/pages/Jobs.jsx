@@ -6,23 +6,22 @@ import ResourceHeader from '../components/game/ResourceHeader';
 import { MapPin, Clock, Zap, Fuel } from 'lucide-react';
 
 export default function Jobs() {
-  const { gameState, addMessage, updateGameState } = useGame();
+  const { gameState, ships: allShips, updateShip, addMessage, updateGameState } = useGame();
   const [availableMissions, setAvailableMissions] = useState([]);
-  const [idleShips, setIdleShips] = useState([]);
   const [selectedMission, setSelectedMission] = useState(null);
   const [selectedShip, setSelectedShip] = useState(null);
   
+  // Filter idle ships from centralized inventory
+  const idleShips = allShips.filter(ship => ship.isHired && ship.status === 'idle');
+  
   useEffect(() => {
     loadData();
-  }, []);
+  }, [allShips.length]);
   
   const loadData = async () => {
     try {
-      const ships = await base44.entities.Ship.filter({ status: 'idle', isHired: true }, '-created_date', 50);
-      setIdleShips(ships || []);
       
       // Generate missions based on all ship tiers owned
-      const allShips = await base44.entities.Ship.filter({ isHired: true }, '-created_date', 100);
       const bestShipMaxLY = allShips.length > 0 
         ? Math.max(...allShips.map(s => s.maxLY || 100))
         : 100;
@@ -31,8 +30,7 @@ export default function Jobs() {
       const ownedTiers = [...new Set(allShips.map(s => s.tier))];
       generateMissions(bestShipMaxLY, ownedTiers);
     } catch (error) {
-      console.error('Error loading ships:', error);
-      setIdleShips([]);
+      console.error('Error loading missions:', error);
       generateMissions(100, ['Unregistered']); // Default to Unregistered range
     }
   };
@@ -149,8 +147,8 @@ export default function Jobs() {
       description: selectedMission.description
     });
     
-    // Update ship status
-    await base44.entities.Ship.update(selectedShip.id, { status: 'active' });
+    // Update ship status using centralized function
+    await updateShip(selectedShip.id, { status: 'active' });
     
     // Deduct fuel
     await updateGameState({
@@ -159,10 +157,9 @@ export default function Jobs() {
     
     addMessage(`${selectedShip.name} deployed on mission!`);
     
-    // Reload
+    // Reset selection
     setSelectedMission(null);
     setSelectedShip(null);
-    loadData();
   };
   
   return (

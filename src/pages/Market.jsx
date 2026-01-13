@@ -10,7 +10,7 @@ import { MarketEngine } from '../components/game/MarketEngine';
 import { getRandomShipImage } from '../components/game/ShipImages';
 
 export default function Market() {
-  const { gameState, updateGameState, addMessage, rollShipTier } = useGame();
+  const { gameState, addShip, updateGameState, addMessage, rollShipTier } = useGame();
   const [activeTab, setActiveTab] = useState('scrap');
   const [marketItems, setMarketItems] = useState([]);
   const [timeUntilReset, setTimeUntilReset] = useState('');
@@ -277,8 +277,8 @@ export default function Market() {
       await updateGameState(updates);
       addMessage(`Purchased ${quantity}x ${item.name}`);
     } else if (activeTab === 'ships') {
-      // Create ship
-      await base44.entities.Ship.create({
+      // Create ship using centralized function
+      await addShip({
         name: item.name,
         tier: item.tier,
         imageUrl: item.imageUrl,
