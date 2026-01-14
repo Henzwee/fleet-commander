@@ -25,6 +25,9 @@ export default function DeviceFrame({ children }) {
     }
     if (tutorialStep === 5 && target !== 'Jobs') return false;
     if (tutorialStep === 6 && target !== 'Jobs') return false;
+    if (tutorialStep === 10 && target !== 'Market') return false;
+    if (tutorialStep === 12 && target !== 'FleetManagement') return false;
+    if (tutorialStep === 13 && target !== 'FleetManagement') return false;
     
     return true;
   };

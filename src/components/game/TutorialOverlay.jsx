@@ -4,13 +4,21 @@ import { createPageUrl } from '../../utils';
 import { useTutorial } from './TutorialProvider';
 import { useGame } from './GameProvider';
 import MANIDialog from './MANIDialog';
+import { base44 } from '@/api/base44Client';
 
 export default function TutorialOverlay() {
   const { tutorialActive, tutorialStep, advanceTutorial, completeTutorial } = useTutorial();
-  const { updateGameState, gameState } = useGame();
+  const { updateGameState, gameState, ships, updateShip } = useGame();
   const navigate = useNavigate();
   const [showDialog, setShowDialog] = useState(false);
   const [dialogMessages, setDialogMessages] = useState([]);
+
+  // Step 8: Trigger forced encounter after dialogue
+  useEffect(() => {
+    if (tutorialActive && tutorialStep === 8) {
+      triggerTutorialEncounter();
+    }
+  }, [tutorialStep, tutorialActive]);
 
   // Redirect to Main page when tutorial starts
   useEffect(() => {
@@ -66,7 +74,34 @@ export default function TutorialOverlay() {
         break;
 
       case 9:
-        // Step 9: Crystal tutorial
+        // Step 9: Post-encounter damage explanation
+        setDialogMessages([
+          "Well you made it through your first encounter,\nbut tore up your only ship in the process.",
+          "Luckily Ship Faced Co. has a fresh shipment\nof supplies come in multiple times a day"
+        ]);
+        setShowDialog(true);
+        break;
+
+      case 10:
+        // Step 10: Force navigate to Store for antimatter
+        navigate(createPageUrl('Market'));
+        break;
+
+      case 11:
+        // Step 11: After antimatter purchase
+        setDialogMessages([
+          "Now that we have what we need,\nwe can get this clunker back to work"
+        ]);
+        setShowDialog(true);
+        break;
+
+      case 12:
+        // Step 12: Force navigate to Fleet for repair
+        navigate(createPageUrl('FleetManagement'));
+        break;
+
+      case 14:
+        // Step 14: Crystal tutorial
         setDialogMessages([
           "Rare crystals can be found out in space.",
           "Sometimes they're on planets,\nsometimes wrecked ships,\nand sometimes in other people's pockets.",
@@ -88,6 +123,42 @@ export default function TutorialOverlay() {
     }
   }, [tutorialStep, tutorialActive]);
 
+  const triggerTutorialEncounter = async () => {
+    console.log('[TUTORIAL] Triggering forced encounter at step 8');
+    
+    // Find the active mission (should be the one just started)
+    const activeMissions = await base44.entities.Mission.filter({ status: 'active' }, '-created_date', 1);
+    if (activeMissions.length === 0) {
+      console.error('[TUTORIAL] No active mission found');
+      advanceTutorial();
+      return;
+    }
+
+    const mission = activeMissions[0];
+    const ship = ships.find(s => s.id === mission.shipId);
+    
+    if (!ship) {
+      console.error('[TUTORIAL] Ship not found');
+      advanceTutorial();
+      return;
+    }
+
+    // Damage ship to 50% health
+    await updateShip(ship.id, {
+      health: 50,
+      damaged: true,
+      status: 'idle'
+    });
+
+    // Cancel the mission
+    await base44.entities.Mission.update(mission.id, { status: 'failed' });
+
+    console.log('[TUTORIAL] Encounter resolved, ship damaged to 50%');
+    
+    // Advance to next step (damage explanation)
+    advanceTutorial();
+  };
+
   const handleDialogComplete = async () => {
     setShowDialog(false);
 
@@ -103,16 +174,26 @@ export default function TutorialOverlay() {
         break;
 
       case 7:
-        // After encounter explanation, advance to force encounter resolution
+        // After encounter explanation, advance to trigger encounter
         advanceTutorial();
         break;
 
       case 9:
-        // After crystal tutorial, advance to time-skip mechanic
+        // After damage explanation, advance to store navigation
         advanceTutorial();
         break;
 
       case 11:
+        // After repair explanation, advance to fleet navigation
+        advanceTutorial();
+        break;
+
+      case 14:
+        // After crystal tutorial, advance to time-skip mechanic
+        advanceTutorial();
+        break;
+
+      case 16:
         // Tutorial complete - give rewards
         const newCredits = gameState.credits + 1000;
         const newCrystals = gameState.crystals + 5;

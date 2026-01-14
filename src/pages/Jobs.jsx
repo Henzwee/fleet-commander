@@ -152,13 +152,13 @@ export default function Jobs() {
     
     addMessage(`${ship.name} deployed on mission!`);
     
-    // Tutorial: advance after first mission start
-    if (tutorialActive && tutorialStep === 6) {
-      advanceTutorial();
-    }
-    
     // Reset selection
     setSelectedMission(null);
+    
+    // Tutorial: advance after first mission start
+    if (tutorialActive && tutorialStep === 6) {
+      setTimeout(() => advanceTutorial(), 500);
+    }
   };
   
   return (
