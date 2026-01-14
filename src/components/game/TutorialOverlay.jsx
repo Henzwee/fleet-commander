@@ -55,11 +55,6 @@ export default function TutorialOverlay() {
         navigate(createPageUrl('Main'));
         break;
 
-      case 5:
-        // Step 6: Force navigate to Jobs
-        navigate(createPageUrl('Jobs'));
-        break;
-
       case 7:
         // Step 7: Encounter explanation
         setDialogMessages([

@@ -24,6 +24,7 @@ export default function DeviceFrame({ children }) {
       return false;
     }
     if (tutorialStep === 5 && target !== 'Jobs') return false;
+    if (tutorialStep === 6 && target !== 'Jobs') return false;
     
     return true;
   };
