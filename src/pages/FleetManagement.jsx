@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { createPageUrl } from '../utils';
 import { base44 } from '@/api/base44Client';
 import { useGame } from '../components/game/GameProvider';
+import { useTutorial } from '../components/game/TutorialProvider';
 import DeviceFrame from '../components/game/DeviceFrame';
 import ResourceHeader from '../components/game/ResourceHeader';
 import ShipCard from '../components/game/ShipCard';
@@ -10,6 +13,8 @@ import { getMaxLYForTier } from '../components/game/ShipTierConfig';
 
 export default function FleetManagement() {
   const { gameState, ships, updateShip, removeShip, updateGameState, addMessage, refreshShips } = useGame();
+  const { tutorialActive, tutorialStep, advanceTutorial } = useTutorial();
+  const navigate = useNavigate();
   const [selectedShip, setSelectedShip] = useState(null);
   const [activeTab, setActiveTab] = useState(() => {
     return localStorage.getItem('fleet_tab_v1') || 'ships';
@@ -20,10 +25,15 @@ export default function FleetManagement() {
     const initDamagedShips = async () => {
       for (const ship of ships) {
         if (ship.damaged && (!ship.requiredParts || ship.requiredParts.length === 0)) {
-          const damagePercent = 100 - ship.health;
-          const partCount = getRequiredPartCountFromDamage(damagePercent);
-          const requiredParts = generateRequiredParts(partCount);
-          await updateShip(ship.id, { requiredParts });
+          // Tutorial: Only require antimatter for first repair
+          if (tutorialActive && (tutorialStep === 12 || tutorialStep === 13)) {
+            await updateShip(ship.id, { requiredParts: [{ name: 'Mostly stable antimatter', qty: 1 }] });
+          } else {
+            const damagePercent = 100 - ship.health;
+            const partCount = getRequiredPartCountFromDamage(damagePercent);
+            const requiredParts = generateRequiredParts(partCount);
+            await updateShip(ship.id, { requiredParts });
+          }
         }
       }
     };
@@ -31,7 +41,18 @@ export default function FleetManagement() {
     if (ships.length > 0) {
       initDamagedShips();
     }
-  }, [ships.length]);
+  }, [ships.length, tutorialStep]);
+
+  // Tutorial: Auto-select damaged ship at step 12
+  useEffect(() => {
+    if (tutorialActive && tutorialStep === 12) {
+      const damagedShip = ships.find(s => s.damaged);
+      if (damagedShip) {
+        setSelectedShip(damagedShip);
+        setActiveTab('ships');
+      }
+    }
+  }, [tutorialActive, tutorialStep, ships]);
   
   const handleTabChange = (tab) => {
     setActiveTab(tab);
@@ -91,6 +112,14 @@ export default function FleetManagement() {
     await updateGameState({ parts: newParts });
     
     addMessage(`${ship.name} repaired successfully!`);
+    
+    // Tutorial: After repair, return to Main and advance
+    if (tutorialActive && tutorialStep === 13) {
+      setTimeout(() => {
+        navigate(createPageUrl('Main'));
+        advanceTutorial();
+      }, 500);
+    }
   };
   
   const handleFire = async (ship) => {
@@ -126,7 +155,8 @@ export default function FleetManagement() {
         <div className="flex gap-2 mb-4">
           <button
             onClick={() => handleTabChange('ships')}
-            className={`flex-1 py-3 rounded-lg font-bold text-sm border-2 transition-all ${
+            disabled={tutorialActive && (tutorialStep === 12 || tutorialStep === 13)}
+            className={`flex-1 py-3 rounded-lg font-bold text-sm border-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed ${
               activeTab === 'ships'
                 ? 'bg-cyan-500/20 border-cyan-500 text-cyan-400'
                 : 'bg-gray-800 border-gray-600 text-gray-400'
@@ -136,7 +166,8 @@ export default function FleetManagement() {
           </button>
           <button
             onClick={() => handleTabChange('inventory')}
-            className={`flex-1 py-3 rounded-lg font-bold text-sm border-2 transition-all ${
+            disabled={tutorialActive && (tutorialStep === 12 || tutorialStep === 13)}
+            className={`flex-1 py-3 rounded-lg font-bold text-sm border-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed ${
               activeTab === 'inventory'
                 ? 'bg-cyan-500/20 border-cyan-500 text-cyan-400'
                 : 'bg-gray-800 border-gray-600 text-gray-400'
@@ -165,11 +196,15 @@ export default function FleetManagement() {
               </div>
             ) : (
               <div className="grid grid-cols-1 gap-3">
-                {ships.map((ship) => (
-                  <div key={ship.id}>
+                {ships.map((ship) => {
+                  const isTutorialDamaged = tutorialActive && (tutorialStep === 12 || tutorialStep === 13) && ship.damaged;
+                  
+                  return (
+                  <div key={ship.id} className={isTutorialDamaged ? 'animate-pulse' : ''}>
                     <ShipCard
                       ship={ship}
                       onClick={() => setSelectedShip(selectedShip?.id === ship.id ? null : ship)}
+                      className={isTutorialDamaged ? 'shadow-[0_0_20px_rgba(255,68,68,0.6)]' : ''}
                     />
                     
                     {selectedShip?.id === ship.id && (
@@ -230,9 +265,17 @@ export default function FleetManagement() {
                         <div className="grid grid-cols-2 gap-2">
                           {ship.health < 100 && (
                             <button
-                              onClick={() => handleRepair(ship)}
+                              onClick={() => {
+                                handleRepair(ship);
+                                // Tutorial: advance to step 13 when repair button clicked
+                                if (tutorialActive && tutorialStep === 12) {
+                                  setTimeout(() => advanceTutorial(), 100);
+                                }
+                              }}
                               disabled={ship.status === 'active' || !hasParts(ship.requiredParts || [], gameState?.parts || {})}
-                              className="bg-green-600 border-2 border-green-500 rounded-lg py-2 px-3 text-white font-bold text-xs flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                              className={`bg-green-600 border-2 border-green-500 rounded-lg py-2 px-3 text-white font-bold text-xs flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed ${
+                                tutorialActive && tutorialStep === 12 && hasParts(ship.requiredParts || [], gameState?.parts || {}) ? 'animate-pulse shadow-[0_0_20px_rgba(34,197,94,0.8)]' : ''
+                              }`}
                             >
                               <Wrench className="w-4 h-4" />
                               <span>REPAIR</span>
@@ -251,7 +294,8 @@ export default function FleetManagement() {
                       </div>
                     )}
                   </div>
-                ))}
+                  );
+                })}
               </div>
             )}
           </section>
