@@ -65,17 +65,21 @@ export default function Main() {
         const minutes = Math.floor((remaining % 1) * 60);
         const seconds = Math.floor(((remaining % 1) * 60 % 1) * 60);
 
-        // Get first active ship image
+        // Get all active ship images
         let shipImage = null;
+        const shipImages = [];
         const activeShips = mission.ships?.filter(s => s.status === 'active') || [];
         if (activeShips.length > 0) {
           try {
-            const ships = await base44.entities.Ship.filter({ id: activeShips[0].shipId });
-            if (ships.length > 0 && ships[0].imageUrl) {
-              shipImage = ships[0].imageUrl;
+            for (const activeShip of activeShips) {
+              const ships = await base44.entities.Ship.filter({ id: activeShip.shipId });
+              if (ships.length > 0 && ships[0].imageUrl) {
+                shipImages.push(ships[0].imageUrl);
+                if (!shipImage) shipImage = ships[0].imageUrl; // First ship for backwards compat
+              }
             }
           } catch (err) {
-            console.error('Error loading ship image:', err);
+            console.error('Error loading ship images:', err);
           }
         }
 
@@ -84,6 +88,7 @@ export default function Main() {
         return {
           ...mission,
           shipImage,
+          shipImages,
           shipNames,
           activeShipCount: activeShips.length,
           isComplete: mission.status === 'completed' || remaining <= 0,
