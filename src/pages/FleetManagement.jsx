@@ -231,13 +231,18 @@ export default function FleetManagement() {
                           </div>
                         )}
                         
+                        {ship.health < 100 && ship.status === 'active' && (
+                          <div className="mb-3 bg-amber-900/30 rounded-lg p-2 border border-amber-500/30">
+                            <div className="text-amber-400 text-xs text-center">Deployed ships can't be repaired</div>
+                          </div>
+                        )}
+                        
                         <div className="grid grid-cols-2 gap-2">
                           {ship.health < 100 && (
                             <button
                               onClick={() => handleRepair(ship)}
                               disabled={ship.status === 'active' || !hasParts(ship.requiredParts || [], gameState?.parts || {})}
-                              className="bg-green-600 border-2 border-green-500 rounded-lg py-2 px-3 text-white font-bold text-xs flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-                              title={ship.status === 'active' ? 'Cannot repair ships on active missions' : ''}
+                              className="bg-green-600 border-2 border-green-500 rounded-lg py-2 px-3 text-white font-bold text-xs flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed active:bg-green-700"
                             >
                               <Wrench className="w-4 h-4" />
                               <span>REPAIR</span>
