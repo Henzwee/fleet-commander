@@ -30,9 +30,11 @@ export default function Main() {
   }, [gameState]);
 
   useEffect(() => {
+    if (!gameState) return;
+    
     const interval = setInterval(() => {
       loadActiveMissions();
-    }, 1000);
+    }, 2000);
     return () => clearInterval(interval);
   }, [gameState]);
 
@@ -49,10 +51,10 @@ export default function Main() {
 
   const loadActiveMissions = async () => {
     try {
-      const missions = await base44.entities.Mission.filter({ status: 'active' }, '-created_date', 20) || [];
-      const completed = await base44.entities.Mission.filter({ status: 'completed' }, '-created_date', 20) || [];
+      const missions = await base44.entities.Mission.filter({ status: 'active' }, '-created_date', 50) || [];
+      const completed = await base44.entities.Mission.filter({ status: 'completed' }, '-created_date', 50) || [];
 
-      const allMissions = [...missions, ...completed];
+      const allMissions = [...missions, ...completed].filter(m => m && m.id);
 
       const missionsWithTime = await Promise.all(allMissions.map(async mission => {
         const startTime = new Date(mission.startTime);
