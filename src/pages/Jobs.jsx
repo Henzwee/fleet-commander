@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '../utils';
 import { base44 } from '@/api/base44Client';
 import { useGame } from '../components/game/GameProvider';
-import { useTutorial } from '../components/game/TutorialProvider';
+
 import DeviceFrame from '../components/game/DeviceFrame';
 import ResourceHeader from '../components/game/ResourceHeader';
 import { MapPin, Clock, Zap, Fuel } from 'lucide-react';
@@ -12,7 +12,6 @@ import MissionShipSelection from '../components/game/MissionShipSelection';
 
 export default function Jobs() {
   const { gameState, ships: allShips, updateShip, addMessage, updateGameState } = useGame();
-  const { tutorialActive, tutorialStep, advanceTutorial } = useTutorial();
   const navigate = useNavigate();
   const [availableMissions, setAvailableMissions] = useState([]);
   const [selectedMission, setSelectedMission] = useState(null);
@@ -40,22 +39,6 @@ export default function Jobs() {
   };
   
   const generateMissions = (playerMaxLY) => {
-    // Tutorial: Only show one mission during tutorial step 5-6
-    if (tutorialActive && (tutorialStep === 5 || tutorialStep === 6)) {
-      const tutorialMission = {
-        id: 'mission_tutorial',
-        distance: 50,
-        duration: 2,
-        reward: 200,
-        fuelCost: 5,
-        description: 'Routine cargo delivery',
-        tier: 'Unregistered',
-        requiredLY: 50
-      };
-      setAvailableMissions([tutorialMission]);
-      return;
-    }
-    
     const missions = [];
     const descriptions = [
       'Deliver mystery meat to Station 7',
@@ -173,14 +156,6 @@ export default function Jobs() {
     
     // Reset selection
     setSelectedMission(null);
-    
-    // Tutorial: navigate to Home and advance after first mission start
-    if (tutorialActive && tutorialStep === 6) {
-      setTimeout(() => {
-        navigate(createPageUrl('Main'));
-        advanceTutorial();
-      }, 500);
-    }
   };
   
   return (

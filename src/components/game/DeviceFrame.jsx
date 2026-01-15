@@ -1,19 +1,11 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { createPageUrl } from '../../utils';
-import { useTutorial } from './TutorialProvider';
 
 export default function DeviceFrame({ children }) {
   const navigate = useNavigate();
   const location = useLocation();
-  const { tutorialActive, tutorialStep } = useTutorial();
   const [debugMode, setDebugMode] = React.useState(false);
-  
-  // Block navigation during certain tutorial steps
-  const canNavigate = (target) => {
-    // Tutorial completely disabled - allow all navigation
-    return true;
-  };
   
   React.useEffect(() => {
     const handleKeyPress = (e) => {
@@ -90,9 +82,8 @@ export default function DeviceFrame({ children }) {
         
         {/* Clickable hotspots */}
         <button
-          onClick={() => canNavigate('Settings') && navigate(createPageUrl('Settings'))}
-          disabled={!canNavigate('Settings')}
-          className="hotspot hs-settings absolute cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
+          onClick={() => navigate(createPageUrl('Settings'))}
+          className="hotspot hs-settings absolute cursor-pointer"
           aria-label="Settings"
           style={{
             left: 'var(--settings-x)',
@@ -104,9 +95,8 @@ export default function DeviceFrame({ children }) {
         />
 
         <button
-          onClick={() => canNavigate('Main') && navigate(createPageUrl('Main'))}
-          disabled={!canNavigate('Main')}
-          className="hotspot hs-home absolute cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
+          onClick={() => navigate(createPageUrl('Main'))}
+          className="hotspot hs-home absolute cursor-pointer"
           aria-label="Home"
           style={{
             left: 'var(--home-x)',
@@ -118,9 +108,8 @@ export default function DeviceFrame({ children }) {
         />
 
         <button
-          onClick={() => canNavigate('FleetManagement') && navigate(createPageUrl('FleetManagement'))}
-          disabled={!canNavigate('FleetManagement')}
-          className="hotspot hs-fleet absolute cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
+          onClick={() => navigate(createPageUrl('FleetManagement'))}
+          className="hotspot hs-fleet absolute cursor-pointer"
           aria-label="Fleet Management"
           style={{
             left: 'var(--fleet-x)',
