@@ -57,6 +57,15 @@ export default function GameProvider({ children }) {
         // Initialize new game - clear any old tutorial progress
         localStorage.removeItem('tutorial_step');
         
+        // Initialize market stock with 6 random items
+        const allItemIds = ['cracked_glass', 'evil_ai', 'rusty_screws', 'wire_splice', 'antimatter', 'sci_fi_panel', 'tangled_wire', 'stripped_bolts', 'outdated_map', 'expired_food'];
+        const shuffled = allItemIds.sort(() => Math.random() - 0.5);
+        const selectedIds = shuffled.slice(0, 6);
+        const initialStock = { shipStock: 5 };
+        selectedIds.forEach(itemId => {
+          initialStock[itemId] = Math.floor(Math.random() * 5) + 1; // 1-5 stock
+        });
+        
         const newState = await base44.entities.GameState.create({
           credits: 5000,
           crystals: 50,
@@ -71,7 +80,8 @@ export default function GameProvider({ children }) {
           lastMarketReset: new Date().toISOString(),
           autoResolve: false,
           highestTier: 'Unregistered',
-          marketStock: {}
+          marketStock: initialStock,
+          marketRotationHistory: [selectedIds]
         });
         setGameState(newState);
         setMessages(['M.A.N.I. system initialized. Welcome, Commander.']);

@@ -50,8 +50,8 @@ export default function Main() {
 
   const loadActiveMissions = async () => {
     try {
-      const missions = await base44.entities.Mission.filter({ status: 'active' }, '-created_date', 20);
-      const completed = await base44.entities.Mission.filter({ status: 'completed' }, '-created_date', 20);
+      const missions = await base44.entities.Mission.filter({ status: 'active' }, '-created_date', 20) || [];
+      const completed = await base44.entities.Mission.filter({ status: 'completed' }, '-created_date', 20) || [];
 
       const allMissions = [...missions, ...completed];
 
