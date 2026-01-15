@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { createPageUrl } from '../utils';
 import { base44 } from '@/api/base44Client';
 import { useGame } from '../components/game/GameProvider';
 import { useTutorial } from '../components/game/TutorialProvider';
@@ -11,6 +13,7 @@ import MissionShipSelection from '../components/game/MissionShipSelection';
 export default function Jobs() {
   const { gameState, ships: allShips, updateShip, addMessage, updateGameState } = useGame();
   const { tutorialActive, tutorialStep, advanceTutorial } = useTutorial();
+  const navigate = useNavigate();
   const [availableMissions, setAvailableMissions] = useState([]);
   const [selectedMission, setSelectedMission] = useState(null);
   const [selectedShip, setSelectedShip] = useState(null);
@@ -37,6 +40,22 @@ export default function Jobs() {
   };
   
   const generateMissions = (playerMaxLY) => {
+    // Tutorial: Only show one mission during tutorial step 5-6
+    if (tutorialActive && (tutorialStep === 5 || tutorialStep === 6)) {
+      const tutorialMission = {
+        id: 'mission_tutorial',
+        distance: 50,
+        duration: 2,
+        reward: 200,
+        fuelCost: 5,
+        description: 'Routine cargo delivery',
+        tier: 'Unregistered',
+        requiredLY: 50
+      };
+      setAvailableMissions([tutorialMission]);
+      return;
+    }
+    
     const missions = [];
     const descriptions = [
       'Deliver mystery meat to Station 7',
@@ -180,15 +199,12 @@ export default function Jobs() {
         </div>
         
         <div className="grid grid-cols-1 gap-3 mb-4">
-          {availableMissions.slice(0, tutorialActive && tutorialStep === 5 ? 1 : undefined).map((mission, idx) => {
-            const highlightTutorial = tutorialActive && tutorialStep === 5 && idx === 0;
+          {availableMissions.map((mission, idx) => {
             return (
             <div
               key={mission.id}
               onClick={() => setSelectedMission(mission)}
               className={`bg-gradient-to-r from-gray-800 to-gray-900 border-2 rounded-lg p-4 transition-all cursor-pointer ${
-                highlightTutorial ? 'animate-pulse border-cyan-400 bg-cyan-900/50 shadow-[0_0_20px_rgba(0,212,255,0.6)]' : ''
-              } ${
                 selectedMission?.id === mission.id
                   ? 'border-cyan-500 bg-cyan-500/10'
                   : 'border-gray-600 hover:border-cyan-500/50'
