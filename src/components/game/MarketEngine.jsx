@@ -48,8 +48,8 @@ class MarketEngineClass {
     const item = this.items.get(itemId);
     if (!item) return;
 
-    // Generate new price: ±20% of base price
-    const fluctuation = (Math.random() - 0.5) * 0.4; // -20% to +20%
+    // Generate new price: ±25% of base price
+    const fluctuation = (Math.random() - 0.5) * 0.5; // -25% to +25%
     const newPrice = Math.round(item.basePrice * (1 + fluctuation));
 
     // Calculate delta vs previous price
