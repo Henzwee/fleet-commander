@@ -11,24 +11,7 @@ export default function DeviceFrame({ children }) {
   
   // Block navigation during certain tutorial steps
   const canNavigate = (target) => {
-    if (!tutorialActive) return true;
-    
-    if (tutorialStep === 1 && target !== 'Market') return false;
-    if (tutorialStep === 2 && target !== 'Market') return false;
-    if (tutorialStep === 3 && target !== 'Main') return false;
-    if (tutorialStep === 4) {
-      // On step 4, only allow clicking Jobs button
-      if (target === 'Jobs') {
-        return true;
-      }
-      return false;
-    }
-    if (tutorialStep === 5 && target !== 'Jobs') return false;
-    if (tutorialStep === 6 && target !== 'Jobs') return false;
-    if (tutorialStep === 10 && target !== 'Market') return false;
-    if (tutorialStep === 12 && target !== 'FleetManagement') return false;
-    if (tutorialStep === 13 && target !== 'FleetManagement') return false;
-    
+    // Tutorial completely disabled - allow all navigation
     return true;
   };
   
