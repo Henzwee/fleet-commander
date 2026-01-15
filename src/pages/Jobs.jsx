@@ -20,7 +20,7 @@ export default function Jobs() {
   
   useEffect(() => {
     loadData();
-  }, [allShips.length, tutorialStep]);
+  }, [allShips.length]);
   
   const loadData = async () => {
     try {
@@ -37,21 +37,6 @@ export default function Jobs() {
   };
   
   const generateMissions = (playerMaxLY) => {
-    // Tutorial: Only one mission during steps 5-6
-    if (tutorialActive && (tutorialStep === 5 || tutorialStep === 6)) {
-      setAvailableMissions([{
-        id: 'tutorial-mission-1',
-        distance: 75,
-        duration: 1,
-        reward: 300,
-        fuelCost: 8,
-        description: 'Simple cargo run to get you started.',
-        tier: 'Unregistered',
-        requiredLY: 75
-      }]);
-      return;
-    }
-    
     const missions = [];
     const descriptions = [
       'Deliver mystery meat to Station 7',
@@ -192,14 +177,14 @@ export default function Jobs() {
         </div>
         
         <div className="grid grid-cols-1 gap-3 mb-4">
-          {availableMissions.map((mission, idx) => {
-            const isTutorialBlocked = tutorialActive && (tutorialStep === 5 || tutorialStep === 6) && idx !== 0;
+          {availableMissions.slice(0, tutorialActive && tutorialStep === 5 ? 1 : undefined).map((mission, idx) => {
+            const highlightTutorial = tutorialActive && tutorialStep === 5 && idx === 0;
             return (
             <div
               key={mission.id}
-              onClick={() => !isTutorialBlocked && setSelectedMission(mission)}
-              className={`bg-gradient-to-r from-gray-800 to-gray-900 border-2 rounded-lg p-4 transition-all ${
-                isTutorialBlocked ? 'opacity-20 pointer-events-none cursor-not-allowed' : 'cursor-pointer'
+              onClick={() => setSelectedMission(mission)}
+              className={`bg-gradient-to-r from-gray-800 to-gray-900 border-2 rounded-lg p-4 transition-all cursor-pointer ${
+                highlightTutorial ? 'animate-pulse border-cyan-400 bg-cyan-900/50 shadow-[0_0_20px_rgba(0,212,255,0.6)]' : ''
               } ${
                 selectedMission?.id === mission.id
                   ? 'border-cyan-500 bg-cyan-500/10'
