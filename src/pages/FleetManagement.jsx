@@ -72,6 +72,12 @@ export default function FleetManagement() {
   };
   
   const handleRepair = async (ship) => {
+    // Check if ship is on a mission
+    if (ship.status === 'active') {
+      addMessage(`${ship.name} is deployed and can't be repaired!`);
+      return;
+    }
+    
     const requiredParts = ship.requiredParts || [];
     const parts = gameState.parts || {};
     

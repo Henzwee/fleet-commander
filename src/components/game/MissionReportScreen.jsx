@@ -25,12 +25,17 @@ export default function MissionReportScreen({ mission, event, onClose, onChoice 
         </div>
 
         <div className="flex-1 overflow-y-auto" style={{ WebkitOverflowScrolling: 'touch' }}>
-          {mission.shipImage && (
-            <img 
-              src={mission.shipImage} 
-              alt={mission.shipName} 
-              className="w-full h-32 object-contain mb-4 rounded-lg bg-gray-800/50"
-            />
+          {mission.shipImages && mission.shipImages.length > 0 && (
+            <div className="grid grid-cols-3 gap-2 mb-4">
+              {mission.shipImages.map((imgUrl, idx) => (
+                <img 
+                  key={idx}
+                  src={imgUrl} 
+                  alt={`Ship ${idx + 1}`} 
+                  className="w-full h-24 object-contain rounded-lg bg-gray-800/50"
+                />
+              ))}
+            </div>
           )}
 
           <div className="mb-4">
