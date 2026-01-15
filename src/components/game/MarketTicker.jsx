@@ -157,7 +157,7 @@ export default function MarketTicker() {
             <div
               key={`${item.id}-${idx}`}
               onClick={() => navigate(createPageUrl('Market'))}
-              className="flex-shrink-0 bg-gradient-to-br from-cyan-900/20 to-blue-900/20 border border-cyan-600/40 rounded-lg px-4 py-2 cursor-pointer hover:border-cyan-500 hover:bg-cyan-500/10 transition-colors"
+              className="flex-shrink-0 bg-gradient-to-br from-cyan-900/20 to-blue-900/20 border border-cyan-600/40 rounded-lg px-4 py-2 cursor-pointer active:border-cyan-500 active:bg-cyan-500/10 transition-colors"
             >
               <div className="text-cyan-100 font-bold text-sm whitespace-nowrap">
                 {item.name}

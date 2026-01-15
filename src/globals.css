@@ -133,10 +133,6 @@ button,
     transition: opacity 0.2s ease;
   }
 
-  .hotspot:hover {
-    opacity: 0.8;
-  }
-
   .hotspot:active {
     opacity: 0.6;
   }

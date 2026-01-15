@@ -349,7 +349,7 @@ export default function Market() {
                 addMessage('Market reset!');
               }}
               disabled={!gameState || gameState.crystals < 10}
-              className="bg-purple-600 hover:bg-purple-700 disabled:bg-gray-600 disabled:cursor-not-allowed border-2 border-purple-500 disabled:border-gray-500 rounded-lg px-3 py-1 text-white font-bold text-xs transition-all flex items-center gap-1"
+              className="bg-purple-600 active:bg-purple-700 disabled:bg-gray-600 disabled:cursor-not-allowed border-2 border-purple-500 disabled:border-gray-500 rounded-lg px-3 py-1 text-white font-bold text-xs transition-all flex items-center gap-1"
             >
               <RefreshCw className="w-3 h-3" />
               <span>◆10</span>
@@ -403,7 +403,7 @@ export default function Market() {
               className={`bg-gradient-to-r from-gray-800 to-gray-900 border rounded-lg p-4 flex items-center justify-between transition-all ${
                 (activeTab === 'scrap' && item.stock === 0) 
                   ? 'border-gray-700 opacity-50' 
-                  : 'border-cyan-500/30 hover:border-cyan-500'
+                  : 'border-cyan-500/30'
               }`}
             >
               <div className="flex items-center gap-3">
@@ -445,7 +445,7 @@ export default function Market() {
                   (item.currency === 'crystals' ? gameState?.crystals < item.price : gameState?.credits < item.price) ||
                   (activeTab === 'scrap' && item.stock === 0)
                 }
-                className="bg-green-600 hover:bg-green-700 disabled:bg-gray-600 disabled:cursor-not-allowed border-2 border-green-500 disabled:border-gray-500 rounded-lg px-6 py-2 text-white font-bold text-sm transition-all"
+                className="bg-green-600 active:bg-green-700 disabled:bg-gray-600 disabled:cursor-not-allowed border-2 border-green-500 disabled:border-gray-500 rounded-lg px-6 py-2 text-white font-bold text-sm transition-all"
               >
                 {(activeTab === 'scrap' && item.stock === 0) ? 'OUT' : `${item.currency === 'crystals' ? '◆' : '$'}${item.price}`}
               </button>
