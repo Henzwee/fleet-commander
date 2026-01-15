@@ -55,7 +55,7 @@ export default function GameProvider({ children }) {
       const states = await base44.entities.GameState.list('-created_date', 1);
       if (!states || states.length === 0) {
         // Initialize new game - clear any old tutorial progress
-        localStorage.removeItem('tutorialStep');
+        localStorage.removeItem('tutorial_step');
         
         const newState = await base44.entities.GameState.create({
           credits: 5000,
