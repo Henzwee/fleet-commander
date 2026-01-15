@@ -65,20 +65,27 @@ export default function Main() {
         const minutes = Math.floor((remaining % 1) * 60);
         const seconds = Math.floor(((remaining % 1) * 60 % 1) * 60);
 
-        // Get ship image
+        // Get first active ship image
         let shipImage = null;
-        try {
-          const ships = await base44.entities.Ship.filter({ id: mission.shipId });
-          if (ships.length > 0 && ships[0].imageUrl) {
-            shipImage = ships[0].imageUrl;
+        const activeShips = mission.ships?.filter(s => s.status === 'active') || [];
+        if (activeShips.length > 0) {
+          try {
+            const ships = await base44.entities.Ship.filter({ id: activeShips[0].shipId });
+            if (ships.length > 0 && ships[0].imageUrl) {
+              shipImage = ships[0].imageUrl;
+            }
+          } catch (err) {
+            console.error('Error loading ship image:', err);
           }
-        } catch (err) {
-          console.error('Error loading ship image:', err);
         }
+
+        const shipNames = activeShips.map(s => s.shipName).join(', ');
 
         return {
           ...mission,
           shipImage,
+          shipNames,
+          activeShipCount: activeShips.length,
           isComplete: mission.status === 'completed' || remaining <= 0,
           timeRemaining: `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`,
           timeRemainingMinutes: remaining * 60
@@ -103,10 +110,17 @@ export default function Main() {
     
     // Complete mission immediately
     await base44.entities.Mission.update(mission.id, { status: 'completed' });
-    await updateShip(mission.shipId, { status: 'idle' });
+    
+    // Update all active ships to idle
+    for (const ship of mission.ships || []) {
+      if (ship.status === 'active') {
+        await updateShip(ship.shipId, { status: 'idle' });
+      }
+    }
+    
     await updateGameState({ crystals: gameState.crystals - crystalCost });
     
-    addMessage(`${mission.shipName} mission boosted! Used ${crystalCost} crystals.`);
+    addMessage(`Mission boosted! Used ${crystalCost} crystals.`);
     setTimeSkipMission(null);
     loadActiveMissions();
   };
@@ -209,10 +223,13 @@ export default function Main() {
                   >
                     <div className="flex items-center gap-3" onClick={() => setSelectedMission(mission)}>
                       {mission.shipImage && (
-                        <img src={mission.shipImage} alt={mission.shipName} className="w-10 h-10 object-contain" />
+                        <img src={mission.shipImage} alt={mission.shipNames} className="w-10 h-10 object-contain" />
                       )}
                       <div className="text-cyan-100 font-bold text-sm flex-1">
-                        {mission.shipName} - {mission.distance}ly
+                        {mission.shipNames} - {mission.distance}ly
+                        {mission.activeShipCount > 1 && (
+                          <span className="text-cyan-400 text-xs ml-2">({mission.activeShipCount} ships)</span>
+                        )}
                       </div>
                       {mission.isComplete ? (
                         <button
@@ -221,7 +238,7 @@ export default function Main() {
                             const newCredits = gameState.credits + mission.reward;
                             await base44.entities.Mission.delete(mission.id);
                             await updateGameState({ credits: newCredits });
-                            addMessage(`Collected $${mission.reward} from ${mission.shipName}!`);
+                            addMessage(`Collected $${mission.reward} from mission!`);
                             loadActiveMissions();
                           }}
                           className="bg-green-600 hover:bg-green-700 border-2 border-green-500 rounded px-3 py-1 text-white font-bold text-xs"

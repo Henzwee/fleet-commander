@@ -231,11 +231,15 @@ export default function GameProvider({ children }) {
           continue;
         }
 
-        // Roll for damage - use cached ships
+        // Roll for damage for each active ship
         const currentShips = queryClient.getQueryData(['ships', 'inventory']) || [];
-        const ship = currentShips.find(s => s.id === mission.shipId);
-        if (ship) {
-          await rollForDamage(ship, mission);
+        for (const missionShip of mission.ships || []) {
+          if (missionShip.status === 'active') {
+            const ship = currentShips.find(s => s.id === missionShip.shipId);
+            if (ship) {
+              await rollForDamage(ship, mission);
+            }
+          }
         }
 
         // Roll for distress signal (5% chance per hour)
@@ -280,7 +284,17 @@ export default function GameProvider({ children }) {
             status: 'destroyed',
             health: 0
           });
-          await base44.entities.Mission.update(mission.id, { status: 'failed' });
+          
+          // Update mission ship status
+          const updatedShips = mission.ships.map(s => 
+            s.shipId === ship.id ? { ...s, status: 'destroyed' } : s
+          );
+          const anyActive = updatedShips.some(s => s.status === 'active');
+          await base44.entities.Mission.update(mission.id, { 
+            ships: updatedShips,
+            status: anyActive ? 'active' : 'failed'
+          });
+          
           addMessage(`${ship.name} has been destroyed!`);
           setCurrentEvent({
             type: 'explosion',
@@ -357,8 +371,12 @@ export default function GameProvider({ children }) {
     console.log('[INVENTORY] Mission completed:', mission.id);
     await base44.entities.Mission.update(mission.id, { status: 'completed' });
 
-    // Update ship status in cache
-    await updateShip(mission.shipId, { status: 'idle' });
+    // Update all active ships to idle
+    for (const missionShip of mission.ships || []) {
+      if (missionShip.status === 'active') {
+        await updateShip(missionShip.shipId, { status: 'idle' });
+      }
+    }
 
     // Roll for fuel reward
     const rand = Math.random();
@@ -378,10 +396,13 @@ export default function GameProvider({ children }) {
     const newFuel = gameState.fuel + fuelReward;
     await updateGameState({ credits: newCredits, fuel: newFuel });
 
+    const activeShipCount = mission.ships.filter(s => s.status === 'active').length;
+    const shipNames = mission.ships.filter(s => s.status === 'active').map(s => s.shipName).join(', ');
+
     if (fuelReward > 0) {
-      addMessage(`Mission completed! ${mission.shipName} earned $${mission.reward} and ${fuelReward} fuel.`);
+      addMessage(`Mission completed! ${shipNames} earned $${mission.reward} and ${fuelReward} fuel.`);
     } else {
-      addMessage(`Mission completed! ${mission.shipName} earned $${mission.reward}.`);
+      addMessage(`Mission completed! ${shipNames} earned $${mission.reward}.`);
     }
   };
   
@@ -393,9 +414,34 @@ export default function GameProvider({ children }) {
         if (choiceId === 'recall') {
           const currentShips = queryClient.getQueryData(['ships', 'inventory']) || [];
           const ship = currentShips.find(s => s.id === currentEvent.shipId);
+          
+          // Calculate hourly wage for time worked
+          const mission = await base44.entities.Mission.filter({ id: currentEvent.missionId });
+          if (mission[0]) {
+            const startTime = new Date(mission[0].startTime);
+            const now = new Date();
+            const hoursWorked = Math.max(1, Math.floor((now - startTime) / (1000 * 60 * 60)));
+            
+            const missionShip = mission[0].ships.find(s => s.shipId === currentEvent.shipId);
+            const hourlyWage = hoursWorked * (missionShip?.hourlyPay || 0);
+            
+            // Pay the ship and update mission
+            await updateGameState({ credits: gameState.credits + hourlyWage });
+            
+            const updatedShips = mission[0].ships.map(s => 
+              s.shipId === currentEvent.shipId ? { ...s, status: 'recalled' } : s
+            );
+            const anyActive = updatedShips.some(s => s.status === 'active');
+            
+            await base44.entities.Mission.update(currentEvent.missionId, { 
+              ships: updatedShips,
+              status: anyActive ? 'active' : 'failed'
+            });
+            
+            addMessage(`${ship?.name} recalled safely. Earned $${hourlyWage} (${hoursWorked}h).`);
+          }
+          
           await updateShip(currentEvent.shipId, { status: 'idle' });
-          await base44.entities.Mission.update(currentEvent.missionId, { status: 'failed' });
-          addMessage(`${ship?.name} recalled safely.`);
         } else {
           addMessage('Ship continuing mission despite damage...');
         }

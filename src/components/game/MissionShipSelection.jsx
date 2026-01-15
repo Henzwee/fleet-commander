@@ -1,12 +1,20 @@
 import React, { useState } from 'react';
 
 export default function MissionShipSelection({ mission, ships, onConfirm, onCancel }) {
-  const [selectedShip, setSelectedShip] = useState(null);
+  const [selectedShips, setSelectedShips] = useState([]);
   
   if (!mission) return null;
   
   const eligibleShips = ships.filter(ship => ship.maxLY >= mission.requiredLY);
   const ineligibleShips = ships.filter(ship => ship.maxLY < mission.requiredLY);
+  
+  const toggleShip = (ship) => {
+    if (selectedShips.find(s => s.id === ship.id)) {
+      setSelectedShips(selectedShips.filter(s => s.id !== ship.id));
+    } else if (selectedShips.length < 3) {
+      setSelectedShips([...selectedShips, ship]);
+    }
+  };
   const canAnyShipHandle = eligibleShips.length > 0;
   
   return (

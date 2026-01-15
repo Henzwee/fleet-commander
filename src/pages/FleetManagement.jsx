@@ -237,6 +237,7 @@ export default function FleetManagement() {
                               onClick={() => handleRepair(ship)}
                               disabled={ship.status === 'active' || !hasParts(ship.requiredParts || [], gameState?.parts || {})}
                               className="bg-green-600 border-2 border-green-500 rounded-lg py-2 px-3 text-white font-bold text-xs flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                              title={ship.status === 'active' ? 'Cannot repair ships on active missions' : ''}
                             >
                               <Wrench className="w-4 h-4" />
                               <span>REPAIR</span>

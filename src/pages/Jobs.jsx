@@ -123,18 +123,22 @@ export default function Jobs() {
     setAvailableMissions(missions);
   };
   
-  const handleConfirmShip = async (ship) => {
-    if (!selectedMission || !ship) return;
+  const handleConfirmShip = async (selectedShips) => {
+    if (!selectedMission || !selectedShips || selectedShips.length === 0) return;
     
     if (gameState.fuel < selectedMission.fuelCost) {
       addMessage('Insufficient fuel!');
       return;
     }
     
-    // Create mission
+    // Create mission with multiple ships
     await base44.entities.Mission.create({
-      shipId: ship.id,
-      shipName: ship.name,
+      ships: selectedShips.map(ship => ({
+        shipId: ship.id,
+        shipName: ship.name,
+        hourlyPay: ship.hourlyPay,
+        status: 'active'
+      })),
       distance: selectedMission.distance,
       duration: selectedMission.duration,
       reward: selectedMission.reward,
@@ -144,15 +148,17 @@ export default function Jobs() {
       description: selectedMission.description
     });
     
-    // Update ship status using centralized function
-    await updateShip(ship.id, { status: 'active' });
+    // Update all ship statuses using centralized function
+    for (const ship of selectedShips) {
+      await updateShip(ship.id, { status: 'active' });
+    }
     
     // Deduct fuel
     await updateGameState({
       fuel: gameState.fuel - selectedMission.fuelCost
     });
     
-    addMessage(`${ship.name} deployed on mission!`);
+    addMessage(`${selectedShips.length} ship${selectedShips.length > 1 ? 's' : ''} deployed on mission!`);
     
     // Reset selection
     setSelectedMission(null);
