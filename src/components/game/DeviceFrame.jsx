@@ -11,8 +11,6 @@ export default function DeviceFrame({ children }) {
   
   // Block navigation during certain tutorial steps
   const canNavigate = (target) => {
-    // Settings and FleetManagement always accessible
-    if (target === 'Settings' || target === 'FleetManagement') return true;
     if (!tutorialActive) return true;
     
     if (tutorialStep === 1 && target !== 'Market') return false;
