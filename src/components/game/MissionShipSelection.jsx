@@ -26,7 +26,10 @@ export default function MissionShipSelection({ mission, ships, onConfirm, onCanc
     }}>
       <div className="flex-1 flex flex-col px-6 overflow-y-auto" style={{ WebkitOverflowScrolling: 'touch' }}>
           <div className="mb-6 mt-12">
-            <h2 className="text-cyan-400 font-bold text-base">SELECT SHIP</h2>
+            <h2 className="text-cyan-400 font-bold text-base">SELECT SHIPS (1-3)</h2>
+            <div className="text-xs text-purple-400 mt-1">
+              Selected: {selectedShips.length}/3
+            </div>
           </div>
           
           <div className="mb-4 bg-gray-800/50 rounded-lg p-3 border border-cyan-500/30">
@@ -40,25 +43,32 @@ export default function MissionShipSelection({ mission, ships, onConfirm, onCanc
             </div>
           ) : (
             <div className="space-y-2 mb-4">
-              {eligibleShips.map((ship) => (
-                <div
-                  key={ship.id}
-                  onClick={() => setSelectedShip(ship)}
-                  className={`bg-gray-800 border-2 rounded-lg p-3 transition-all cursor-pointer ${
-                    selectedShip?.id === ship.id
-                      ? 'border-green-500 bg-green-500/10'
-                      : 'border-gray-600 hover:border-green-500/50'
-                  }`}
-                >
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <div className="text-cyan-100 font-bold text-sm">{ship.name}</div>
-                      <div className="text-xs text-gray-400">{ship.tier} • {ship.maxLY} LY</div>
+              {eligibleShips.map((ship) => {
+                const isSelected = selectedShips.find(s => s.id === ship.id);
+                return (
+                  <div
+                    key={ship.id}
+                    onClick={() => toggleShip(ship)}
+                    className={`bg-gray-800 border-2 rounded-lg p-3 transition-all cursor-pointer ${
+                      isSelected
+                        ? 'border-green-500 bg-green-500/10'
+                        : 'border-gray-600 active:border-green-500/50'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <div className="text-cyan-100 font-bold text-sm">{ship.name}</div>
+                        <div className="text-xs text-gray-400">{ship.tier} • {ship.maxLY} LY • ${ship.hourlyPay}/h</div>
+                      </div>
+                      {isSelected ? (
+                        <div className="text-green-400 font-bold">✓</div>
+                      ) : (
+                        <div className="text-green-400 text-xs">READY</div>
+                      )}
                     </div>
-                    <div className="text-green-400 text-xs">READY</div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
               
               {ineligibleShips.map((ship) => (
                 <div
@@ -80,16 +90,16 @@ export default function MissionShipSelection({ mission, ships, onConfirm, onCanc
           <div className="flex gap-2 mb-8 mt-4 flex-shrink-0">
             <button
               onClick={onCancel}
-              className="flex-1 bg-gray-700 hover:bg-gray-600 border-2 border-gray-600 rounded-lg py-2.5 text-white font-bold text-sm transition-all"
+              className="flex-1 bg-gray-700 active:bg-gray-600 border-2 border-gray-600 rounded-lg py-2.5 text-white font-bold text-sm transition-all"
             >
               BACK
             </button>
             <button
-              onClick={() => selectedShip && onConfirm(selectedShip)}
-              disabled={!selectedShip}
-              className="flex-1 bg-green-600 hover:bg-green-700 disabled:bg-gray-600 disabled:cursor-not-allowed border-2 border-green-500 disabled:border-gray-500 rounded-lg py-2.5 text-white font-bold text-sm transition-all"
+              onClick={() => onConfirm(selectedShips)}
+              disabled={selectedShips.length === 0}
+              className="flex-1 bg-green-600 active:bg-green-700 disabled:bg-gray-600 disabled:cursor-not-allowed border-2 border-green-500 disabled:border-gray-500 rounded-lg py-2.5 text-white font-bold text-sm transition-all"
             >
-              CONFIRM
+              CONFIRM ({selectedShips.length} SHIP{selectedShips.length !== 1 ? 'S' : ''})
             </button>
         </div>
       </div>
