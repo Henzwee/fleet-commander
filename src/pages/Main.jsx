@@ -7,7 +7,6 @@ import ExplosionEffect from '../components/game/ExplosionEffect';
 import { useGame } from '../components/game/GameProvider';
 
 import MarketTicker from '../components/game/MarketTicker';
-import MarketCarousel from '../components/game/MarketCarousel';
 import ResourceHeader from '../components/game/ResourceHeader';
 import MissionReportScreen from '../components/game/MissionReportScreen';
 import CrystalTimeSkip from '../components/game/CrystalTimeSkip';
@@ -158,48 +157,8 @@ export default function Main() {
         </div>
 
         {/* Market Section */}
-        <div className="bg-gradient-to-br from-cyan-900/30 to-blue-900/30 border-2 border-cyan-600/50 rounded-2xl p-4 w-full">
-          <h2 className="text-cyan-400 text-lg font-bold mb-3">Market</h2>
-          <MarketCarousel 
-            items={gameState?.marketStock ? 
-              Object.keys(gameState.marketStock)
-                .filter(key => key !== 'shipStock')
-                .map(itemId => {
-                  const iconMap = {
-                    'tangled_wire': '📦',
-                    'evil_ai': '🤖',
-                    'cracked_glass': '🔷',
-                    'wire_splice': '🔧',
-                    'rusty_screws': '🔩',
-                    'stripped_bolts': '⚙️',
-                    'outdated_map': '🗺️',
-                    'antimatter': '⚛️',
-                    'expired_food': '🥫',
-                    'sci_fi_panel': '🖥️'
-                  };
-                  const nameMap = {
-                    'tangled_wire': 'Box of tangled wire',
-                    'evil_ai': 'Reformed evil AI',
-                    'cracked_glass': 'Cracked glass',
-                    'wire_splice': 'Wire splice',
-                    'rusty_screws': 'Rusty screws',
-                    'stripped_bolts': 'Stripped bolts',
-                    'outdated_map': 'Outdated map',
-                    'antimatter': 'Mostly stable antimatter',
-                    'expired_food': 'Expired food rations',
-                    'sci_fi_panel': 'Sci-fi looking panel'
-                  };
-                  return {
-                    id: itemId,
-                    name: nameMap[itemId] || itemId,
-                    icon: iconMap[itemId] || '📦',
-                    price: Math.floor(Math.random() * 200) + 100
-                  };
-                })
-              : []
-            }
-            onItemClick={() => navigate(createPageUrl('Market'))}
-          />
+        <div className="w-full">
+          <MarketTicker />
         </div>
 
         {/* Action Buttons */}
