@@ -159,7 +159,7 @@ export default function Market() {
 
       // Generate ships based on player's highest tier
       const ships = [];
-      for (let i = 0; i < 5; i++) {
+      for (let i = 0; i < gameState.marketStock.shipStock; i++) {
         const tier = rollShipTier();
         const tierConfig = getTierConfig(tier);
 
