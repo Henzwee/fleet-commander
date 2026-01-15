@@ -118,27 +118,16 @@ export default function DeviceFrame({ children }) {
         />
 
         <button
-          onClick={() => {
-            if (canNavigate('Jobs')) {
-              navigate(createPageUrl('Jobs'));
-              if (tutorialActive && tutorialStep === 4) {
-                setTimeout(() => advanceTutorial(), 100);
-              }
-            }
-          }}
-          disabled={!canNavigate('Jobs')}
-          className={`hotspot hs-fleet absolute cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed ${tutorialActive && tutorialStep === 4 ? 'animate-pulse' : ''}`}
-          aria-label="Jobs"
+          onClick={() => canNavigate('FleetManagement') && navigate(createPageUrl('FleetManagement'))}
+          disabled={!canNavigate('FleetManagement')}
+          className="hotspot hs-fleet absolute cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
+          aria-label="Fleet Management"
           style={{
             left: 'var(--fleet-x)',
             top: 'var(--fleet-y)',
             width: 'var(--fleet-w)',
             height: 'var(--fleet-h)',
-            zIndex: 20,
-            ...(tutorialActive && tutorialStep === 4 ? {
-              boxShadow: '0 0 20px rgba(0, 212, 255, 0.8)',
-              backgroundColor: 'rgba(0, 212, 255, 0.2)'
-            } : {})
+            zIndex: 20
           }}
         />
       </div>
