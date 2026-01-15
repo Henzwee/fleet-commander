@@ -255,8 +255,7 @@ export default function FleetManagement() {
                       </div>
                     )}
                   </div>
-                  );
-                })}
+                ))}
               </div>
             )}
           </section>
