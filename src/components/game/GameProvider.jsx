@@ -86,7 +86,25 @@ export default function GameProvider({ children }) {
         setGameState(newState);
         setMessages(['M.A.N.I. system initialized. Welcome, Commander.']);
       } else {
-        setGameState(states[0]);
+        let state = states[0];
+        
+        // Fix existing game states that don't have market stock
+        if (!state.marketStock || Object.keys(state.marketStock).filter(k => k !== 'shipStock').length === 0) {
+          const allItemIds = ['cracked_glass', 'evil_ai', 'rusty_screws', 'wire_splice', 'antimatter', 'sci_fi_panel', 'tangled_wire', 'stripped_bolts', 'outdated_map', 'expired_food'];
+          const shuffled = allItemIds.sort(() => Math.random() - 0.5);
+          const selectedIds = shuffled.slice(0, 6);
+          const initialStock = { shipStock: 5 };
+          selectedIds.forEach(itemId => {
+            initialStock[itemId] = Math.floor(Math.random() * 5) + 1;
+          });
+          
+          state = await base44.entities.GameState.update(state.id, {
+            marketStock: initialStock,
+            marketRotationHistory: [selectedIds]
+          });
+        }
+        
+        setGameState(state);
         setMessages(['M.A.N.I. system online. Status: Operational.']);
       }
     } catch (error) {
