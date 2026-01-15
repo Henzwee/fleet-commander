@@ -5,7 +5,7 @@ import { base44 } from '@/api/base44Client';
 import DeviceFrame from '../components/game/DeviceFrame';
 import ExplosionEffect from '../components/game/ExplosionEffect';
 import { useGame } from '../components/game/GameProvider';
-import { useTutorial } from '../components/game/TutorialProvider';
+
 import MarketTicker from '../components/game/MarketTicker';
 import ResourceHeader from '../components/game/ResourceHeader';
 import MissionReportScreen from '../components/game/MissionReportScreen';
@@ -15,7 +15,6 @@ import CrystalTimeSkip from '../components/game/CrystalTimeSkip';
 export default function Main() {
   const navigate = useNavigate();
   const { gameState, loading, messages, currentEvent, handleEventChoice, updateGameState, addMessage, updateShip } = useGame();
-  const { tutorialActive, tutorialStep, advanceTutorial } = useTutorial();
   const [activeMissions, setActiveMissions] = useState([]);
   const [showExplosion, setShowExplosion] = useState(false);
   const [selectedMission, setSelectedMission] = useState(null);
@@ -108,11 +107,6 @@ export default function Main() {
     addMessage(`${mission.shipName} mission boosted! Used ${crystalCost} crystals.`);
     setTimeSkipMission(null);
     loadActiveMissions();
-    
-    // Tutorial: advance after using crystal boost
-    if (tutorialActive && tutorialStep === 9) {
-      advanceTutorial();
-    }
   };
 
 
@@ -274,7 +268,6 @@ export default function Main() {
           onConfirm={() => handleCrystalBoost(timeSkipMission)}
           onCancel={() => setTimeSkipMission(null)}
           crystals={gameState?.crystals || 0}
-          isTutorial={tutorialActive && tutorialStep === 9}
         />
       )}
     </DeviceFrame>
