@@ -114,6 +114,10 @@ export default function GameProvider({ children }) {
   
   const updateGameState = async (updates) => {
     try {
+      if (!gameState?.id) {
+        console.error('Cannot update game state: no id found');
+        return gameState;
+      }
       const updated = await base44.entities.GameState.update(gameState.id, updates);
       setGameState(updated);
       return updated;
