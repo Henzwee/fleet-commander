@@ -68,7 +68,7 @@ export default function GameProvider({ children }) {
         
         const newState = await base44.entities.GameState.create({
           credits: 5000,
-          crystals: 50,
+          crystals: 10,
           fuel: 100,
           parts: {
             'Box of tangled wire': 5,
