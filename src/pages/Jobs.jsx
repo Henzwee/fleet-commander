@@ -155,9 +155,12 @@ export default function Jobs() {
     // Reset selection
     setSelectedMission(null);
     
-    // Tutorial: advance after first mission start
+    // Tutorial: navigate to Home and advance after first mission start
     if (tutorialActive && tutorialStep === 6) {
-      setTimeout(() => advanceTutorial(), 500);
+      setTimeout(() => {
+        navigate(createPageUrl('Main'));
+        advanceTutorial();
+      }, 500);
     }
   };
   
