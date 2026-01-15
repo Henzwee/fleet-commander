@@ -66,7 +66,7 @@ export default function GameProvider({ children }) {
             'Rusty screws': 3,
             'Wire splice': 2
           },
-          tutorialCompleted: false,
+          tutorialCompleted: true,
           lastFuelRefill: new Date().toISOString(),
           lastMarketReset: new Date().toISOString(),
           autoResolve: false,
