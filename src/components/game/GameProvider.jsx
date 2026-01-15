@@ -59,8 +59,8 @@ export default function GameProvider({ children }) {
         
         const newState = await base44.entities.GameState.create({
           credits: 5000,
-          crystals: 50,
-          fuel: 100,
+          crystals: 10,
+          fuel: 50,
           parts: {
             'Box of tangled wire': 5,
             'Rusty screws': 3,
@@ -84,8 +84,8 @@ export default function GameProvider({ children }) {
       // Initialize with default state if network fails
       setGameState({
         credits: 5000,
-        crystals: 50,
-        fuel: 100,
+        crystals: 10,
+        fuel: 50,
         parts: {
           'Box of tangled wire': 5,
           'Rusty screws': 3,

@@ -371,10 +371,8 @@ export default function Market() {
         <div className="flex gap-2 mb-4">
           <button
             onClick={() => setActiveTab('scrap')}
-            disabled={(tutorialActive && tutorialStep === 1) || (tutorialActive && tutorialStep === 10)}
-            className={`flex-1 py-3 rounded-lg font-bold text-sm border-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed ${
-              (tutorialActive && tutorialStep === 10) ? 'animate-pulse' : ''
-            } ${
+            disabled={tutorialActive && (tutorialStep === 1 || tutorialStep === 2 || tutorialStep !== 10)}
+            className={`flex-1 py-3 rounded-lg font-bold text-sm border-2 transition-all disabled:opacity-30 disabled:cursor-not-allowed disabled:text-gray-600 ${
               activeTab === 'scrap'
                 ? 'bg-cyan-500/20 border-cyan-500 text-cyan-400'
                 : 'bg-gray-800 border-gray-600 text-gray-400'
@@ -384,10 +382,8 @@ export default function Market() {
           </button>
           <button
             onClick={() => setActiveTab('ships')}
-            disabled={tutorialActive && tutorialStep === 10}
-            className={`flex-1 py-3 rounded-lg font-bold text-sm border-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed ${
-              (tutorialActive && tutorialStep === 1) ? 'animate-pulse' : ''
-            } ${
+            disabled={tutorialActive && tutorialStep !== 1 && tutorialStep !== 2}
+            className={`flex-1 py-3 rounded-lg font-bold text-sm border-2 transition-all disabled:opacity-30 disabled:cursor-not-allowed disabled:text-gray-600 ${
               activeTab === 'ships'
                 ? 'bg-cyan-500/20 border-cyan-500 text-cyan-400'
                 : 'bg-gray-800 border-gray-600 text-gray-400'
@@ -397,8 +393,8 @@ export default function Market() {
           </button>
           <button
             onClick={() => setActiveTab('fuel')}
-            disabled={(tutorialActive && tutorialStep === 1) || (tutorialActive && tutorialStep === 10)}
-            className={`flex-1 py-3 rounded-lg font-bold text-sm border-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed ${
+            disabled={tutorialActive}
+            className={`flex-1 py-3 rounded-lg font-bold text-sm border-2 transition-all disabled:opacity-30 disabled:cursor-not-allowed disabled:text-gray-600 ${
               activeTab === 'fuel'
                 ? 'bg-cyan-500/20 border-cyan-500 text-cyan-400'
                 : 'bg-gray-800 border-gray-600 text-gray-400'
@@ -423,8 +419,7 @@ export default function Market() {
             <div
               key={idx}
               className={`bg-gradient-to-r from-gray-800 to-gray-900 border rounded-lg p-4 flex items-center justify-between transition-all ${
-                isTutorialAntimatter ? 'animate-pulse border-cyan-400 bg-cyan-900/50 shadow-[0_0_20px_rgba(0,212,255,0.6)]' :
-                isTutorialBlocked ? 'border-gray-700 opacity-30 pointer-events-none' :
+                isTutorialBlocked ? 'border-gray-700 opacity-20 pointer-events-none cursor-not-allowed' :
                 (activeTab === 'scrap' && item.stock === 0) 
                   ? 'border-gray-700 opacity-50' 
                   : 'border-cyan-500/30 hover:border-cyan-500'

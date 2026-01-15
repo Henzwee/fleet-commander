@@ -156,7 +156,7 @@ export default function FleetManagement() {
           <button
             onClick={() => handleTabChange('ships')}
             disabled={tutorialActive && (tutorialStep === 12 || tutorialStep === 13)}
-            className={`flex-1 py-3 rounded-lg font-bold text-sm border-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed ${
+            className={`flex-1 py-3 rounded-lg font-bold text-sm border-2 transition-all disabled:opacity-30 disabled:cursor-not-allowed disabled:text-gray-600 ${
               activeTab === 'ships'
                 ? 'bg-cyan-500/20 border-cyan-500 text-cyan-400'
                 : 'bg-gray-800 border-gray-600 text-gray-400'
@@ -167,7 +167,7 @@ export default function FleetManagement() {
           <button
             onClick={() => handleTabChange('inventory')}
             disabled={tutorialActive && (tutorialStep === 12 || tutorialStep === 13)}
-            className={`flex-1 py-3 rounded-lg font-bold text-sm border-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed ${
+            className={`flex-1 py-3 rounded-lg font-bold text-sm border-2 transition-all disabled:opacity-30 disabled:cursor-not-allowed disabled:text-gray-600 ${
               activeTab === 'inventory'
                 ? 'bg-cyan-500/20 border-cyan-500 text-cyan-400'
                 : 'bg-gray-800 border-gray-600 text-gray-400'
@@ -198,13 +198,13 @@ export default function FleetManagement() {
               <div className="grid grid-cols-1 gap-3">
                 {ships.map((ship) => {
                   const isTutorialDamaged = tutorialActive && (tutorialStep === 12 || tutorialStep === 13) && ship.damaged;
+                  const isTutorialBlocked = tutorialActive && (tutorialStep === 12 || tutorialStep === 13) && !ship.damaged;
                   
                   return (
-                  <div key={ship.id} className={isTutorialDamaged ? 'animate-pulse' : ''}>
+                  <div key={ship.id} className={isTutorialBlocked ? 'opacity-30 pointer-events-none' : ''}>
                     <ShipCard
                       ship={ship}
                       onClick={() => setSelectedShip(selectedShip?.id === ship.id ? null : ship)}
-                      className={isTutorialDamaged ? 'shadow-[0_0_20px_rgba(255,68,68,0.6)]' : ''}
                     />
                     
                     {selectedShip?.id === ship.id && (
@@ -273,9 +273,7 @@ export default function FleetManagement() {
                                 }
                               }}
                               disabled={ship.status === 'active' || !hasParts(ship.requiredParts || [], gameState?.parts || {})}
-                              className={`bg-green-600 border-2 border-green-500 rounded-lg py-2 px-3 text-white font-bold text-xs flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed ${
-                                tutorialActive && tutorialStep === 12 && hasParts(ship.requiredParts || [], gameState?.parts || {}) ? 'animate-pulse shadow-[0_0_20px_rgba(34,197,94,0.8)]' : ''
-                              }`}
+                              className="bg-green-600 border-2 border-green-500 rounded-lg py-2 px-3 text-white font-bold text-xs flex items-center justify-center gap-2 disabled:opacity-30 disabled:cursor-not-allowed disabled:bg-gray-700 disabled:border-gray-600 disabled:text-gray-500"
                             >
                               <Wrench className="w-4 h-4" />
                               <span>REPAIR</span>

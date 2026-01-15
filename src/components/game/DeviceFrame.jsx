@@ -9,23 +9,22 @@ export default function DeviceFrame({ children }) {
   const { tutorialActive, tutorialStep } = useTutorial();
   const [debugMode, setDebugMode] = React.useState(false);
   
-  // Block navigation during certain tutorial steps
+  // Hard gate navigation during tutorial steps
   const canNavigate = (target) => {
     if (!tutorialActive) return true;
     
+    // Tutorial step gating
     if (tutorialStep === 1 && target !== 'Market') return false;
     if (tutorialStep === 2 && target !== 'Market') return false;
     if (tutorialStep === 3 && target !== 'Main') return false;
-    if (tutorialStep === 4) {
-      // On step 4, only allow clicking Jobs button
-      if (target === 'Jobs') {
-        return true;
-      }
-      return false;
-    }
+    if (tutorialStep === 4 && target !== 'Jobs') return false;
     if (tutorialStep === 5 && target !== 'Jobs') return false;
     if (tutorialStep === 6 && target !== 'Jobs') return false;
+    if (tutorialStep === 7 && target !== 'Jobs') return false;
+    if (tutorialStep === 8 && target !== 'Jobs') return false;
+    if (tutorialStep === 9 && target !== 'Main') return false;
     if (tutorialStep === 10 && target !== 'Market') return false;
+    if (tutorialStep === 11 && target !== 'Market') return false;
     if (tutorialStep === 12 && target !== 'FleetManagement') return false;
     if (tutorialStep === 13 && target !== 'FleetManagement') return false;
     
@@ -109,7 +108,7 @@ export default function DeviceFrame({ children }) {
         <button
           onClick={() => canNavigate('Settings') && navigate(createPageUrl('Settings'))}
           disabled={!canNavigate('Settings')}
-          className="hotspot hs-settings absolute cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
+          className="hotspot hs-settings absolute disabled:opacity-20 disabled:cursor-not-allowed"
           aria-label="Settings"
           style={{
             left: 'var(--settings-x)',
@@ -123,7 +122,7 @@ export default function DeviceFrame({ children }) {
         <button
           onClick={() => canNavigate('Main') && navigate(createPageUrl('Main'))}
           disabled={!canNavigate('Main')}
-          className="hotspot hs-home absolute cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
+          className="hotspot hs-home absolute disabled:opacity-20 disabled:cursor-not-allowed"
           aria-label="Home"
           style={{
             left: 'var(--home-x)',
@@ -138,24 +137,17 @@ export default function DeviceFrame({ children }) {
           onClick={() => {
             if (canNavigate('Jobs')) {
               navigate(createPageUrl('Jobs'));
-              if (tutorialActive && tutorialStep === 4) {
-                setTimeout(() => advanceTutorial(), 100);
-              }
             }
           }}
           disabled={!canNavigate('Jobs')}
-          className={`hotspot hs-fleet absolute cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed ${tutorialActive && tutorialStep === 4 ? 'animate-pulse' : ''}`}
+          className="hotspot hs-fleet absolute disabled:opacity-20 disabled:cursor-not-allowed"
           aria-label="Jobs"
           style={{
             left: 'var(--fleet-x)',
             top: 'var(--fleet-y)',
             width: 'var(--fleet-w)',
             height: 'var(--fleet-h)',
-            zIndex: 20,
-            ...(tutorialActive && tutorialStep === 4 ? {
-              boxShadow: '0 0 20px rgba(0, 212, 255, 0.8)',
-              backgroundColor: 'rgba(0, 212, 255, 0.2)'
-            } : {})
+            zIndex: 20
           }}
         />
       </div>
