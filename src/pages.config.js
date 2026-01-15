@@ -1,21 +1,21 @@
-import HireShips from './pages/HireShips';
-import Settings from './pages/Settings';
-import Tutorial from './pages/Tutorial';
-import Jobs from './pages/Jobs';
 import FleetManagement from './pages/FleetManagement';
+import HireShips from './pages/HireShips';
+import Jobs from './pages/Jobs';
 import Main from './pages/Main';
 import Market from './pages/Market';
+import Settings from './pages/Settings';
+import Tutorial from './pages/Tutorial';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
-    "HireShips": HireShips,
-    "Settings": Settings,
-    "Tutorial": Tutorial,
-    "Jobs": Jobs,
     "FleetManagement": FleetManagement,
+    "HireShips": HireShips,
+    "Jobs": Jobs,
     "Main": Main,
     "Market": Market,
+    "Settings": Settings,
+    "Tutorial": Tutorial,
 }
 
 export const pagesConfig = {

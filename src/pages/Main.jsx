@@ -162,8 +162,11 @@ export default function Main() {
           </div>
         </div>
 
-        {/* Market Ticker */}
-        <MarketTicker />
+        {/* Market Section */}
+        <div className="bg-gradient-to-br from-cyan-900/30 to-blue-900/30 border-2 border-cyan-600/50 rounded-2xl p-4 w-full">
+          <h2 className="text-cyan-400 text-lg font-bold mb-3">Market</h2>
+          <MarketTicker />
+        </div>
 
         {/* Action Buttons */}
         <div className="grid grid-cols-2 gap-3 w-full" style={{ minWidth: 0 }}>
