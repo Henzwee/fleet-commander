@@ -306,7 +306,7 @@ export default function GameProvider({ children }) {
           console.log('[INVENTORY] Ship damaged:', ship.name);
           await updateShip(ship.id, { 
             damaged: true,
-            health: 50,
+            health: 75,
             status: 'damaged'
           });
           addMessage(`${ship.name} has taken damage!`);
