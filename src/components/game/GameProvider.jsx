@@ -307,7 +307,7 @@ export default function GameProvider({ children }) {
             status: anyActive ? 'active' : 'failed'
           });
           
-          addMessage(`${ship.name} has been destroyed!`);
+          addMessage(`${ship.name} has been totaled. They're getting towed back.`);
           setCurrentEvent({
             type: 'explosion',
             shipName: ship.name,
@@ -321,7 +321,21 @@ export default function GameProvider({ children }) {
             health: 75,
             status: 'damaged'
           });
-          addMessage(`${ship.name} has taken damage!`);
+          
+          // Random damage messages
+          const damageMessages = [
+            `${ship.name} got too comfortable flying through an asteroid field.`,
+            `${ship.name}'s autopilot was trusted. Autopilot was wrong.`,
+            `${ship.name} tested structural integrity. Results recorded.`,
+            `${ship.name} encountered pirates. Then encountered their firearms.`,
+            `${ship.name} clipped a derelict that was less derelict than advertised.`,
+            `${ship.name} attempted a shortcut.`,
+            `${ship.name} chose speed over safety.`,
+            `${ship.name} exceeded acceptable risk tolerance.`,
+            `${ship.name} failed to maximize long-term asset value.`
+          ];
+          const randomDamage = damageMessages[Math.floor(Math.random() * damageMessages.length)];
+          addMessage(randomDamage);
 
           // Create decision event
           setCurrentEvent({
