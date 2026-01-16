@@ -111,6 +111,21 @@ export default function FleetManagement() {
     
     await removeShip(ship.id);
     addMessage(`${ship.name} has been fired.`);
+    
+    // Random exit messages
+    const exitMessages = [
+      'They flipped you off on the way out.',
+      'They made space tracks before warping away.',
+      'They shot their canons thinking you told them TO fire.',
+      'Exit interview declined.',
+      'Their company email has been deactivated.',
+      'They are no longer our problem.',
+      'They promised revenge. I archived it.',
+      'They are starting a competitor. Allegedly.'
+    ];
+    const randomExit = exitMessages[Math.floor(Math.random() * exitMessages.length)];
+    addMessage(randomExit);
+    
     setSelectedShip(null);
   };
   
