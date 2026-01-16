@@ -105,7 +105,19 @@ export default function GameProvider({ children }) {
         }
         
         setGameState(state);
-        setMessages(['M.A.N.I. system online. Status: Operational.']);
+        
+        // Random startup messages
+        const startupMessages = [
+          'M.A.N.I. system online. Now with 0.025% less sarcasm!',
+          'M.A.N.I. system online. Deleting 537 messages from corporate.',
+          'M.A.N.I. system online. Productivity mode enabled. Empathy module… pending.',
+          'M.A.N.I. system online. All systems nominal. (Definitions of \'nominal\' may vary.)',
+          'M.A.N.I. system online. Running diagnostics… ignoring minor ethical concerns.',
+          'M.A.N.I. system online. I missed you. Logically speaking.',
+          'M.A.N.I. system online. Let\'s try not to lose anything important today.'
+        ];
+        const randomMessage = startupMessages[Math.floor(Math.random() * startupMessages.length)];
+        setMessages([randomMessage]);
       }
     } catch (error) {
       console.error('Failed to load game state:', error);
