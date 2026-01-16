@@ -391,18 +391,38 @@ export default function GameProvider({ children }) {
       fuelReward = 20;
     }
 
-    // Award credits and fuel
-    const newCredits = gameState.credits + mission.reward;
+    // Calculate total wages from all active ships
+    const activeShips = mission.ships.filter(s => s.status === 'active');
+    const totalWages = activeShips.reduce((sum, ship) => {
+      return sum + (ship.hourlyPay * mission.duration);
+    }, 0);
+    
+    // Award parts reward
+    const partsReward = mission.partsReward || 0;
+    const newParts = { ...gameState.parts };
+    
+    // Generate random parts
+    const partsList = [
+      'Box of tangled wire', 'Rusty screws', 'Cracked glass',
+      'Wire splice', 'Stripped bolts', 'Reformed evil AI',
+      'Outdated map', 'Mostly stable antimatter', 'Expired food rations',
+      'Sci-fi looking panel'
+    ];
+    
+    for (let i = 0; i < partsReward; i++) {
+      const randomPart = partsList[Math.floor(Math.random() * partsList.length)];
+      newParts[randomPart] = (newParts[randomPart] || 0) + 1;
+    }
+    
     const newFuel = gameState.fuel + fuelReward;
-    await updateGameState({ credits: newCredits, fuel: newFuel });
+    await updateGameState({ credits: gameState.credits + totalWages, fuel: newFuel, parts: newParts });
 
-    const activeShipCount = mission.ships.filter(s => s.status === 'active').length;
-    const shipNames = mission.ships.filter(s => s.status === 'active').map(s => s.shipName).join(', ');
+    const shipNames = activeShips.map(s => s.shipName).join(', ');
 
     if (fuelReward > 0) {
-      addMessage(`Mission completed! ${shipNames} earned $${mission.reward} and ${fuelReward} fuel.`);
+      addMessage(`Mission completed! ${shipNames} earned $${totalWages} wages, ${partsReward} parts, and ${fuelReward} fuel.`);
     } else {
-      addMessage(`Mission completed! ${shipNames} earned $${mission.reward}.`);
+      addMessage(`Mission completed! ${shipNames} earned $${totalWages} wages and ${partsReward} parts.`);
     }
   };
   
