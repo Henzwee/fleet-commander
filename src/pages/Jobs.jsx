@@ -83,11 +83,24 @@ export default function Jobs() {
       
       for (let j = 0; j < missionsForTier; j++) {
         const distance = Math.floor(Math.random() * (tierMaxLY - tierMinLY)) + tierMinLY;
+        
+        // Calculate parts reward based on tier
+        const tierPartsMap = {
+          'Unregistered': [1, 3],
+          'Known': [2, 4],
+          'Notorious': [3, 5],
+          'Esteemed': [4, 6],
+          'Renowned': [6, 8],
+          'Legendary': [8, 10]
+        };
+        const [minParts, maxParts] = tierPartsMap[tier] || [1, 3];
+        const partsReward = Math.floor(Math.random() * (maxParts - minParts + 1)) + minParts;
+        
         missions.push({
           id: `mission_${tier}_${j}`,
           distance,
           duration: Math.floor(distance / 500) + 1,
-          reward: Math.floor(distance * (Math.random() * 1.5 + 1.5)),
+          partsReward,
           fuelCost: Math.floor(distance / 100) || 1,
           description: descriptions[Math.floor(Math.random() * descriptions.length)],
           tier,
@@ -106,11 +119,24 @@ export default function Jobs() {
       
       for (let i = 0; i < numAspirational; i++) {
         const distance = Math.floor(Math.random() * (tierMaxLY - tierMinLY)) + tierMinLY;
+        
+        // Calculate parts reward based on tier
+        const tierPartsMap = {
+          'Unregistered': [1, 3],
+          'Known': [2, 4],
+          'Notorious': [3, 5],
+          'Esteemed': [4, 6],
+          'Renowned': [6, 8],
+          'Legendary': [8, 10]
+        };
+        const [minParts, maxParts] = tierPartsMap[nextTier] || [1, 3];
+        const partsReward = Math.floor(Math.random() * (maxParts - minParts + 1)) + minParts;
+        
         missions.push({
           id: `mission_aspirational_${i}`,
           distance,
           duration: Math.floor(distance / 500) + 1,
-          reward: Math.floor(distance * (Math.random() * 1.5 + 2)),
+          partsReward,
           fuelCost: Math.floor(distance / 100),
           description: descriptions[Math.floor(Math.random() * descriptions.length)],
           tier: nextTier,
@@ -141,7 +167,7 @@ export default function Jobs() {
       })),
       distance: selectedMission.distance,
       duration: selectedMission.duration,
-      reward: selectedMission.reward,
+      partsReward: selectedMission.partsReward,
       fuelCost: selectedMission.fuelCost,
       startTime: new Date().toISOString(),
       status: 'active',
@@ -208,7 +234,7 @@ export default function Jobs() {
                 </div>
                 <div className="flex items-center gap-1 text-amber-400">
                   <Zap className="w-3 h-3" />
-                  <span>${mission.reward}</span>
+                  <span>{mission.partsReward} parts</span>
                 </div>
                 <div className="flex items-center gap-1 text-blue-400">
                   <Fuel className="w-3 h-3" />
