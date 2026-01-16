@@ -34,7 +34,7 @@ export default function Main() {
     
     const interval = setInterval(() => {
       loadActiveMissions();
-    }, 2000);
+    }, 5000);
     return () => clearInterval(interval);
   }, [gameState]);
 
