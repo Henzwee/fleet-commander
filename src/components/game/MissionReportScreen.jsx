@@ -5,23 +5,23 @@ export default function MissionReportScreen({ mission, event, onClose, onChoice 
   if (!mission) return null;
 
   return (
-    <div className="fixed z-50 bg-black/80 flex items-center justify-center" style={{
-      top: 'calc(var(--content-pad-top) - 50px)',
-      bottom: 'calc(var(--content-pad-bottom) - 40px)',
-      left: 'var(--content-pad-left)',
-      right: 'var(--content-pad-right)'
+    <div className="fixed bg-black/80 flex items-center justify-center" style={{
+      top: 0,
+      bottom: 0,
+      left: 0,
+      right: 0,
+      zIndex: 5
     }}>
       <div className="bg-gradient-to-br from-gray-900 to-gray-950 border-2 border-cyan-500 rounded-xl w-full p-6 pb-8 relative flex flex-col" style={{ maxHeight: '100%' }}>
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-6 text-gray-400 active:text-cyan-400 transition-colors"
-        >
-          <X className="w-6 h-6" />
-        </button>
-
         <div className="flex items-center gap-2 mb-6">
           <Radio className="w-5 h-5 text-cyan-400 animate-pulse" />
           <h2 className="text-cyan-400 font-bold text-lg">M.A.N.I. REPORT</h2>
+          <button
+            onClick={onClose}
+            className="ml-auto text-gray-400 active:text-cyan-400 transition-colors"
+          >
+            <X className="w-6 h-6" />
+          </button>
         </div>
 
         <div className="flex-1 overflow-y-auto" style={{ WebkitOverflowScrolling: 'touch' }}>
