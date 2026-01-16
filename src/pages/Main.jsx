@@ -19,6 +19,7 @@ export default function Main() {
   const [showExplosion, setShowExplosion] = useState(false);
   const [selectedMission, setSelectedMission] = useState(null);
   const [timeSkipMission, setTimeSkipMission] = useState(null);
+  const [debriefData, setDebriefData] = useState(null);
   const messageLogRef = React.useRef(null);
 
   // Tutorial redirect disabled - allow direct access to main page
@@ -84,6 +85,11 @@ export default function Main() {
         }
 
         const shipNames = activeShips.map(s => s.shipName).join(', ');
+        
+        // Calculate total wages based on active ships
+        const totalWages = activeShips.reduce((sum, ship) => {
+          return sum + (ship.hourlyPay * mission.duration);
+        }, 0);
 
         return {
           ...mission,
@@ -91,6 +97,7 @@ export default function Main() {
           shipImages,
           shipNames,
           activeShipCount: activeShips.length,
+          totalWages,
           isComplete: mission.status === 'completed' || remaining <= 0,
           timeRemaining: `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`,
           timeRemainingMinutes: remaining * 60
@@ -250,6 +257,7 @@ export default function Main() {
                             // Award parts reward
                             const partsReward = mission.partsReward || 0;
                             const newParts = { ...gameState.parts };
+                            const earnedParts = [];
                             
                             // Generate random parts
                             const partsList = [
@@ -262,7 +270,15 @@ export default function Main() {
                             for (let i = 0; i < partsReward; i++) {
                               const randomPart = partsList[Math.floor(Math.random() * partsList.length)];
                               newParts[randomPart] = (newParts[randomPart] || 0) + 1;
+                              earnedParts.push(randomPart);
                             }
+                            
+                            // Show debrief
+                            setDebriefData({
+                              credits: totalWages,
+                              parts: earnedParts,
+                              crystals: 0
+                            });
                             
                             await base44.entities.Mission.delete(mission.id);
                             await updateGameState({ 
@@ -270,7 +286,6 @@ export default function Main() {
                               parts: newParts
                             });
                             
-                            addMessage(`Collected $${totalWages} wages and ${partsReward} parts!`);
                             loadActiveMissions();
                           }}
                           className="bg-green-600 hover:bg-green-700 border-2 border-green-500 rounded px-3 py-1 text-white font-bold text-xs"
@@ -319,6 +334,56 @@ export default function Main() {
           onCancel={() => setTimeSkipMission(null)}
           crystals={gameState?.crystals || 0}
         />
+      )}
+      
+      {debriefData && (
+        <div className="fixed bg-black/80 flex items-center justify-center" style={{
+          top: 0,
+          bottom: 0,
+          left: 0,
+          right: 0,
+          zIndex: 5,
+          paddingTop: 'var(--content-pad-top)',
+          paddingBottom: 'var(--content-pad-bottom)',
+          paddingLeft: 'var(--content-pad-left)',
+          paddingRight: 'var(--content-pad-right)'
+        }}>
+          <div className="bg-gradient-to-br from-gray-900 to-gray-950 border-2 border-cyan-500 w-full p-6 pb-8 relative flex flex-col" style={{ maxHeight: '100%' }}>
+            <div className="flex items-center gap-2 mb-6">
+              <h2 className="text-cyan-400 font-bold text-lg">MISSION DEBRIEF</h2>
+            </div>
+            
+            <div className="space-y-4 flex-1 overflow-y-auto">
+              <div className="bg-cyan-900/20 border-2 border-cyan-500/50 rounded-lg p-4">
+                <div className="text-amber-400 font-bold text-sm mb-2">Credits Earned</div>
+                <div className="text-white text-2xl font-bold">${debriefData.credits}</div>
+              </div>
+              
+              <div className="bg-cyan-900/20 border-2 border-cyan-500/50 rounded-lg p-4">
+                <div className="text-green-400 font-bold text-sm mb-2">Parts Collected ({debriefData.parts.length})</div>
+                <div className="text-gray-300 text-xs space-y-1">
+                  {debriefData.parts.map((part, idx) => (
+                    <div key={idx}>• {part}</div>
+                  ))}
+                </div>
+              </div>
+              
+              {debriefData.crystals > 0 && (
+                <div className="bg-purple-900/20 border-2 border-purple-500/50 rounded-lg p-4">
+                  <div className="text-purple-400 font-bold text-sm mb-2">Crystals Earned</div>
+                  <div className="text-white text-2xl font-bold">{debriefData.crystals}</div>
+                </div>
+              )}
+            </div>
+            
+            <button
+              onClick={() => setDebriefData(null)}
+              className="w-full bg-gray-700 active:bg-gray-600 border-2 border-gray-600 rounded-lg py-2 text-white font-bold text-sm transition-all mt-4"
+            >
+              CLOSE
+            </button>
+          </div>
+        </div>
       )}
     </DeviceFrame>
   );

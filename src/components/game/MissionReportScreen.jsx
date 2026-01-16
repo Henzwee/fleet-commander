@@ -47,7 +47,8 @@ export default function MissionReportScreen({ mission, event, onClose, onChoice 
             <div className="text-gray-400 text-xs space-y-1">
               <div>Distance: {mission.distance} ly</div>
               <div>Time Remaining: {mission.timeRemaining}</div>
-              <div>Reward: ${mission.reward}</div>
+              <div>Parts Reward: {mission.partsReward || 0} parts</div>
+              <div>Wages: ${mission.totalWages || 0}</div>
             </div>
           </div>
 
