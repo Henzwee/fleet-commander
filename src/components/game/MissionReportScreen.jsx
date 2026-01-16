@@ -16,7 +16,7 @@ export default function MissionReportScreen({ mission, event, onClose, onChoice 
       paddingLeft: 'var(--content-pad-left)',
       paddingRight: 'var(--content-pad-right)'
     }}>
-      <div className="bg-gradient-to-br from-gray-900 to-gray-950 border-2 border-cyan-500 rounded-xl w-full p-6 pb-8 relative flex flex-col" style={{ maxHeight: '100%' }}>
+      <div className="bg-gradient-to-br from-gray-900 to-gray-950 border-2 border-cyan-500 w-full p-6 pb-8 relative flex flex-col" style={{ maxHeight: '100%' }}>
         <div className="flex items-center gap-2 mb-6">
           <Radio className="w-5 h-5 text-cyan-400 animate-pulse" />
           <h2 className="text-cyan-400 font-bold text-lg">M.A.N.I. REPORT</h2>
