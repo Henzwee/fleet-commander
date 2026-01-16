@@ -10,7 +10,11 @@ export default function MissionReportScreen({ mission, event, onClose, onChoice 
       bottom: 0,
       left: 0,
       right: 0,
-      zIndex: 5
+      zIndex: 5,
+      paddingTop: 'var(--content-pad-top)',
+      paddingBottom: 'var(--content-pad-bottom)',
+      paddingLeft: 'var(--content-pad-left)',
+      paddingRight: 'var(--content-pad-right)'
     }}>
       <div className="bg-gradient-to-br from-gray-900 to-gray-950 border-2 border-cyan-500 rounded-xl w-full p-6 pb-8 relative flex flex-col" style={{ maxHeight: '100%' }}>
         <div className="flex items-center gap-2 mb-6">
