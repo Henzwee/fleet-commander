@@ -17,8 +17,8 @@ export default function Jobs() {
   const [selectedMission, setSelectedMission] = useState(null);
   const [selectedShip, setSelectedShip] = useState(null);
   
-  // Filter idle ships from centralized inventory
-  const idleShips = allShips.filter(ship => ship.isHired && ship.status === 'idle');
+  // Get all hired ships (not just idle ones)
+  const allHiredShips = allShips.filter(ship => ship.isHired);
   
   useEffect(() => {
     loadData();
@@ -220,16 +220,16 @@ export default function Jobs() {
         
         </div>
         
-        {selectedMission && idleShips.length > 0 && (
+        {selectedMission && allHiredShips.length > 0 && (
           <MissionShipSelection
             mission={selectedMission}
-            ships={idleShips}
+            ships={allHiredShips}
             onConfirm={handleConfirmShip}
             onCancel={() => setSelectedMission(null)}
           />
         )}
         
-        {selectedMission && idleShips.length === 0 && (
+        {selectedMission && allHiredShips.length === 0 && (
           <div className="fixed z-[4] bg-gradient-to-br from-gray-900 to-gray-950 flex flex-col" style={{
             top: 'calc(var(--content-pad-top) - 40px)',
             bottom: 'calc(var(--content-pad-bottom) - 30px)',

@@ -5,8 +5,9 @@ export default function MissionShipSelection({ mission, ships, onConfirm, onCanc
   
   if (!mission) return null;
   
-  const eligibleShips = ships.filter(ship => ship.maxLY >= mission.requiredLY);
-  const ineligibleShips = ships.filter(ship => ship.maxLY < mission.requiredLY);
+  const eligibleShips = ships.filter(ship => ship.status === 'idle' && ship.maxLY >= mission.requiredLY);
+  const ineligibleShips = ships.filter(ship => ship.status === 'idle' && ship.maxLY < mission.requiredLY);
+  const busyShips = ships.filter(ship => ship.status !== 'idle');
   
   const toggleShip = (ship) => {
     if (selectedShips.find(s => s.id === ship.id)) {
@@ -37,55 +38,70 @@ export default function MissionShipSelection({ mission, ships, onConfirm, onCanc
             <div className="text-xs text-gray-400">{mission.tier} and higher • {mission.distance} LY</div>
           </div>
           
-          {!canAnyShipHandle ? (
-            <div className="text-red-400 text-sm text-center py-8 font-bold">
-              with that crew? I dont think so, pal.
+          {!canAnyShipHandle && (
+            <div className="text-red-400 text-sm text-center py-4 font-bold mb-4">
+              with that fleet? I don't think so pal.
             </div>
-          ) : (
-            <div className="space-y-2 mb-4">
-              {eligibleShips.map((ship) => {
-                const isSelected = selectedShips.find(s => s.id === ship.id);
-                return (
-                  <div
-                    key={ship.id}
-                    onClick={() => toggleShip(ship)}
-                    className={`bg-gray-800 border-2 rounded-lg p-3 transition-all cursor-pointer ${
-                      isSelected
-                        ? 'border-green-500 bg-green-500/10'
-                        : 'border-gray-600 active:border-green-500/50'
-                    }`}
-                  >
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <div className="text-cyan-100 font-bold text-sm">{ship.name}</div>
-                        <div className="text-xs text-gray-400">{ship.tier} • {ship.maxLY} LY • ${ship.hourlyPay}/h</div>
-                      </div>
-                      {isSelected ? (
-                        <div className="text-green-400 font-bold">✓</div>
-                      ) : (
-                        <div className="text-green-400 text-xs">READY</div>
-                      )}
-                    </div>
-                  </div>
-                );
-              })}
-              
-              {ineligibleShips.map((ship) => (
+          )}
+          
+          <div className="space-y-2 mb-4">
+            {eligibleShips.map((ship) => {
+              const isSelected = selectedShips.find(s => s.id === ship.id);
+              return (
                 <div
                   key={ship.id}
-                  className="bg-gray-800 border-2 border-red-500/30 rounded-lg p-3 opacity-50 cursor-not-allowed"
+                  onClick={() => toggleShip(ship)}
+                  className={`bg-gray-800 border-2 rounded-lg p-3 transition-all cursor-pointer ${
+                    isSelected
+                      ? 'border-green-500 bg-green-500/10'
+                      : 'border-gray-600 active:border-green-500/50'
+                  }`}
                 >
                   <div className="flex items-center justify-between">
                     <div>
                       <div className="text-cyan-100 font-bold text-sm">{ship.name}</div>
-                      <div className="text-xs text-gray-400">{ship.tier} • {ship.maxLY} LY</div>
+                      <div className="text-xs text-gray-400">{ship.tier} • {ship.maxLY} LY • ${ship.hourlyPay}/h</div>
                     </div>
-                    <div className="text-red-400 text-xs">OUT OF RANGE</div>
+                    {isSelected ? (
+                      <div className="text-green-400 font-bold">✓</div>
+                    ) : (
+                      <div className="text-green-400 text-xs">READY</div>
+                    )}
                   </div>
                 </div>
-              ))}
-            </div>
-          )}
+              );
+            })}
+            
+            {ineligibleShips.map((ship) => (
+              <div
+                key={ship.id}
+                className="bg-gray-800 border-2 border-red-500/30 rounded-lg p-3 opacity-50 cursor-not-allowed"
+              >
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="text-cyan-100 font-bold text-sm">{ship.name}</div>
+                    <div className="text-xs text-gray-400">{ship.tier} • {ship.maxLY} LY</div>
+                  </div>
+                  <div className="text-red-400 text-xs">OUT OF RANGE</div>
+                </div>
+              </div>
+            ))}
+            
+            {busyShips.map((ship) => (
+              <div
+                key={ship.id}
+                className="bg-gray-800 border-2 border-amber-500/30 rounded-lg p-3 opacity-50 cursor-not-allowed"
+              >
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="text-cyan-100 font-bold text-sm">{ship.name}</div>
+                    <div className="text-xs text-gray-400">{ship.tier} • {ship.maxLY} LY</div>
+                  </div>
+                  <div className="text-amber-400 text-xs">DEPLOYED</div>
+                </div>
+              </div>
+            ))}
+          </div>
           
           <div className="flex gap-2 mb-8 mt-4 flex-shrink-0">
             <button
