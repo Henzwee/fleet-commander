@@ -240,10 +240,37 @@ export default function Main() {
                         <button
                           onClick={async (e) => {
                             e.stopPropagation();
-                            const newCredits = gameState.credits + mission.reward;
+                            
+                            // Calculate total wages from all active ships
+                            const activeShips = mission.ships?.filter(s => s.status === 'active') || [];
+                            const totalWages = activeShips.reduce((sum, ship) => {
+                              return sum + (ship.hourlyPay * mission.duration);
+                            }, 0);
+                            
+                            // Award parts reward
+                            const partsReward = mission.partsReward || 0;
+                            const newParts = { ...gameState.parts };
+                            
+                            // Generate random parts
+                            const partsList = [
+                              'Box of tangled wire', 'Rusty screws', 'Cracked glass',
+                              'Wire splice', 'Stripped bolts', 'Reformed evil AI',
+                              'Outdated map', 'Mostly stable antimatter', 'Expired food rations',
+                              'Sci-fi looking panel'
+                            ];
+                            
+                            for (let i = 0; i < partsReward; i++) {
+                              const randomPart = partsList[Math.floor(Math.random() * partsList.length)];
+                              newParts[randomPart] = (newParts[randomPart] || 0) + 1;
+                            }
+                            
                             await base44.entities.Mission.delete(mission.id);
-                            await updateGameState({ credits: newCredits });
-                            addMessage(`Collected $${mission.reward} from mission!`);
+                            await updateGameState({ 
+                              credits: gameState.credits + totalWages,
+                              parts: newParts
+                            });
+                            
+                            addMessage(`Collected $${totalWages} wages and ${partsReward} parts!`);
                             loadActiveMissions();
                           }}
                           className="bg-green-600 hover:bg-green-700 border-2 border-green-500 rounded px-3 py-1 text-white font-bold text-xs"
