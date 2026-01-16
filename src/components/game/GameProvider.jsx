@@ -287,16 +287,20 @@ export default function GameProvider({ children }) {
       };
 
       const damageChance = tierDamageChance[ship.tier] || 0.30;
-      
+
       if (Math.random() < damageChance) {
-        if (ship.damaged) {
-          // Ship was already damaged - destroy it
+        // Reduce health by 25%
+        const newHealth = Math.max(0, ship.health - 25);
+
+        if (newHealth === 0) {
+          // Ship destroyed
           console.log('[INVENTORY] Ship destroyed:', ship.name);
           await updateShip(ship.id, { 
             status: 'destroyed',
-            health: 0
+            health: 0,
+            damaged: true
           });
-          
+
           // Update mission ship status
           const updatedShips = mission.ships.map(s => 
             s.shipId === ship.id ? { ...s, status: 'destroyed' } : s
@@ -306,7 +310,7 @@ export default function GameProvider({ children }) {
             ships: updatedShips,
             status: anyActive ? 'active' : 'failed'
           });
-          
+
           addMessage(`${ship.name} has been totaled. They're getting towed back.`);
           setCurrentEvent({
             type: 'explosion',
@@ -314,11 +318,11 @@ export default function GameProvider({ children }) {
             intensity: 2
           });
         } else {
-          // First damage
+          // Take damage
           console.log('[INVENTORY] Ship damaged:', ship.name);
           await updateShip(ship.id, { 
             damaged: true,
-            health: 75,
+            health: newHealth,
             status: 'damaged'
           });
           
