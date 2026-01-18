@@ -243,13 +243,29 @@ export default function GameProvider({ children }) {
           continue;
         }
 
-        // Roll for damage for each active ship
+        // Initialize damage tracking if not exists
+        if (!mission.damageHoursChecked) {
+          mission.damageHoursChecked = [];
+        }
+
+        // Roll for damage for each active ship - but only once per hour
         const currentShips = queryClient.getQueryData(['ships', 'inventory']) || [];
-        for (const missionShip of mission.ships || []) {
-          if (missionShip.status === 'active') {
-            const ship = currentShips.find(s => s.id === missionShip.shipId);
-            if (ship) {
-              await rollForDamage(ship, mission);
+        for (let hour = 1; hour <= hoursElapsed; hour++) {
+          if (!mission.damageHoursChecked.includes(hour)) {
+            // Mark this hour as checked
+            mission.damageHoursChecked.push(hour);
+            await base44.entities.Mission.update(mission.id, { 
+              damageHoursChecked: mission.damageHoursChecked 
+            });
+
+            // Roll damage for each active ship this hour
+            for (const missionShip of mission.ships || []) {
+              if (missionShip.status === 'active') {
+                const ship = currentShips.find(s => s.id === missionShip.shipId);
+                if (ship) {
+                  await rollForDamage(ship, mission, hour);
+                }
+              }
             }
           }
         }
@@ -275,18 +291,18 @@ export default function GameProvider({ children }) {
     }
   };
   
-  const rollForDamage = async (ship, mission) => {
+  const rollForDamage = async (ship, mission, currentHour) => {
     try {
       const tierDamageChance = {
-        'Unregistered': 0.30,
-        'Known': 0.25,
-        'Notorious': 0.20,
-        'Esteemed': 0.15,
+        'Unregistered': 0.50,
+        'Known': 0.40,
+        'Notorious': 0.30,
+        'Esteemed': 0.20,
         'Renowned': 0.10,
         'Legendary': 0.05
       };
 
-      const damageChance = tierDamageChance[ship.tier] || 0.30;
+      const damageChance = tierDamageChance[ship.tier] || 0.50;
 
       if (Math.random() < damageChance) {
         // Reduce health by 25%
