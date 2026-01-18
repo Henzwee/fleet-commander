@@ -562,14 +562,57 @@ export default function GameProvider({ children }) {
             });
 
             // Pick one of two success messages
-            if (Math.random() < 0.5) {
-              addMessage(`Just some lightly armored pirates. ${shipName} only shot a warning shot before they flew away, tail between the legs. The ship under attack thanked us with some credits and spare parts.`);
-            } else {
-              addMessage(`This ship must have been floating around for years. It was completely vacant. Luckily, they left some good loot behind. ${shipName} will collect it and get back to work.`);
+            const successMessage = Math.random() < 0.5
+              ? `Just some lightly armored pirates. ${shipName} only shot a warning shot before they flew away, tail between the legs. The ship under attack thanked us with some credits and spare parts.`
+              : `This ship must have been floating around for years. It was completely vacant. Luckily, they left some good loot behind. ${shipName} will collect it and get back to work.`;
+
+            addMessage(successMessage);
+
+            // Store result on mission for display
+            const mission = await base44.entities.Mission.filter({ id: currentEvent.missionId });
+            if (mission[0]) {
+              await base44.entities.Mission.update(currentEvent.missionId, {
+                encounterResult: `+${bonusParts} parts, +$${bonusCredits}`
+              });
             }
           } else {
-            // Failure - will add messages later
-            addMessage('Investigation failed.');
+            // Failure - ship takes 50% damage
+            const newHealth = Math.max(0, ship.health - 50);
+            await updateShip(currentEvent.shipId, {
+              health: newHealth,
+              damaged: newHealth < 100,
+              status: newHealth === 0 ? 'destroyed' : 'damaged'
+            });
+
+            // Update mission ship status if destroyed
+            if (newHealth === 0) {
+              const mission = await base44.entities.Mission.filter({ id: currentEvent.missionId });
+              if (mission[0]) {
+                const updatedShips = mission[0].ships.map(s => 
+                  s.shipId === currentEvent.shipId ? { ...s, status: 'destroyed' } : s
+                );
+                const anyActive = updatedShips.some(s => s.status === 'active');
+                await base44.entities.Mission.update(currentEvent.missionId, {
+                  ships: updatedShips,
+                  status: anyActive ? 'active' : 'failed',
+                  encounterResult: `-50% damage (DESTROYED)`
+                });
+              }
+            } else {
+              const mission = await base44.entities.Mission.filter({ id: currentEvent.missionId });
+              if (mission[0]) {
+                await base44.entities.Mission.update(currentEvent.missionId, {
+                  encounterResult: `-50% damage`
+                });
+              }
+            }
+
+            // Pick one of two failure messages
+            const failureMessage = Math.random() < 0.5
+              ? `${shipName} made it to the signal's origin. Unfortunately they were greatly outnumbered by pirates. They managed to escape, but not without taking heavy damage.`
+              : `${shipName} made it too the distress signal, but it turned out to be a trap. They managed to escape but not without taking heavy damage. They're getting back to the task at hand now and are hoping this doesn't get brought up again.`;
+
+            addMessage(failureMessage);
           }
         } else {
           addMessage('Distress signal ignored.');
