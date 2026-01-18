@@ -60,7 +60,7 @@ export default function DeviceFrame({ children }) {
           <div 
             className="app-panel min-h-full"
             style={{
-              paddingTop: location.pathname === '/Main' ? '95px' : '55px',
+              paddingTop: location.pathname === '/Main' ? '115px' : '75px',
               paddingBottom: 'var(--content-pad-bottom)',
               paddingLeft: 'var(--content-pad-left)',
               paddingRight: 'var(--content-pad-right)'
