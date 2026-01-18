@@ -19,7 +19,7 @@ export default function DeviceFrame({ children }) {
   }, []);
   
   const frameVars = {
-    '--content-pad-top': '115px',
+    '--content-pad-top': '95px',
     '--content-pad-bottom': '115px',
     '--content-pad-left': '22px',
     '--content-pad-right': '22px',
@@ -60,7 +60,7 @@ export default function DeviceFrame({ children }) {
           <div 
             className="app-panel min-h-full"
             style={{
-              paddingTop: location.pathname === '/Main' ? '115px' : '75px',
+              paddingTop: location.pathname === '/Main' ? '125px' : '55px',
               paddingBottom: 'var(--content-pad-bottom)',
               paddingLeft: 'var(--content-pad-left)',
               paddingRight: 'var(--content-pad-right)'
