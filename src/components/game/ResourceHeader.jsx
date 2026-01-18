@@ -7,10 +7,11 @@ export default function ResourceHeader() {
   
   return (
     <div className="fixed z-[3] bg-gradient-to-r from-gray-900/95 to-gray-800/95 backdrop-blur-sm" style={{ 
-      top: 0,
+      top: 'max(0px, env(safe-area-inset-top, 0px))',
       left: 'var(--content-pad-left)',
       right: 'var(--content-pad-right)',
-      height: 'calc(var(--content-pad-top) + 28px)'
+      height: 'calc(var(--content-pad-top) + 28px + max(0px, env(safe-area-inset-top, 0px)))',
+      paddingTop: 'max(0px, env(safe-area-inset-top, 0px))'
     }}>
       <div className="flex items-center justify-between gap-3 rounded-full px-4 py-3" style={{
         position: 'absolute',
