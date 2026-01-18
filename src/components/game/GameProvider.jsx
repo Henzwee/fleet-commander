@@ -377,17 +377,24 @@ export default function GameProvider({ children }) {
   };
   
   const createDistressEvent = async (mission) => {
-    const ship = await base44.entities.Ship.filter({ id: mission.shipId });
-    const shipName = ship[0]?.name || 'Unknown Ship';
+    // Get the first active ship from the mission
+    const activeShip = mission.ships?.find(s => s.status === 'active');
+    if (!activeShip) return;
+
+    const currentShips = queryClient.getQueryData(['ships', 'inventory']) || [];
+    const ship = currentShips.find(s => s.id === activeShip.shipId);
+    const shipName = ship?.name || 'Unknown Ship';
 
     setCurrentEvent({
       title: 'Distress Signal Detected',
-      description: `${shipName} picked up a distress signal. They could check it out but policy is to ignore it. Your call, boss.`,
+      description: `${shipName} picked up a distress signal. It clearly states in the employee handbook not to investigate such things. But the ship's captain believes there's a chance to salvage some good loot. You make the call.`,
       choices: [
         { id: 'investigate', label: 'CHECK IT OUT', primary: true },
         { id: 'ignore', label: 'FOLLOW POLICY' }
       ],
       missionId: mission.id,
+      shipId: ship?.id,
+      shipTier: ship?.tier,
       type: 'distress',
       expiresAt: new Date(Date.now() + 15 * 60 * 1000).toISOString()
     });
@@ -515,16 +522,54 @@ export default function GameProvider({ children }) {
         
       case 'distress':
         if (choiceId === 'investigate') {
-          // 75% real ship
-          if (Math.random() < 0.75) {
-            addMessage('Ship in distress rescued. They\'ve joined your fleet!');
-            // Create new ship based on rarity
-            const tier = rollShipTier();
-            const newShip = await createRandomShip(tier);
-            // Add to inventory cache
-            queryClient.setQueryData(['ships', 'inventory'], (old = []) => [...old, newShip]);
+          const currentShips = queryClient.getQueryData(['ships', 'inventory']) || [];
+          const ship = currentShips.find(s => s.id === currentEvent.shipId);
+          const shipName = ship?.name || 'Unknown Ship';
+
+          // Calculate success rate based on tier
+          const tierSuccessRate = {
+            'Unregistered': 0.50,
+            'Known': 0.55,
+            'Notorious': 0.60,
+            'Esteemed': 0.65,
+            'Renowned': 0.70,
+            'Legendary': 0.75
+          };
+
+          const successRate = tierSuccessRate[currentEvent.shipTier] || 0.50;
+
+          if (Math.random() < successRate) {
+            // Success - choose one of two outcomes
+            const bonusCredits = Math.floor(Math.random() * 500) + 300; // 300-800 credits
+            const bonusParts = Math.floor(Math.random() * 3) + 2; // 2-4 parts
+
+            const partsList = [
+              'Box of tangled wire', 'Rusty screws', 'Cracked glass',
+              'Wire splice', 'Stripped bolts', 'Reformed evil AI',
+              'Outdated map', 'Mostly stable antimatter', 'Expired food rations',
+              'Sci-fi looking panel'
+            ];
+
+            const newParts = { ...gameState.parts };
+            for (let i = 0; i < bonusParts; i++) {
+              const randomPart = partsList[Math.floor(Math.random() * partsList.length)];
+              newParts[randomPart] = (newParts[randomPart] || 0) + 1;
+            }
+
+            await updateGameState({ 
+              credits: gameState.credits + bonusCredits,
+              parts: newParts
+            });
+
+            // Pick one of two success messages
+            if (Math.random() < 0.5) {
+              addMessage(`Just some lightly armored pirates. ${shipName} only shot a warning shot before they flew away, tail between the legs. The ship under attack thanked us with some credits and spare parts.`);
+            } else {
+              addMessage(`This ship must have been floating around for years. It was completely vacant. Luckily, they left some good loot behind. ${shipName} will collect it and get back to work.`);
+            }
           } else {
-            addMessage('False alarm. No ship found.');
+            // Failure - will add messages later
+            addMessage('Investigation failed.');
           }
         } else {
           addMessage('Distress signal ignored.');
