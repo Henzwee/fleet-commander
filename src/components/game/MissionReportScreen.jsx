@@ -49,6 +49,11 @@ export default function MissionReportScreen({ mission, event, onClose, onChoice 
               <div>Time Remaining: {mission.timeRemaining}</div>
               <div>Parts Reward: {mission.partsReward || 0} parts</div>
               <div>Wages: ${mission.totalWages || 0}</div>
+              {mission.encounterResult && (
+                <div className={`font-bold ${mission.encounterResult.includes('-') ? 'text-red-400' : 'text-green-400'}`}>
+                  Encounter: {mission.encounterResult}
+                </div>
+              )}
             </div>
           </div>
 
