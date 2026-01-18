@@ -39,7 +39,9 @@ export default function DeviceFrame({ children }) {
   };
   
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center p-2 overflow-hidden">
+    <div className="min-h-screen bg-black flex items-center justify-center p-2 overflow-hidden" style={{
+      paddingTop: 'max(0.5rem, env(safe-area-inset-top, 0px))'
+    }}>
       <div 
         className={`app-shell relative overflow-hidden ${debugMode ? 'debug' : ''}`}
         style={{
