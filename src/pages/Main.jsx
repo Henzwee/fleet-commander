@@ -143,7 +143,7 @@ export default function Main() {
     return (
       <DeviceFrame>
         <div className="flex items-center justify-center h-full">
-          <div className="text-cyan-400 animate-pulse">Loading M.A.N.I. system...</div>
+          <div className="text-red-400 animate-pulse">Loading M.A.N.I. system...</div>
         </div>
       </DeviceFrame>
     );
@@ -163,10 +163,10 @@ export default function Main() {
         <ResourceHeader />
         <div className="space-y-3" style={{ paddingTop: '28px' }}>
         {/* Message Console */}
-        <div className="bg-gradient-to-br from-cyan-900/30 to-blue-900/30 border-2 border-cyan-600/50 rounded-2xl p-4 w-full" style={{ height: '160px', boxSizing: 'border-box' }}>
+        <div className="bg-gradient-to-br from-red-900/30 to-gray-900/30 border-2 border-red-600/50 rounded-2xl p-4 w-full" style={{ height: '160px', boxSizing: 'border-box' }}>
           <div 
             ref={messageLogRef}
-            className="h-full overflow-y-auto space-y-2 text-sm text-cyan-100/90 font-mono"
+            className="h-full overflow-y-auto space-y-2 text-sm text-red-100/90 font-mono"
             style={{ scrollBehavior: 'smooth' }}
           >
             {messages.length === 0 ? (
@@ -174,7 +174,7 @@ export default function Main() {
             ) : (
               messages.map((msg, idx) => (
                 <div key={idx} className="flex gap-2">
-                  <span className="text-cyan-500 flex-shrink-0 text-xs">
+                  <span className="text-red-500 flex-shrink-0 text-xs">
                     {new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false })}
                   </span>
                   <span className="break-words">{msg}</span>
@@ -193,7 +193,7 @@ export default function Main() {
         <div className="grid grid-cols-2 gap-3 w-full" style={{ minWidth: 0 }}>
           <button
             onClick={() => navigate(createPageUrl('Market'))}
-            className="bg-gradient-to-br from-cyan-600/80 to-blue-600/80 border-2 border-cyan-500/50 rounded-xl py-4 text-white font-bold text-sm hover:from-cyan-500/80 hover:to-blue-500/80 transition-all w-full"
+            className="bg-gradient-to-br from-red-600/80 to-red-700/80 border-2 border-red-500/50 rounded-xl py-4 text-white font-bold text-sm hover:from-red-500/80 hover:to-red-600/80 transition-all w-full"
             style={{ minWidth: 0 }}
           >
             Ship Market
@@ -201,7 +201,7 @@ export default function Main() {
 
           <button
             onClick={() => navigate(createPageUrl('FleetManagement'))}
-            className="bg-gradient-to-br from-cyan-600/80 to-blue-600/80 border-2 border-cyan-500/50 rounded-xl py-4 text-white font-bold text-sm hover:from-cyan-500/80 hover:to-blue-500/80 transition-all w-full"
+            className="bg-gradient-to-br from-red-600/80 to-red-700/80 border-2 border-red-500/50 rounded-xl py-4 text-white font-bold text-sm hover:from-red-500/80 hover:to-red-600/80 transition-all w-full"
             style={{ minWidth: 0 }}
           >
             Manage Fleet
@@ -211,13 +211,13 @@ export default function Main() {
         {/* Available Jobs Button */}
         <button
           onClick={() => navigate(createPageUrl('Jobs'))}
-          className="w-full bg-gradient-to-br from-cyan-700/60 to-blue-700/60 border-2 border-cyan-600/60 rounded-2xl py-6 text-cyan-100 font-bold text-xl tracking-wider hover:from-cyan-600/60 hover:to-blue-600/60 transition-all"
+          className="w-full bg-gradient-to-br from-red-700/60 to-red-800/60 border-2 border-red-600/60 rounded-2xl py-6 text-red-100 font-bold text-xl tracking-wider hover:from-red-600/60 hover:to-red-700/60 transition-all"
         >
           Available Jobs
         </button>
 
         {/* Active Missions */}
-        <div className="bg-gradient-to-br from-cyan-900/30 to-blue-900/30 border-2 border-cyan-600/50 rounded-2xl p-4 flex-1 flex flex-col min-h-0">
+        <div className="bg-gradient-to-br from-red-900/30 to-gray-900/30 border-2 border-red-600/50 rounded-2xl p-4 flex-1 flex flex-col min-h-0">
           {activeMissions.length === 0 ? (
             <div className="text-center text-gray-500 py-8">No active missions</div>
           ) : (
@@ -227,20 +227,20 @@ export default function Main() {
                 return (
                   <div
                     key={mission.id}
-                    className={`bg-gradient-to-r from-cyan-800/20 to-blue-800/20 border rounded-lg p-4 cursor-pointer transition-all ${
+                    className={`bg-gradient-to-r from-red-800/20 to-gray-800/20 border rounded-lg p-4 cursor-pointer transition-all ${
                       hasEvent 
                         ? 'border-amber-500 animate-pulse' 
-                        : 'border-cyan-600/30 hover:border-cyan-500'
+                        : 'border-red-600/30 hover:border-red-500'
                     }`}
                   >
                     <div className="flex items-center gap-3" onClick={() => setSelectedMission(mission)}>
                       {mission.shipImage && (
                         <img src={mission.shipImage} alt={mission.shipNames} className="w-10 h-10 object-contain" />
                       )}
-                      <div className="text-cyan-100 font-bold text-sm flex-1">
+                      <div className="text-red-100 font-bold text-sm flex-1">
                         {mission.shipNames} - {mission.distance}ly
                         {mission.activeShipCount > 1 && (
-                          <span className="text-cyan-400 text-xs ml-2">({mission.activeShipCount} ships)</span>
+                          <span className="text-red-400 text-xs ml-2">({mission.activeShipCount} ships)</span>
                         )}
                       </div>
                       {mission.isComplete ? (
@@ -303,7 +303,7 @@ export default function Main() {
                           >
                             ⚡
                           </button>
-                          <div className="text-cyan-400 text-xs font-mono">
+                          <div className="text-red-400 text-xs font-mono">
                             {mission.timeRemaining}
                           </div>
                         </div>
@@ -348,18 +348,18 @@ export default function Main() {
           paddingLeft: 'var(--content-pad-left)',
           paddingRight: 'var(--content-pad-right)'
         }}>
-          <div className="bg-gradient-to-br from-gray-900 to-gray-950 border-2 border-cyan-500 w-full p-6 pb-8 relative flex flex-col" style={{ maxHeight: '100%' }}>
+          <div className="bg-gradient-to-br from-gray-900 to-gray-950 border-2 border-red-500 w-full p-6 pb-8 relative flex flex-col" style={{ maxHeight: '100%' }}>
             <div className="flex items-center gap-2 mb-6">
-              <h2 className="text-cyan-400 font-bold text-lg">MISSION DEBRIEF</h2>
+              <h2 className="text-red-400 font-bold text-lg">MISSION DEBRIEF</h2>
             </div>
             
             <div className="space-y-4 flex-1 overflow-y-auto">
-              <div className="bg-cyan-900/20 border-2 border-cyan-500/50 rounded-lg p-4">
+              <div className="bg-red-900/20 border-2 border-red-500/50 rounded-lg p-4">
                 <div className="text-amber-400 font-bold text-sm mb-2">Credits Earned</div>
                 <div className="text-white text-2xl font-bold">${debriefData.credits}</div>
               </div>
               
-              <div className="bg-cyan-900/20 border-2 border-cyan-500/50 rounded-lg p-4">
+              <div className="bg-red-900/20 border-2 border-red-500/50 rounded-lg p-4">
                 <div className="text-green-400 font-bold text-sm mb-2">Parts Collected ({debriefData.parts.length})</div>
                 <div className="text-gray-300 text-xs space-y-1">
                   {debriefData.parts.map((part, idx) => (

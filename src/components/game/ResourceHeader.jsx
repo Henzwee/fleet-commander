@@ -35,8 +35,8 @@ export default function ResourceHeader() {
         </div>
         
         <div className="flex items-center gap-1.5">
-          <Fuel className="w-4 h-4 text-cyan-400" />
-          <span className="text-cyan-400 font-bold text-sm">
+          <Fuel className="w-4 h-4 text-red-400" />
+          <span className="text-red-400 font-bold text-sm">
             {gameState?.fuel || 0}
           </span>
         </div>
