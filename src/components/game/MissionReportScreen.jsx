@@ -16,10 +16,10 @@ export default function MissionReportScreen({ mission, event, onClose, onChoice 
       paddingLeft: 'var(--content-pad-left)',
       paddingRight: 'var(--content-pad-right)'
     }}>
-      <div className="bg-gradient-to-br from-gray-900 to-gray-950 border-2 border-red-500 w-full p-6 pb-8 relative flex flex-col" style={{ maxHeight: '100%' }}>
+      <div className="bg-gradient-to-br from-gray-900 to-gray-950 border-2 border-cyan-500 w-full p-6 pb-8 relative flex flex-col" style={{ maxHeight: '100%' }}>
         <div className="flex items-center gap-2 mb-6">
-          <Radio className="w-5 h-5 text-red-400 animate-pulse" />
-          <h2 className="text-red-400 font-bold text-lg">M.A.N.I. REPORT</h2>
+          <Radio className="w-5 h-5 text-cyan-400 animate-pulse" />
+          <h2 className="text-cyan-400 font-bold text-lg">M.A.N.I. REPORT</h2>
           <button
             onClick={onClose}
             className="ml-auto text-gray-400 active:text-cyan-400 transition-colors"
@@ -43,7 +43,7 @@ export default function MissionReportScreen({ mission, event, onClose, onChoice 
           )}
 
           <div className="mb-4">
-            <div className="text-red-100 font-bold text-base mb-2">{mission.shipNames || mission.shipName}</div>
+            <div className="text-cyan-100 font-bold text-base mb-2">{mission.shipNames || mission.shipName}</div>
             <div className="text-gray-400 text-xs space-y-1">
               <div>Distance: {mission.distance} ly</div>
               <div>Time Remaining: {mission.timeRemaining}</div>
@@ -70,7 +70,7 @@ export default function MissionReportScreen({ mission, event, onClose, onChoice 
                     }}
                     className={`px-4 py-2 rounded border-2 text-xs font-bold tracking-wide transition-all ${
                       choice.primary
-                        ? 'bg-red-500/20 border-red-500 text-red-400 active:bg-red-500/30'
+                        ? 'bg-cyan-500/20 border-cyan-500 text-cyan-400 active:bg-cyan-500/30'
                         : 'bg-gray-700/50 border-gray-500 text-gray-300 active:bg-gray-600/50'
                     }`}
                   >

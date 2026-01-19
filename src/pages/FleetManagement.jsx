@@ -153,7 +153,7 @@ export default function FleetManagement() {
             onClick={() => handleTabChange('ships')}
             className={`flex-1 py-3 rounded-lg font-bold text-sm border-2 transition-all ${
               activeTab === 'ships'
-                ? 'bg-red-500/20 border-red-500 text-red-400'
+                ? 'bg-cyan-500/20 border-cyan-500 text-cyan-400'
                 : 'bg-gray-800 border-gray-600 text-gray-400'
             }`}
           >
@@ -163,7 +163,7 @@ export default function FleetManagement() {
             onClick={() => handleTabChange('inventory')}
             className={`flex-1 py-3 rounded-lg font-bold text-sm border-2 transition-all ${
               activeTab === 'inventory'
-                ? 'bg-red-500/20 border-red-500 text-red-400'
+                ? 'bg-cyan-500/20 border-cyan-500 text-cyan-400'
                 : 'bg-gray-800 border-gray-600 text-gray-400'
             }`}
           >
@@ -174,9 +174,9 @@ export default function FleetManagement() {
         {/* Ships Tab */}
         {activeTab === 'ships' && (
           <section id="fleetShipsPanel">
-            <div className="bg-gradient-to-r from-gray-900 to-gray-800 border-2 border-red-500/50 rounded-lg p-4 mb-4">
+            <div className="bg-gradient-to-r from-gray-900 to-gray-800 border-2 border-cyan-500/50 rounded-lg p-4 mb-4">
               <div className="flex items-center justify-between">
-                <div className="text-red-400 font-bold">YOUR FLEET</div>
+                <div className="text-cyan-400 font-bold">YOUR FLEET</div>
                 <div className="flex items-center gap-2 text-gray-400 text-xs">
                   <Package className="w-4 h-4" />
                   <span>{totalParts} parts</span>
@@ -229,8 +229,8 @@ export default function FleetManagement() {
                         </div>
                         
                         {ship.damaged && ship.status !== 'active' && ship.requiredParts && ship.requiredParts.length > 0 && (
-                          <div className="mb-3 bg-gray-900/50 rounded-lg p-3 border border-red-500/30">
-                            <div className="text-red-400 text-xs font-bold mb-2">Required Parts</div>
+                          <div className="mb-3 bg-gray-900/50 rounded-lg p-3 border border-cyan-500/30">
+                            <div className="text-cyan-400 text-xs font-bold mb-2">Required Parts</div>
                             <div className="space-y-1">
                               {ship.requiredParts.map((part, idx) => {
                                 const available = (gameState?.parts || {})[part.name] || 0;
@@ -291,9 +291,9 @@ export default function FleetManagement() {
         {/* Inventory Tab */}
         {activeTab === 'inventory' && (
           <section id="fleetInventoryPanel">
-            <div className="bg-gradient-to-r from-gray-900 to-gray-800 border-2 border-red-500/50 rounded-lg p-4 mb-4">
+            <div className="bg-gradient-to-r from-gray-900 to-gray-800 border-2 border-cyan-500/50 rounded-lg p-4 mb-4">
               <div className="flex items-center justify-between">
-                <div className="text-red-400 font-bold">INVENTORY</div>
+                <div className="text-cyan-400 font-bold">INVENTORY</div>
                 <div className="flex items-center gap-2 text-gray-400 text-xs">
                   <Package className="w-4 h-4" />
                   <span>{totalParts} parts</span>
@@ -313,13 +313,13 @@ export default function FleetManagement() {
                   .map(([partName, qty]) => (
                     <div
                       key={partName}
-                      className="bg-gradient-to-r from-gray-800/60 to-gray-900/60 border border-red-500/20 rounded-lg p-3 flex items-center justify-between"
+                      className="bg-gradient-to-r from-gray-800/60 to-gray-900/60 border border-cyan-500/20 rounded-lg p-3 flex items-center justify-between"
                     >
                       <div className="flex items-center gap-3">
-                        <Package className="w-5 h-5 text-red-400" />
-                        <span className="text-red-100 text-sm">{partName}</span>
+                        <Package className="w-5 h-5 text-cyan-400" />
+                        <span className="text-cyan-100 text-sm">{partName}</span>
                       </div>
-                      <div className="text-red-400 font-bold text-sm">x{qty}</div>
+                      <div className="text-cyan-400 font-bold text-sm">x{qty}</div>
                     </div>
                   ))}
               </div>
