@@ -5,14 +5,14 @@
 @tailwind utilities;
 
 :root {
-  --device-bg: #0a1628;
-  --device-frame: #1a2a3a;
-  --cyan-glow: #00d4ff;
+  --device-bg: #1a0a0a;
+  --device-frame: #2a1a1a;
+  --red-glow: #ff4444;
   --amber-warn: #ffaa00;
   --red-alert: #ff4444;
   --green-ok: #00ff88;
-  --text-primary: #e0f4ff;
-  --text-secondary: #8fb4c9;
+  --text-primary: #ffe0e0;
+  --text-secondary: #c98f8f;
   --ui-font: 'VT323', monospace;
 }
 
@@ -55,20 +55,20 @@ button,
 }
 
 @layer utilities {
-  .glow-cyan {
-    text-shadow: 0 0 10px var(--cyan-glow), 0 0 20px var(--cyan-glow);
+  .glow-red {
+    text-shadow: 0 0 10px var(--red-glow), 0 0 20px var(--red-glow);
   }
 
   .glow-amber {
     text-shadow: 0 0 10px var(--amber-warn), 0 0 20px var(--amber-warn);
   }
 
-  .glow-red {
+  .glow-alert {
     text-shadow: 0 0 10px var(--red-alert), 0 0 20px var(--red-alert);
   }
 
-  .border-glow-cyan {
-    box-shadow: 0 0 10px rgba(0, 212, 255, 0.5), inset 0 0 10px rgba(0, 212, 255, 0.2);
+  .border-glow-red {
+    box-shadow: 0 0 10px rgba(255, 68, 68, 0.5), inset 0 0 10px rgba(255, 68, 68, 0.2);
   }
 
   .border-glow-amber {
@@ -89,7 +89,7 @@ button,
     bottom: 0;
     background: linear-gradient(
       transparent 0%,
-      rgba(0, 212, 255, 0.05) 50%,
+      rgba(255, 68, 68, 0.05) 50%,
       transparent 100%
     );
     background-size: 100% 4px;
@@ -156,8 +156,8 @@ button,
   .debug button,
   .debug [role="button"],
   .debug .hotspot {
-    outline: 2px solid rgba(0, 255, 255, 0.9) !important;
-    background: rgba(0, 255, 255, 0.1) !important;
+    outline: 2px solid rgba(255, 68, 68, 0.9) !important;
+    background: rgba(255, 68, 68, 0.1) !important;
   }
 
   .debug .frame-layer {
