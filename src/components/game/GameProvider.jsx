@@ -56,7 +56,7 @@ export default function GameProvider({ children }) {
       if (!states || states.length === 0) {
         // Initialize new game - clear any old tutorial progress
         localStorage.removeItem('tutorial_step');
-        
+
         // Initialize market stock with 6 random items
         const allItemIds = ['cracked_glass', 'evil_ai', 'rusty_screws', 'wire_splice', 'antimatter', 'sci_fi_panel', 'tangled_wire', 'stripped_bolts', 'outdated_map', 'expired_food'];
         const shuffled = allItemIds.sort(() => Math.random() - 0.5);
@@ -65,7 +65,7 @@ export default function GameProvider({ children }) {
         selectedIds.forEach(itemId => {
           initialStock[itemId] = Math.floor(Math.random() * 5) + 1; // 1-5 stock
         });
-        
+
         const newState = await base44.entities.GameState.create({
           credits: 5000,
           crystals: 10,
@@ -87,7 +87,7 @@ export default function GameProvider({ children }) {
         setMessages(['M.A.N.I. system initialized. Welcome, Commander.']);
       } else {
         let state = states[0];
-        
+
         // Fix existing game states that don't have market stock
         if (!state.marketStock || Object.keys(state.marketStock).filter(k => k !== 'shipStock').length === 0) {
           const allItemIds = ['cracked_glass', 'evil_ai', 'rusty_screws', 'wire_splice', 'antimatter', 'sci_fi_panel', 'tangled_wire', 'stripped_bolts', 'outdated_map', 'expired_food'];
@@ -97,15 +97,18 @@ export default function GameProvider({ children }) {
           selectedIds.forEach(itemId => {
             initialStock[itemId] = Math.floor(Math.random() * 5) + 1;
           });
-          
+
           state = await base44.entities.GameState.update(state.id, {
             marketStock: initialStock,
             marketRotationHistory: [selectedIds]
           });
         }
-        
+
         setGameState(state);
-        
+
+        // Clean up orphaned ships (active status but no active mission)
+        await cleanupOrphanedShips();
+
         // Random startup messages
         const startupMessages = [
           'M.A.N.I. system online. Now with 0.025% less sarcasm!',
@@ -139,6 +142,44 @@ export default function GameProvider({ children }) {
       setMessages(['M.A.N.I. system online (offline mode).']);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const cleanupOrphanedShips = async () => {
+    try {
+      // Get all active missions
+      const activeMissions = await base44.entities.Mission.filter({ status: 'active' }, '-created_date', 50);
+      const activeShipIds = new Set();
+
+      // Collect all ship IDs that are actually on active missions
+      activeMissions.forEach(mission => {
+        if (mission.ships) {
+          mission.ships.forEach(ship => {
+            if (ship.status === 'active') {
+              activeShipIds.add(ship.shipId);
+            }
+          });
+        }
+      });
+
+      // Get all ships with active or damaged status
+      const allShips = await base44.entities.Ship.filter({ isHired: true }, '-created_date', 100);
+      const orphanedShips = allShips.filter(ship => 
+        ship.status === 'active' && !activeShipIds.has(ship.id)
+      );
+
+      // Reset orphaned ships to idle (unless damaged)
+      for (const ship of orphanedShips) {
+        const newStatus = ship.health < 100 ? 'damaged' : 'idle';
+        await base44.entities.Ship.update(ship.id, { status: newStatus });
+        console.log(`[CLEANUP] Reset orphaned ship ${ship.name} to ${newStatus}`);
+      }
+
+      if (orphanedShips.length > 0) {
+        queryClient.invalidateQueries({ queryKey: ['ships', 'inventory'] });
+      }
+    } catch (error) {
+      console.error('Error cleaning up orphaned ships:', error);
     }
   };
   
