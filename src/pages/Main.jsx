@@ -159,9 +159,9 @@ export default function Main() {
         />
       )}
 
-      <div className="flex flex-col min-h-full pb-6" style={{ maxWidth: '100%', paddingLeft: 'var(--safe-x)', paddingRight: 'var(--safe-x)', boxSizing: 'border-box' }}>
+      <div className="flex flex-col min-h-full pb-6">
         <ResourceHeader />
-        <div className="space-y-3" style={{ paddingTop: '28px' }}>
+        <div className="space-y-3">
         {/* Message Console */}
         <div className="bg-gradient-to-br from-cyan-900/30 to-blue-900/30 border-2 border-cyan-600/50 rounded-2xl p-4 w-full" style={{ height: '160px', boxSizing: 'border-box' }}>
           <div 
