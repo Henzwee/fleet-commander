@@ -159,7 +159,7 @@ export default function Main() {
         />
       )}
 
-      <div className="flex flex-col min-h-full pb-6">
+      <div className="flex flex-col min-h-full pb-6 px-4">
         <ResourceHeader />
         <div className="space-y-3">
         {/* Message Console */}
