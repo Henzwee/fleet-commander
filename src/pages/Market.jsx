@@ -352,7 +352,12 @@ export default function Market() {
               className="bg-purple-600 active:bg-purple-700 disabled:bg-gray-600 disabled:cursor-not-allowed border-2 border-purple-500 disabled:border-gray-500 rounded-lg px-3 py-1 text-white font-bold text-xs transition-all flex items-center gap-1"
             >
               <RefreshCw className="w-3 h-3" />
-              <span>◆10</span>
+              <img 
+                src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695af5ca435140b76c0dadc9/26d2c74b8_crystal.png" 
+                alt="Crystal" 
+                className="w-3 h-3 inline-block"
+              />
+              <span>10</span>
             </button>
           </div>
         </div>
@@ -452,7 +457,18 @@ export default function Market() {
                 }
                 className="bg-green-600 active:bg-green-700 disabled:bg-gray-600 disabled:cursor-not-allowed border-2 border-green-500 disabled:border-gray-500 rounded-lg px-6 py-2 text-white font-bold text-sm transition-all"
               >
-                {(activeTab === 'scrap' && item.stock === 0) ? 'OUT' : `${item.currency === 'crystals' ? '◆' : '$'}${item.price}`}
+                {(activeTab === 'scrap' && item.stock === 0) ? 'OUT' : (
+                  <>
+                    {item.currency === 'crystals' ? (
+                      <img 
+                        src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695af5ca435140b76c0dadc9/26d2c74b8_crystal.png" 
+                        alt="Crystal" 
+                        className="w-4 h-4 inline-block"
+                      />
+                    ) : '$'}
+                    {item.price}
+                  </>
+                )}
               </button>
               </div>
               ))}

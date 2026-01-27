@@ -28,7 +28,11 @@ export default function ResourceHeader() {
         </div>
         
         <div className="flex items-center gap-1.5">
-          <Zap className="w-4 h-4 text-purple-400" />
+          <img 
+            src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695af5ca435140b76c0dadc9/26d2c74b8_crystal.png" 
+            alt="Crystal" 
+            className="w-4 h-4"
+          />
           <span className="text-purple-400 font-bold text-sm">
             {gameState?.crystals || 0}
           </span>
