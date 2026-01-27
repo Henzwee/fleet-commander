@@ -408,7 +408,12 @@ export default function Market() {
             >
               <div className="flex items-center gap-3">
                 {item.imageUrl ? (
-                  <img src={item.imageUrl} alt={item.name} className="w-12 h-12 object-contain" />
+                  <img 
+                    src={item.imageUrl} 
+                    alt={item.name} 
+                    className="w-12 h-12 object-contain" 
+                    style={item.imageUrl.includes('unregistered1.png') ? { transform: 'scale(0.65)' } : {}}
+                  />
                 ) : (
                   <div className="text-3xl">{item.icon}</div>
                 )}
