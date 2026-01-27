@@ -10,13 +10,14 @@ export default function MissionReportScreen({ mission, event, onClose, onChoice 
       bottom: 0,
       left: 0,
       right: 0,
-      zIndex: 5,
-      paddingTop: 'var(--content-pad-top)',
-      paddingBottom: 'var(--content-pad-bottom)',
-      paddingLeft: 'var(--content-pad-left)',
-      paddingRight: 'var(--content-pad-right)'
+      zIndex: 5
     }}>
-      <div className="bg-gradient-to-br from-gray-900 to-gray-950 border-2 border-cyan-500 w-full p-6 pb-8 relative flex flex-col" style={{ maxHeight: '100%' }}>
+      <div className="bg-gradient-to-br from-gray-900 to-gray-950 border-2 border-cyan-500 w-full h-full relative flex flex-col" style={{
+        paddingTop: 'calc(var(--content-pad-top) + 24px)',
+        paddingBottom: 'calc(var(--content-pad-bottom) + 32px)',
+        paddingLeft: 'calc(var(--content-pad-left) + 24px)',
+        paddingRight: 'calc(var(--content-pad-right) + 24px)'
+      }}>
         <div className="flex items-center gap-2 mb-6">
           <Radio className="w-5 h-5 text-cyan-400 animate-pulse" />
           <h2 className="text-cyan-400 font-bold text-lg">M.A.N.I. REPORT</h2>
