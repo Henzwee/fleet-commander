@@ -33,7 +33,11 @@ export default function CrystalTimeSkip({ mission, onConfirm, onCancel, crystals
 
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2 text-purple-400">
-                <Zap className="w-4 h-4" />
+                <img 
+                  src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695af5ca435140b76c0dadc9/26d2c74b8_crystal.png" 
+                  alt="Crystal" 
+                  className="w-4 h-4"
+                />
                 <span className="text-sm">Crystal Cost</span>
               </div>
               <span className="text-purple-400 font-bold">{crystalCost}</span>
