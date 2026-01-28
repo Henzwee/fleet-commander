@@ -346,18 +346,20 @@ export default function Main() {
           bottom: 0,
           left: 0,
           right: 0,
-          zIndex: 5,
-          paddingTop: 'var(--content-pad-top)',
-          paddingBottom: 'var(--content-pad-bottom)',
-          paddingLeft: 'var(--content-pad-left)',
-          paddingRight: 'var(--content-pad-right)'
+          zIndex: 5
         }}>
-          <div className="bg-gradient-to-br from-gray-900 to-gray-950 border-2 border-cyan-500 w-full p-6 pb-8 relative flex flex-col" style={{ maxHeight: '100%' }}>
+          <div className="bg-gradient-to-br from-gray-900 to-gray-950 border-2 border-cyan-500 w-full h-full relative flex flex-col overflow-y-auto" style={{
+            paddingTop: 'calc(var(--content-pad-top) + 24px)',
+            paddingBottom: 'calc(var(--content-pad-bottom) + 32px)',
+            paddingLeft: 'calc(var(--content-pad-left) + 24px)',
+            paddingRight: 'calc(var(--content-pad-right) + 24px)',
+            WebkitOverflowScrolling: 'touch'
+          }}>
             <div className="flex items-center gap-2 mb-6">
               <h2 className="text-cyan-400 font-bold text-lg">MISSION DEBRIEF</h2>
             </div>
             
-            <div className="space-y-4 flex-1 overflow-y-auto">
+            <div className="space-y-4 flex-1">
               <div className="bg-cyan-900/20 border-2 border-cyan-500/50 rounded-lg p-4">
                 <div className="text-amber-400 font-bold text-sm mb-2">Credits Earned</div>
                 <div className="text-white text-2xl font-bold">${debriefData.credits}</div>
