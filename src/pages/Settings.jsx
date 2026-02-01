@@ -52,14 +52,17 @@ export default function Settings() {
                   <div className="flex gap-4">
                     {/* Ship Images */}
                     <div className="flex-shrink-0 w-20 flex flex-col gap-2 justify-start py-2">
-                      {shipImages.map((img, idx) => (
-                        <img 
-                          key={idx}
-                          src={img} 
-                          alt={`${tier} ${idx + 1}`} 
-                          className={`w-full object-contain ${tier === 'Unregistered' ? 'h-8' : 'h-14'}`}
-                        />
-                      ))}
+                      {shipImages.map((img, idx) => {
+                        const isUnregistered1 = img.includes('unregistered1.png');
+                        return (
+                          <img 
+                            key={idx}
+                            src={img} 
+                            alt={`${tier} ${idx + 1}`} 
+                            className={`w-full object-contain ${isUnregistered1 ? 'h-8' : 'h-16'}`}
+                          />
+                        );
+                      })}
                     </div>
                     
                     {/* Stats */}
