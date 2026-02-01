@@ -120,7 +120,7 @@ export default function MissionReportScreen({ mission, event, onClose, onChoice,
               onClose();
             }}
             disabled={crystals < crystalCost}
-            className="w-full bg-purple-600 active:bg-purple-700 disabled:bg-gray-600 disabled:cursor-not-allowed border-2 border-purple-500 disabled:border-gray-500 rounded-lg py-2 text-white font-bold text-sm transition-all mb-3 flex items-center justify-center gap-2"
+            className="w-full bg-gradient-to-br from-purple-600 to-purple-700 active:from-purple-700 active:to-purple-800 disabled:bg-gray-600 disabled:cursor-not-allowed border-2 border-purple-400 disabled:border-gray-500 rounded-lg py-2 text-white font-bold text-sm transition-all mb-3 flex items-center justify-center gap-2"
           >
             <img 
               src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695af5ca435140b76c0dadc9/26d2c74b8_crystal.png" 
