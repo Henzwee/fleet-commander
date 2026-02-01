@@ -51,13 +51,13 @@ export default function Settings() {
                 >
                   <div className="flex gap-4">
                     {/* Ship Images */}
-                    <div className="flex-shrink-0 w-24 flex flex-col gap-1">
+                    <div className="flex-shrink-0 w-28 flex flex-col gap-2 justify-center">
                       {shipImages.map((img, idx) => (
                         <img 
                           key={idx}
                           src={img} 
                           alt={`${tier} ${idx + 1}`} 
-                          className="w-full h-6 object-contain"
+                          className="w-full h-auto object-contain"
                         />
                       ))}
                     </div>
