@@ -1,7 +1,7 @@
 import React from 'react';
 import DeviceFrame from '../components/game/DeviceFrame';
 import ResourceHeader from '../components/game/ResourceHeader';
-import { getTierConfig, SHIP_TIERS } from '../components/game/ShipTierConfig';
+import { getTierConfig, TIER_ORDER } from '../components/game/ShipTierConfig';
 import { getRandomShipImage } from '../components/game/ShipImages';
 
 export default function Settings() {
@@ -40,7 +40,7 @@ export default function Settings() {
           <h1 className="text-2xl font-bold text-cyan-400 mb-4">SHIP TIER STATS</h1>
           
           <div className="space-y-4">
-            {SHIP_TIERS.map((tier) => {
+            {TIER_ORDER.map((tier) => {
               const config = getTierConfig(tier);
               const shipImage = getRandomShipImage(tier);
               
