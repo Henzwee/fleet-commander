@@ -80,6 +80,28 @@ export default function MissionReportScreen({ mission, event, onClose, onChoice 
               ))}
             </div>
           </div>
+        ) : mission.isFailed ? (
+          <div className="bg-red-900/20 border-2 border-red-500/50 rounded-lg p-4 mb-4">
+            <div className="text-red-400 text-sm font-bold mb-2">
+              {mission.ships?.some(s => s.status === 'active')
+                ? `${mission.ships.find(s => s.status === 'destroyed')?.shipName} has been compromised. But the Ship Faced handbook says "no ship is ever truly totaled."`
+                : `${mission.shipNames} was unsuccessful in finishing the mission. This will put you behind on your monthly quota.`
+              }
+            </div>
+            <button
+              onClick={async () => {
+                await mission.ships?.forEach(async (ship) => {
+                  if (ship.status === 'destroyed') {
+                    await onChoice('tow_back');
+                  }
+                });
+                onClose();
+              }}
+              className="w-full bg-gray-700 active:bg-gray-600 border-2 border-gray-600 rounded-lg py-2 text-white font-bold text-xs transition-all mt-3"
+            >
+              TOW BACK
+            </button>
+          </div>
         ) : (
           <div className="bg-green-900/20 border-2 border-green-500/50 rounded-lg p-4 mb-4">
             <div className="text-green-400 text-sm">

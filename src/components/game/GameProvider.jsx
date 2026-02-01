@@ -571,6 +571,11 @@ export default function GameProvider({ children }) {
   };
   
   const handleEventChoice = async (choiceId) => {
+    if (choiceId === 'tow_back') {
+      // Handle towing destroyed ships back
+      return;
+    }
+
     if (!currentEvent) return;
     
     switch (currentEvent.type) {
