@@ -461,6 +461,7 @@ export default function GameProvider({ children }) {
       ],
       missionId: mission.id,
       shipId: ship?.id,
+      shipTier: ship?.tier,
       type: 'planet_discovery',
       expiresAt: new Date(Date.now() + 15 * 60 * 1000).toISOString()
     });
@@ -485,6 +486,7 @@ export default function GameProvider({ children }) {
       ],
       missionId: mission.id,
       shipId: ship?.id,
+      shipTier: ship?.tier,
       totalWages: activeShip.hourlyPay * mission.duration,
       type: 'hostile_fleet',
       expiresAt: new Date(Date.now() + 15 * 60 * 1000).toISOString()
@@ -494,8 +496,12 @@ export default function GameProvider({ children }) {
   };
 
   const createScavengeEvent = async (mission) => {
-    const ship = await base44.entities.Ship.filter({ id: mission.shipId });
-    const shipName = ship[0]?.name || 'Unknown Ship';
+    const activeShip = mission.ships?.find(s => s.status === 'active');
+    if (!activeShip) return;
+
+    const currentShips = queryClient.getQueryData(['ships', 'inventory']) || [];
+    const ship = currentShips.find(s => s.id === activeShip.shipId);
+    const shipName = ship?.name || 'Unknown Ship';
 
     setCurrentEvent({
       title: 'Derelict Vessel Located',
@@ -505,6 +511,8 @@ export default function GameProvider({ children }) {
         { id: 'leave', label: 'LEAVE IT' }
       ],
       missionId: mission.id,
+      shipId: ship?.id,
+      shipTier: ship?.tier,
       type: 'scavenge'
     });
 
@@ -721,7 +729,18 @@ export default function GameProvider({ children }) {
           const ship = currentShips.find(s => s.id === currentEvent.shipId);
           const shipName = ship?.name || 'Unknown Ship';
 
-          if (Math.random() < 0.5) {
+          // Tier-based success rate
+          const tierSuccessRate = {
+            'Unregistered': 0.50,
+            'Known': 0.60,
+            'Notorious': 0.70,
+            'Esteemed': 0.80,
+            'Renowned': 0.90,
+            'Legendary': 0.99
+          };
+          const successRate = tierSuccessRate[currentEvent.shipTier] || 0.50;
+
+          if (Math.random() < successRate) {
             // Success - reward credits and parts
             const bonusCredits = Math.floor(Math.random() * 501) + 800; // 800-1300
             const bonusParts = Math.floor(Math.random() * 3) + 3; // 3-5 parts
@@ -815,7 +834,18 @@ export default function GameProvider({ children }) {
           const ship = currentShips.find(s => s.id === currentEvent.shipId);
           const shipName = ship?.name || 'Unknown Ship';
 
-          if (Math.random() < 0.5) {
+          // Tier-based success rate
+          const tierSuccessRate = {
+            'Unregistered': 0.50,
+            'Known': 0.60,
+            'Notorious': 0.70,
+            'Esteemed': 0.80,
+            'Renowned': 0.90,
+            'Legendary': 0.99
+          };
+          const successRate = tierSuccessRate[currentEvent.shipTier] || 0.50;
+
+          if (Math.random() < successRate) {
             // Success - reward credits
             const bonusCredits = Math.floor(Math.random() * 501) + 1000; // 1000-1500
             await updateGameState({ credits: gameState.credits + bonusCredits });
@@ -874,7 +904,18 @@ export default function GameProvider({ children }) {
           const ship = currentShips.find(s => s.id === activeShip?.shipId);
           const shipName = ship?.name || 'Unknown Ship';
 
-          if (Math.random() < 0.5) {
+          // Tier-based success rate
+          const tierSuccessRate = {
+            'Unregistered': 0.50,
+            'Known': 0.60,
+            'Notorious': 0.70,
+            'Esteemed': 0.80,
+            'Renowned': 0.90,
+            'Legendary': 0.99
+          };
+          const successRate = tierSuccessRate[currentEvent.shipTier] || 0.50;
+
+          if (Math.random() < successRate) {
             // Success - get parts
             const partsFound = Math.random() < 0.5 ? 2 : (Math.random() < 0.75 ? 3 : 4);
             const partNames = [
