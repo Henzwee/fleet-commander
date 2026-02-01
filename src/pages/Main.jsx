@@ -54,8 +54,9 @@ export default function Main() {
     try {
       const missions = await base44.entities.Mission.filter({ status: 'active' }, '-created_date', 50) || [];
       const completed = await base44.entities.Mission.filter({ status: 'completed' }, '-created_date', 50) || [];
+      const failed = await base44.entities.Mission.filter({ status: 'failed' }, '-created_date', 50) || [];
 
-      const allMissions = [...missions, ...completed].filter(m => m && m.id);
+      const allMissions = [...missions, ...completed, ...failed].filter(m => m && m.id);
 
       const missionsWithTime = await Promise.all(allMissions.map(async mission => {
         const startTime = new Date(mission.startTime);
@@ -99,6 +100,7 @@ export default function Main() {
           activeShipCount: activeShips.length,
           totalWages,
           isComplete: mission.status === 'completed' || remaining <= 0,
+          isFailed: mission.status === 'failed',
           timeRemaining: `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`,
           timeRemainingMinutes: remaining * 60
         };
@@ -224,11 +226,14 @@ export default function Main() {
             <div className="space-y-3 overflow-y-auto">
               {activeMissions.map((mission) => {
                 const hasEvent = currentEvent?.missionId === mission.id;
+                const isFailed = mission.isFailed;
                 return (
                   <div
                     key={mission.id}
                     className={`bg-gradient-to-r from-cyan-800/20 to-blue-800/20 border rounded-lg p-4 cursor-pointer transition-all ${
-                      hasEvent 
+                      isFailed
+                        ? 'border-red-500 animate-pulse'
+                        : hasEvent 
                         ? 'border-amber-500 animate-pulse' 
                         : 'border-cyan-600/30 hover:border-cyan-500'
                     }`}
@@ -291,6 +296,16 @@ export default function Main() {
                           className="bg-green-600 hover:bg-green-700 border-2 border-green-500 rounded px-3 py-1 text-white font-bold text-xs"
                         >
                           COLLECT
+                        </button>
+                      ) : mission.isFailed ? (
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedMission(mission);
+                          }}
+                          className="bg-red-600 hover:bg-red-700 border-2 border-red-500 rounded px-3 py-1 text-white font-bold text-xs animate-pulse"
+                        >
+                          DEBRIEF
                         </button>
                       ) : (
                         <div className="flex items-center gap-2">
