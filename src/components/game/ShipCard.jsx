@@ -33,7 +33,7 @@ export default function ShipCard({ ship, onClick, showPrice = false }) {
             src={ship.imageUrl} 
             alt={ship.name}
             className="w-20 h-20 object-contain"
-            style={ship.imageUrl.includes('unregistered1.png') ? { transform: 'scale(0.65)' } : {}}
+            style={ship.imageUrl.includes('unregistered1.png') ? { transform: 'scale(0.6)' } : {}}
           />
         </div>
       )}
