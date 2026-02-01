@@ -2,7 +2,7 @@ import React from 'react';
 import DeviceFrame from '../components/game/DeviceFrame';
 import ResourceHeader from '../components/game/ResourceHeader';
 import { getTierConfig, TIER_ORDER } from '../components/game/ShipTierConfig';
-import { getRandomShipImage } from '../components/game/ShipImages';
+import { SHIP_IMAGES } from '../components/game/ShipImages';
 
 export default function Settings() {
   const tierColors = {
@@ -42,7 +42,7 @@ export default function Settings() {
           <div className="space-y-4">
             {TIER_ORDER.map((tier) => {
               const config = getTierConfig(tier);
-              const shipImage = getRandomShipImage(tier);
+              const shipImages = SHIP_IMAGES[tier] || [];
               
               return (
                 <div 
@@ -50,15 +50,16 @@ export default function Settings() {
                   className={`bg-gradient-to-r from-gray-900 to-gray-800 border-2 ${tierColors[tier]} rounded-lg p-4`}
                 >
                   <div className="flex gap-4">
-                    {/* Ship Image */}
-                    <div className="flex-shrink-0 w-20">
-                      {shipImage && (
+                    {/* Ship Images */}
+                    <div className="flex-shrink-0 w-24 flex flex-col gap-1">
+                      {shipImages.map((img, idx) => (
                         <img 
-                          src={shipImage} 
-                          alt={tier} 
-                          className="w-full h-20 object-contain"
+                          key={idx}
+                          src={img} 
+                          alt={`${tier} ${idx + 1}`} 
+                          className="w-full h-6 object-contain"
                         />
-                      )}
+                      ))}
                     </div>
                     
                     {/* Stats */}
