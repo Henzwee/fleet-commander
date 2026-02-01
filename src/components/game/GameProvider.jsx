@@ -316,6 +316,11 @@ export default function GameProvider({ children }) {
           await createDistressEvent(mission);
         }
 
+        // Roll for planet discovery (15% chance)
+        if (Math.random() < 0.15) {
+          await createPlanetDiscoveryEvent(mission);
+        }
+
         // Roll for forgotten ship (25% chance)
         if (Math.random() < 0.25) {
           await createScavengeEvent(mission);
@@ -443,6 +448,30 @@ export default function GameProvider({ children }) {
     addMessage(`${shipName} detected distress signal. Awaiting orders.`);
   };
   
+  const createPlanetDiscoveryEvent = async (mission) => {
+    const activeShip = mission.ships?.find(s => s.status === 'active');
+    if (!activeShip) return;
+
+    const currentShips = queryClient.getQueryData(['ships', 'inventory']) || [];
+    const ship = currentShips.find(s => s.id === activeShip.shipId);
+    const shipName = ship?.name || 'Unknown Ship';
+
+    setCurrentEvent({
+      title: 'New Planet Discovered',
+      description: `${shipName} has discovered a new planet. Ship Faced policy states that such planets shall be taken in their name. There's sure to be a substantial reward.`,
+      choices: [
+        { id: 'claim', label: 'CLAIM', primary: true },
+        { id: 'ignore', label: 'IGNORE' }
+      ],
+      missionId: mission.id,
+      shipId: ship?.id,
+      type: 'planet_discovery',
+      expiresAt: new Date(Date.now() + 15 * 60 * 1000).toISOString()
+    });
+
+    addMessage(`${shipName} discovered an uncharted planet.`);
+  };
+
   const createScavengeEvent = async (mission) => {
     const ship = await base44.entities.Ship.filter({ id: mission.shipId });
     const shipName = ship[0]?.name || 'Unknown Ship';
@@ -660,6 +689,63 @@ export default function GameProvider({ children }) {
         }
         break;
         
+      case 'planet_discovery':
+        if (choiceId === 'claim') {
+          const currentShips = queryClient.getQueryData(['ships', 'inventory']) || [];
+          const ship = currentShips.find(s => s.id === currentEvent.shipId);
+          const shipName = ship?.name || 'Unknown Ship';
+
+          if (Math.random() < 0.5) {
+            // Success - reward credits
+            const bonusCredits = Math.floor(Math.random() * 501) + 1000; // 1000-1500
+            await updateGameState({ credits: gameState.credits + bonusCredits });
+
+            const mission = await base44.entities.Mission.filter({ id: currentEvent.missionId });
+            if (mission[0]) {
+              await base44.entities.Mission.update(currentEvent.missionId, {
+                encounterResult: `+$${bonusCredits} (planet claim)`
+              });
+            }
+
+            addMessage(`${shipName} successfully claimed the planet and received $${bonusCredits} reward!`);
+          } else {
+            // Failure - pirate hideout, 50% damage
+            const newHealth = Math.max(0, ship.health - 50);
+            await updateShip(currentEvent.shipId, {
+              health: newHealth,
+              damaged: newHealth < 100,
+              status: newHealth === 0 ? 'destroyed' : 'damaged'
+            });
+
+            if (newHealth === 0) {
+              const mission = await base44.entities.Mission.filter({ id: currentEvent.missionId });
+              if (mission[0]) {
+                const updatedShips = mission[0].ships.map(s => 
+                  s.shipId === currentEvent.shipId ? { ...s, status: 'destroyed' } : s
+                );
+                const anyActive = updatedShips.some(s => s.status === 'active');
+                await base44.entities.Mission.update(currentEvent.missionId, {
+                  ships: updatedShips,
+                  status: anyActive ? 'active' : 'failed',
+                  encounterResult: `-50% damage (DESTROYED - pirate hideout)`
+                });
+              }
+            } else {
+              const mission = await base44.entities.Mission.filter({ id: currentEvent.missionId });
+              if (mission[0]) {
+                await base44.entities.Mission.update(currentEvent.missionId, {
+                  encounterResult: `-50% damage (pirate hideout)`
+                });
+              }
+            }
+
+            addMessage(`The planet turned out to be a secret hideout for a gang of pirates. They quickly swarmed your fleet and overwhelmed their defenses. They managed to escape before total annihilation.`);
+          }
+        } else {
+          addMessage('Planet discovery ignored. Ship continuing mission.');
+        }
+        break;
+
       case 'scavenge':
         if (choiceId === 'scavenge') {
           // Roll for parts
@@ -668,13 +754,13 @@ export default function GameProvider({ children }) {
             'Box of tangled wire', 'Rusty screws', 'Cracked glass', 
             'Wire splice', 'Stripped bolts'
           ];
-          
+
           const newParts = { ...gameState.parts };
           for (let i = 0; i < partsFound; i++) {
             const partName = partNames[Math.floor(Math.random() * partNames.length)];
             newParts[partName] = (newParts[partName] || 0) + 1;
           }
-          
+
           await updateGameState({ parts: newParts });
           addMessage(`Salvaged ${partsFound} parts from derelict vessel.`);
         } else {
