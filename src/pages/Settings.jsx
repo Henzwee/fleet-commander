@@ -59,7 +59,7 @@ export default function Settings() {
                             key={idx}
                             src={img} 
                             alt={`${tier} ${idx + 1}`} 
-                            className={`w-full object-contain ${isUnregistered1 ? 'h-8' : 'h-16'}`}
+                            className={`w-full object-contain ${isUnregistered1 ? 'h-10' : 'h-16'}`}
                           />
                         );
                       })}
