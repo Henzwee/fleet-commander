@@ -29,7 +29,7 @@ export default function Settings() {
     'Notorious': '30%',
     'Esteemed': '20%',
     'Renowned': '10%',
-    'Legendary': '5%'
+    'Legendary': '1%'
   };
 
   return (
@@ -57,7 +57,7 @@ export default function Settings() {
                           key={idx}
                           src={img} 
                           alt={`${tier} ${idx + 1}`} 
-                          className="w-full h-8 object-contain"
+                          className={`w-full object-contain ${tier === 'Unregistered' ? 'h-8' : 'h-14'}`}
                         />
                       ))}
                     </div>
