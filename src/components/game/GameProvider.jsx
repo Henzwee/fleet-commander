@@ -748,21 +748,55 @@ export default function GameProvider({ children }) {
 
       case 'scavenge':
         if (choiceId === 'scavenge') {
-          // Roll for parts
-          const partsFound = Math.random() < 0.5 ? 2 : (Math.random() < 0.75 ? 3 : 4);
-          const partNames = [
-            'Box of tangled wire', 'Rusty screws', 'Cracked glass', 
-            'Wire splice', 'Stripped bolts'
-          ];
+          const currentShips = queryClient.getQueryData(['ships', 'inventory']) || [];
+          const mission = await base44.entities.Mission.filter({ id: currentEvent.missionId });
+          const activeShip = mission[0]?.ships?.find(s => s.status === 'active');
+          const ship = currentShips.find(s => s.id === activeShip?.shipId);
+          const shipName = ship?.name || 'Unknown Ship';
 
-          const newParts = { ...gameState.parts };
-          for (let i = 0; i < partsFound; i++) {
-            const partName = partNames[Math.floor(Math.random() * partNames.length)];
-            newParts[partName] = (newParts[partName] || 0) + 1;
+          if (Math.random() < 0.5) {
+            // Success - get parts
+            const partsFound = Math.random() < 0.5 ? 2 : (Math.random() < 0.75 ? 3 : 4);
+            const partNames = [
+              'Box of tangled wire', 'Rusty screws', 'Cracked glass', 
+              'Wire splice', 'Stripped bolts'
+            ];
+
+            const newParts = { ...gameState.parts };
+            for (let i = 0; i < partsFound; i++) {
+              const partName = partNames[Math.floor(Math.random() * partNames.length)];
+              newParts[partName] = (newParts[partName] || 0) + 1;
+            }
+
+            await updateGameState({ parts: newParts });
+            addMessage(`Salvaged ${partsFound} parts from derelict vessel.`);
+          } else {
+            // Failure - mind slugs, 25% damage
+            const newHealth = Math.max(0, ship.health - 25);
+            await updateShip(ship.id, {
+              health: newHealth,
+              damaged: newHealth < 100,
+              status: newHealth === 0 ? 'destroyed' : 'damaged'
+            });
+
+            if (newHealth === 0) {
+              const updatedShips = mission[0].ships.map(s => 
+                s.shipId === ship.id ? { ...s, status: 'destroyed' } : s
+              );
+              const anyActive = updatedShips.some(s => s.status === 'active');
+              await base44.entities.Mission.update(currentEvent.missionId, {
+                ships: updatedShips,
+                status: anyActive ? 'active' : 'failed',
+                encounterResult: `-25% damage (DESTROYED - mind slugs)`
+              });
+            } else {
+              await base44.entities.Mission.update(currentEvent.missionId, {
+                encounterResult: `-25% damage (mind slugs)`
+              });
+            }
+
+            addMessage(`The abandoned ship was infested with mind slugs. Your crew managed to kill several of them, but they were severely outnumbered. The crew managed to escape before being succumbed to the hive mind.`);
           }
-
-          await updateGameState({ parts: newParts });
-          addMessage(`Salvaged ${partsFound} parts from derelict vessel.`);
         } else {
           addMessage('Derelict vessel left undisturbed.');
         }
