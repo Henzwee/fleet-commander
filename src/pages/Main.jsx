@@ -35,7 +35,7 @@ export default function Main() {
     
     const interval = setInterval(() => {
       loadActiveMissions();
-    }, 5000);
+    }, 30000); // Check every 30 seconds instead of 5
     return () => clearInterval(interval);
   }, [gameState]);
 
