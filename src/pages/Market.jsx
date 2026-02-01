@@ -157,21 +157,51 @@ export default function Market() {
         return;
       }
 
-      // Generate ships based on player's highest tier
+      // Use existing market seed to generate consistent ships
+      if (!gameState.lastMarketRotationSeed) {
+        const seed = Date.now();
+        updateGameState({ lastMarketRotationSeed: seed });
+        return;
+      }
+
+      // Generate ships based on seed for consistency
       const ships = [];
-      for (let i = 0; i < gameState.marketStock.shipStock; i++) {
-        const tier = rollShipTier();
+      const seed = gameState.lastMarketRotationSeed;
+      const shipCount = gameState.marketStock.shipStock;
+
+      for (let i = 0; i < shipCount; i++) {
+        // Use seed-based random for tier
+        const tierRand = Math.sin(seed + i * 100) * 10000;
+        const tierVal = tierRand - Math.floor(tierRand);
+        
+        let tier;
+        if (tierVal < 0.30) tier = 'Unregistered';
+        else if (tierVal < 0.55) tier = 'Known';
+        else if (tierVal < 0.75) tier = 'Notorious';
+        else if (tierVal < 0.90) tier = 'Esteemed';
+        else if (tierVal < 0.98) tier = 'Renowned';
+        else tier = 'Legendary';
+
         const tierConfig = getTierConfig(tier);
 
+        // Use seed for consistent pricing
+        const payRand = Math.sin(seed + i * 200) * 10000;
+        const payVal = payRand - Math.floor(payRand);
         const [minPay, maxPay] = tierConfig.payRange;
-        const hourlyPay = Math.floor(Math.random() * (maxPay - minPay + 1)) + minPay;
+        const hourlyPay = Math.floor(payVal * (maxPay - minPay + 1)) + minPay;
 
+        const priceRand = Math.sin(seed + i * 300) * 10000;
+        const priceVal = priceRand - Math.floor(priceRand);
         const [min, max] = tierConfig.priceRange;
-        const price = Math.floor(Math.random() * (max - min + 1)) + min;
+        const price = Math.floor(priceVal * (max - min + 1)) + min;
 
+        // Use seed for consistent naming
+        const nameRand = Math.sin(seed + i * 400) * 10000;
+        const nameVal = Math.floor((nameRand - Math.floor(nameRand)) * 1000);
         const names = ['Vanguard', 'Sentinel', 'Pathfinder', 'Explorer', 'Voyager'];
+        
         ships.push({
-          name: names[i] + '-' + Math.floor(Math.random() * 1000),
+          name: names[i % names.length] + '-' + nameVal,
           tier,
           imageUrl: getRandomShipImage(tier),
           maxLY: tierConfig.maxLY,
