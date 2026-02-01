@@ -51,24 +51,24 @@ export default function Settings() {
                 >
                   <div className="flex gap-4">
                     {/* Ship Images */}
-                    <div className="flex-shrink-0 w-28 flex flex-col gap-2 justify-center">
+                    <div className="flex-shrink-0 w-20 flex flex-col gap-2 justify-start py-2">
                       {shipImages.map((img, idx) => (
                         <img 
                           key={idx}
                           src={img} 
                           alt={`${tier} ${idx + 1}`} 
-                          className="w-full h-auto object-contain"
+                          className="w-full h-8 object-contain"
                         />
                       ))}
                     </div>
                     
                     {/* Stats */}
                     <div className="flex-1">
-                      <div className={`font-bold text-lg mb-2 ${tierColors[tier]}`}>
+                      <div className={`font-bold text-lg mb-3 ${tierColors[tier]}`}>
                         {tier}
                       </div>
                       
-                      <div className="grid grid-cols-2 gap-2 text-xs">
+                      <div className="space-y-2 text-xs">
                         <div>
                           <div className="text-gray-500">Hourly Wage</div>
                           <div className="text-cyan-100 font-bold">
@@ -97,7 +97,7 @@ export default function Settings() {
                           </div>
                         </div>
                         
-                        <div className="col-span-2">
+                        <div>
                           <div className="text-gray-500">Market Price</div>
                           <div className="text-amber-400 font-bold">
                             ${config.priceRange[0]} - ${config.priceRange[1]}
