@@ -311,19 +311,15 @@ export default function GameProvider({ children }) {
           }
         }
 
-        // Roll for distress signal (5% chance per hour)
-        if (Math.random() < 0.05) {
-          await createDistressEvent(mission);
-        }
-
-        // Roll for planet discovery (15% chance)
+        // Roll for special encounters (15% chance)
         if (Math.random() < 0.15) {
-          await createPlanetDiscoveryEvent(mission);
-        }
-
-        // Roll for forgotten ship (25% chance)
-        if (Math.random() < 0.25) {
-          await createScavengeEvent(mission);
+          const encounterType = Math.floor(Math.random() * 4);
+          switch (encounterType) {
+            case 0: await createDistressEvent(mission); break;
+            case 1: await createPlanetDiscoveryEvent(mission); break;
+            case 2: await createScavengeEvent(mission); break;
+            case 3: await createHostileFleetEvent(mission); break;
+          }
         }
       }
     
@@ -470,6 +466,31 @@ export default function GameProvider({ children }) {
     });
 
     addMessage(`${shipName} discovered an uncharted planet.`);
+  };
+
+  const createHostileFleetEvent = async (mission) => {
+    const activeShip = mission.ships?.find(s => s.status === 'active');
+    if (!activeShip) return;
+
+    const currentShips = queryClient.getQueryData(['ships', 'inventory']) || [];
+    const ship = currentShips.find(s => s.id === activeShip.shipId);
+    const shipName = ship?.name || 'Unknown Ship';
+
+    setCurrentEvent({
+      title: 'Hostile Fleet Detected',
+      description: `${shipName} is reporting a fleet of hostile ships warping in on their location. Handbook says it's best to surrender in these situations, but the captain believes he can take them.`,
+      choices: [
+        { id: 'fight', label: 'FIGHT', primary: true },
+        { id: 'surrender', label: 'SURRENDER' }
+      ],
+      missionId: mission.id,
+      shipId: ship?.id,
+      totalWages: activeShip.hourlyPay * mission.duration,
+      type: 'hostile_fleet',
+      expiresAt: new Date(Date.now() + 15 * 60 * 1000).toISOString()
+    });
+
+    addMessage(`${shipName} detected hostile fleet approaching!`);
   };
 
   const createScavengeEvent = async (mission) => {
@@ -689,6 +710,100 @@ export default function GameProvider({ children }) {
         }
         break;
         
+      case 'hostile_fleet':
+        if (choiceId === 'fight') {
+          const currentShips = queryClient.getQueryData(['ships', 'inventory']) || [];
+          const ship = currentShips.find(s => s.id === currentEvent.shipId);
+          const shipName = ship?.name || 'Unknown Ship';
+
+          if (Math.random() < 0.5) {
+            // Success - reward credits and parts
+            const bonusCredits = Math.floor(Math.random() * 501) + 800; // 800-1300
+            const bonusParts = Math.floor(Math.random() * 3) + 3; // 3-5 parts
+
+            const partsList = [
+              'Box of tangled wire', 'Rusty screws', 'Cracked glass',
+              'Wire splice', 'Stripped bolts', 'Reformed evil AI',
+              'Outdated map', 'Mostly stable antimatter', 'Expired food rations',
+              'Sci-fi looking panel'
+            ];
+
+            const newParts = { ...gameState.parts };
+            for (let i = 0; i < bonusParts; i++) {
+              const randomPart = partsList[Math.floor(Math.random() * partsList.length)];
+              newParts[randomPart] = (newParts[randomPart] || 0) + 1;
+            }
+
+            await updateGameState({ 
+              credits: gameState.credits + bonusCredits,
+              parts: newParts
+            });
+
+            const mission = await base44.entities.Mission.filter({ id: currentEvent.missionId });
+            if (mission[0]) {
+              await base44.entities.Mission.update(currentEvent.missionId, {
+                encounterResult: `+${bonusParts} parts, +$${bonusCredits} (hostile victory)`
+              });
+            }
+
+            addMessage(`After some fancy flying, and lack of concern for the crew, the hostiles were defeated.`);
+          } else {
+            // Failure - 50% damage
+            const newHealth = Math.max(0, ship.health - 50);
+            await updateShip(currentEvent.shipId, {
+              health: newHealth,
+              damaged: newHealth < 100,
+              status: newHealth === 0 ? 'destroyed' : 'damaged'
+            });
+
+            if (newHealth === 0) {
+              const mission = await base44.entities.Mission.filter({ id: currentEvent.missionId });
+              if (mission[0]) {
+                const updatedShips = mission[0].ships.map(s => 
+                  s.shipId === currentEvent.shipId ? { ...s, status: 'destroyed' } : s
+                );
+                const anyActive = updatedShips.some(s => s.status === 'active');
+                await base44.entities.Mission.update(currentEvent.missionId, {
+                  ships: updatedShips,
+                  status: anyActive ? 'active' : 'failed',
+                  encounterResult: `-50% damage (DESTROYED - hostile fleet)`
+                });
+              }
+            } else {
+              const mission = await base44.entities.Mission.filter({ id: currentEvent.missionId });
+              if (mission[0]) {
+                await base44.entities.Mission.update(currentEvent.missionId, {
+                  encounterResult: `-50% damage (hostile fleet)`
+                });
+              }
+            }
+
+            addMessage(`It was a resilient effort, but you were no match for the hostile fleet. You managed to escape, but not without paying the price.`);
+          }
+        } else {
+          // Surrender - lose 50% of mission reward
+          const mission = await base44.entities.Mission.filter({ id: currentEvent.missionId });
+          if (mission[0]) {
+            const activeShip = mission[0].ships.find(s => s.shipId === currentEvent.shipId);
+            const lostWages = Math.floor((activeShip?.hourlyPay || 0) * mission[0].duration * 0.5);
+
+            await base44.entities.Mission.update(currentEvent.missionId, {
+              encounterResult: `-$${lostWages} (surrendered)`
+            });
+
+            // Reduce wages for this ship only
+            const updatedShips = mission[0].ships.map(s => 
+              s.shipId === currentEvent.shipId 
+                ? { ...s, hourlyPay: Math.floor(s.hourlyPay * 0.5) } 
+                : s
+            );
+            await base44.entities.Mission.update(currentEvent.missionId, { ships: updatedShips });
+          }
+
+          addMessage(`Surrendered to hostile fleet. Half of mission earnings confiscated.`);
+        }
+        break;
+
       case 'planet_discovery':
         if (choiceId === 'claim') {
           const currentShips = queryClient.getQueryData(['ships', 'inventory']) || [];
