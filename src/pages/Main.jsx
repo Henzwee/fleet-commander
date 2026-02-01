@@ -328,6 +328,8 @@ export default function Main() {
           event={currentEvent?.missionId === selectedMission.id ? currentEvent : null}
           onClose={() => setSelectedMission(null)}
           onChoice={handleEventChoice}
+          onTimeSkip={!selectedMission.isComplete && !selectedMission.isFailed ? () => setTimeSkipMission(selectedMission) : null}
+          crystals={gameState?.crystals || 0}
         />
       )}
       
