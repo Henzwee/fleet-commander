@@ -1,8 +1,11 @@
 import React from 'react';
 import { X, Radio } from 'lucide-react';
 
-export default function MissionReportScreen({ mission, event, onClose, onChoice }) {
+export default function MissionReportScreen({ mission, event, onClose, onChoice, onTimeSkip, crystals }) {
   if (!mission) return null;
+  
+  const hoursRemaining = Math.ceil(mission.timeRemainingMinutes / 60);
+  const crystalCost = hoursRemaining * 5;
 
   return (
     <div className="fixed bg-black/80 flex items-center justify-center" style={{
@@ -110,9 +113,27 @@ export default function MissionReportScreen({ mission, event, onClose, onChoice 
           </div>
         )}
 
+        {onTimeSkip && (
+          <button
+            onClick={() => {
+              onTimeSkip();
+              onClose();
+            }}
+            disabled={crystals < crystalCost}
+            className="w-full bg-purple-600 active:bg-purple-700 disabled:bg-gray-600 disabled:cursor-not-allowed border-2 border-purple-500 disabled:border-gray-500 rounded-lg py-2 text-white font-bold text-sm transition-all mb-3 flex items-center justify-center gap-2"
+          >
+            <img 
+              src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695af5ca435140b76c0dadc9/26d2c74b8_crystal.png" 
+              alt="Crystal" 
+              className="w-4 h-4"
+            />
+            <span>SKIP ({crystalCost})</span>
+          </button>
+        )}
+
         <button
           onClick={onClose}
-          className="w-full bg-gray-700 active:bg-gray-600 border-2 border-gray-600 rounded-lg py-2 text-white font-bold text-sm transition-all mt-4"
+          className="w-full bg-gray-700 active:bg-gray-600 border-2 border-gray-600 rounded-lg py-2 text-white font-bold text-sm transition-all"
         >
           CLOSE
         </button>

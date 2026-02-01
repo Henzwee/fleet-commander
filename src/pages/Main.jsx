@@ -308,23 +308,8 @@ export default function Main() {
                           DEBRIEF
                         </button>
                       ) : (
-                        <div className="flex items-center gap-2">
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setTimeSkipMission(mission);
-                            }}
-                            className="bg-purple-600 hover:bg-purple-700 border-2 border-purple-500 rounded px-2 py-1 text-white font-bold text-xs flex items-center gap-1"
-                          >
-                            <img 
-                              src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695af5ca435140b76c0dadc9/26d2c74b8_crystal.png" 
-                              alt="Crystal" 
-                              className="w-3 h-3"
-                            />
-                          </button>
-                          <div className="text-cyan-400 text-xs font-mono">
-                            {mission.timeRemaining}
-                          </div>
+                        <div className="text-cyan-400 text-xs font-mono">
+                          {mission.timeRemaining}
                         </div>
                       )}
                     </div>
