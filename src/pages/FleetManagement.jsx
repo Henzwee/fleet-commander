@@ -215,9 +215,9 @@ export default function FleetManagement() {
                             <div className="text-amber-400 font-bold">${ship.hourlyPay}</div>
                           </div>
                           <div>
-                            <div className="text-gray-400">Damage</div>
+                            <div className="text-gray-400">Health</div>
                             <div className={`font-bold ${getDamageColor(ship.health)}`}>
-                              {100 - ship.health}%
+                              {ship.health}%
                             </div>
                           </div>
                           <div>
