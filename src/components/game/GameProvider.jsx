@@ -337,12 +337,13 @@ export default function GameProvider({ children }) {
           
           // Roll for encounter (15% chance)
           if (Math.random() < 0.15) {
-            const encounterType = Math.floor(Math.random() * 4);
+            const encounterType = Math.floor(Math.random() * 5);
             switch (encounterType) {
               case 0: await createDistressEvent(mission); break;
               case 1: await createPlanetDiscoveryEvent(mission); break;
               case 2: await createScavengeEvent(mission); break;
               case 3: await createHostileFleetEvent(mission); break;
+              case 4: await createWanderingShipEvent(mission); break;
             }
           }
         }
@@ -558,6 +559,49 @@ export default function GameProvider({ children }) {
     });
 
     addMessage(`${shipName} found salvageable wreckage.`);
+  };
+
+  const createWanderingShipEvent = async (mission) => {
+    // Don't create event if one is already active
+    if (currentEvent) return;
+
+    const activeShip = mission.ships?.find(s => s.status === 'active');
+    if (!activeShip) return;
+
+    const currentShips = queryClient.getQueryData(['ships', 'inventory']) || [];
+    const ship = currentShips.find(s => s.id === activeShip.shipId);
+    const shipName = ship?.name || 'Unknown Ship';
+
+    // Weighted tier roll - heavily favor lower tiers
+    const rollWeightedTier = () => {
+      const rand = Math.random();
+      if (rand < 0.40) return 'Unregistered';
+      if (rand < 0.70) return 'Known';
+      if (rand < 0.90) return 'Notorious';
+      if (rand < 0.97) return 'Esteemed';
+      if (rand < 0.995) return 'Renowned';
+      return 'Legendary';
+    };
+
+    const wanderingShipTier = rollWeightedTier();
+    const wanderingShipName = `Wanderer-${Math.floor(Math.random() * 9000) + 1000}`;
+
+    setCurrentEvent({
+      title: 'Wandering Ship Detected',
+      description: `${shipName} has been approached by a wandering ship. They seek employment, as many do. Will you allow them to join your fleet? You can always fire them later.`,
+      choices: [
+        { id: 'hire', label: 'HIRE', primary: true },
+        { id: 'pass', label: 'PASS' }
+      ],
+      missionId: mission.id,
+      shipId: ship?.id,
+      wanderingShipTier,
+      wanderingShipName,
+      type: 'wandering_ship',
+      requiresUserChoice: true
+    });
+
+    addMessage(`${shipName} encountered a wandering ${wanderingShipTier} ship.`);
   };
   
   const completeMission = async (mission) => {
@@ -1001,6 +1045,21 @@ export default function GameProvider({ children }) {
           }
         } else {
           addMessage('Derelict vessel left undisturbed.');
+        }
+        break;
+
+      case 'wandering_ship':
+        if (choiceId === 'hire') {
+          // Create the wandering ship and add to fleet
+          const newShip = await createRandomShip(currentEvent.wanderingShipTier);
+          await base44.entities.Ship.update(newShip.id, {
+            name: currentEvent.wanderingShipName
+          });
+
+          await addShip(newShip);
+          addMessage(`${currentEvent.wanderingShipName} has joined your fleet!`);
+        } else {
+          addMessage('Wandering ship declined. They continue their journey.');
         }
         break;
     }
