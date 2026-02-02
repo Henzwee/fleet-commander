@@ -107,7 +107,7 @@ export default function Market() {
         const seed = Date.now();
         const selectedIds = generateWeightedRotation(allItemIds, [], 6, seed);
         
-        const newStock = {};
+        const newStock = { shipStock: 5 }; // Initialize with ship stock
         selectedIds.forEach(itemId => {
           const stockAmount = Math.floor(Math.random() * 5) + 1; // 1-5 stock
           newStock[itemId] = stockAmount;
@@ -144,23 +144,20 @@ export default function Market() {
       
       setMarketItems(parts);
     } else if (activeTab === 'ships') {
-      // Initialize ship stock if needed
-      if (!gameState.marketStock?.shipStock) {
+      // Ensure ship stock and seed are initialized
+      if (gameState.marketStock?.shipStock === undefined || !gameState.lastMarketRotationSeed) {
         const newStock = { ...gameState.marketStock, shipStock: 5 };
-        updateGameState({ marketStock: newStock });
+        const seed = gameState.lastMarketRotationSeed || Date.now();
+        updateGameState({ 
+          marketStock: newStock,
+          lastMarketRotationSeed: seed
+        });
         return;
       }
 
       // Check if ships are sold out
       if (gameState.marketStock.shipStock <= 0) {
         setMarketItems([]);
-        return;
-      }
-
-      // Use existing market seed to generate consistent ships
-      if (!gameState.lastMarketRotationSeed) {
-        const seed = Date.now();
-        updateGameState({ lastMarketRotationSeed: seed });
         return;
       }
 
