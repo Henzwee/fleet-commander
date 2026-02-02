@@ -1129,10 +1129,34 @@ export default function GameProvider({ children }) {
     const lastReset = new Date(gameState.lastMarketReset);
     const now = new Date();
     const hoursSinceReset = (now - lastReset) / (1000 * 60 * 60);
-    
+
     if (hoursSinceReset >= 6) {
+      // Import MarketEngine and rotation functions
+      const { MarketEngine } = await import('../components/game/MarketEngine');
+      const { generateWeightedRotation, updateRotationHistory } = await import('../components/game/MarketRotation');
+
+      const allItems = MarketEngine.getAll();
+      const allItemIds = allItems.map(item => item.id);
+      const rotationHistory = gameState.marketRotationHistory || [];
+      const seed = Date.now();
+
+      const selectedIds = generateWeightedRotation(allItemIds, rotationHistory, 6, seed);
+
+      const newStock = {};
+      selectedIds.forEach(itemId => {
+        MarketEngine.reprice(itemId);
+        const stockAmount = Math.floor(Math.random() * 5) + 1;
+        newStock[itemId] = stockAmount;
+      });
+      newStock.shipStock = 5; // Reset ship stock
+
+      const newRotationHistory = updateRotationHistory(selectedIds, rotationHistory);
+
       await updateGameState({
-        lastMarketReset: now.toISOString()
+        lastMarketReset: now.toISOString(),
+        marketStock: newStock,
+        marketRotationHistory: newRotationHistory,
+        lastMarketRotationSeed: seed
       });
       addMessage('Market inventory refreshed.');
     }
