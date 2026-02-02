@@ -153,9 +153,6 @@ export default function Market() {
       
       setMarketItems(parts);
     } else if (activeTab === 'ships') {
-      // Always clear scrap items first
-      setMarketItems([]);
-      
       // Initialize marketStock if it doesn't exist
       if (!gameState.marketStock && !isInitializing) {
         setIsInitializing(true);
