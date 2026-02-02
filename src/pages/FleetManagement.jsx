@@ -199,97 +199,97 @@ export default function FleetManagement() {
                       <div className="text-cyan-400 font-bold text-sm mb-3 uppercase">{tier}</div>
                       <div className="grid grid-cols-1 gap-3">
                         {tierShips.map((ship) => (
-                  <div key={ship.id}>
-                    <ShipCard
-                      ship={ship}
-                      onClick={() => setSelectedShip(selectedShip?.id === ship.id ? null : ship)}
-                    />
-                    
-                    {selectedShip?.id === ship.id && (
-                      <div className={`bg-gradient-to-br from-gray-900 to-gray-950 rounded-lg p-4 mt-2 ${
-                        ship.health <= 25 ? 'border-2 border-red-500/60' :
-                        ship.health <= 50 ? 'border-2 border-amber-500/60' :
-                        'border-2 border-cyan-500/30'
-                      }`}>
-                        <div className="grid grid-cols-2 gap-3 mb-4 text-xs">
-                          <div>
-                            <div className="text-gray-400">Status</div>
-                            <div className={`font-bold ${getStatusColor(ship.status)}`}>
-                              {ship.health === 0 ? 'DESTROYED' : ship.status.toUpperCase()}
-                            </div>
-                          </div>
-                          <div>
-                            <div className="text-gray-400">Hourly Pay</div>
-                            <div className="text-amber-400 font-bold">${ship.hourlyPay}</div>
-                          </div>
-                          <div>
-                            <div className="text-gray-400">Health</div>
-                            <div className={`font-bold ${getDamageColor(ship.health)}`}>
-                              {ship.health}%
-                            </div>
-                          </div>
-                          <div>
-                            <div className="text-gray-400">Range</div>
-                            <div className="text-cyan-400 font-bold">
-                              {getRange(ship.tier).toLocaleString()} ly
-                            </div>
-                          </div>
-                        </div>
-                        
-                        {ship.damaged && ship.status !== 'active' && ship.requiredParts && ship.requiredParts.length > 0 && (
-                          <div className="mb-3 bg-gray-900/50 rounded-lg p-3 border border-cyan-500/30">
-                            <div className="text-cyan-400 text-xs font-bold mb-2">Required Parts</div>
-                            <div className="space-y-1">
-                              {ship.requiredParts.map((part, idx) => {
-                                const available = (gameState?.parts || {})[part.name] || 0;
-                                const hasEnough = available >= part.qty;
-                                return (
-                                  <div key={idx} className="flex items-center gap-2 text-xs">
-                                    {hasEnough ? (
-                                      <Check className="w-4 h-4 text-green-400" />
-                                    ) : (
-                                      <X className="w-4 h-4 text-red-400" />
-                                    )}
-                                    <span className={hasEnough ? 'text-green-400' : 'text-red-400'}>
-                                      {part.name} ({part.qty})
-                                    </span>
+                          <div key={ship.id}>
+                            <ShipCard
+                              ship={ship}
+                              onClick={() => setSelectedShip(selectedShip?.id === ship.id ? null : ship)}
+                            />
+                            
+                            {selectedShip?.id === ship.id && (
+                              <div className={`bg-gradient-to-br from-gray-900 to-gray-950 rounded-lg p-4 mt-2 ${
+                                ship.health <= 25 ? 'border-2 border-red-500/60' :
+                                ship.health <= 50 ? 'border-2 border-amber-500/60' :
+                                'border-2 border-cyan-500/30'
+                              }`}>
+                                <div className="grid grid-cols-2 gap-3 mb-4 text-xs">
+                                  <div>
+                                    <div className="text-gray-400">Status</div>
+                                    <div className={`font-bold ${getStatusColor(ship.status)}`}>
+                                      {ship.health === 0 ? 'DESTROYED' : ship.status.toUpperCase()}
+                                    </div>
                                   </div>
-                                );
-                              })}
-                            </div>
+                                  <div>
+                                    <div className="text-gray-400">Hourly Pay</div>
+                                    <div className="text-amber-400 font-bold">${ship.hourlyPay}</div>
+                                  </div>
+                                  <div>
+                                    <div className="text-gray-400">Health</div>
+                                    <div className={`font-bold ${getDamageColor(ship.health)}`}>
+                                      {ship.health}%
+                                    </div>
+                                  </div>
+                                  <div>
+                                    <div className="text-gray-400">Range</div>
+                                    <div className="text-cyan-400 font-bold">
+                                      {getRange(ship.tier).toLocaleString()} ly
+                                    </div>
+                                  </div>
+                                </div>
+                                
+                                {ship.damaged && ship.status !== 'active' && ship.requiredParts && ship.requiredParts.length > 0 && (
+                                  <div className="mb-3 bg-gray-900/50 rounded-lg p-3 border border-cyan-500/30">
+                                    <div className="text-cyan-400 text-xs font-bold mb-2">Required Parts</div>
+                                    <div className="space-y-1">
+                                      {ship.requiredParts.map((part, idx) => {
+                                        const available = (gameState?.parts || {})[part.name] || 0;
+                                        const hasEnough = available >= part.qty;
+                                        return (
+                                          <div key={idx} className="flex items-center gap-2 text-xs">
+                                            {hasEnough ? (
+                                              <Check className="w-4 h-4 text-green-400" />
+                                            ) : (
+                                              <X className="w-4 h-4 text-red-400" />
+                                            )}
+                                            <span className={hasEnough ? 'text-green-400' : 'text-red-400'}>
+                                              {part.name} ({part.qty})
+                                            </span>
+                                          </div>
+                                        );
+                                      })}
+                                    </div>
+                                  </div>
+                                )}
+                                
+                                {ship.health < 100 && ship.status === 'active' && (
+                                  <div className="mb-3 bg-amber-900/30 rounded-lg p-2 border border-amber-500/30">
+                                    <div className="text-amber-400 text-xs text-center">Deployed ships can't be repaired</div>
+                                  </div>
+                                )}
+                                
+                                <div className="grid grid-cols-2 gap-2">
+                                  {ship.health < 100 && (
+                                    <button
+                                      onClick={() => handleRepair(ship)}
+                                      disabled={ship.status === 'active' || !hasParts(ship.requiredParts || [], gameState?.parts || {})}
+                                      className="bg-green-600 border-2 border-green-500 rounded-lg py-2 px-3 text-white font-bold text-xs flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed active:bg-green-700"
+                                    >
+                                      <Wrench className="w-4 h-4" />
+                                      <span>REPAIR</span>
+                                    </button>
+                                  )}
+                                  
+                                  <button
+                                    onClick={() => handleFire(ship)}
+                                    disabled={ship.status === 'active'}
+                                    className={`bg-red-600 border-2 border-red-500 rounded-lg py-2 px-3 text-white font-bold text-xs flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed ${ship.health < 100 ? '' : 'col-span-2'}`}
+                                  >
+                                    <UserMinus className="w-4 h-4" />
+                                    <span>FIRE</span>
+                                  </button>
+                                </div>
+                              </div>
+                            )}
                           </div>
-                        )}
-                        
-                        {ship.health < 100 && ship.status === 'active' && (
-                          <div className="mb-3 bg-amber-900/30 rounded-lg p-2 border border-amber-500/30">
-                            <div className="text-amber-400 text-xs text-center">Deployed ships can't be repaired</div>
-                          </div>
-                        )}
-                        
-                        <div className="grid grid-cols-2 gap-2">
-                          {ship.health < 100 && (
-                            <button
-                              onClick={() => handleRepair(ship)}
-                              disabled={ship.status === 'active' || !hasParts(ship.requiredParts || [], gameState?.parts || {})}
-                              className="bg-green-600 border-2 border-green-500 rounded-lg py-2 px-3 text-white font-bold text-xs flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed active:bg-green-700"
-                            >
-                              <Wrench className="w-4 h-4" />
-                              <span>REPAIR</span>
-                            </button>
-                          )}
-                          
-                          <button
-                            onClick={() => handleFire(ship)}
-                            disabled={ship.status === 'active'}
-                            className={`bg-red-600 border-2 border-red-500 rounded-lg py-2 px-3 text-white font-bold text-xs flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed ${ship.health < 100 ? '' : 'col-span-2'}`}
-                          >
-                            <UserMinus className="w-4 h-4" />
-                            <span>FIRE</span>
-                          </button>
-                        </div>
-                      </div>
-                    )}
-                  </div>
                         ))}
                       </div>
                     </div>
