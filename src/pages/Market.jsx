@@ -147,9 +147,30 @@ export default function Market() {
       
       setMarketItems(parts);
     } else if (activeTab === 'ships') {
-      // Ensure ship stock and seed are initialized
+      // Initialize marketStock if it doesn't exist
+      if (!gameState.marketStock && !isInitializing) {
+        setIsInitializing(true);
+        const allItems = MarketEngine.getAll();
+        const allItemIds = allItems.map(item => item.id);
+        const seed = Date.now();
+        const selectedIds = generateWeightedRotation(allItemIds, [], 6, seed);
+        
+        const newStock = { shipStock: 5 };
+        selectedIds.forEach(itemId => {
+          newStock[itemId] = Math.floor(Math.random() * 5) + 1;
+        });
+        
+        const rotationHistory = updateRotationHistory(selectedIds, []);
+        await updateGameState({ 
+          marketStock: newStock,
+          marketRotationHistory: rotationHistory,
+          lastMarketRotationSeed: seed
+        });
+        setIsInitializing(false);
+        return;
+      }
+      
       if (!gameState.marketStock) {
-        // Wait for scrap tab to initialize marketStock first
         setMarketItems([]);
         return;
       }
