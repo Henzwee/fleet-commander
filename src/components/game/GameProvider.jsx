@@ -323,7 +323,6 @@ export default function GameProvider({ children }) {
         }
 
         // Check for encounters based on online status
-        const now = new Date();
         const lastEncounterCheck = mission.lastEncounterCheck ? new Date(mission.lastEncounterCheck) : startTime;
         const minutesSinceLastCheck = (now - lastEncounterCheck) / (1000 * 60);
         
