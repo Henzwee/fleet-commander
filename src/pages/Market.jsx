@@ -84,6 +84,12 @@ export default function Market() {
   };
   
   const generateMarketItems = async () => {
+    // Clear items when switching tabs
+    if (activeTab !== 'scrap' && activeTab !== 'ships' && activeTab !== 'fuel') {
+      setMarketItems([]);
+      return;
+    }
+    
     if (activeTab === 'scrap') {
       // Get prices from MarketEngine
       const iconMap = {
@@ -147,6 +153,9 @@ export default function Market() {
       
       setMarketItems(parts);
     } else if (activeTab === 'ships') {
+      // Always clear scrap items first
+      setMarketItems([]);
+      
       // Initialize marketStock if it doesn't exist
       if (!gameState.marketStock && !isInitializing) {
         setIsInitializing(true);
@@ -171,7 +180,6 @@ export default function Market() {
       }
       
       if (!gameState.marketStock) {
-        setMarketItems([]);
         return;
       }
       
@@ -193,7 +201,6 @@ export default function Market() {
 
       // Check if ships are sold out
       if (shipStock <= 0) {
-        setMarketItems([]);
         return;
       }
 
