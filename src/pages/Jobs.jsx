@@ -26,6 +26,29 @@ export default function Jobs() {
   
   const loadData = async () => {
     try {
+      // First, check for orphaned ships (marked as active but not on any active mission)
+      const activeMissions = await base44.entities.Mission.filter({ status: 'active' }, '-created_date', 50);
+      const activeShipIds = new Set();
+      
+      activeMissions.forEach(mission => {
+        if (mission.ships) {
+          mission.ships.forEach(ship => {
+            if (ship.status === 'active') {
+              activeShipIds.add(ship.shipId);
+            }
+          });
+        }
+      });
+      
+      // Fix any ships that are marked as active but not on active missions
+      for (const ship of allShips) {
+        if (ship.status === 'active' && !activeShipIds.has(ship.id)) {
+          const newStatus = ship.health < 100 ? 'damaged' : 'idle';
+          await updateShip(ship.id, { status: newStatus });
+          console.log(`[Jobs] Fixed orphaned ship ${ship.name} to ${newStatus}`);
+        }
+      }
+      
       // Get player's maximum ship range
       const maxLY = allShips.length > 0 
         ? Math.max(...allShips.map(s => s.maxLY || 100))
