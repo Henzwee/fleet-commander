@@ -51,7 +51,7 @@ export default function Settings() {
                 >
                   <div className="flex gap-4">
                     {/* Ship Images */}
-                    <div className="flex-shrink-0 w-24 flex flex-col gap-2 justify-start py-2">
+                    <div className="flex-shrink-0 w-28 flex flex-col gap-2 justify-start py-2">
                       {shipImages.map((img, idx) => {
                         const isUnregistered1 = img.includes('unregistered1.png');
                         return (
@@ -59,7 +59,7 @@ export default function Settings() {
                             key={idx}
                             src={img} 
                             alt={`${tier} ${idx + 1}`} 
-                            className={`w-full object-contain ${isUnregistered1 ? 'h-12' : 'h-20'}`}
+                            className={`w-full object-contain ${isUnregistered1 ? 'h-14' : 'h-24'}`}
                           />
                         );
                       })}
