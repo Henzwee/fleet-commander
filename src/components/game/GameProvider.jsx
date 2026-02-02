@@ -17,6 +17,7 @@ export default function GameProvider({ children }) {
   const [loading, setLoading] = useState(true);
   const [messages, setMessages] = useState([]);
   const [currentEvent, setCurrentEvent] = useState(null);
+  const [isOnline, setIsOnline] = useState(true);
   const queryClient = useQueryClient();
   
   // Centralized ship inventory with React Query
@@ -34,6 +35,16 @@ export default function GameProvider({ children }) {
     refetchOnReconnect: false,
   });
   
+  // Track online status
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      setIsOnline(!document.hidden);
+    };
+    
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+  }, []);
+
   // Load or initialize game state
   useEffect(() => {
     loadGameState();
@@ -48,7 +59,7 @@ export default function GameProvider({ children }) {
     }, 60000); // 1 minute
     
     return () => clearInterval(interval);
-  }, [gameState]);
+  }, [gameState, isOnline]);
   
   const loadGameState = async () => {
     try {
@@ -311,14 +322,29 @@ export default function GameProvider({ children }) {
           }
         }
 
-        // Roll for special encounters (15% chance)
-        if (Math.random() < 0.15) {
-          const encounterType = Math.floor(Math.random() * 4);
-          switch (encounterType) {
-            case 0: await createDistressEvent(mission); break;
-            case 1: await createPlanetDiscoveryEvent(mission); break;
-            case 2: await createScavengeEvent(mission); break;
-            case 3: await createHostileFleetEvent(mission); break;
+        // Check for encounters based on online status
+        const now = new Date();
+        const lastEncounterCheck = mission.lastEncounterCheck ? new Date(mission.lastEncounterCheck) : startTime;
+        const minutesSinceLastCheck = (now - lastEncounterCheck) / (1000 * 60);
+        
+        // Online: check every 4-5 minutes, Offline: check every 60 minutes
+        const encounterInterval = isOnline ? 4 : 60;
+        
+        if (minutesSinceLastCheck >= encounterInterval) {
+          // Update last encounter check time
+          await base44.entities.Mission.update(mission.id, {
+            lastEncounterCheck: now.toISOString()
+          });
+          
+          // Roll for encounter (15% chance)
+          if (Math.random() < 0.15) {
+            const encounterType = Math.floor(Math.random() * 4);
+            switch (encounterType) {
+              case 0: await createDistressEvent(mission); break;
+              case 1: await createPlanetDiscoveryEvent(mission); break;
+              case 2: await createScavengeEvent(mission); break;
+              case 3: await createHostileFleetEvent(mission); break;
+            }
           }
         }
       }
