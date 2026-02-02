@@ -84,6 +84,9 @@ export default function Market() {
   };
   
   const generateMarketItems = async () => {
+    // Clear items first to prevent showing wrong tab's items
+    setMarketItems([]);
+    
     if (activeTab === 'scrap') {
       // Get prices from MarketEngine
       const iconMap = {
@@ -245,7 +248,6 @@ export default function Market() {
       }
       setMarketItems(ships);
     } else if (activeTab === 'fuel') {
-      setMarketItems([]);
       // Fuel for crystals
       const fuelItems = [
         { 
