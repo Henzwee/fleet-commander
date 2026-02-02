@@ -63,6 +63,25 @@ export default function Jobs() {
   
   const generateMissions = (playerMaxLY) => {
     const missions = [];
+    
+    // Check if it's Friday (5 = Friday in JavaScript)
+    const today = new Date().getDay();
+    if (today === 5) {
+      // Add Ship Face Incentive Mission
+      missions.push({
+        id: 'friday_incentive',
+        distance: 50,
+        duration: 2,
+        partsReward: 0,
+        crystalReward: 10,
+        fuelCost: 5,
+        description: 'Ship Face Incentive Mission',
+        tier: 'Unregistered',
+        requiredLY: 50,
+        isFridayMission: true
+      });
+    }
+    
     const descriptions = [
       'Deliver mystery meat to Station 7',
       'Rescue cat stuck in airlock',
@@ -190,7 +209,9 @@ export default function Jobs() {
       })),
       distance: selectedMission.distance,
       duration: selectedMission.duration,
-      partsReward: selectedMission.partsReward,
+      partsReward: selectedMission.partsReward || 0,
+      crystalReward: selectedMission.crystalReward || 0,
+      isFridayMission: selectedMission.isFridayMission || false,
       fuelCost: selectedMission.fuelCost,
       startTime: new Date().toISOString(),
       status: 'active',
@@ -256,8 +277,21 @@ export default function Jobs() {
                   <span>{mission.duration}h</span>
                 </div>
                 <div className="flex items-center gap-1 text-amber-400">
-                  <Zap className="w-3 h-3" />
-                  <span>{mission.partsReward} parts</span>
+                  {mission.isFridayMission ? (
+                    <>
+                      <img 
+                        src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695af5ca435140b76c0dadc9/26d2c74b8_crystal.png" 
+                        alt="Crystal" 
+                        className="w-3 h-3"
+                      />
+                      <span>{mission.crystalReward} crystals</span>
+                    </>
+                  ) : (
+                    <>
+                      <Zap className="w-3 h-3" />
+                      <span>{mission.partsReward} parts</span>
+                    </>
+                  )}
                 </div>
                 <div className="flex items-center gap-1 text-blue-400">
                   <Fuel className="w-3 h-3" />

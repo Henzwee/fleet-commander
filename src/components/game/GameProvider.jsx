@@ -636,8 +636,9 @@ export default function GameProvider({ children }) {
     
     // Award parts reward
     const partsReward = mission.partsReward || 0;
+    const crystalReward = mission.crystalReward || 0;
     const newParts = { ...gameState.parts };
-    
+
     // Generate random parts
     const partsList = [
       'Box of tangled wire', 'Rusty screws', 'Cracked glass',
@@ -645,18 +646,30 @@ export default function GameProvider({ children }) {
       'Outdated map', 'Mostly stable antimatter', 'Expired food rations',
       'Sci-fi looking panel'
     ];
-    
+
     for (let i = 0; i < partsReward; i++) {
       const randomPart = partsList[Math.floor(Math.random() * partsList.length)];
       newParts[randomPart] = (newParts[randomPart] || 0) + 1;
     }
-    
+
     const newFuel = gameState.fuel + fuelReward;
-    await updateGameState({ credits: gameState.credits + totalWages, fuel: newFuel, parts: newParts });
+    const updates = { 
+      credits: gameState.credits + totalWages, 
+      fuel: newFuel, 
+      parts: newParts 
+    };
+
+    if (crystalReward > 0) {
+      updates.crystals = gameState.crystals + crystalReward;
+    }
+
+    await updateGameState(updates);
 
     const shipNames = activeShips.map(s => s.shipName).join(', ');
 
-    if (fuelReward > 0) {
+    if (mission.isFridayMission) {
+      addMessage(`Friday mission completed! ${shipNames} earned ${crystalReward} crystals.`);
+    } else if (fuelReward > 0) {
       addMessage(`Mission completed! ${shipNames} earned $${totalWages} wages, ${partsReward} parts, and ${fuelReward} fuel.`);
     } else {
       addMessage(`Mission completed! ${shipNames} earned $${totalWages} wages and ${partsReward} parts.`);
