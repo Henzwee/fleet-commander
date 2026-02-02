@@ -189,8 +189,16 @@ export default function FleetManagement() {
                 No ships in fleet. Hire ships from the market!
               </div>
             ) : (
-              <div className="grid grid-cols-1 gap-3">
-                {ships.map((ship) => (
+              <>
+                {['Legendary', 'Renowned', 'Esteemed', 'Notorious', 'Known', 'Unregistered'].map(tier => {
+                  const tierShips = ships.filter(ship => ship.tier === tier);
+                  if (tierShips.length === 0) return null;
+                  
+                  return (
+                    <div key={tier} className="mb-6">
+                      <div className="text-cyan-400 font-bold text-sm mb-3 uppercase">{tier}</div>
+                      <div className="grid grid-cols-1 gap-3">
+                        {tierShips.map((ship) => (
                   <div key={ship.id}>
                     <ShipCard
                       ship={ship}
