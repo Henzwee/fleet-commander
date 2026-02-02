@@ -171,6 +171,7 @@ export default function Market() {
       }
       
       if (!gameState.marketStock) {
+        setMarketItems([]);
         return;
       }
       
@@ -192,6 +193,7 @@ export default function Market() {
 
       // Check if ships are sold out
       if (shipStock <= 0) {
+        setMarketItems([]);
         return;
       }
 
@@ -243,6 +245,7 @@ export default function Market() {
       }
       setMarketItems(ships);
     } else if (activeTab === 'fuel') {
+      setMarketItems([]);
       // Fuel for crystals
       const fuelItems = [
         { 
