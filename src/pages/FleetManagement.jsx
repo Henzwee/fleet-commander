@@ -7,7 +7,7 @@ import { useGame } from '../components/game/GameProvider';
 import DeviceFrame from '../components/game/DeviceFrame';
 import ResourceHeader from '../components/game/ResourceHeader';
 import ShipCard from '../components/game/ShipCard';
-import { Heart, Wrench, UserMinus, Package, Check, X, Filter } from 'lucide-react';
+import { Heart, Wrench, UserMinus, Package, Check, X } from 'lucide-react';
 import { getRequiredPartCountFromDamage, generateRequiredParts, hasParts, consumeParts } from '../components/game/PartsCatalog';
 import { getMaxLYForTier } from '../components/game/ShipTierConfig';
 
@@ -18,8 +18,6 @@ export default function FleetManagement() {
   const [activeTab, setActiveTab] = useState(() => {
     return localStorage.getItem('fleet_tab_v1') || 'ships';
   });
-  const [filterTier, setFilterTier] = useState('all');
-  const [sortBy, setSortBy] = useState('recent');
   
   // Generate required parts for damaged ships on mount
   useEffect(() => {
@@ -144,17 +142,6 @@ export default function FleetManagement() {
   const inventoryParts = gameState?.parts || {};
   const totalParts = Object.values(inventoryParts).reduce((sum, count) => sum + count, 0);
   
-  // Filter and sort ships
-  const filteredShips = ships
-    .filter(ship => filterTier === 'all' || ship.tier === filterTier)
-    .sort((a, b) => {
-      if (sortBy === 'recent') {
-        return new Date(b.created_date) - new Date(a.created_date);
-      } else {
-        return new Date(a.created_date) - new Date(b.created_date);
-      }
-    });
-  
   return (
     <DeviceFrame title="FLEET">
       <div className="flex flex-col min-h-full pb-6" style={{ maxWidth: '100%', paddingLeft: 'var(--safe-x)', paddingRight: 'var(--safe-x)', boxSizing: 'border-box' }}>
@@ -197,46 +184,13 @@ export default function FleetManagement() {
               </div>
             </div>
             
-            {/* Filters */}
-            <div className="flex gap-2 mb-4">
-              <div className="flex-1">
-                <select
-                  value={filterTier}
-                  onChange={(e) => setFilterTier(e.target.value)}
-                  className="w-full bg-gray-800 border-2 border-cyan-500/30 rounded-lg px-3 py-2 text-cyan-100 text-sm font-bold"
-                >
-                  <option value="all">All Tiers</option>
-                  <option value="Unregistered">Unregistered</option>
-                  <option value="Known">Known</option>
-                  <option value="Notorious">Notorious</option>
-                  <option value="Esteemed">Esteemed</option>
-                  <option value="Renowned">Renowned</option>
-                  <option value="Legendary">Legendary</option>
-                </select>
-              </div>
-              <div className="flex-1">
-                <select
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value)}
-                  className="w-full bg-gray-800 border-2 border-cyan-500/30 rounded-lg px-3 py-2 text-cyan-100 text-sm font-bold"
-                >
-                  <option value="recent">Recently Acquired</option>
-                  <option value="oldest">Oldest First</option>
-                </select>
-              </div>
-            </div>
-            
             {ships.length === 0 ? (
               <div className="text-center text-gray-500 py-8">
                 No ships in fleet. Hire ships from the market!
               </div>
-            ) : filteredShips.length === 0 ? (
-              <div className="text-center text-gray-500 py-8">
-                No ships match the selected filter.
-              </div>
             ) : (
               <div className="grid grid-cols-1 gap-3">
-                {filteredShips.map((ship) => (
+                {ships.map((ship) => (
                   <div key={ship.id}>
                     <ShipCard
                       ship={ship}
