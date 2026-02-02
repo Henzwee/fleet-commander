@@ -84,12 +84,6 @@ export default function Market() {
   };
   
   const generateMarketItems = async () => {
-    // Clear items when switching tabs
-    if (activeTab !== 'scrap' && activeTab !== 'ships' && activeTab !== 'fuel') {
-      setMarketItems([]);
-      return;
-    }
-    
     if (activeTab === 'scrap') {
       // Get prices from MarketEngine
       const iconMap = {
