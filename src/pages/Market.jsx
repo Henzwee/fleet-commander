@@ -148,7 +148,13 @@ export default function Market() {
       setMarketItems(parts);
     } else if (activeTab === 'ships') {
       // Ensure ship stock and seed are initialized
-      if ((gameState.marketStock?.shipStock === undefined || !gameState.lastMarketRotationSeed) && !isInitializing) {
+      if (!gameState.marketStock) {
+        // Wait for scrap tab to initialize marketStock first
+        setMarketItems([]);
+        return;
+      }
+      
+      if ((gameState.marketStock.shipStock === undefined || !gameState.lastMarketRotationSeed) && !isInitializing) {
         setIsInitializing(true);
         const newStock = { ...gameState.marketStock, shipStock: 5 };
         const seed = gameState.lastMarketRotationSeed || Date.now();
@@ -161,7 +167,7 @@ export default function Market() {
       }
 
       // Default values if not set yet
-      const shipStock = gameState.marketStock?.shipStock ?? 5;
+      const shipStock = gameState.marketStock.shipStock ?? 5;
       const seed = gameState.lastMarketRotationSeed ?? Date.now();
 
       // Check if ships are sold out
