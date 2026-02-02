@@ -3,6 +3,8 @@ import { base44 } from '@/api/base44Client';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { getRandomShipImage } from './ShipImages';
 import { getTierConfig } from './ShipTierConfig';
+import { MarketEngine } from './MarketEngine';
+import { generateWeightedRotation, updateRotationHistory } from './MarketRotation';
 
 const GameContext = createContext();
 
@@ -1131,10 +1133,6 @@ export default function GameProvider({ children }) {
     const hoursSinceReset = (now - lastReset) / (1000 * 60 * 60);
 
     if (hoursSinceReset >= 6) {
-      // Import MarketEngine and rotation functions
-      const { MarketEngine } = await import('../components/game/MarketEngine');
-      const { generateWeightedRotation, updateRotationHistory } = await import('../components/game/MarketRotation');
-
       const allItems = MarketEngine.getAll();
       const allItemIds = allItems.map(item => item.id);
       const rotationHistory = gameState.marketRotationHistory || [];
