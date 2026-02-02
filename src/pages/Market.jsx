@@ -18,6 +18,7 @@ export default function Market() {
   const [marketItems, setMarketItems] = useState([]);
   const [timeUntilReset, setTimeUntilReset] = useState('');
   const [purchaseDialog, setPurchaseDialog] = useState(null);
+  const [isInitializing, setIsInitializing] = useState(false);
   
   useEffect(() => {
     if (gameState) {
@@ -82,7 +83,7 @@ export default function Market() {
     }
   };
   
-  const generateMarketItems = () => {
+  const generateMarketItems = async () => {
     if (activeTab === 'scrap') {
       // Get prices from MarketEngine
       const iconMap = {
@@ -99,7 +100,8 @@ export default function Market() {
       };
       
       // Initialize or use existing market rotation
-      if (!gameState.marketStock) {
+      if (!gameState.marketStock && !isInitializing) {
+        setIsInitializing(true);
         const allItems = MarketEngine.getAll();
         const allItemIds = allItems.map(item => item.id);
         
@@ -116,11 +118,12 @@ export default function Market() {
         // Store rotation history
         const rotationHistory = updateRotationHistory(selectedIds, []);
         
-        updateGameState({ 
+        await updateGameState({ 
           marketStock: newStock,
           marketRotationHistory: rotationHistory,
           lastMarketRotationSeed: seed
         });
+        setIsInitializing(false);
         return;
       }
       
@@ -145,13 +148,15 @@ export default function Market() {
       setMarketItems(parts);
     } else if (activeTab === 'ships') {
       // Ensure ship stock and seed are initialized
-      if (gameState.marketStock?.shipStock === undefined || !gameState.lastMarketRotationSeed) {
+      if ((gameState.marketStock?.shipStock === undefined || !gameState.lastMarketRotationSeed) && !isInitializing) {
+        setIsInitializing(true);
         const newStock = { ...gameState.marketStock, shipStock: 5 };
         const seed = gameState.lastMarketRotationSeed || Date.now();
-        updateGameState({ 
+        await updateGameState({ 
           marketStock: newStock,
           lastMarketRotationSeed: seed
         });
+        setIsInitializing(false);
         return;
       }
 
