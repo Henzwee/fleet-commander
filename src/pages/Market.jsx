@@ -447,7 +447,7 @@ export default function Market() {
                     src={item.imageUrl} 
                     alt={item.name} 
                     className="w-12 h-12 object-contain" 
-                    style={item.imageUrl.includes('unregistered1.png') ? { transform: 'scale(0.65)' } : {}}
+                    style={item.imageUrl.includes('unregistered1.png') ? { transform: 'scale(0.6)' } : {}}
                   />
                 ) : (
                   <div className="text-3xl">{item.icon}</div>
