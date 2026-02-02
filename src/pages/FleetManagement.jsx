@@ -290,8 +290,12 @@ export default function FleetManagement() {
                       </div>
                     )}
                   </div>
-                ))}
-              </div>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })}
+              </>
             )}
           </section>
         )}
