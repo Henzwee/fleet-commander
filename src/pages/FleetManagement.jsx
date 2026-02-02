@@ -207,7 +207,7 @@ export default function FleetManagement() {
                           <div>
                             <div className="text-gray-400">Status</div>
                             <div className={`font-bold ${getStatusColor(ship.status)}`}>
-                              {ship.status.toUpperCase()}
+                              {ship.health === 0 ? 'DESTROYED' : ship.status.toUpperCase()}
                             </div>
                           </div>
                           <div>

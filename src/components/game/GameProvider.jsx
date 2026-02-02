@@ -419,6 +419,9 @@ export default function GameProvider({ children }) {
   };
   
   const createDistressEvent = async (mission) => {
+    // Don't create event if one is already active
+    if (currentEvent) return;
+
     // Get the first active ship from the mission
     const activeShip = mission.ships?.find(s => s.status === 'active');
     if (!activeShip) return;
@@ -438,13 +441,17 @@ export default function GameProvider({ children }) {
       shipId: ship?.id,
       shipTier: ship?.tier,
       type: 'distress',
-      expiresAt: new Date(Date.now() + 15 * 60 * 1000).toISOString()
+      expiresAt: new Date(Date.now() + 15 * 60 * 1000).toISOString(),
+      requiresUserChoice: true
     });
 
     addMessage(`${shipName} detected distress signal. Awaiting orders.`);
   };
   
   const createPlanetDiscoveryEvent = async (mission) => {
+    // Don't create event if one is already active
+    if (currentEvent) return;
+
     const activeShip = mission.ships?.find(s => s.status === 'active');
     if (!activeShip) return;
 
@@ -463,13 +470,17 @@ export default function GameProvider({ children }) {
       shipId: ship?.id,
       shipTier: ship?.tier,
       type: 'planet_discovery',
-      expiresAt: new Date(Date.now() + 15 * 60 * 1000).toISOString()
+      expiresAt: new Date(Date.now() + 15 * 60 * 1000).toISOString(),
+      requiresUserChoice: true
     });
 
     addMessage(`${shipName} discovered an uncharted planet.`);
   };
 
   const createHostileFleetEvent = async (mission) => {
+    // Don't create event if one is already active
+    if (currentEvent) return;
+
     const activeShip = mission.ships?.find(s => s.status === 'active');
     if (!activeShip) return;
 
@@ -489,13 +500,17 @@ export default function GameProvider({ children }) {
       shipTier: ship?.tier,
       totalWages: activeShip.hourlyPay * mission.duration,
       type: 'hostile_fleet',
-      expiresAt: new Date(Date.now() + 15 * 60 * 1000).toISOString()
+      expiresAt: new Date(Date.now() + 15 * 60 * 1000).toISOString(),
+      requiresUserChoice: true
     });
 
     addMessage(`${shipName} detected hostile fleet approaching!`);
   };
 
   const createScavengeEvent = async (mission) => {
+    // Don't create event if one is already active
+    if (currentEvent) return;
+
     const activeShip = mission.ships?.find(s => s.status === 'active');
     if (!activeShip) return;
 
@@ -513,7 +528,8 @@ export default function GameProvider({ children }) {
       missionId: mission.id,
       shipId: ship?.id,
       shipTier: ship?.tier,
-      type: 'scavenge'
+      type: 'scavenge',
+      requiresUserChoice: true
     });
 
     addMessage(`${shipName} found salvageable wreckage.`);
