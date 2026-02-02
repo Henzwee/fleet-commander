@@ -160,22 +160,19 @@ export default function Market() {
         return;
       }
 
-      // Check if ships are sold out (only after initialization)
-      if (gameState.marketStock?.shipStock !== undefined && gameState.marketStock.shipStock <= 0) {
-        setMarketItems([]);
-        return;
-      }
+      // Default values if not set yet
+      const shipStock = gameState.marketStock?.shipStock ?? 5;
+      const seed = gameState.lastMarketRotationSeed ?? Date.now();
 
-      // If still initializing, don't show anything yet
-      if (!gameState.marketStock?.shipStock || !gameState.lastMarketRotationSeed) {
+      // Check if ships are sold out
+      if (shipStock <= 0) {
         setMarketItems([]);
         return;
       }
 
       // Generate ships based on seed for consistency
       const ships = [];
-      const seed = gameState.lastMarketRotationSeed;
-      const shipCount = gameState.marketStock.shipStock;
+      const shipCount = shipStock;
 
       for (let i = 0; i < shipCount; i++) {
         // Use seed-based random for tier
