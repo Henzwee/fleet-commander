@@ -160,8 +160,14 @@ export default function Market() {
         return;
       }
 
-      // Check if ships are sold out
-      if (gameState.marketStock.shipStock <= 0) {
+      // Check if ships are sold out (only after initialization)
+      if (gameState.marketStock?.shipStock !== undefined && gameState.marketStock.shipStock <= 0) {
+        setMarketItems([]);
+        return;
+      }
+
+      // If still initializing, don't show anything yet
+      if (!gameState.marketStock?.shipStock || !gameState.lastMarketRotationSeed) {
         setMarketItems([]);
         return;
       }
