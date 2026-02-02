@@ -52,14 +52,14 @@ export default function GameProvider({ children }) {
     loadGameState();
   }, []);
   
-  // Tick system - check every 60 seconds
+  // Tick system - check every 2 minutes
   useEffect(() => {
     if (!gameState) return;
-    
+
     const interval = setInterval(() => {
       processTick();
-    }, 60000); // 1 minute
-    
+    }, 120000); // 2 minutes
+
     return () => clearInterval(interval);
   }, [gameState, isOnline]);
   
@@ -286,6 +286,10 @@ export default function GameProvider({ children }) {
       // Process active missions
       const missions = await base44.entities.Mission.filter({ status: 'active' }, '-created_date', 50);
 
+      // Batch all updates to reduce API calls
+      const shipUpdates = [];
+      const missionUpdates = [];
+
       for (const mission of missions) {
         const startTime = new Date(mission.startTime);
         const now = new Date();
@@ -294,6 +298,13 @@ export default function GameProvider({ children }) {
         // Check if mission complete
         if (hoursElapsed >= mission.duration) {
           await completeMission(mission);
+          continue;
+        }
+
+        // Skip processing if less than 5 minutes since last check
+        const lastCheck = mission.lastEncounterCheck ? new Date(mission.lastEncounterCheck) : new Date(mission.startTime);
+        const minutesSinceLastCheck = (now - lastCheck) / (1000 * 60);
+        if (minutesSinceLastCheck < 5) {
           continue;
         }
 
@@ -324,38 +335,29 @@ export default function GameProvider({ children }) {
           }
         }
 
-        // Check for encounters based on online status
-        const lastEncounterCheck = mission.lastEncounterCheck ? new Date(mission.lastEncounterCheck) : startTime;
-        const minutesSinceLastCheck = (now - lastEncounterCheck) / (1000 * 60);
-        
-        // Online: check every 4-5 minutes, Offline: check every 60 minutes
-        const encounterInterval = isOnline ? 4 : 60;
-        
-        if (minutesSinceLastCheck >= encounterInterval) {
-          // Update last encounter check time
-          await base44.entities.Mission.update(mission.id, {
-            lastEncounterCheck: now.toISOString()
-          });
-          
-          // Roll for encounter (15% chance)
-          if (Math.random() < 0.15) {
-            const encounterType = Math.floor(Math.random() * 5);
-            switch (encounterType) {
-              case 0: await createDistressEvent(mission); break;
-              case 1: await createPlanetDiscoveryEvent(mission); break;
-              case 2: await createScavengeEvent(mission); break;
-              case 3: await createHostileFleetEvent(mission); break;
-              case 4: await createWanderingShipEvent(mission); break;
-            }
+        // Roll for encounter (10% chance, reduced from 15%)
+        if (Math.random() < 0.10) {
+          const encounterType = Math.floor(Math.random() * 5);
+          switch (encounterType) {
+            case 0: await createDistressEvent(mission); break;
+            case 1: await createPlanetDiscoveryEvent(mission); break;
+            case 2: await createScavengeEvent(mission); break;
+            case 3: await createHostileFleetEvent(mission); break;
+            case 4: await createWanderingShipEvent(mission); break;
           }
         }
-      }
-    
-    // Check for daily fuel refill
-    await checkDailyFuelRefill();
-    
-      // Check for market reset (every 6 hours)
-      await checkMarketReset();
+
+        // Update last encounter check time
+        await base44.entities.Mission.update(mission.id, {
+          lastEncounterCheck: now.toISOString()
+        });
+        }
+
+        // Check for daily fuel refill
+        await checkDailyFuelRefill();
+
+        // Check for market reset (every 6 hours)
+        await checkMarketReset();
     } catch (error) {
       console.error('Error processing tick:', error);
     }
