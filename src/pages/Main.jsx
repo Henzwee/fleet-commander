@@ -195,7 +195,7 @@ export default function Main() {
         <div className="grid grid-cols-2 gap-3 w-full" style={{ minWidth: 0 }}>
           <button
             onClick={() => navigate(createPageUrl('Market'))}
-            className="bg-gradient-to-br from-cyan-600/80 to-blue-600/80 border-2 border-cyan-500/50 rounded-xl py-4 text-white font-bold text-sm hover:from-cyan-500/80 hover:to-blue-500/80 transition-all w-full"
+            className="bg-gradient-to-br from-cyan-600/80 to-blue-600/80 border-4 border-cyan-500/50 py-4 text-white font-bold text-xs hover:from-cyan-500/80 hover:to-blue-500/80 transition-all w-full"
             style={{ minWidth: 0 }}
           >
             Ship Market
@@ -203,7 +203,7 @@ export default function Main() {
 
           <button
             onClick={() => navigate(createPageUrl('FleetManagement'))}
-            className="bg-gradient-to-br from-cyan-600/80 to-blue-600/80 border-2 border-cyan-500/50 rounded-xl py-4 text-white font-bold text-sm hover:from-cyan-500/80 hover:to-blue-500/80 transition-all w-full"
+            className="bg-gradient-to-br from-cyan-600/80 to-blue-600/80 border-4 border-cyan-500/50 py-4 text-white font-bold text-xs hover:from-cyan-500/80 hover:to-blue-500/80 transition-all w-full"
             style={{ minWidth: 0 }}
           >
             Manage Fleet
@@ -213,7 +213,7 @@ export default function Main() {
         {/* Available Jobs Button */}
         <button
           onClick={() => navigate(createPageUrl('Jobs'))}
-          className="w-full bg-gradient-to-br from-cyan-700/60 to-blue-700/60 border-2 border-cyan-600/60 rounded-2xl py-6 text-cyan-100 font-bold text-xl tracking-wider hover:from-cyan-600/60 hover:to-blue-600/60 transition-all"
+          className="w-full bg-gradient-to-br from-cyan-700/60 to-blue-700/60 border-4 border-cyan-600/60 py-6 text-cyan-100 font-bold text-base tracking-wider hover:from-cyan-600/60 hover:to-blue-600/60 transition-all"
         >
           Available Jobs
         </button>
