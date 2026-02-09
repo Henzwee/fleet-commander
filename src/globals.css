@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=VT323&family=Press+Start+2P&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -13,7 +13,8 @@
   --green-ok: #00ff88;
   --text-primary: #e0f4ff;
   --text-secondary: #8fb4c9;
-  --ui-font: 'VT323', monospace;
+  --ui-font: 'Press Start 2P', cursive;
+  --message-font: 'VT323', monospace;
 }
 
 * {
