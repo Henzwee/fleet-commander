@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -13,7 +14,13 @@
   --green-ok: #00ff88;
   --text-primary: #e0f4ff;
   --text-secondary: #8fb4c9;
-  --ui-font: 'VT323', monospace;
+  --ui-font: 'Press Start 2P', cursive;
+  --mani-font: 'VT323', monospace;
+  --pixel-green: #00ff66;
+  --pixel-teal: #00ccaa;
+  --navy-dark: #0d1b2a;
+  --navy-mid: #1b263b;
+  --navy-light: #415a77;
 }
 
 * {
@@ -33,13 +40,17 @@ body {
   -webkit-tap-highlight-color: transparent;
   overflow-x: hidden;
   font-weight: 400;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.05em;
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--ui-font);
   font-weight: 400;
   letter-spacing: 0.05em;
+  text-transform: uppercase;
 }
 
 button,
@@ -54,25 +65,78 @@ button,
   letter-spacing: 0.05em;
 }
 
+/* Preserve VT323 font for MANI console */
+.mani-console,
+.mani-dialog,
+.mani-text {
+  font-family: var(--mani-font) !important;
+  letter-spacing: 0.02em !important;
+}
+
 @layer utilities {
+  /* Pixel-style text effects - subtle */
   .glow-cyan {
-    text-shadow: 0 0 10px var(--cyan-glow), 0 0 20px var(--cyan-glow);
+    color: var(--cyan-glow);
   }
 
   .glow-amber {
-    text-shadow: 0 0 10px var(--amber-warn), 0 0 20px var(--amber-warn);
+    color: var(--amber-warn);
   }
 
   .glow-red {
-    text-shadow: 0 0 10px var(--red-alert), 0 0 20px var(--red-alert);
+    color: var(--red-alert);
   }
 
+  /* Pixel-style borders - no glow */
   .border-glow-cyan {
-    box-shadow: 0 0 10px rgba(0, 212, 255, 0.5), inset 0 0 10px rgba(0, 212, 255, 0.2);
+    border: 2px solid var(--cyan-glow);
+    box-shadow: inset 2px 2px 0 rgba(255, 255, 255, 0.2), inset -2px -2px 0 rgba(0, 0, 0, 0.3);
   }
 
   .border-glow-amber {
-    box-shadow: 0 0 10px rgba(255, 170, 0, 0.5), inset 0 0 10px rgba(255, 170, 0, 0.2);
+    border: 2px solid var(--amber-warn);
+    box-shadow: inset 2px 2px 0 rgba(255, 255, 255, 0.2), inset -2px -2px 0 rgba(0, 0, 0, 0.3);
+  }
+
+  /* Pixel panel effect */
+  .pixel-panel {
+    background: linear-gradient(135deg, var(--navy-mid) 0%, var(--navy-dark) 100%);
+    border: 3px solid var(--navy-light);
+    box-shadow: 
+      inset 3px 3px 0 rgba(255, 255, 255, 0.1),
+      inset -3px -3px 0 rgba(0, 0, 0, 0.4),
+      0 0 0 1px var(--navy-dark);
+  }
+
+  /* Pixel button */
+  .pixel-btn {
+    background: linear-gradient(180deg, var(--navy-light) 0%, var(--navy-mid) 100%);
+    border: 3px solid var(--navy-light);
+    box-shadow: 
+      inset 2px 2px 0 rgba(255, 255, 255, 0.3),
+      inset -2px -2px 0 rgba(0, 0, 0, 0.5),
+      3px 3px 0 rgba(0, 0, 0, 0.3);
+    transition: all 0.1s;
+  }
+
+  .pixel-btn:active {
+    box-shadow: 
+      inset 3px 3px 0 rgba(0, 0, 0, 0.5),
+      inset -2px -2px 0 rgba(255, 255, 255, 0.2);
+    transform: translate(2px, 2px);
+  }
+
+  /* Green accent variants */
+  .pixel-btn-green {
+    background: linear-gradient(180deg, var(--pixel-green) 0%, #00cc44 100%);
+    border: 3px solid var(--pixel-green);
+    color: var(--navy-dark);
+  }
+
+  .pixel-btn-cyan {
+    background: linear-gradient(180deg, var(--pixel-teal) 0%, #0099aa 100%);
+    border: 3px solid var(--pixel-teal);
+    color: var(--navy-dark);
   }
 
   .scanline {
@@ -87,12 +151,13 @@ button,
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(
-      transparent 0%,
-      rgba(0, 212, 255, 0.05) 50%,
-      transparent 100%
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 255, 102, 0.03) 2px,
+      rgba(0, 255, 102, 0.03) 4px
     );
-    background-size: 100% 4px;
     pointer-events: none;
     animation: scan 8s linear infinite;
   }
@@ -104,10 +169,10 @@ button,
 
   .pixel-corners {
     clip-path: polygon(
-      0 8px, 8px 8px, 8px 0,
-      calc(100% - 8px) 0, calc(100% - 8px) 8px, 100% 8px,
-      100% calc(100% - 8px), calc(100% - 8px) calc(100% - 8px), calc(100% - 8px) 100%,
-      8px 100%, 8px calc(100% - 8px), 0 calc(100% - 8px)
+      0 6px, 6px 6px, 6px 0,
+      calc(100% - 6px) 0, calc(100% - 6px) 6px, 100% 6px,
+      100% calc(100% - 6px), calc(100% - 6px) calc(100% - 6px), calc(100% - 6px) 100%,
+      6px 100%, 6px calc(100% - 6px), 0 calc(100% - 6px)
     );
   }
 
