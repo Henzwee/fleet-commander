@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function MANIConsole({ messages = [], autoResolve = false, onToggleAuto }) {
   return (
-    <div className="mani-console bg-gradient-to-br from-gray-900 to-gray-950 border-2 border-cyan-500/50 rounded-lg p-4 mb-3 border-glow-cyan">
+    <div className="bg-gradient-to-br from-gray-900 to-gray-950 border-2 border-cyan-500/50 rounded-lg p-4 mb-3 border-glow-cyan">
       <div className="flex items-center justify-between mb-3 pb-2 border-b border-cyan-500/30">
         <div className="text-cyan-400 font-bold tracking-wider text-sm">MESSAGE LOG</div>
         <button
@@ -17,7 +17,7 @@ export default function MANIConsole({ messages = [], autoResolve = false, onTogg
         </button>
       </div>
       
-      <div className="mani-text space-y-1 max-h-32 overflow-y-auto text-xs text-cyan-100/90 font-mono">
+      <div className="space-y-1 max-h-32 overflow-y-auto text-xs text-cyan-100/90 font-mono">
         {messages.length === 0 ? (
           <div className="text-gray-500 italic">System standby. Awaiting input...</div>
         ) : (

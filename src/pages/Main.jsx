@@ -165,10 +165,10 @@ export default function Main() {
         <ResourceHeader />
         <div className="space-y-3">
         {/* Message Console */}
-        <div className="mani-console pixel-panel p-4 w-full" style={{ height: '160px', boxSizing: 'border-box' }}>
+        <div className="bg-gradient-to-br from-cyan-900/30 to-blue-900/30 border-2 border-cyan-600/50 rounded-2xl p-4 w-full" style={{ height: '160px', boxSizing: 'border-box' }}>
           <div 
             ref={messageLogRef}
-            className="mani-text h-full overflow-y-auto space-y-2 text-sm text-cyan-100/90 font-mono"
+            className="h-full overflow-y-auto space-y-2 text-sm text-cyan-100/90 font-mono"
             style={{ scrollBehavior: 'smooth' }}
           >
             {messages.length === 0 ? (
@@ -195,7 +195,7 @@ export default function Main() {
         <div className="grid grid-cols-2 gap-3 w-full" style={{ minWidth: 0 }}>
           <button
             onClick={() => navigate(createPageUrl('Market'))}
-            className="pixel-btn-cyan py-4 text-[var(--navy-dark)] font-bold text-[10px] leading-tight uppercase w-full"
+            className="bg-gradient-to-br from-cyan-600/80 to-blue-600/80 border-2 border-cyan-500/50 rounded-xl py-4 text-white font-bold text-sm hover:from-cyan-500/80 hover:to-blue-500/80 transition-all w-full"
             style={{ minWidth: 0 }}
           >
             Ship Market
@@ -203,7 +203,7 @@ export default function Main() {
 
           <button
             onClick={() => navigate(createPageUrl('FleetManagement'))}
-            className="pixel-btn-cyan py-4 text-[var(--navy-dark)] font-bold text-[10px] leading-tight uppercase w-full"
+            className="bg-gradient-to-br from-cyan-600/80 to-blue-600/80 border-2 border-cyan-500/50 rounded-xl py-4 text-white font-bold text-sm hover:from-cyan-500/80 hover:to-blue-500/80 transition-all w-full"
             style={{ minWidth: 0 }}
           >
             Manage Fleet
@@ -213,15 +213,15 @@ export default function Main() {
         {/* Available Jobs Button */}
         <button
           onClick={() => navigate(createPageUrl('Jobs'))}
-          className="w-full pixel-btn-green py-6 text-[var(--navy-dark)] font-bold text-[11px] uppercase"
+          className="w-full bg-gradient-to-br from-cyan-700/60 to-blue-700/60 border-2 border-cyan-600/60 rounded-2xl py-6 text-cyan-100 font-bold text-xl tracking-wider hover:from-cyan-600/60 hover:to-blue-600/60 transition-all"
         >
           Available Jobs
         </button>
 
         {/* Active Missions */}
-        <div className="pixel-panel p-4 flex-1 flex flex-col min-h-0">
+        <div className="bg-gradient-to-br from-cyan-900/30 to-blue-900/30 border-2 border-cyan-600/50 rounded-2xl p-4 flex-1 flex flex-col min-h-0">
           {activeMissions.length === 0 ? (
-            <div className="text-center text-gray-500 py-8 text-[10px]">No active missions</div>
+            <div className="text-center text-gray-500 py-8">No active missions</div>
           ) : (
             <div className="space-y-3 overflow-y-auto">
               {activeMissions.map((mission) => {
@@ -230,22 +230,22 @@ export default function Main() {
                 return (
                   <div
                     key={mission.id}
-                    className="p-3 cursor-pointer transition-all"
-                    style={{
-                      background: 'linear-gradient(135deg, var(--navy-mid) 0%, var(--navy-dark) 100%)',
-                      border: `2px solid ${isFailed ? '#ff4444' : hasEvent ? '#ffaa00' : 'var(--pixel-teal)'}`,
-                      boxShadow: `inset 2px 2px 0 rgba(255,255,255,0.1), inset -2px -2px 0 rgba(0,0,0,0.3)`,
-                      animation: (isFailed || hasEvent) ? 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite' : 'none'
-                    }}
+                    className={`bg-gradient-to-r from-cyan-800/20 to-blue-800/20 border rounded-lg p-4 cursor-pointer transition-all ${
+                      isFailed
+                        ? 'border-red-500 animate-pulse'
+                        : hasEvent 
+                        ? 'border-amber-500 animate-pulse' 
+                        : 'border-cyan-600/30 hover:border-cyan-500'
+                    }`}
                   >
                     <div className="flex items-center gap-3" onClick={() => setSelectedMission(mission)}>
                       {mission.shipImage && (
                         <img src={mission.shipImage} alt={mission.shipNames} className="w-10 h-10 object-contain" />
                       )}
-                      <div className="text-cyan-100 font-bold text-[10px] leading-tight flex-1">
+                      <div className="text-cyan-100 font-bold text-sm flex-1">
                         {mission.shipNames} - {mission.distance}ly
                         {mission.activeShipCount > 1 && (
-                          <span className="text-cyan-400 text-[9px] ml-2">({mission.activeShipCount} ships)</span>
+                          <span className="text-cyan-400 text-xs ml-2">({mission.activeShipCount} ships)</span>
                         )}
                       </div>
                       {mission.isComplete ? (
@@ -293,7 +293,7 @@ export default function Main() {
                             
                             loadActiveMissions();
                           }}
-                          className="pixel-btn-green px-3 py-1 text-[var(--navy-dark)] font-bold text-[8px]"
+                          className="bg-green-600 hover:bg-green-700 border-2 border-green-500 rounded px-3 py-1 text-white font-bold text-xs"
                         >
                           COLLECT
                         </button>
@@ -303,18 +303,12 @@ export default function Main() {
                             e.stopPropagation();
                             setSelectedMission(mission);
                           }}
-                          className="px-3 py-1 font-bold text-[8px] animate-pulse"
-                          style={{
-                            background: 'linear-gradient(180deg, #ff6666 0%, #cc0000 100%)',
-                            border: '2px solid #ff4444',
-                            boxShadow: 'inset 2px 2px 0 rgba(255,255,255,0.3), inset -2px -2px 0 rgba(0,0,0,0.5)',
-                            color: 'white'
-                          }}
+                          className="bg-red-600 hover:bg-red-700 border-2 border-red-500 rounded px-3 py-1 text-white font-bold text-xs animate-pulse"
                         >
                           DEBRIEF
                         </button>
                       ) : (
-                        <div className="text-cyan-400 text-[9px] font-mono">
+                        <div className="text-cyan-400 text-xs font-mono">
                           {mission.timeRemaining}
                         </div>
                       )}
@@ -356,7 +350,7 @@ export default function Main() {
           right: 0,
           zIndex: 5
         }}>
-          <div className="pixel-panel w-full h-full relative flex flex-col overflow-y-auto" style={{
+          <div className="bg-gradient-to-br from-gray-900 to-gray-950 border-2 border-cyan-500 w-full h-full relative flex flex-col overflow-y-auto" style={{
             paddingTop: 'calc(var(--content-pad-top) + 24px)',
             paddingBottom: 'calc(var(--content-pad-bottom) + 32px)',
             paddingLeft: 'calc(var(--content-pad-left) + 24px)',
@@ -364,18 +358,18 @@ export default function Main() {
             WebkitOverflowScrolling: 'touch'
           }}>
             <div className="flex items-center gap-2 mb-6">
-              <h2 className="text-cyan-400 font-bold text-[12px]">MISSION DEBRIEF</h2>
+              <h2 className="text-cyan-400 font-bold text-lg">MISSION DEBRIEF</h2>
             </div>
             
             <div className="space-y-4 flex-1">
-              <div className="pixel-panel p-4">
-                <div className="text-amber-400 font-bold text-[10px] mb-2">Credits Earned</div>
-                <div className="text-white text-[14px] font-bold">${debriefData.credits}</div>
+              <div className="bg-cyan-900/20 border-2 border-cyan-500/50 rounded-lg p-4">
+                <div className="text-amber-400 font-bold text-sm mb-2">Credits Earned</div>
+                <div className="text-white text-2xl font-bold">${debriefData.credits}</div>
               </div>
               
-              <div className="pixel-panel p-4">
-                <div className="text-green-400 font-bold text-[10px] mb-2">Parts Collected ({debriefData.parts.length})</div>
-                <div className="text-gray-300 text-[8px] space-y-1">
+              <div className="bg-cyan-900/20 border-2 border-cyan-500/50 rounded-lg p-4">
+                <div className="text-green-400 font-bold text-sm mb-2">Parts Collected ({debriefData.parts.length})</div>
+                <div className="text-gray-300 text-xs space-y-1">
                   {debriefData.parts.map((part, idx) => (
                     <div key={idx}>• {part}</div>
                   ))}
@@ -383,16 +377,16 @@ export default function Main() {
               </div>
               
               {debriefData.crystals > 0 && (
-                <div className="pixel-panel p-4">
-                  <div className="text-purple-400 font-bold text-[10px] mb-2">Crystals Earned</div>
-                  <div className="text-white text-[14px] font-bold">{debriefData.crystals}</div>
+                <div className="bg-purple-900/20 border-2 border-purple-500/50 rounded-lg p-4">
+                  <div className="text-purple-400 font-bold text-sm mb-2">Crystals Earned</div>
+                  <div className="text-white text-2xl font-bold">{debriefData.crystals}</div>
                 </div>
               )}
             </div>
             
             <button
               onClick={() => setDebriefData(null)}
-              className="w-full pixel-btn py-2 text-white font-bold text-[10px] transition-all mt-4"
+              className="w-full bg-gray-700 active:bg-gray-600 border-2 border-gray-600 rounded-lg py-2 text-white font-bold text-sm transition-all mt-4"
             >
               CLOSE
             </button>

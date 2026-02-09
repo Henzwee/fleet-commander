@@ -372,9 +372,9 @@ export default function Market() {
       <div className="flex flex-col min-h-full pb-6" style={{ maxWidth: '100%', paddingLeft: 'var(--safe-x)', paddingRight: 'var(--safe-x)', boxSizing: 'border-box' }}>
         <ResourceHeader />
         <div className="p-4 pb-24 overflow-y-auto h-full" style={{ paddingLeft: '0', paddingRight: '0', paddingTop: '70px' }}>
-        <div className="pixel-panel p-4 mb-4">
+        <div className="bg-gradient-to-r from-gray-900 to-gray-800 border-2 border-cyan-500/50 rounded-lg p-4 mb-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2 text-cyan-400 text-[10px]">
+            <div className="flex items-center gap-2 text-cyan-400 text-sm">
               <Clock className="w-4 h-4" />
               <span>Resets: {timeUntilReset}</span>
             </div>
@@ -414,14 +414,7 @@ export default function Market() {
                 addMessage('Market reset!');
               }}
               disabled={!gameState || gameState.crystals < 10}
-              className="px-3 py-1 text-white font-bold text-[8px] transition-all flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed"
-              style={{
-                background: gameState?.crystals >= 10 
-                  ? 'linear-gradient(180deg, #bb88ff 0%, #7700ff 100%)' 
-                  : 'linear-gradient(180deg, #666 0%, #444 100%)',
-                border: gameState?.crystals >= 10 ? '2px solid #bb88ff' : '2px solid #666',
-                boxShadow: 'inset 2px 2px 0 rgba(255,255,255,0.3), inset -2px -2px 0 rgba(0,0,0,0.5)'
-              }}
+              className="bg-purple-600 active:bg-purple-700 disabled:bg-gray-600 disabled:cursor-not-allowed border-2 border-purple-500 disabled:border-gray-500 rounded-lg px-3 py-1 text-white font-bold text-xs transition-all flex items-center gap-1"
             >
               <RefreshCw className="w-3 h-3" />
               <img 
@@ -437,28 +430,31 @@ export default function Market() {
         <div className="flex gap-2 mb-4">
           <button
             onClick={() => setActiveTab('scrap')}
-            className={`flex-1 py-3 font-bold text-[10px] transition-all ${
-              activeTab === 'scrap' ? 'pixel-btn-green' : 'pixel-btn'
+            className={`flex-1 py-3 rounded-lg font-bold text-sm border-2 transition-all ${
+              activeTab === 'scrap'
+                ? 'bg-cyan-500/20 border-cyan-500 text-cyan-400'
+                : 'bg-gray-800 border-gray-600 text-gray-400'
             }`}
-            style={activeTab === 'scrap' ? { color: 'var(--navy-dark)' } : { color: '#aaa' }}
           >
             SCRAP
           </button>
           <button
             onClick={() => setActiveTab('ships')}
-            className={`flex-1 py-3 font-bold text-[10px] transition-all ${
-              activeTab === 'ships' ? 'pixel-btn-green' : 'pixel-btn'
+            className={`flex-1 py-3 rounded-lg font-bold text-sm border-2 transition-all ${
+              activeTab === 'ships'
+                ? 'bg-cyan-500/20 border-cyan-500 text-cyan-400'
+                : 'bg-gray-800 border-gray-600 text-gray-400'
             }`}
-            style={activeTab === 'ships' ? { color: 'var(--navy-dark)' } : { color: '#aaa' }}
           >
             SHIPS
           </button>
           <button
             onClick={() => setActiveTab('fuel')}
-            className={`flex-1 py-3 font-bold text-[10px] transition-all ${
-              activeTab === 'fuel' ? 'pixel-btn-green' : 'pixel-btn'
+            className={`flex-1 py-3 rounded-lg font-bold text-sm border-2 transition-all ${
+              activeTab === 'fuel'
+                ? 'bg-cyan-500/20 border-cyan-500 text-cyan-400'
+                : 'bg-gray-800 border-gray-600 text-gray-400'
             }`}
-            style={activeTab === 'fuel' ? { color: 'var(--navy-dark)' } : { color: '#aaa' }}
           >
             FUEL
           </button>
@@ -466,23 +462,19 @@ export default function Market() {
         
         <div className="space-y-3">
           {activeTab === 'ships' && marketItems.length === 0 && gameState?.marketStock?.shipStock <= 0 && (
-            <div className="pixel-panel p-8 text-center">
-              <div className="text-cyan-400 font-bold text-[12px] mb-2">SOLD OUT</div>
-              <div className="text-gray-400 text-[10px]">Come back later, money bags</div>
+            <div className="bg-gradient-to-r from-gray-800 to-gray-900 border-2 border-cyan-500/30 rounded-lg p-8 text-center">
+              <div className="text-cyan-400 font-bold text-lg mb-2">SOLD OUT</div>
+              <div className="text-gray-400 text-sm">Come back later, money bags</div>
             </div>
           )}
           {marketItems.map((item, idx) => (
             <div
               key={idx}
-              className="p-4 flex items-center justify-between transition-all"
-              style={{
-                background: 'linear-gradient(135deg, var(--navy-mid) 0%, var(--navy-dark) 100%)',
-                border: (activeTab === 'scrap' && item.stock === 0) 
-                  ? '2px solid #555' 
-                  : '2px solid var(--pixel-teal)',
-                boxShadow: 'inset 2px 2px 0 rgba(255,255,255,0.1), inset -2px -2px 0 rgba(0,0,0,0.3)',
-                opacity: (activeTab === 'scrap' && item.stock === 0) ? 0.5 : 1
-              }}
+              className={`bg-gradient-to-r from-gray-800 to-gray-900 border rounded-lg p-4 flex items-center justify-between transition-all ${
+                (activeTab === 'scrap' && item.stock === 0) 
+                  ? 'border-gray-700 opacity-50' 
+                  : 'border-cyan-500/30'
+              }`}
             >
               <div className="flex items-center gap-3">
                 {item.imageUrl ? (
@@ -496,11 +488,11 @@ export default function Market() {
                   <div className="text-3xl">{item.icon}</div>
                 )}
                 <div>
-                  <div className="text-cyan-100 font-bold text-[10px] leading-tight">
+                  <div className="text-cyan-100 font-bold text-sm">
                     {item.name}
                     {activeTab === 'scrap' && item.deltaPercent !== 0 && (
                       <span 
-                        className={`ml-2 text-[8px] ${
+                        className={`ml-2 text-xs ${
                           item.deltaPercent > 0 
                             ? 'text-red-400' 
                             : 'text-green-400'
@@ -512,10 +504,10 @@ export default function Market() {
                     )}
                   </div>
                   {item.tier && (
-                    <div className="text-[8px] text-gray-400">{item.tier} • {item.maxLY} LY</div>
+                    <div className="text-xs text-gray-400">{item.tier} • {item.maxLY} LY</div>
                   )}
                   {activeTab === 'scrap' && item.stock !== undefined && (
-                    <div className={`text-[8px] ${item.stock === 0 ? 'text-red-500' : 'text-gray-500'}`}>
+                    <div className={`text-xs ${item.stock === 0 ? 'text-red-500' : 'text-gray-500'}`}>
                       Stock: {item.stock}
                     </div>
                   )}
@@ -528,8 +520,7 @@ export default function Market() {
                   (item.currency === 'crystals' ? gameState?.crystals < item.price : gameState?.credits < item.price) ||
                   (activeTab === 'scrap' && item.stock === 0)
                 }
-                className="pixel-btn-green px-6 py-2 font-bold text-[10px] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                style={(item.currency === 'crystals' ? gameState?.crystals < item.price : gameState?.credits < item.price) || (activeTab === 'scrap' && item.stock === 0) ? { background: '#666', border: '2px solid #555', color: '#999' } : { color: 'var(--navy-dark)' }}
+                className="bg-green-600 active:bg-green-700 disabled:bg-gray-600 disabled:cursor-not-allowed border-2 border-green-500 disabled:border-gray-500 rounded-lg px-6 py-2 text-white font-bold text-sm transition-all"
               >
                 {(activeTab === 'scrap' && item.stock === 0) ? 'OUT' : (
                   <>

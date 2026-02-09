@@ -37,7 +37,7 @@ export default function Settings() {
       <div className="flex flex-col min-h-full pb-6" style={{ maxWidth: '100%', paddingLeft: 'var(--safe-x)', paddingRight: 'var(--safe-x)', boxSizing: 'border-box' }}>
         <ResourceHeader />
         <div className="p-4 pb-24 overflow-y-auto h-full" style={{ paddingLeft: '0', paddingRight: '0', paddingTop: '70px' }}>
-          <h1 className="text-[14px] font-bold text-cyan-400 mb-4">SHIP TIER STATS</h1>
+          <h1 className="text-2xl font-bold text-cyan-400 mb-4">SHIP TIER STATS</h1>
           
           <div className="space-y-4">
             {TIER_ORDER.map((tier) => {
@@ -47,8 +47,7 @@ export default function Settings() {
               return (
                 <div 
                   key={tier}
-                  className="pixel-panel p-4"
-                  style={{ borderColor: tierColors[tier].split(' ')[0].replace('border-', '') }}
+                  className={`bg-gradient-to-r from-gray-900 to-gray-800 border-2 ${tierColors[tier]} rounded-lg p-4`}
                 >
                   <div className="flex gap-4">
                     {/* Ship Images */}
@@ -68,11 +67,11 @@ export default function Settings() {
                     
                     {/* Stats */}
                     <div className="flex-1">
-                      <div className={`font-bold text-[11px] mb-3 ${tierColors[tier]}`}>
+                      <div className={`font-bold text-lg mb-3 ${tierColors[tier]}`}>
                         {tier}
                       </div>
                       
-                      <div className="space-y-2 text-[9px]">
+                      <div className="space-y-2 text-xs">
                         <div>
                           <div className="text-gray-500">Hourly Wage</div>
                           <div className="text-cyan-100 font-bold">

@@ -151,19 +151,21 @@ export default function FleetManagement() {
         <div className="flex gap-2 mb-4">
           <button
             onClick={() => handleTabChange('ships')}
-            className={`flex-1 py-3 font-bold text-[10px] transition-all ${
-              activeTab === 'ships' ? 'pixel-btn-green' : 'pixel-btn'
+            className={`flex-1 py-3 rounded-lg font-bold text-sm border-2 transition-all ${
+              activeTab === 'ships'
+                ? 'bg-cyan-500/20 border-cyan-500 text-cyan-400'
+                : 'bg-gray-800 border-gray-600 text-gray-400'
             }`}
-            style={activeTab === 'ships' ? { color: 'var(--navy-dark)' } : { color: '#aaa' }}
           >
             SHIPS
           </button>
           <button
             onClick={() => handleTabChange('inventory')}
-            className={`flex-1 py-3 font-bold text-[10px] transition-all ${
-              activeTab === 'inventory' ? 'pixel-btn-green' : 'pixel-btn'
+            className={`flex-1 py-3 rounded-lg font-bold text-sm border-2 transition-all ${
+              activeTab === 'inventory'
+                ? 'bg-cyan-500/20 border-cyan-500 text-cyan-400'
+                : 'bg-gray-800 border-gray-600 text-gray-400'
             }`}
-            style={activeTab === 'inventory' ? { color: 'var(--navy-dark)' } : { color: '#aaa' }}
           >
             INVENTORY
           </button>
@@ -172,10 +174,10 @@ export default function FleetManagement() {
         {/* Ships Tab */}
         {activeTab === 'ships' && (
           <section id="fleetShipsPanel">
-            <div className="pixel-panel p-4 mb-4">
+            <div className="bg-gradient-to-r from-gray-900 to-gray-800 border-2 border-cyan-500/50 rounded-lg p-4 mb-4">
               <div className="flex items-center justify-between">
-                <div className="text-cyan-400 font-bold text-[10px]">YOUR FLEET</div>
-                <div className="flex items-center gap-2 text-gray-400 text-[9px]">
+                <div className="text-cyan-400 font-bold">YOUR FLEET</div>
+                <div className="flex items-center gap-2 text-gray-400 text-xs">
                   <Package className="w-4 h-4" />
                   <span>{totalParts} parts</span>
                 </div>
@@ -183,7 +185,7 @@ export default function FleetManagement() {
             </div>
             
             {ships.length === 0 ? (
-              <div className="text-center text-gray-500 py-8 text-[10px]">
+              <div className="text-center text-gray-500 py-8">
                 No ships in fleet. Hire ships from the market!
               </div>
             ) : (
@@ -194,7 +196,7 @@ export default function FleetManagement() {
                   
                   return (
                     <div key={tier} className="mb-6">
-                      <div className="text-cyan-400 font-bold text-[10px] mb-3 uppercase">{tier}</div>
+                      <div className="text-cyan-400 font-bold text-sm mb-3 uppercase">{tier}</div>
                       <div className="grid grid-cols-1 gap-3">
                         {tierShips.map((ship) => (
                           <div key={ship.id}>
@@ -204,10 +206,12 @@ export default function FleetManagement() {
                             />
                             
                             {selectedShip?.id === ship.id && (
-                              <div className="pixel-panel p-4 mt-2" style={{
-                                borderColor: ship.health <= 25 ? '#ff4444' : ship.health <= 50 ? '#ffaa00' : 'var(--pixel-teal)'
-                              }}>
-                                <div className="grid grid-cols-2 gap-3 mb-4 text-[9px]">
+                              <div className={`bg-gradient-to-br from-gray-900 to-gray-950 rounded-lg p-4 mt-2 ${
+                                ship.health <= 25 ? 'border-2 border-red-500/60' :
+                                ship.health <= 50 ? 'border-2 border-amber-500/60' :
+                                'border-2 border-cyan-500/30'
+                              }`}>
+                                <div className="grid grid-cols-2 gap-3 mb-4 text-xs">
                                   <div>
                                     <div className="text-gray-400">Status</div>
                                     <div className={`font-bold ${getStatusColor(ship.status)}`}>
@@ -233,14 +237,14 @@ export default function FleetManagement() {
                                 </div>
                                 
                                 {ship.damaged && ship.status !== 'active' && ship.requiredParts && ship.requiredParts.length > 0 && (
-                                  <div className="mb-3 pixel-panel p-3">
-                                    <div className="text-cyan-400 text-[9px] font-bold mb-2">Required Parts</div>
+                                  <div className="mb-3 bg-gray-900/50 rounded-lg p-3 border border-cyan-500/30">
+                                    <div className="text-cyan-400 text-xs font-bold mb-2">Required Parts</div>
                                     <div className="space-y-1">
                                       {ship.requiredParts.map((part, idx) => {
                                         const available = (gameState?.parts || {})[part.name] || 0;
                                         const hasEnough = available >= part.qty;
                                         return (
-                                          <div key={idx} className="flex items-center gap-2 text-[8px]">
+                                          <div key={idx} className="flex items-center gap-2 text-xs">
                                             {hasEnough ? (
                                               <Check className="w-4 h-4 text-green-400" />
                                             ) : (
@@ -257,11 +261,8 @@ export default function FleetManagement() {
                                 )}
                                 
                                 {ship.health < 100 && ship.status === 'active' && (
-                                  <div className="mb-3 p-2" style={{
-                                    background: 'rgba(255,170,0,0.2)',
-                                    border: '2px solid #ffaa00'
-                                  }}>
-                                    <div className="text-amber-400 text-[8px] text-center">Deployed ships can't be repaired</div>
+                                  <div className="mb-3 bg-amber-900/30 rounded-lg p-2 border border-amber-500/30">
+                                    <div className="text-amber-400 text-xs text-center">Deployed ships can't be repaired</div>
                                   </div>
                                 )}
                                 
@@ -270,7 +271,7 @@ export default function FleetManagement() {
                                     <button
                                       onClick={() => handleRepair(ship)}
                                       disabled={ship.status === 'active' || !hasParts(ship.requiredParts || [], gameState?.parts || {})}
-                                      className="pixel-btn-green py-2 px-3 text-[var(--navy-dark)] font-bold text-[9px] flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                                      className="bg-green-600 border-2 border-green-500 rounded-lg py-2 px-3 text-white font-bold text-xs flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed active:bg-green-700"
                                     >
                                       <Wrench className="w-4 h-4" />
                                       <span>REPAIR</span>
@@ -280,13 +281,7 @@ export default function FleetManagement() {
                                   <button
                                     onClick={() => handleFire(ship)}
                                     disabled={ship.status === 'active'}
-                                    className={`py-2 px-3 font-bold text-[9px] flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed ${ship.health < 100 ? '' : 'col-span-2'}`}
-                                    style={{
-                                      background: 'linear-gradient(180deg, #ff6666 0%, #cc0000 100%)',
-                                      border: '2px solid #ff4444',
-                                      boxShadow: 'inset 2px 2px 0 rgba(255,255,255,0.3), inset -2px -2px 0 rgba(0,0,0,0.5)',
-                                      color: 'white'
-                                    }}
+                                    className={`bg-red-600 border-2 border-red-500 rounded-lg py-2 px-3 text-white font-bold text-xs flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed ${ship.health < 100 ? '' : 'col-span-2'}`}
                                   >
                                     <UserMinus className="w-4 h-4" />
                                     <span>FIRE</span>
@@ -308,10 +303,10 @@ export default function FleetManagement() {
         {/* Inventory Tab */}
         {activeTab === 'inventory' && (
           <section id="fleetInventoryPanel">
-            <div className="pixel-panel p-4 mb-4">
+            <div className="bg-gradient-to-r from-gray-900 to-gray-800 border-2 border-cyan-500/50 rounded-lg p-4 mb-4">
               <div className="flex items-center justify-between">
-                <div className="text-cyan-400 font-bold text-[10px]">INVENTORY</div>
-                <div className="flex items-center gap-2 text-gray-400 text-[9px]">
+                <div className="text-cyan-400 font-bold">INVENTORY</div>
+                <div className="flex items-center gap-2 text-gray-400 text-xs">
                   <Package className="w-4 h-4" />
                   <span>{totalParts} parts</span>
                 </div>
@@ -319,7 +314,7 @@ export default function FleetManagement() {
             </div>
             
             {Object.keys(inventoryParts).length === 0 ? (
-              <div className="text-center text-gray-500 py-8 text-[10px]">
+              <div className="text-center text-gray-500 py-8">
                 No parts in inventory. Buy from market!
               </div>
             ) : (
@@ -330,13 +325,13 @@ export default function FleetManagement() {
                   .map(([partName, qty]) => (
                     <div
                       key={partName}
-                      className="pixel-panel p-3 flex items-center justify-between"
+                      className="bg-gradient-to-r from-gray-800/60 to-gray-900/60 border border-cyan-500/20 rounded-lg p-3 flex items-center justify-between"
                     >
                       <div className="flex items-center gap-3">
                         <Package className="w-5 h-5 text-cyan-400" />
-                        <span className="text-cyan-100 text-[10px]">{partName}</span>
+                        <span className="text-cyan-100 text-sm">{partName}</span>
                       </div>
-                      <div className="text-cyan-400 font-bold text-[10px]">x{qty}</div>
+                      <div className="text-cyan-400 font-bold text-sm">x{qty}</div>
                     </div>
                   ))}
               </div>
