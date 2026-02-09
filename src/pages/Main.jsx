@@ -165,10 +165,10 @@ export default function Main() {
         <ResourceHeader />
         <div className="space-y-3">
         {/* Message Console */}
-        <div className="bg-gradient-to-br from-cyan-900/30 to-blue-900/30 border-2 border-cyan-600/50 rounded-2xl p-4 w-full" style={{ height: '160px', boxSizing: 'border-box' }}>
+        <div className="bg-gradient-to-br from-cyan-900/30 to-blue-900/30 border-4 border-cyan-600/50 p-4 w-full" style={{ height: '160px', boxSizing: 'border-box' }}>
           <div 
             ref={messageLogRef}
-            className="h-full overflow-y-auto space-y-2 text-sm text-cyan-100/90 font-mono"
+            className="h-full overflow-y-auto space-y-2 text-sm text-cyan-100/90 message-text"
             style={{ scrollBehavior: 'smooth' }}
           >
             {messages.length === 0 ? (
