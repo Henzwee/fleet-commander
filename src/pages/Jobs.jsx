@@ -239,12 +239,12 @@ export default function Jobs() {
       <div className="flex flex-col min-h-full pb-6" style={{ maxWidth: '100%', paddingLeft: 'var(--safe-x)', paddingRight: 'var(--safe-x)', boxSizing: 'border-box' }}>
         <ResourceHeader />
         <div className="p-4 pb-24 overflow-y-auto h-full" style={{ paddingLeft: '0', paddingRight: '0', paddingTop: '70px' }}>
-        <div className="bg-gradient-to-r from-gray-900 to-gray-800 border-2 border-cyan-500/50 rounded-lg p-4 mb-4">
+        <div className="pixel-panel p-4 mb-4">
           <div className="flex items-center justify-between">
-            <div className="text-cyan-400 font-bold">AVAILABLE MISSIONS</div>
+            <div className="text-cyan-400 font-bold text-[10px]">AVAILABLE MISSIONS</div>
             <div className="flex items-center gap-2 text-amber-400">
               <Fuel className="w-4 h-4" />
-              <span className="font-bold">{gameState?.fuel} fuel</span>
+              <span className="font-bold text-[10px]">{gameState?.fuel} fuel</span>
             </div>
           </div>
         </div>
@@ -255,19 +255,26 @@ export default function Jobs() {
             <div
               key={mission.id}
               onClick={() => setSelectedMission(mission)}
-              className={`bg-gradient-to-r from-gray-800 to-gray-900 border-2 rounded-lg p-4 transition-all cursor-pointer ${
-                selectedMission?.id === mission.id
-                  ? 'border-cyan-500 bg-cyan-500/10'
-                  : 'border-gray-600 hover:border-cyan-500/50'
-              }`}
+              className="p-4 transition-all cursor-pointer"
+              style={{
+                background: selectedMission?.id === mission.id 
+                  ? 'linear-gradient(135deg, rgba(0,204,170,0.2) 0%, var(--navy-dark) 100%)'
+                  : 'linear-gradient(135deg, var(--navy-mid) 0%, var(--navy-dark) 100%)',
+                border: selectedMission?.id === mission.id 
+                  ? '3px solid var(--pixel-teal)' 
+                  : '2px solid var(--navy-light)',
+                boxShadow: selectedMission?.id === mission.id
+                  ? 'inset 3px 3px 0 rgba(0,255,102,0.2), inset -3px -3px 0 rgba(0,0,0,0.4)'
+                  : 'inset 2px 2px 0 rgba(255,255,255,0.1), inset -2px -2px 0 rgba(0,0,0,0.3)'
+              }}
             >
               <div className="flex items-center justify-between mb-2">
-                <div className="text-cyan-100 font-bold">{mission.description}</div>
+                <div className="text-cyan-100 font-bold text-[10px] leading-tight">{mission.description}</div>
               </div>
               
-              <div className="text-xs text-gray-400 mb-2">{mission.tier} and higher</div>
+              <div className="text-[8px] text-gray-400 mb-2">{mission.tier} and higher</div>
               
-              <div className="grid grid-cols-2 gap-2 text-xs">
+              <div className="grid grid-cols-2 gap-2 text-[9px]">
                 <div className="flex items-center gap-1 text-gray-400">
                   <MapPin className="w-3 h-3" />
                   <span>{mission.distance} ly</span>
@@ -313,7 +320,7 @@ export default function Jobs() {
         )}
         
         {selectedMission && allHiredShips.length === 0 && (
-          <div className="fixed z-[4] bg-gradient-to-br from-gray-900 to-gray-950 flex flex-col" style={{
+          <div className="fixed z-[4] pixel-panel flex flex-col" style={{
             top: 'calc(var(--content-pad-top) - 40px)',
             bottom: 'calc(var(--content-pad-bottom) - 30px)',
             left: 'var(--content-pad-left)',
@@ -321,14 +328,14 @@ export default function Jobs() {
           }}>
             <div className="flex-1 flex flex-col px-6 py-4 relative">
               <div className="mb-6 mt-6">
-                <h2 className="text-cyan-400 font-bold text-base">SELECT SHIP</h2>
+                <h2 className="text-cyan-400 font-bold text-[12px]">SELECT SHIP</h2>
               </div>
-              <div className="text-gray-500 text-sm text-center py-8 flex-1 flex items-center justify-center">
+              <div className="text-gray-500 text-[10px] text-center py-8 flex-1 flex items-center justify-center">
                 No ships available. Hire more ships or wait for active missions to complete.
               </div>
               <button
                 onClick={() => setSelectedMission(null)}
-                className="bg-gray-700 hover:bg-gray-600 border-2 border-gray-600 rounded-lg py-2.5 text-white font-bold text-sm transition-all mb-8"
+                className="pixel-btn py-2.5 text-white font-bold text-[10px] transition-all mb-8"
               >
                 BACK
               </button>
