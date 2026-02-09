@@ -293,7 +293,7 @@ export default function Main() {
                             
                             loadActiveMissions();
                           }}
-                          className="bg-green-600 hover:bg-green-700 border-2 border-green-500 rounded px-3 py-1 text-white font-bold text-xs"
+                          className="bg-green-600 hover:bg-green-700 border-2 border-green-500 px-2 py-1 text-white font-bold text-xs"
                         >
                           COLLECT
                         </button>
@@ -303,12 +303,12 @@ export default function Main() {
                             e.stopPropagation();
                             setSelectedMission(mission);
                           }}
-                          className="bg-red-600 hover:bg-red-700 border-2 border-red-500 rounded px-3 py-1 text-white font-bold text-xs animate-pulse"
+                          className="bg-red-600 hover:bg-red-700 border-2 border-red-500 px-2 py-1 text-white font-bold text-xs animate-pulse"
                         >
                           DEBRIEF
                         </button>
                       ) : (
-                        <div className="text-cyan-400 text-xs font-mono">
+                        <div className="text-cyan-400 text-xs message-text">
                           {mission.timeRemaining}
                         </div>
                       )}
