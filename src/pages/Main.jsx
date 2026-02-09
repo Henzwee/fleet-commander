@@ -362,13 +362,13 @@ export default function Main() {
             </div>
             
             <div className="space-y-4 flex-1">
-              <div className="bg-cyan-900/20 border-2 border-cyan-500/50 rounded-lg p-4">
-                <div className="text-amber-400 font-bold text-sm mb-2">Credits Earned</div>
-                <div className="text-white text-2xl font-bold">${debriefData.credits}</div>
+              <div className="bg-cyan-900/20 border-4 border-cyan-500/50 p-4">
+                <div className="text-amber-400 font-bold text-xs mb-2">Credits Earned</div>
+                <div className="text-white text-xl font-bold">${debriefData.credits}</div>
               </div>
               
-              <div className="bg-cyan-900/20 border-2 border-cyan-500/50 rounded-lg p-4">
-                <div className="text-green-400 font-bold text-sm mb-2">Parts Collected ({debriefData.parts.length})</div>
+              <div className="bg-cyan-900/20 border-4 border-cyan-500/50 p-4">
+                <div className="text-green-400 font-bold text-xs mb-2">Parts Collected ({debriefData.parts.length})</div>
                 <div className="text-gray-300 text-xs space-y-1">
                   {debriefData.parts.map((part, idx) => (
                     <div key={idx}>• {part}</div>
@@ -377,16 +377,16 @@ export default function Main() {
               </div>
               
               {debriefData.crystals > 0 && (
-                <div className="bg-purple-900/20 border-2 border-purple-500/50 rounded-lg p-4">
-                  <div className="text-purple-400 font-bold text-sm mb-2">Crystals Earned</div>
-                  <div className="text-white text-2xl font-bold">{debriefData.crystals}</div>
+                <div className="bg-purple-900/20 border-4 border-purple-500/50 p-4">
+                  <div className="text-purple-400 font-bold text-xs mb-2">Crystals Earned</div>
+                  <div className="text-white text-xl font-bold">{debriefData.crystals}</div>
                 </div>
               )}
             </div>
             
             <button
               onClick={() => setDebriefData(null)}
-              className="w-full bg-gray-700 active:bg-gray-600 border-2 border-gray-600 rounded-lg py-2 text-white font-bold text-sm transition-all mt-4"
+              className="w-full bg-gray-700 active:bg-gray-600 border-4 border-gray-600 py-3 text-white font-bold text-xs transition-all mt-4"
             >
               CLOSE
             </button>
