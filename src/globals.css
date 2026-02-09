@@ -34,13 +34,16 @@ body {
   -webkit-tap-highlight-color: transparent;
   overflow-x: hidden;
   font-weight: 400;
-  letter-spacing: 0.04em;
+  letter-spacing: 0;
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--ui-font);
   font-weight: 400;
-  letter-spacing: 0.05em;
+  letter-spacing: 0;
 }
 
 button,
@@ -52,7 +55,12 @@ button,
 .app-panel {
   font-family: var(--ui-font);
   font-weight: 400;
-  letter-spacing: 0.05em;
+  letter-spacing: 0;
+}
+
+.message-text {
+  font-family: var(--message-font);
+  letter-spacing: 0.04em;
 }
 
 @layer utilities {
