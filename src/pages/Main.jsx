@@ -219,9 +219,9 @@ export default function Main() {
         </button>
 
         {/* Active Missions */}
-        <div className="bg-gradient-to-br from-cyan-900/30 to-blue-900/30 border-2 border-cyan-600/50 rounded-2xl p-4 flex-1 flex flex-col min-h-0">
+        <div className="bg-gradient-to-br from-cyan-900/30 to-blue-900/30 border-4 border-cyan-600/50 p-4 flex-1 flex flex-col min-h-0">
           {activeMissions.length === 0 ? (
-            <div className="text-center text-gray-500 py-8">No active missions</div>
+            <div className="text-center text-gray-500 py-8 text-xs">No active missions</div>
           ) : (
             <div className="space-y-3 overflow-y-auto">
               {activeMissions.map((mission) => {
@@ -230,7 +230,7 @@ export default function Main() {
                 return (
                   <div
                     key={mission.id}
-                    className={`bg-gradient-to-r from-cyan-800/20 to-blue-800/20 border rounded-lg p-4 cursor-pointer transition-all ${
+                    className={`bg-gradient-to-r from-cyan-800/20 to-blue-800/20 border-2 p-3 cursor-pointer transition-all ${
                       isFailed
                         ? 'border-red-500 animate-pulse'
                         : hasEvent 
