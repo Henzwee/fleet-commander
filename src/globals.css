@@ -84,6 +84,31 @@ button,
     box-shadow: 0 0 10px rgba(255, 170, 0, 0.5), inset 0 0 10px rgba(255, 170, 0, 0.2);
   }
 
+  /* Pixelated UI overrides */
+  * {
+    border-radius: 0 !important;
+  }
+
+  button,
+  .btn,
+  input,
+  select,
+  textarea,
+  .card,
+  .panel,
+  .badge,
+  div[class*="rounded"] {
+    border-radius: 0 !important;
+  }
+
+  /* Chunky pixelated borders */
+  .border,
+  .border-2,
+  .border-4,
+  [class*="border-"] {
+    border-style: solid;
+  }
+
   .scanline {
     position: relative;
     overflow: hidden;
