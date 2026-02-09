@@ -165,10 +165,10 @@ export default function Main() {
         <ResourceHeader />
         <div className="space-y-3">
         {/* Message Console */}
-        <div className="bg-gradient-to-br from-cyan-900/30 to-blue-900/30 border-4 border-cyan-600/50 p-4 w-full" style={{ height: '160px', boxSizing: 'border-box' }}>
+        <div className="bg-gradient-to-br from-cyan-900/30 to-blue-900/30 border-2 border-cyan-600/50 rounded-2xl p-4 w-full" style={{ height: '160px', boxSizing: 'border-box' }}>
           <div 
             ref={messageLogRef}
-            className="h-full overflow-y-auto space-y-2 text-sm text-cyan-100/90 message-text"
+            className="h-full overflow-y-auto space-y-2 text-sm text-cyan-100/90 font-mono"
             style={{ scrollBehavior: 'smooth' }}
           >
             {messages.length === 0 ? (
@@ -195,7 +195,7 @@ export default function Main() {
         <div className="grid grid-cols-2 gap-3 w-full" style={{ minWidth: 0 }}>
           <button
             onClick={() => navigate(createPageUrl('Market'))}
-            className="bg-gradient-to-br from-cyan-600/80 to-blue-600/80 border-4 border-cyan-500/50 py-4 text-white font-bold text-xs hover:from-cyan-500/80 hover:to-blue-500/80 transition-all w-full"
+            className="bg-gradient-to-br from-cyan-600/80 to-blue-600/80 border-2 border-cyan-500/50 rounded-xl py-4 text-white font-bold text-sm hover:from-cyan-500/80 hover:to-blue-500/80 transition-all w-full"
             style={{ minWidth: 0 }}
           >
             Ship Market
@@ -203,7 +203,7 @@ export default function Main() {
 
           <button
             onClick={() => navigate(createPageUrl('FleetManagement'))}
-            className="bg-gradient-to-br from-cyan-600/80 to-blue-600/80 border-4 border-cyan-500/50 py-4 text-white font-bold text-xs hover:from-cyan-500/80 hover:to-blue-500/80 transition-all w-full"
+            className="bg-gradient-to-br from-cyan-600/80 to-blue-600/80 border-2 border-cyan-500/50 rounded-xl py-4 text-white font-bold text-sm hover:from-cyan-500/80 hover:to-blue-500/80 transition-all w-full"
             style={{ minWidth: 0 }}
           >
             Manage Fleet
@@ -213,15 +213,15 @@ export default function Main() {
         {/* Available Jobs Button */}
         <button
           onClick={() => navigate(createPageUrl('Jobs'))}
-          className="w-full bg-gradient-to-br from-cyan-700/60 to-blue-700/60 border-4 border-cyan-600/60 py-6 text-cyan-100 font-bold text-base tracking-wider hover:from-cyan-600/60 hover:to-blue-600/60 transition-all"
+          className="w-full bg-gradient-to-br from-cyan-700/60 to-blue-700/60 border-2 border-cyan-600/60 rounded-2xl py-6 text-cyan-100 font-bold text-xl tracking-wider hover:from-cyan-600/60 hover:to-blue-600/60 transition-all"
         >
           Available Jobs
         </button>
 
         {/* Active Missions */}
-        <div className="bg-gradient-to-br from-cyan-900/30 to-blue-900/30 border-4 border-cyan-600/50 p-4 flex-1 flex flex-col min-h-0">
+        <div className="bg-gradient-to-br from-cyan-900/30 to-blue-900/30 border-2 border-cyan-600/50 rounded-2xl p-4 flex-1 flex flex-col min-h-0">
           {activeMissions.length === 0 ? (
-            <div className="text-center text-gray-500 py-8 text-xs">No active missions</div>
+            <div className="text-center text-gray-500 py-8">No active missions</div>
           ) : (
             <div className="space-y-3 overflow-y-auto">
               {activeMissions.map((mission) => {
@@ -230,7 +230,7 @@ export default function Main() {
                 return (
                   <div
                     key={mission.id}
-                    className={`bg-gradient-to-r from-cyan-800/20 to-blue-800/20 border-2 p-3 cursor-pointer transition-all ${
+                    className={`bg-gradient-to-r from-cyan-800/20 to-blue-800/20 border rounded-lg p-4 cursor-pointer transition-all ${
                       isFailed
                         ? 'border-red-500 animate-pulse'
                         : hasEvent 
@@ -240,9 +240,9 @@ export default function Main() {
                   >
                     <div className="flex items-center gap-3" onClick={() => setSelectedMission(mission)}>
                       {mission.shipImage && (
-                        <img src={mission.shipImage} alt={mission.shipNames} className="w-8 h-8 object-contain" style={{ imageRendering: 'pixelated' }} />
+                        <img src={mission.shipImage} alt={mission.shipNames} className="w-10 h-10 object-contain" />
                       )}
-                      <div className="text-cyan-100 font-bold text-xs flex-1">
+                      <div className="text-cyan-100 font-bold text-sm flex-1">
                         {mission.shipNames} - {mission.distance}ly
                         {mission.activeShipCount > 1 && (
                           <span className="text-cyan-400 text-xs ml-2">({mission.activeShipCount} ships)</span>
@@ -293,7 +293,7 @@ export default function Main() {
                             
                             loadActiveMissions();
                           }}
-                          className="bg-green-600 hover:bg-green-700 border-2 border-green-500 px-2 py-1 text-white font-bold text-xs"
+                          className="bg-green-600 hover:bg-green-700 border-2 border-green-500 rounded px-3 py-1 text-white font-bold text-xs"
                         >
                           COLLECT
                         </button>
@@ -303,12 +303,12 @@ export default function Main() {
                             e.stopPropagation();
                             setSelectedMission(mission);
                           }}
-                          className="bg-red-600 hover:bg-red-700 border-2 border-red-500 px-2 py-1 text-white font-bold text-xs animate-pulse"
+                          className="bg-red-600 hover:bg-red-700 border-2 border-red-500 rounded px-3 py-1 text-white font-bold text-xs animate-pulse"
                         >
                           DEBRIEF
                         </button>
                       ) : (
-                        <div className="text-cyan-400 text-xs message-text">
+                        <div className="text-cyan-400 text-xs font-mono">
                           {mission.timeRemaining}
                         </div>
                       )}
@@ -362,13 +362,13 @@ export default function Main() {
             </div>
             
             <div className="space-y-4 flex-1">
-              <div className="bg-cyan-900/20 border-4 border-cyan-500/50 p-4">
-                <div className="text-amber-400 font-bold text-xs mb-2">Credits Earned</div>
-                <div className="text-white text-xl font-bold">${debriefData.credits}</div>
+              <div className="bg-cyan-900/20 border-2 border-cyan-500/50 rounded-lg p-4">
+                <div className="text-amber-400 font-bold text-sm mb-2">Credits Earned</div>
+                <div className="text-white text-2xl font-bold">${debriefData.credits}</div>
               </div>
               
-              <div className="bg-cyan-900/20 border-4 border-cyan-500/50 p-4">
-                <div className="text-green-400 font-bold text-xs mb-2">Parts Collected ({debriefData.parts.length})</div>
+              <div className="bg-cyan-900/20 border-2 border-cyan-500/50 rounded-lg p-4">
+                <div className="text-green-400 font-bold text-sm mb-2">Parts Collected ({debriefData.parts.length})</div>
                 <div className="text-gray-300 text-xs space-y-1">
                   {debriefData.parts.map((part, idx) => (
                     <div key={idx}>• {part}</div>
@@ -377,16 +377,16 @@ export default function Main() {
               </div>
               
               {debriefData.crystals > 0 && (
-                <div className="bg-purple-900/20 border-4 border-purple-500/50 p-4">
-                  <div className="text-purple-400 font-bold text-xs mb-2">Crystals Earned</div>
-                  <div className="text-white text-xl font-bold">{debriefData.crystals}</div>
+                <div className="bg-purple-900/20 border-2 border-purple-500/50 rounded-lg p-4">
+                  <div className="text-purple-400 font-bold text-sm mb-2">Crystals Earned</div>
+                  <div className="text-white text-2xl font-bold">{debriefData.crystals}</div>
                 </div>
               )}
             </div>
             
             <button
               onClick={() => setDebriefData(null)}
-              className="w-full bg-gray-700 active:bg-gray-600 border-4 border-gray-600 py-3 text-white font-bold text-xs transition-all mt-4"
+              className="w-full bg-gray-700 active:bg-gray-600 border-2 border-gray-600 rounded-lg py-2 text-white font-bold text-sm transition-all mt-4"
             >
               CLOSE
             </button>
