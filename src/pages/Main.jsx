@@ -240,9 +240,9 @@ export default function Main() {
                   >
                     <div className="flex items-center gap-3" onClick={() => setSelectedMission(mission)}>
                       {mission.shipImage && (
-                        <img src={mission.shipImage} alt={mission.shipNames} className="w-10 h-10 object-contain" />
+                        <img src={mission.shipImage} alt={mission.shipNames} className="w-8 h-8 object-contain" style={{ imageRendering: 'pixelated' }} />
                       )}
-                      <div className="text-cyan-100 font-bold text-sm flex-1">
+                      <div className="text-cyan-100 font-bold text-xs flex-1">
                         {mission.shipNames} - {mission.distance}ly
                         {mission.activeShipCount > 1 && (
                           <span className="text-cyan-400 text-xs ml-2">({mission.activeShipCount} ships)</span>
