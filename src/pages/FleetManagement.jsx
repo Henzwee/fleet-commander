@@ -144,40 +144,80 @@ export default function FleetManagement() {
   
   return (
     <DeviceFrame title="FLEET">
-      <div className="flex flex-col min-h-full pb-6" style={{ maxWidth: '100%', paddingLeft: 'var(--safe-x)', paddingRight: 'var(--safe-x)', boxSizing: 'border-box' }}>
+      <div className="flex flex-col h-full overflow-hidden" style={{ maxWidth: '100%', paddingLeft: 'var(--safe-x)', paddingRight: 'var(--safe-x)', boxSizing: 'border-box' }}>
         <ResourceHeader />
-        <div className="p-4 pb-24 overflow-y-auto h-full" style={{ paddingLeft: '0', paddingRight: '0', paddingTop: '70px' }}>
+        <div className="flex-1 overflow-y-auto" style={{ paddingLeft: '0', paddingRight: '0', paddingTop: '70px', paddingBottom: '24px' }}>
         {/* Tab Switcher */}
         <div className="flex gap-2 mb-4">
           <button
             onClick={() => handleTabChange('ships')}
-            className={`flex-1 py-3 rounded-lg font-bold text-sm border-2 transition-all ${
-              activeTab === 'ships'
-                ? 'bg-cyan-500/20 border-cyan-500 text-cyan-400'
-                : 'bg-gray-800 border-gray-600 text-gray-400'
-            }`}
+            className="relative flex-1 py-3 font-bold text-sm"
           >
-            SHIPS
+            <div className={`absolute inset-0 border-2 ${
+              activeTab === 'ships'
+                ? 'bg-[#3a5a4f] border-[#5a7a5f]'
+                : 'bg-[#2a3a2f] border-[#3a4a3f]'
+            }`} style={{
+              boxShadow: 'inset 0 0 0 1px #1a2a1f'
+            }}></div>
+            <div className={`absolute inset-[3px] ${
+              activeTab === 'ships'
+                ? 'bg-[#3a5a4f]'
+                : 'bg-[#1a2a1f]'
+            }`} style={{
+              backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,122,95,0.15) 1px, transparent 0)',
+              backgroundSize: '3px 3px',
+              boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.3)'
+            }}></div>
+            <span className={`relative ${
+              activeTab === 'ships'
+                ? 'text-[#d0e8d5]'
+                : 'text-[#5a6a5f]'
+            }`}>SHIPS</span>
           </button>
           <button
             onClick={() => handleTabChange('inventory')}
-            className={`flex-1 py-3 rounded-lg font-bold text-sm border-2 transition-all ${
-              activeTab === 'inventory'
-                ? 'bg-cyan-500/20 border-cyan-500 text-cyan-400'
-                : 'bg-gray-800 border-gray-600 text-gray-400'
-            }`}
+            className="relative flex-1 py-3 font-bold text-sm"
           >
-            INVENTORY
+            <div className={`absolute inset-0 border-2 ${
+              activeTab === 'inventory'
+                ? 'bg-[#3a5a4f] border-[#5a7a5f]'
+                : 'bg-[#2a3a2f] border-[#3a4a3f]'
+            }`} style={{
+              boxShadow: 'inset 0 0 0 1px #1a2a1f'
+            }}></div>
+            <div className={`absolute inset-[3px] ${
+              activeTab === 'inventory'
+                ? 'bg-[#3a5a4f]'
+                : 'bg-[#1a2a1f]'
+            }`} style={{
+              backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,122,95,0.15) 1px, transparent 0)',
+              backgroundSize: '3px 3px',
+              boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.3)'
+            }}></div>
+            <span className={`relative ${
+              activeTab === 'inventory'
+                ? 'text-[#d0e8d5]'
+                : 'text-[#5a6a5f]'
+            }`}>INVENTORY</span>
           </button>
         </div>
         
         {/* Ships Tab */}
         {activeTab === 'ships' && (
           <section id="fleetShipsPanel">
-            <div className="bg-gradient-to-r from-gray-900 to-gray-800 border-2 border-cyan-500/50 rounded-lg p-4 mb-4">
-              <div className="flex items-center justify-between">
-                <div className="text-cyan-400 font-bold">YOUR FLEET</div>
-                <div className="flex items-center gap-2 text-gray-400 text-xs">
+            <div className="relative p-4 mb-4">
+              <div className="absolute inset-0 bg-[#2a3a2f] border-2 border-[#5a7a5f]" style={{
+                boxShadow: 'inset 0 0 0 1px #1a2a1f'
+              }}></div>
+              <div className="absolute inset-[4px] bg-[#1a2a1f]" style={{
+                backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,122,95,0.1) 1px, transparent 0)',
+                backgroundSize: '3px 3px',
+                boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.5)'
+              }}></div>
+              <div className="relative flex items-center justify-between">
+                <div className="text-[#a8c5ad] font-bold">YOUR FLEET</div>
+                <div className="flex items-center gap-2 text-[#5a6a5f] text-xs">
                   <Package className="w-4 h-4" />
                   <span>{totalParts} parts</span>
                 </div>
@@ -185,7 +225,7 @@ export default function FleetManagement() {
             </div>
             
             {ships.length === 0 ? (
-              <div className="text-center text-gray-500 py-8">
+              <div className="text-center text-[#3a4a3f] py-8">
                 No ships in fleet. Hire ships from the market!
               </div>
             ) : (
@@ -196,7 +236,7 @@ export default function FleetManagement() {
                   
                   return (
                     <div key={tier} className="mb-6">
-                      <div className="text-cyan-400 font-bold text-sm mb-3 uppercase">{tier}</div>
+                      <div className="text-[#a8c5ad] font-bold text-sm mb-3 uppercase">{tier}</div>
                       <div className="grid grid-cols-1 gap-3">
                         {tierShips.map((ship) => (
                           <div key={ship.id}>
@@ -303,10 +343,18 @@ export default function FleetManagement() {
         {/* Inventory Tab */}
         {activeTab === 'inventory' && (
           <section id="fleetInventoryPanel">
-            <div className="bg-gradient-to-r from-gray-900 to-gray-800 border-2 border-cyan-500/50 rounded-lg p-4 mb-4">
-              <div className="flex items-center justify-between">
-                <div className="text-cyan-400 font-bold">INVENTORY</div>
-                <div className="flex items-center gap-2 text-gray-400 text-xs">
+            <div className="relative p-4 mb-4">
+              <div className="absolute inset-0 bg-[#2a3a2f] border-2 border-[#5a7a5f]" style={{
+                boxShadow: 'inset 0 0 0 1px #1a2a1f'
+              }}></div>
+              <div className="absolute inset-[4px] bg-[#1a2a1f]" style={{
+                backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,122,95,0.1) 1px, transparent 0)',
+                backgroundSize: '3px 3px',
+                boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.5)'
+              }}></div>
+              <div className="relative flex items-center justify-between">
+                <div className="text-[#a8c5ad] font-bold">INVENTORY</div>
+                <div className="flex items-center gap-2 text-[#5a6a5f] text-xs">
                   <Package className="w-4 h-4" />
                   <span>{totalParts} parts</span>
                 </div>
@@ -314,7 +362,7 @@ export default function FleetManagement() {
             </div>
             
             {Object.keys(inventoryParts).length === 0 ? (
-              <div className="text-center text-gray-500 py-8">
+              <div className="text-center text-[#3a4a3f] py-8">
                 No parts in inventory. Buy from market!
               </div>
             ) : (
@@ -325,13 +373,23 @@ export default function FleetManagement() {
                   .map(([partName, qty]) => (
                     <div
                       key={partName}
-                      className="bg-gradient-to-r from-gray-800/60 to-gray-900/60 border border-cyan-500/20 rounded-lg p-3 flex items-center justify-between"
+                      className="relative"
                     >
-                      <div className="flex items-center gap-3">
-                        <Package className="w-5 h-5 text-cyan-400" />
-                        <span className="text-cyan-100 text-sm">{partName}</span>
+                      <div className="absolute inset-0 border border-[#3a5a4f]" style={{
+                        boxShadow: 'inset 0 0 0 1px #1a2a1f'
+                      }}></div>
+                      <div className="absolute inset-[2px] bg-[#1a2a1f]" style={{
+                        backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(58,90,79,0.15) 1px, transparent 0)',
+                        backgroundSize: '3px 3px',
+                        boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.4)'
+                      }}></div>
+                      <div className="relative p-3 flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <Package className="w-5 h-5 text-[#5a9a8f]" />
+                          <span className="text-[#a8c5ad] text-sm">{partName}</span>
+                        </div>
+                        <div className="text-[#5a9a8f] font-bold text-sm">x{qty}</div>
                       </div>
-                      <div className="text-cyan-400 font-bold text-sm">x{qty}</div>
                     </div>
                   ))}
               </div>
