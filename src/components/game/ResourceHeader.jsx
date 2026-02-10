@@ -6,7 +6,7 @@ export default function ResourceHeader() {
   const { gameState } = useGame();
   
   return (
-    <div className="fixed z-[3] bg-gradient-to-r from-gray-900/95 to-gray-800/95 backdrop-blur-sm" style={{ 
+    <div className="fixed z-[3] bg-gradient-to-r from-[#1a2a1f]/95 to-[#151f1a]/95 backdrop-blur-sm" style={{ 
       top: 0,
       left: 'var(--content-pad-left)',
       right: 'var(--content-pad-right)',

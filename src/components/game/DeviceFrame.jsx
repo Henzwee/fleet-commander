@@ -39,14 +39,16 @@ export default function DeviceFrame({ children }) {
   };
   
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center p-2 overflow-hidden" style={{
-      paddingTop: 'max(0.5rem, calc(0.5rem + env(safe-area-inset-top, 0px)))'
+    <div className="min-h-[100dvh] bg-gradient-to-br from-[#0d1a14] to-[#080f0c] flex items-center justify-center p-2" style={{
+      paddingTop: 'max(0.5rem, calc(0.5rem + env(safe-area-inset-top, 0px)))',
+      paddingBottom: 'max(0.5rem, calc(0.5rem + env(safe-area-inset-bottom, 0px)))'
     }}>
       <div 
-        className={`app-shell relative overflow-hidden ${debugMode ? 'debug' : ''}`}
+        className={`app-shell relative ${debugMode ? 'debug' : ''}`}
         style={{
           width: 'min(500px, 98vw)',
-          height: 'min(1000px, 98svh)',
+          minHeight: 'min(1000px, 96dvh)',
+          maxHeight: 'min(1000px, 96dvh)',
           ...frameVars
         }}
       >
@@ -58,10 +60,11 @@ export default function DeviceFrame({ children }) {
           }}
         >
           <div 
-            className="app-panel min-h-full"
+            className="app-panel"
             style={{
+              minHeight: '100%',
               paddingTop: location.pathname === '/Main' ? '125px' : '55px',
-              paddingBottom: 'var(--content-pad-bottom)',
+              paddingBottom: 'max(var(--content-pad-bottom), calc(var(--content-pad-bottom) + env(safe-area-inset-bottom, 0px)))',
               paddingLeft: 'var(--content-pad-left)',
               paddingRight: 'var(--content-pad-right)'
             }}

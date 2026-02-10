@@ -161,7 +161,7 @@ export default function Main() {
         />
       )}
 
-      <div className="flex flex-col min-h-full pb-6 px-4">
+      <div className="flex flex-col px-4" style={{ paddingBottom: 'max(24px, calc(24px + env(safe-area-inset-bottom, 0px)))' }}>
         <ResourceHeader />
         <div className="space-y-3">
         {/* Message Console */}
