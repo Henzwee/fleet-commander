@@ -248,9 +248,21 @@ export default function Main() {
         {/* Available Jobs Button */}
         <button
           onClick={() => navigate(createPageUrl('Jobs'))}
-          className="w-full bg-gradient-to-br from-cyan-700/60 to-blue-700/60 border-2 border-cyan-600/60 rounded-2xl py-6 text-cyan-100 font-bold text-xl tracking-wider hover:from-cyan-600/60 hover:to-blue-600/60 transition-all"
+          className="relative w-full py-6 font-bold text-xl tracking-wider"
         >
-          Available Jobs
+          {/* Outer frame */}
+          <div className="absolute inset-0 bg-[#2a3a2f] border-2 border-[#5a7a5f]" style={{
+            boxShadow: 'inset 0 0 0 1px #1a2a1f, 0 3px 0 #1a2a1f'
+          }}></div>
+          {/* Inner frame */}
+          <div className="absolute inset-[4px] bg-[#1f2e24] border border-[#3a4a3f]"></div>
+          {/* Button surface with accent */}
+          <div className="absolute inset-[8px] bg-[#3a5a4f]" style={{
+            boxShadow: 'inset 0 2px 3px rgba(90,154,143,0.4)',
+            backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,122,95,0.2) 1px, transparent 0)',
+            backgroundSize: '4px 4px'
+          }}></div>
+          <span className="relative text-[#d0e8d5]">Available Jobs</span>
         </button>
 
         {/* Active Missions */}
