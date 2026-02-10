@@ -266,39 +266,65 @@ export default function Main() {
         </button>
 
         {/* Active Missions */}
-        <div className="bg-gradient-to-br from-cyan-900/30 to-blue-900/30 border-2 border-cyan-600/50 rounded-2xl p-4 flex-1 flex flex-col min-h-0">
-          {activeMissions.length === 0 ? (
-            <div className="text-center text-gray-500 py-8">No active missions</div>
-          ) : (
-            <div className="space-y-3 overflow-y-auto">
-              {activeMissions.map((mission) => {
-                const hasEvent = currentEvent?.missionId === mission.id;
-                const isFailed = mission.isFailed;
-                return (
-                  <div
-                    key={mission.id}
-                    className={`bg-gradient-to-r from-cyan-800/20 to-blue-800/20 border rounded-lg p-4 cursor-pointer transition-all ${
-                      isFailed
-                        ? 'border-red-500 animate-pulse'
-                        : hasEvent 
-                        ? 'border-amber-500 animate-pulse' 
-                        : 'border-cyan-600/30 hover:border-cyan-500'
-                    }`}
-                  >
-                    <div className="flex items-center gap-3" onClick={() => setSelectedMission(mission)}>
-                      {mission.shipImage && (
-                        <img src={mission.shipImage} alt={mission.shipNames} className="w-10 h-10 object-contain" />
-                      )}
-                      <div className="text-cyan-100 font-bold text-sm flex-1">
-                        {mission.shipNames} - {mission.distance}ly
-                        {mission.activeShipCount > 1 && (
-                          <span className="text-cyan-400 text-xs ml-2">({mission.activeShipCount} ships)</span>
-                        )}
-                      </div>
-                      {mission.isComplete ? (
-                        <button
-                          onClick={async (e) => {
-                            e.stopPropagation();
+        <div className="relative flex-1 flex flex-col min-h-0">
+          {/* Outer frame */}
+          <div className="absolute inset-0 bg-[#2a3a2f] border-2 border-[#5a7a5f]" style={{
+            boxShadow: 'inset 0 0 0 1px #1a2a1f, 0 2px 0 #1a2a1f'
+          }}></div>
+          {/* Inner frame */}
+          <div className="absolute inset-[6px] bg-[#1f2e24] border border-[#3a4a3f]" style={{
+            boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.5)'
+          }}></div>
+          {/* Content surface */}
+          <div className="absolute inset-[10px] bg-[#0f1a14]" style={{
+            backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,122,95,0.1) 1px, transparent 0)',
+            backgroundSize: '4px 4px',
+            boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.7)'
+          }}>
+            <div className="h-full p-3 flex flex-col min-h-0">
+              {activeMissions.length === 0 ? (
+                <div className="text-center text-[#3a4a3f] py-8">No active missions</div>
+              ) : (
+                <div className="space-y-3 overflow-y-auto">
+                  {activeMissions.map((mission) => {
+                    const hasEvent = currentEvent?.missionId === mission.id;
+                    const isFailed = mission.isFailed;
+                    return (
+                      <div
+                        key={mission.id}
+                        className="relative cursor-pointer"
+                      >
+                        {/* Mission item frame */}
+                        <div className={`absolute inset-0 border-2 ${
+                          isFailed
+                            ? 'border-[#c84444] animate-pulse'
+                            : hasEvent 
+                            ? 'border-[#d89944] animate-pulse' 
+                            : 'border-[#3a5a4f]'
+                        }`} style={{
+                          boxShadow: 'inset 0 0 0 1px #1a2a1f'
+                        }}></div>
+                        <div className="absolute inset-[3px] bg-[#1a2a1f]" style={{
+                          backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(58,90,79,0.15) 1px, transparent 0)',
+                          backgroundSize: '3px 3px',
+                          boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.4)'
+                        }}></div>
+                        
+                        <div className="relative p-4">
+                          <div className="flex items-center gap-3" onClick={() => setSelectedMission(mission)}>
+                            {mission.shipImage && (
+                              <img src={mission.shipImage} alt={mission.shipNames} className="w-10 h-10 object-contain" />
+                            )}
+                            <div className="text-[#a8c5ad] font-bold text-sm flex-1">
+                              {mission.shipNames} - {mission.distance}ly
+                              {mission.activeShipCount > 1 && (
+                                <span className="text-[#5a9a8f] text-xs ml-2">({mission.activeShipCount} ships)</span>
+                              )}
+                            </div>
+                            {mission.isComplete ? (
+                              <button
+                                onClick={async (e) => {
+                                  e.stopPropagation();
                             
                             // Calculate total wages from all active ships
                             const activeShips = mission.ships?.filter(s => s.status === 'active') || [];
