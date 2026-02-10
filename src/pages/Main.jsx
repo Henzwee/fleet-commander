@@ -364,33 +364,42 @@ export default function Main() {
                               parts: newParts
                             });
                             
-                            loadActiveMissions();
-                          }}
-                          className="bg-green-600 hover:bg-green-700 border-2 border-green-500 rounded px-3 py-1 text-white font-bold text-xs"
-                        >
-                          COLLECT
-                        </button>
-                      ) : mission.isFailed ? (
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setSelectedMission(mission);
-                          }}
-                          className="bg-red-600 hover:bg-red-700 border-2 border-red-500 rounded px-3 py-1 text-white font-bold text-xs animate-pulse"
-                        >
-                          DEBRIEF
-                        </button>
-                      ) : (
-                        <div className="text-cyan-400 text-xs font-mono">
-                          {mission.timeRemaining}
+                                  loadActiveMissions();
+                                }}
+                                className="relative px-3 py-1 font-bold text-xs"
+                              >
+                                <div className="absolute inset-0 bg-[#3a7a4f] border-2 border-[#5a9a6f]" style={{
+                                  boxShadow: 'inset 0 1px 0 rgba(90,154,111,0.4)'
+                                }}></div>
+                                <span className="relative text-[#d0e8d5]">COLLECT</span>
+                              </button>
+                            ) : mission.isFailed ? (
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setSelectedMission(mission);
+                                }}
+                                className="relative px-3 py-1 font-bold text-xs animate-pulse"
+                              >
+                                <div className="absolute inset-0 bg-[#8a3a3a] border-2 border-[#c84444]" style={{
+                                  boxShadow: 'inset 0 1px 0 rgba(200,68,68,0.4)'
+                                }}></div>
+                                <span className="relative text-[#ffd0d0]">DEBRIEF</span>
+                              </button>
+                            ) : (
+                              <div className="text-[#5a9a8f] text-xs font-mono">
+                                {mission.timeRemaining}
+                              </div>
+                            )}
+                          </div>
                         </div>
-                      )}
-                    </div>
-                  </div>
-                );
-              })}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
             </div>
-          )}
+          </div>
         </div>
       </div>
       </div>
