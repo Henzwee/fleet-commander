@@ -124,12 +124,23 @@ export default function MarketTicker() {
   // If no items, show idle message
   if (items.length === 0) {
     return (
-      <div>
-        <div className="text-cyan-400 font-bold text-lg mb-3 tracking-wider">Market</div>
-        <div className="relative overflow-hidden h-12">
-          <div className="flex items-center h-full bg-gradient-to-br from-cyan-900/20 to-blue-900/20 border border-cyan-600/40 rounded-lg px-4">
-            <div className="text-cyan-100 font-bold text-sm whitespace-nowrap">
-              Market idle — awaiting inventory
+      <div className="w-full">
+        <div className="relative w-full" style={{ height: '64px' }}>
+          <div className="absolute inset-0 bg-[#2a3a2f] border-2 border-[#5a7a5f]" style={{
+            boxShadow: 'inset 0 0 0 1px #1a2a1f, 0 2px 0 #1a2a1f'
+          }}></div>
+          <div className="absolute inset-[6px] bg-[#1f2e24] border border-[#3a4a3f]" style={{
+            boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.5)'
+          }}></div>
+          <div className="absolute inset-[10px] bg-[#0f1a14]" style={{
+            backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,122,95,0.1) 1px, transparent 0)',
+            backgroundSize: '4px 4px',
+            boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.7)'
+          }}>
+            <div className="h-full flex items-center justify-center px-4">
+              <div className="text-[#3a4a3f] font-bold text-sm">
+                Market idle — awaiting inventory
+              </div>
             </div>
           </div>
         </div>
@@ -141,41 +152,52 @@ export default function MarketTicker() {
   const displayItems = [...items, ...items, ...items];
 
   return (
-    <div>
-      <div className="text-cyan-400 font-bold text-lg mb-3 tracking-wider">Market</div>
-      
-      <div className="relative overflow-hidden h-12">
-        <div 
-          ref={containerRef} 
-          className="flex gap-3 will-change-transform"
-          style={{ 
-            transform: `translateX(${offset}px)`,
-            transition: 'none'
-          }}
-        >
-          {displayItems.map((item, idx) => (
-            <div
-              key={`${item.id}-${idx}`}
-              onClick={() => navigate(createPageUrl('Market'))}
-              className="flex-shrink-0 bg-gradient-to-br from-cyan-900/20 to-blue-900/20 border border-cyan-600/40 rounded-lg px-4 py-2 cursor-pointer active:border-cyan-500 active:bg-cyan-500/10 transition-colors"
-            >
-              <div className="text-cyan-100 font-bold text-sm whitespace-nowrap">
-                {item.name}
-                {item.deltaPercent !== 0 && (
-                  <span 
-                    className={`ml-2 ${
-                      item.deltaPercent > 0 
-                        ? 'text-red-400' 
-                        : 'text-green-400'
-                    }`}
-                  >
-                    {item.deltaPercent > 0 ? '+' : ''}
-                    {item.deltaPercent}%
-                  </span>
-                )}
+    <div className="w-full">
+      <div className="relative w-full" style={{ height: '64px' }}>
+        <div className="absolute inset-0 bg-[#2a3a2f] border-2 border-[#5a7a5f]" style={{
+          boxShadow: 'inset 0 0 0 1px #1a2a1f, 0 2px 0 #1a2a1f'
+        }}></div>
+        <div className="absolute inset-[6px] bg-[#1f2e24] border border-[#3a4a3f]" style={{
+          boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.5)'
+        }}></div>
+        <div className="absolute inset-[10px] bg-[#0f1a14] overflow-hidden" style={{
+          backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,122,95,0.1) 1px, transparent 0)',
+          backgroundSize: '4px 4px',
+          boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.7)'
+        }}>
+          <div 
+            ref={containerRef} 
+            className="flex gap-3 will-change-transform h-full items-center"
+            style={{ 
+              transform: `translateX(${offset}px)`,
+              transition: 'none',
+              paddingLeft: '12px'
+            }}
+          >
+            {displayItems.map((item, idx) => (
+              <div
+                key={`${item.id}-${idx}`}
+                onClick={() => navigate(createPageUrl('Market'))}
+                className="flex-shrink-0 cursor-pointer"
+              >
+                <div className="text-[#a8c5ad] font-bold text-sm whitespace-nowrap">
+                  {item.name}
+                  {item.deltaPercent !== 0 && (
+                    <span 
+                      className={`ml-2 ${
+                        item.deltaPercent > 0 
+                          ? 'text-[#c84444]' 
+                          : 'text-[#5a9a6f]'
+                      }`}
+                    >
+                      {item.deltaPercent > 0 ? '+' : ''}
+                      {item.deltaPercent}%
+                    </span>
+                  )}
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     </div>

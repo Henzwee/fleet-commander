@@ -236,13 +236,21 @@ export default function Jobs() {
   
   return (
     <DeviceFrame title="JOBS">
-      <div className="flex flex-col min-h-full pb-6" style={{ maxWidth: '100%', paddingLeft: 'var(--safe-x)', paddingRight: 'var(--safe-x)', boxSizing: 'border-box' }}>
+      <div className="flex flex-col h-full overflow-hidden" style={{ maxWidth: '100%', paddingLeft: 'var(--safe-x)', paddingRight: 'var(--safe-x)', boxSizing: 'border-box' }}>
         <ResourceHeader />
-        <div className="p-4 pb-24 overflow-y-auto h-full" style={{ paddingLeft: '0', paddingRight: '0', paddingTop: '70px' }}>
-        <div className="bg-gradient-to-r from-gray-900 to-gray-800 border-2 border-cyan-500/50 rounded-lg p-4 mb-4">
-          <div className="flex items-center justify-between">
-            <div className="text-cyan-400 font-bold">AVAILABLE MISSIONS</div>
-            <div className="flex items-center gap-2 text-amber-400">
+        <div className="flex-1 overflow-y-auto" style={{ paddingLeft: '0', paddingRight: '0', paddingTop: '70px', paddingBottom: '24px' }}>
+        <div className="relative p-4 mb-4">
+          <div className="absolute inset-0 bg-[#2a3a2f] border-2 border-[#5a7a5f]" style={{
+            boxShadow: 'inset 0 0 0 1px #1a2a1f'
+          }}></div>
+          <div className="absolute inset-[4px] bg-[#1a2a1f]" style={{
+            backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,122,95,0.1) 1px, transparent 0)',
+            backgroundSize: '3px 3px',
+            boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.5)'
+          }}></div>
+          <div className="relative flex items-center justify-between">
+            <div className="text-[#a8c5ad] font-bold">AVAILABLE MISSIONS</div>
+            <div className="flex items-center gap-2 text-[#5a9a8f]">
               <Fuel className="w-4 h-4" />
               <span className="font-bold">{gameState?.fuel} fuel</span>
             </div>
@@ -255,47 +263,61 @@ export default function Jobs() {
             <div
               key={mission.id}
               onClick={() => setSelectedMission(mission)}
-              className={`bg-gradient-to-r from-gray-800 to-gray-900 border-2 rounded-lg p-4 transition-all cursor-pointer ${
-                selectedMission?.id === mission.id
-                  ? 'border-cyan-500 bg-cyan-500/10'
-                  : 'border-gray-600 hover:border-cyan-500/50'
-              }`}
+              className="relative cursor-pointer"
             >
-              <div className="flex items-center justify-between mb-2">
-                <div className="text-cyan-100 font-bold">{mission.description}</div>
-              </div>
-              
-              <div className="text-xs text-gray-400 mb-2">{mission.tier} and higher</div>
-              
-              <div className="grid grid-cols-2 gap-2 text-xs">
-                <div className="flex items-center gap-1 text-gray-400">
-                  <MapPin className="w-3 h-3" />
-                  <span>{mission.distance} ly</span>
+              <div className={`absolute inset-0 border-2 ${
+                selectedMission?.id === mission.id
+                  ? 'border-[#5a9a6f]'
+                  : 'border-[#3a5a4f]'
+              }`} style={{
+                boxShadow: 'inset 0 0 0 1px #1a2a1f'
+              }}></div>
+              <div className={`absolute inset-[3px] ${
+                selectedMission?.id === mission.id
+                  ? 'bg-[#2a3a2f]'
+                  : 'bg-[#1a2a1f]'
+              }`} style={{
+                backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(58,90,79,0.15) 1px, transparent 0)',
+                backgroundSize: '3px 3px',
+                boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.4)'
+              }}></div>
+              <div className="relative p-4">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="text-[#a8c5ad] font-bold">{mission.description}</div>
                 </div>
-                <div className="flex items-center gap-1 text-gray-400">
-                  <Clock className="w-3 h-3" />
-                  <span>{mission.duration}h</span>
-                </div>
-                <div className="flex items-center gap-1 text-amber-400">
-                  {mission.isFridayMission ? (
-                    <>
-                      <img 
-                        src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695af5ca435140b76c0dadc9/26d2c74b8_crystal.png" 
-                        alt="Crystal" 
-                        className="w-3 h-3"
-                      />
-                      <span>{mission.crystalReward} crystals</span>
-                    </>
-                  ) : (
-                    <>
-                      <Zap className="w-3 h-3" />
-                      <span>{mission.partsReward} parts</span>
-                    </>
-                  )}
-                </div>
-                <div className="flex items-center gap-1 text-blue-400">
-                  <Fuel className="w-3 h-3" />
-                  <span>{mission.fuelCost} fuel</span>
+                
+                <div className="text-xs text-[#5a6a5f] mb-2">{mission.tier} and higher</div>
+                
+                <div className="grid grid-cols-2 gap-2 text-xs">
+                  <div className="flex items-center gap-1 text-[#5a9a8f]">
+                    <MapPin className="w-3 h-3" />
+                    <span>{mission.distance} ly</span>
+                  </div>
+                  <div className="flex items-center gap-1 text-[#5a9a8f]">
+                    <Clock className="w-3 h-3" />
+                    <span>{mission.duration}h</span>
+                  </div>
+                  <div className="flex items-center gap-1 text-[#d89944]">
+                    {mission.isFridayMission ? (
+                      <>
+                        <img 
+                          src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695af5ca435140b76c0dadc9/26d2c74b8_crystal.png" 
+                          alt="Crystal" 
+                          className="w-3 h-3"
+                        />
+                        <span>{mission.crystalReward} crystals</span>
+                      </>
+                    ) : (
+                      <>
+                        <Zap className="w-3 h-3" />
+                        <span>{mission.partsReward} parts</span>
+                      </>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-1 text-[#5a9a8f]">
+                    <Fuel className="w-3 h-3" />
+                    <span>{mission.fuelCost} fuel</span>
+                  </div>
                 </div>
               </div>
             </div>

@@ -369,12 +369,20 @@ export default function Market() {
   
   return (
     <DeviceFrame title="STORE">
-      <div className="flex flex-col min-h-full pb-6" style={{ maxWidth: '100%', paddingLeft: 'var(--safe-x)', paddingRight: 'var(--safe-x)', boxSizing: 'border-box' }}>
+      <div className="flex flex-col h-full overflow-hidden" style={{ maxWidth: '100%', paddingLeft: 'var(--safe-x)', paddingRight: 'var(--safe-x)', boxSizing: 'border-box' }}>
         <ResourceHeader />
-        <div className="p-4 pb-24 overflow-y-auto h-full" style={{ paddingLeft: '0', paddingRight: '0', paddingTop: '70px' }}>
-        <div className="bg-gradient-to-r from-gray-900 to-gray-800 border-2 border-cyan-500/50 rounded-lg p-4 mb-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2 text-cyan-400 text-sm">
+        <div className="flex-1 overflow-y-auto" style={{ paddingLeft: '0', paddingRight: '0', paddingTop: '70px', paddingBottom: '24px' }}>
+        <div className="relative p-4 mb-4">
+          <div className="absolute inset-0 bg-[#2a3a2f] border-2 border-[#5a7a5f]" style={{
+            boxShadow: 'inset 0 0 0 1px #1a2a1f'
+          }}></div>
+          <div className="absolute inset-[4px] bg-[#1a2a1f]" style={{
+            backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,122,95,0.1) 1px, transparent 0)',
+            backgroundSize: '3px 3px',
+            boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.5)'
+          }}></div>
+          <div className="relative flex items-center justify-between">
+            <div className="flex items-center gap-2 text-[#5a9a8f] text-sm">
               <Clock className="w-4 h-4" />
               <span>Resets: {timeUntilReset}</span>
             </div>
@@ -414,15 +422,22 @@ export default function Market() {
                 addMessage('Market reset!');
               }}
               disabled={!gameState || gameState.crystals < 10}
-              className="bg-purple-600 active:bg-purple-700 disabled:bg-gray-600 disabled:cursor-not-allowed border-2 border-purple-500 disabled:border-gray-500 rounded-lg px-3 py-1 text-white font-bold text-xs transition-all flex items-center gap-1"
+              className="relative px-3 py-1 font-bold text-xs flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <RefreshCw className="w-3 h-3" />
+              <div className="absolute inset-0 bg-[#3a2a4a] border-2 border-[#6a5a7a]" style={{
+                boxShadow: 'inset 0 1px 0 rgba(106,90,122,0.4)'
+              }}></div>
+              <div className="absolute inset-[2px] bg-[#4a3a5a]" style={{
+                backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(106,90,122,0.15) 1px, transparent 0)',
+                backgroundSize: '3px 3px'
+              }}></div>
+              <RefreshCw className="w-3 h-3 relative text-[#b89acf]" />
               <img 
                 src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695af5ca435140b76c0dadc9/26d2c74b8_crystal.png" 
                 alt="Crystal" 
-                className="w-3 h-3 inline-block"
+                className="w-3 h-3 relative"
               />
-              <span>10</span>
+              <span className="relative text-[#d0d0e8]">10</span>
             </button>
           </div>
         </div>
@@ -430,112 +445,189 @@ export default function Market() {
         <div className="flex gap-2 mb-4">
           <button
             onClick={() => setActiveTab('scrap')}
-            className={`flex-1 py-3 rounded-lg font-bold text-sm border-2 transition-all ${
-              activeTab === 'scrap'
-                ? 'bg-cyan-500/20 border-cyan-500 text-cyan-400'
-                : 'bg-gray-800 border-gray-600 text-gray-400'
-            }`}
+            className="relative flex-1 py-3 font-bold text-sm"
           >
-            SCRAP
+            <div className={`absolute inset-0 border-2 ${
+              activeTab === 'scrap'
+                ? 'bg-[#3a5a4f] border-[#5a7a5f]'
+                : 'bg-[#2a3a2f] border-[#3a4a3f]'
+            }`} style={{
+              boxShadow: 'inset 0 0 0 1px #1a2a1f'
+            }}></div>
+            <div className={`absolute inset-[3px] ${
+              activeTab === 'scrap'
+                ? 'bg-[#3a5a4f]'
+                : 'bg-[#1a2a1f]'
+            }`} style={{
+              backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,122,95,0.15) 1px, transparent 0)',
+              backgroundSize: '3px 3px',
+              boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.3)'
+            }}></div>
+            <span className={`relative ${
+              activeTab === 'scrap'
+                ? 'text-[#d0e8d5]'
+                : 'text-[#5a6a5f]'
+            }`}>SCRAP</span>
           </button>
           <button
             onClick={() => setActiveTab('ships')}
-            className={`flex-1 py-3 rounded-lg font-bold text-sm border-2 transition-all ${
-              activeTab === 'ships'
-                ? 'bg-cyan-500/20 border-cyan-500 text-cyan-400'
-                : 'bg-gray-800 border-gray-600 text-gray-400'
-            }`}
+            className="relative flex-1 py-3 font-bold text-sm"
           >
-            SHIPS
+            <div className={`absolute inset-0 border-2 ${
+              activeTab === 'ships'
+                ? 'bg-[#3a5a4f] border-[#5a7a5f]'
+                : 'bg-[#2a3a2f] border-[#3a4a3f]'
+            }`} style={{
+              boxShadow: 'inset 0 0 0 1px #1a2a1f'
+            }}></div>
+            <div className={`absolute inset-[3px] ${
+              activeTab === 'ships'
+                ? 'bg-[#3a5a4f]'
+                : 'bg-[#1a2a1f]'
+            }`} style={{
+              backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,122,95,0.15) 1px, transparent 0)',
+              backgroundSize: '3px 3px',
+              boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.3)'
+            }}></div>
+            <span className={`relative ${
+              activeTab === 'ships'
+                ? 'text-[#d0e8d5]'
+                : 'text-[#5a6a5f]'
+            }`}>SHIPS</span>
           </button>
           <button
             onClick={() => setActiveTab('fuel')}
-            className={`flex-1 py-3 rounded-lg font-bold text-sm border-2 transition-all ${
-              activeTab === 'fuel'
-                ? 'bg-cyan-500/20 border-cyan-500 text-cyan-400'
-                : 'bg-gray-800 border-gray-600 text-gray-400'
-            }`}
+            className="relative flex-1 py-3 font-bold text-sm"
           >
-            FUEL
+            <div className={`absolute inset-0 border-2 ${
+              activeTab === 'fuel'
+                ? 'bg-[#3a5a4f] border-[#5a7a5f]'
+                : 'bg-[#2a3a2f] border-[#3a4a3f]'
+            }`} style={{
+              boxShadow: 'inset 0 0 0 1px #1a2a1f'
+            }}></div>
+            <div className={`absolute inset-[3px] ${
+              activeTab === 'fuel'
+                ? 'bg-[#3a5a4f]'
+                : 'bg-[#1a2a1f]'
+            }`} style={{
+              backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,122,95,0.15) 1px, transparent 0)',
+              backgroundSize: '3px 3px',
+              boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.3)'
+            }}></div>
+            <span className={`relative ${
+              activeTab === 'fuel'
+                ? 'text-[#d0e8d5]'
+                : 'text-[#5a6a5f]'
+            }`}>FUEL</span>
           </button>
         </div>
         
         <div className="space-y-3">
           {activeTab === 'ships' && marketItems.length === 0 && gameState?.marketStock?.shipStock <= 0 && (
-            <div className="bg-gradient-to-r from-gray-800 to-gray-900 border-2 border-cyan-500/30 rounded-lg p-8 text-center">
-              <div className="text-cyan-400 font-bold text-lg mb-2">SOLD OUT</div>
-              <div className="text-gray-400 text-sm">Come back later, money bags</div>
+            <div className="relative p-8 text-center">
+              <div className="absolute inset-0 bg-[#2a3a2f] border-2 border-[#5a7a5f]" style={{
+                boxShadow: 'inset 0 0 0 1px #1a2a1f'
+              }}></div>
+              <div className="absolute inset-[4px] bg-[#1a2a1f]" style={{
+                backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,122,95,0.1) 1px, transparent 0)',
+                backgroundSize: '3px 3px',
+                boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.5)'
+              }}></div>
+              <div className="relative">
+                <div className="text-[#5a9a8f] font-bold text-lg mb-2">SOLD OUT</div>
+                <div className="text-[#3a4a3f] text-sm">Come back later, money bags</div>
+              </div>
             </div>
           )}
           {marketItems.map((item, idx) => (
             <div
               key={idx}
-              className={`bg-gradient-to-r from-gray-800 to-gray-900 border rounded-lg p-4 flex items-center justify-between transition-all ${
-                (activeTab === 'scrap' && item.stock === 0) 
-                  ? 'border-gray-700 opacity-50' 
-                  : 'border-cyan-500/30'
-              }`}
+              className="relative"
             >
-              <div className="flex items-center gap-3">
-                {item.imageUrl ? (
-                  <img 
-                    src={item.imageUrl} 
-                    alt={item.name} 
-                    className="w-12 h-12 object-contain" 
-                    style={item.imageUrl.includes('unregistered1.png') ? { transform: 'scale(0.6)' } : {}}
-                  />
-                ) : (
-                  <div className="text-3xl">{item.icon}</div>
-                )}
-                <div>
-                  <div className="text-cyan-100 font-bold text-sm">
-                    {item.name}
-                    {activeTab === 'scrap' && item.deltaPercent !== 0 && (
-                      <span 
-                        className={`ml-2 text-xs ${
-                          item.deltaPercent > 0 
-                            ? 'text-red-400' 
-                            : 'text-green-400'
-                        }`}
-                      >
-                        {item.deltaPercent > 0 ? '+' : ''}
-                        {item.deltaPercent}%
-                      </span>
+              <div className={`absolute inset-0 border-2 ${
+                (activeTab === 'scrap' && item.stock === 0)
+                  ? 'border-[#3a3a3f] opacity-50'
+                  : 'border-[#3a5a4f]'
+              }`} style={{
+                boxShadow: 'inset 0 0 0 1px #1a2a1f'
+              }}></div>
+              <div className="absolute inset-[3px] bg-[#1a2a1f]" style={{
+                backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(58,90,79,0.15) 1px, transparent 0)',
+                backgroundSize: '3px 3px',
+                boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.4)'
+              }}></div>
+              <div className="relative p-4 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  {item.imageUrl ? (
+                    <img 
+                      src={item.imageUrl} 
+                      alt={item.name} 
+                      className="w-12 h-12 object-contain" 
+                      style={item.imageUrl.includes('unregistered1.png') ? { transform: 'scale(0.6)' } : {}}
+                    />
+                  ) : (
+                    <div className="text-3xl">{item.icon}</div>
+                  )}
+                  <div>
+                    <div className="text-[#a8c5ad] font-bold text-sm">
+                      {item.name}
+                      {activeTab === 'scrap' && item.deltaPercent !== 0 && (
+                        <span 
+                          className={`ml-2 text-xs ${
+                            item.deltaPercent > 0 
+                              ? 'text-[#c84444]' 
+                              : 'text-[#5a9a6f]'
+                          }`}
+                        >
+                          {item.deltaPercent > 0 ? '+' : ''}
+                          {item.deltaPercent}%
+                        </span>
+                      )}
+                    </div>
+                    {item.tier && (
+                      <div className="text-xs text-[#5a6a5f]">{item.tier} • {item.maxLY} LY</div>
+                    )}
+                    {activeTab === 'scrap' && item.stock !== undefined && (
+                      <div className={`text-xs ${item.stock === 0 ? 'text-[#c84444]' : 'text-[#5a6a5f]'}`}>
+                        Stock: {item.stock}
+                      </div>
                     )}
                   </div>
-                  {item.tier && (
-                    <div className="text-xs text-gray-400">{item.tier} • {item.maxLY} LY</div>
-                  )}
-                  {activeTab === 'scrap' && item.stock !== undefined && (
-                    <div className={`text-xs ${item.stock === 0 ? 'text-red-500' : 'text-gray-500'}`}>
-                      Stock: {item.stock}
-                    </div>
-                  )}
                 </div>
+                
+                <button
+                  onClick={() => handleBuyClick(item)}
+                  disabled={
+                    (item.currency === 'crystals' ? gameState?.crystals < item.price : gameState?.credits < item.price) ||
+                    (activeTab === 'scrap' && item.stock === 0)
+                  }
+                  className="relative px-6 py-2 font-bold text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <div className="absolute inset-0 bg-[#3a7a4f] border-2 border-[#5a9a6f]" style={{
+                    boxShadow: 'inset 0 1px 0 rgba(90,154,111,0.4)'
+                  }}></div>
+                  <div className="absolute inset-[2px] bg-[#4a8a5f]" style={{
+                    backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,154,111,0.15) 1px, transparent 0)',
+                    backgroundSize: '3px 3px'
+                  }}></div>
+                  <span className="relative text-[#d0e8d5]">
+                    {(activeTab === 'scrap' && item.stock === 0) ? 'OUT' : (
+                      <>
+                        {item.currency === 'crystals' ? (
+                          <img 
+                            src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695af5ca435140b76c0dadc9/26d2c74b8_crystal.png" 
+                            alt="Crystal" 
+                            className="w-4 h-4 inline-block"
+                          />
+                        ) : '$'}
+                        {item.price}
+                      </>
+                    )}
+                  </span>
+                </button>
               </div>
-              
-              <button
-                onClick={() => handleBuyClick(item)}
-                disabled={
-                  (item.currency === 'crystals' ? gameState?.crystals < item.price : gameState?.credits < item.price) ||
-                  (activeTab === 'scrap' && item.stock === 0)
-                }
-                className="bg-green-600 active:bg-green-700 disabled:bg-gray-600 disabled:cursor-not-allowed border-2 border-green-500 disabled:border-gray-500 rounded-lg px-6 py-2 text-white font-bold text-sm transition-all"
-              >
-                {(activeTab === 'scrap' && item.stock === 0) ? 'OUT' : (
-                  <>
-                    {item.currency === 'crystals' ? (
-                      <img 
-                        src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695af5ca435140b76c0dadc9/26d2c74b8_crystal.png" 
-                        alt="Crystal" 
-                        className="w-4 h-4 inline-block"
-                      />
-                    ) : '$'}
-                    {item.price}
-                  </>
-                )}
-              </button>
-              </div>
+            </div>
               ))}
         </div>
         

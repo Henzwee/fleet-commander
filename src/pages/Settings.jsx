@@ -34,10 +34,10 @@ export default function Settings() {
 
   return (
     <DeviceFrame>
-      <div className="flex flex-col min-h-full pb-6" style={{ maxWidth: '100%', paddingLeft: 'var(--safe-x)', paddingRight: 'var(--safe-x)', boxSizing: 'border-box' }}>
+      <div className="flex flex-col h-full overflow-hidden" style={{ maxWidth: '100%', paddingLeft: 'var(--safe-x)', paddingRight: 'var(--safe-x)', boxSizing: 'border-box' }}>
         <ResourceHeader />
-        <div className="p-4 pb-24 overflow-y-auto h-full" style={{ paddingLeft: '0', paddingRight: '0', paddingTop: '70px' }}>
-          <h1 className="text-2xl font-bold text-cyan-400 mb-4">SHIP TIER STATS</h1>
+        <div className="flex-1 overflow-y-auto" style={{ paddingLeft: '0', paddingRight: '0', paddingTop: '70px', paddingBottom: '24px' }}>
+          <h1 className="text-2xl font-bold text-[#a8c5ad] mb-4">SHIP TIER STATS</h1>
           
           <div className="space-y-4">
             {TIER_ORDER.map((tier) => {
@@ -47,9 +47,17 @@ export default function Settings() {
               return (
                 <div 
                   key={tier}
-                  className={`bg-gradient-to-r from-gray-900 to-gray-800 border-2 ${tierColors[tier]} rounded-lg p-4`}
+                  className="relative"
                 >
-                  <div className="flex gap-4">
+                  <div className={`absolute inset-0 border-2 ${tierColors[tier]}`} style={{
+                    boxShadow: 'inset 0 0 0 1px #1a2a1f'
+                  }}></div>
+                  <div className="absolute inset-[3px] bg-[#1a2a1f]" style={{
+                    backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(58,90,79,0.15) 1px, transparent 0)',
+                    backgroundSize: '3px 3px',
+                    boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.4)'
+                  }}></div>
+                  <div className="relative p-4 flex gap-4">
                     {/* Ship Images */}
                     <div className="flex-shrink-0 w-28 flex flex-col gap-2 justify-start py-2">
                       {shipImages.map((img, idx) => {
@@ -73,36 +81,36 @@ export default function Settings() {
                       
                       <div className="space-y-2 text-xs">
                         <div>
-                          <div className="text-gray-500">Hourly Wage</div>
-                          <div className="text-cyan-100 font-bold">
+                          <div className="text-[#5a6a5f]">Hourly Wage</div>
+                          <div className="text-[#a8c5ad] font-bold">
                             ${config.payRange[0]} - ${config.payRange[1]}
                           </div>
                         </div>
                         
                         <div>
-                          <div className="text-gray-500">Max Range</div>
-                          <div className="text-cyan-100 font-bold">
+                          <div className="text-[#5a6a5f]">Max Range</div>
+                          <div className="text-[#a8c5ad] font-bold">
                             {config.maxLY} LY
                           </div>
                         </div>
                         
                         <div>
-                          <div className="text-gray-500">Encounter Success</div>
-                          <div className="text-green-400 font-bold">
+                          <div className="text-[#5a6a5f]">Encounter Success</div>
+                          <div className="text-[#5a9a6f] font-bold">
                             {encounterRates[tier]}
                           </div>
                         </div>
                         
                         <div>
-                          <div className="text-gray-500">Damage Risk</div>
-                          <div className="text-red-400 font-bold">
+                          <div className="text-[#5a6a5f]">Damage Risk</div>
+                          <div className="text-[#c84444] font-bold">
                             {damageChance[tier]}
                           </div>
                         </div>
                         
                         <div>
-                          <div className="text-gray-500">Market Price</div>
-                          <div className="text-amber-400 font-bold">
+                          <div className="text-[#5a6a5f]">Market Price</div>
+                          <div className="text-[#d89944] font-bold">
                             ${config.priceRange[0]} - ${config.priceRange[1]}
                           </div>
                         </div>
