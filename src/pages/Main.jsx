@@ -444,24 +444,54 @@ export default function Main() {
             </div>
             
             <div className="space-y-4 flex-1">
-              <div className="bg-cyan-900/20 border-2 border-cyan-500/50 rounded-lg p-4">
-                <div className="text-amber-400 font-bold text-sm mb-2">Credits Earned</div>
-                <div className="text-white text-2xl font-bold">${debriefData.credits}</div>
+              <div className="relative p-4">
+                <div className="absolute inset-0 bg-[#2a3a2f] border-2 border-[#5a7a5f]" style={{
+                  boxShadow: 'inset 0 0 0 1px #1a2a1f'
+                }}></div>
+                <div className="absolute inset-[4px] bg-[#1a2a1f]" style={{
+                  backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,122,95,0.1) 1px, transparent 0)',
+                  backgroundSize: '3px 3px',
+                  boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.5)'
+                }}></div>
+                <div className="relative">
+                  <div className="text-[#d89944] font-bold text-sm mb-2">Credits Earned</div>
+                  <div className="text-[#d0e8d5] text-2xl font-bold">${debriefData.credits}</div>
+                </div>
               </div>
               
-              <div className="bg-cyan-900/20 border-2 border-cyan-500/50 rounded-lg p-4">
-                <div className="text-green-400 font-bold text-sm mb-2">Parts Collected ({debriefData.parts.length})</div>
-                <div className="text-gray-300 text-xs space-y-1">
-                  {debriefData.parts.map((part, idx) => (
-                    <div key={idx}>• {part}</div>
-                  ))}
+              <div className="relative p-4">
+                <div className="absolute inset-0 bg-[#2a3a2f] border-2 border-[#5a7a5f]" style={{
+                  boxShadow: 'inset 0 0 0 1px #1a2a1f'
+                }}></div>
+                <div className="absolute inset-[4px] bg-[#1a2a1f]" style={{
+                  backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,122,95,0.1) 1px, transparent 0)',
+                  backgroundSize: '3px 3px',
+                  boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.5)'
+                }}></div>
+                <div className="relative">
+                  <div className="text-[#5a9a6f] font-bold text-sm mb-2">Parts Collected ({debriefData.parts.length})</div>
+                  <div className="text-[#8aaa9d] text-xs space-y-1">
+                    {debriefData.parts.map((part, idx) => (
+                      <div key={idx}>• {part}</div>
+                    ))}
+                  </div>
                 </div>
               </div>
               
               {debriefData.crystals > 0 && (
-                <div className="bg-purple-900/20 border-2 border-purple-500/50 rounded-lg p-4">
-                  <div className="text-purple-400 font-bold text-sm mb-2">Crystals Earned</div>
-                  <div className="text-white text-2xl font-bold">{debriefData.crystals}</div>
+                <div className="relative p-4">
+                  <div className="absolute inset-0 bg-[#3a2a4a] border-2 border-[#6a5a7a]" style={{
+                    boxShadow: 'inset 0 0 0 1px #2a1a3a'
+                  }}></div>
+                  <div className="absolute inset-[4px] bg-[#2a1a3a]" style={{
+                    backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(106,90,122,0.1) 1px, transparent 0)',
+                    backgroundSize: '3px 3px',
+                    boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.5)'
+                  }}></div>
+                  <div className="relative">
+                    <div className="text-[#b89acf] font-bold text-sm mb-2">Crystals Earned</div>
+                    <div className="text-[#d0d0e8] text-2xl font-bold">{debriefData.crystals}</div>
+                  </div>
                 </div>
               )}
             </div>
