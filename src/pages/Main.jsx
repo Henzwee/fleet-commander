@@ -210,18 +210,38 @@ export default function Main() {
         <div className="grid grid-cols-2 gap-3 w-full" style={{ minWidth: 0 }}>
           <button
             onClick={() => navigate(createPageUrl('Market'))}
-            className="bg-gradient-to-br from-cyan-600/80 to-blue-600/80 border-2 border-cyan-500/50 rounded-xl py-4 text-white font-bold text-sm hover:from-cyan-500/80 hover:to-blue-500/80 transition-all w-full"
+            className="relative w-full py-4 font-bold text-sm"
             style={{ minWidth: 0 }}
           >
-            Ship Market
+            {/* Outer frame */}
+            <div className="absolute inset-0 bg-[#2a3a2f] border-2 border-[#5a7a5f]" style={{
+              boxShadow: 'inset 0 0 0 1px #1a2a1f, 0 2px 0 #1a2a1f'
+            }}></div>
+            {/* Button surface */}
+            <div className="absolute inset-[4px] bg-[#3a5a4f] border border-[#4a6a5f]" style={{
+              boxShadow: 'inset 0 1px 2px rgba(90,154,143,0.3)',
+              backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,122,95,0.15) 1px, transparent 0)',
+              backgroundSize: '3px 3px'
+            }}></div>
+            <span className="relative text-[#d0e8d5]">Ship Market</span>
           </button>
 
           <button
             onClick={() => navigate(createPageUrl('FleetManagement'))}
-            className="bg-gradient-to-br from-cyan-600/80 to-blue-600/80 border-2 border-cyan-500/50 rounded-xl py-4 text-white font-bold text-sm hover:from-cyan-500/80 hover:to-blue-500/80 transition-all w-full"
+            className="relative w-full py-4 font-bold text-sm"
             style={{ minWidth: 0 }}
           >
-            Manage Fleet
+            {/* Outer frame */}
+            <div className="absolute inset-0 bg-[#2a3a2f] border-2 border-[#5a7a5f]" style={{
+              boxShadow: 'inset 0 0 0 1px #1a2a1f, 0 2px 0 #1a2a1f'
+            }}></div>
+            {/* Button surface */}
+            <div className="absolute inset-[4px] bg-[#3a5a4f] border border-[#4a6a5f]" style={{
+              boxShadow: 'inset 0 1px 2px rgba(90,154,143,0.3)',
+              backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,122,95,0.15) 1px, transparent 0)',
+              backgroundSize: '3px 3px'
+            }}></div>
+            <span className="relative text-[#d0e8d5]">Manage Fleet</span>
           </button>
         </div>
 
