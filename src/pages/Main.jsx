@@ -165,24 +165,39 @@ export default function Main() {
         <ResourceHeader />
         <div className="space-y-3">
         {/* Message Console */}
-        <div className="bg-gradient-to-br from-cyan-900/30 to-blue-900/30 border-2 border-cyan-600/50 rounded-2xl p-4 w-full" style={{ height: '160px', boxSizing: 'border-box' }}>
-          <div 
-            ref={messageLogRef}
-            className="h-full overflow-y-auto space-y-2 text-sm text-cyan-100/90 font-mono"
-            style={{ scrollBehavior: 'smooth' }}
-          >
-            {messages.length === 0 ? (
-              <div className="text-gray-500 italic">System standby...</div>
-            ) : (
-              messages.map((msg, idx) => (
-                <div key={idx} className="flex gap-2">
-                  <span className="text-cyan-500 flex-shrink-0 text-xs">
-                    {new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false })}
-                  </span>
-                  <span className="break-words">{msg}</span>
-                </div>
-              ))
-            )}
+        <div className="relative w-full" style={{ height: '160px', boxSizing: 'border-box' }}>
+          {/* Outer frame */}
+          <div className="absolute inset-0 bg-[#2a3a2f] border-2 border-[#5a7a5f]" style={{
+            boxShadow: 'inset 0 0 0 1px #1a2a1f, 0 2px 0 #1a2a1f'
+          }}></div>
+          {/* Inner frame */}
+          <div className="absolute inset-[6px] bg-[#1f2e24] border border-[#3a4a3f]" style={{
+            boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.5)'
+          }}></div>
+          {/* Content surface with texture */}
+          <div className="absolute inset-[10px] bg-[#0f1a14]" style={{
+            backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,122,95,0.1) 1px, transparent 0)',
+            backgroundSize: '4px 4px',
+            boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.7)'
+          }}>
+            <div 
+              ref={messageLogRef}
+              className="h-full overflow-y-auto space-y-2 text-sm text-[#a8c5ad] font-mono p-3"
+              style={{ scrollBehavior: 'smooth' }}
+            >
+              {messages.length === 0 ? (
+                <div className="text-[#3a4a3f] italic">System standby...</div>
+              ) : (
+                messages.map((msg, idx) => (
+                  <div key={idx} className="flex gap-2">
+                    <span className="text-[#5a9a8f] flex-shrink-0 text-xs">
+                      {new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false })}
+                    </span>
+                    <span className="break-words">{msg}</span>
+                  </div>
+                ))
+              )}
+            </div>
           </div>
         </div>
 
