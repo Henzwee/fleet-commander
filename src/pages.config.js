@@ -48,23 +48,23 @@
  * The mainPage value must match a key in the PAGES object exactly.
  */
 import HireShips from './pages/HireShips';
-import Tutorial from './pages/Tutorial';
-import FleetManagement from './pages/FleetManagement';
 import Jobs from './pages/Jobs';
+import Main from './pages/Main';
 import Market from './pages/Market';
 import Settings from './pages/Settings';
-import Main from './pages/Main';
+import Tutorial from './pages/Tutorial';
+import FleetManagement from './pages/FleetManagement';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
     "HireShips": HireShips,
-    "Tutorial": Tutorial,
-    "FleetManagement": FleetManagement,
     "Jobs": Jobs,
+    "Main": Main,
     "Market": Market,
     "Settings": Settings,
-    "Main": Main,
+    "Tutorial": Tutorial,
+    "FleetManagement": FleetManagement,
 }
 
 export const pagesConfig = {
