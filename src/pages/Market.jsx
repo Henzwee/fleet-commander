@@ -194,7 +194,7 @@ export default function Market() {
       const shipStock = gameState.marketStock.shipStock ?? 5;
       const seed = gameState.lastMarketRotationSeed ?? Date.now();
 
-      // Check if ships are sold out
+      // Generate ships even if sold out (for showing sold out message)
       if (shipStock <= 0) {
         setMarketItems([]);
         return;
@@ -353,7 +353,12 @@ export default function Market() {
         marketStock: newStock
       });
       
-      addMessage(`Hired ${item.name} for $${totalCost}`);
+      // Check if all ships sold out after this purchase
+      if (newStock.shipStock === 0) {
+        addMessage('Sold out! Come back later, money bags');
+      } else {
+        addMessage(`Hired ${item.name} for $${totalCost}`);
+      }
     } else if (activeTab === 'fuel') {
       await updateGameState({
         fuel: gameState.fuel + (item.fuelAmount * quantity),
