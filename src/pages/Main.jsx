@@ -266,22 +266,17 @@ export default function Main() {
         </button>
 
         {/* Active Missions */}
-        <div className="relative">
-          {/* Outer frame */}
-          <div className="absolute inset-0 bg-[#2a3a2f] border-2 border-[#5a7a5f]" style={{
-            boxShadow: 'inset 0 0 0 1px #1a2a1f, 0 2px 0 #1a2a1f'
-          }}></div>
-          {/* Inner frame */}
-          <div className="absolute inset-[6px] bg-[#1f2e24] border border-[#3a4a3f]" style={{
+        <div className="bg-[#2a3a2f] border-2 border-[#5a7a5f] p-[6px]" style={{
+          boxShadow: 'inset 0 0 0 1px #1a2a1f, 0 2px 0 #1a2a1f'
+        }}>
+          <div className="bg-[#1f2e24] border border-[#3a4a3f] p-[4px]" style={{
             boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.5)'
-          }}></div>
-          {/* Content surface */}
-          <div className="absolute inset-[10px] bg-[#0f1a14]" style={{
-            backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,122,95,0.1) 1px, transparent 0)',
-            backgroundSize: '4px 4px',
-            boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.7)'
           }}>
-            <div className="p-3">
+            <div className="bg-[#0f1a14] p-3" style={{
+              backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,122,95,0.1) 1px, transparent 0)',
+              backgroundSize: '4px 4px',
+              boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.7)'
+            }}>
               {activeMissions.length === 0 ? (
                 <div className="text-center text-[#3a4a3f] py-8">No active missions</div>
               ) : (
