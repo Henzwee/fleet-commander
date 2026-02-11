@@ -2,12 +2,12 @@ import React from 'react';
 import { Heart } from 'lucide-react';
 
 const tierColors = {
-  'Unregistered': 'text-gray-400 border-gray-500',
-  'Known': 'text-green-400 border-green-500',
-  'Notorious': 'text-blue-400 border-blue-500',
-  'Esteemed': 'text-purple-400 border-purple-500',
-  'Renowned': 'text-amber-400 border-amber-500',
-  'Legendary': 'text-red-400 border-red-500'
+  'Unregistered': 'text-gray-400',
+  'Known': 'text-green-400',
+  'Notorious': 'text-blue-400',
+  'Esteemed': 'text-purple-400',
+  'Renowned': 'text-amber-400',
+  'Legendary': 'text-red-400'
 };
 
 const tierDescriptions = {
@@ -25,7 +25,7 @@ export default function ShipCard({ ship, onClick, showPrice = false }) {
   return (
     <div
       onClick={onClick}
-      className={`bg-gradient-to-b from-gray-800 to-gray-900 border-2 ${colorClass} rounded-lg p-4 cursor-pointer`}
+      className={`bg-gradient-to-b from-[#1a2a1f] to-[#0f1a14] border-2 border-green-800 rounded-lg p-4 cursor-pointer hover:border-green-700 transition-all`}
     >
       {ship.imageUrl && (
         <div className="flex justify-center mb-3">
