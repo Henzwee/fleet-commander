@@ -52,7 +52,7 @@ export default function DeviceFrame({ children }) {
       >
         {/* Main app content underneath */}
         <main 
-          className="app-content h-full overflow-y-auto overflow-x-hidden bg-gradient-to-br from-[#0a1628] to-[#050a14]"
+          className="app-content absolute inset-0 overflow-y-auto overflow-x-hidden bg-gradient-to-br from-[#0a1628] to-[#050a14]"
           style={{
             WebkitOverflowScrolling: 'touch'
           }}
