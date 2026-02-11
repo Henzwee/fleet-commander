@@ -266,7 +266,7 @@ export default function Main() {
         </button>
 
         {/* Active Missions */}
-        <div className="relative">
+        <div className="relative" style={{ minHeight: '250px' }}>
           {/* Outer frame */}
           <div className="absolute inset-0 bg-[#2a3a2f] border-2 border-[#5a7a5f]" style={{
             boxShadow: 'inset 0 0 0 1px #1a2a1f, 0 2px 0 #1a2a1f'
@@ -276,10 +276,11 @@ export default function Main() {
             boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.5)'
           }}></div>
           {/* Content surface */}
-          <div className="absolute inset-[10px] bg-[#0f1a14]" style={{
+          <div className="absolute inset-[10px] bg-[#0f1a14] overflow-y-auto" style={{
             backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,122,95,0.1) 1px, transparent 0)',
             backgroundSize: '4px 4px',
-            boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.7)'
+            boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.7)',
+            WebkitOverflowScrolling: 'touch'
           }}>
             <div className="p-3">
               {activeMissions.length === 0 ? (
