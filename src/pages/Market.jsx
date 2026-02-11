@@ -58,7 +58,7 @@ export default function Market() {
       
       return () => unsubscribe();
     }
-  }, [gameState, activeTab]);
+  }, [activeTab]);
   
   useEffect(() => {
     const interval = setInterval(updateResetTimer, 1000);
@@ -150,8 +150,14 @@ export default function Market() {
       
       setMarketItems(parts);
     } else if (activeTab === 'ships') {
+      // Wait if already initializing
+      if (isInitializing) {
+        setMarketItems([]);
+        return;
+      }
+
       // Initialize marketStock if it doesn't exist
-      if (!gameState.marketStock && !isInitializing) {
+      if (!gameState.marketStock) {
         setIsInitializing(true);
         const allItems = MarketEngine.getAll();
         const allItemIds = allItems.map(item => item.id);
@@ -164,37 +170,29 @@ export default function Market() {
         });
         
         const rotationHistory = updateRotationHistory(selectedIds, []);
-        await updateGameState({ 
+        updateGameState({ 
           marketStock: newStock,
           marketRotationHistory: rotationHistory,
           lastMarketRotationSeed: seed
-        });
-        setIsInitializing(false);
+        }).finally(() => setIsInitializing(false));
         return;
       }
       
       // Initialize shipStock if it's missing
-      if (gameState.marketStock && (gameState.marketStock.shipStock === undefined || !gameState.lastMarketRotationSeed) && !isInitializing) {
+      if (gameState.marketStock.shipStock === undefined || !gameState.lastMarketRotationSeed) {
         setIsInitializing(true);
         const newStock = { ...gameState.marketStock, shipStock: 5 };
         const seed = gameState.lastMarketRotationSeed || Date.now();
-        await updateGameState({ 
+        updateGameState({ 
           marketStock: newStock,
           lastMarketRotationSeed: seed
-        });
-        setIsInitializing(false);
+        }).finally(() => setIsInitializing(false));
         return;
       }
 
-      // Wait for initialization to complete
-      if (!gameState.marketStock || isInitializing) {
-        setMarketItems([]);
-        return;
-      }
-
-      // Default values if not set yet
-      const shipStock = gameState.marketStock.shipStock ?? 5;
-      const seed = gameState.lastMarketRotationSeed ?? Date.now();
+      // Default values
+      const shipStock = gameState.marketStock.shipStock;
+      const seed = gameState.lastMarketRotationSeed;
 
       // Generate ships even if sold out (for showing sold out message)
       if (shipStock <= 0) {
