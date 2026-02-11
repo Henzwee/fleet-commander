@@ -193,33 +193,30 @@ export default function Market() {
 
       for (let i = 0; i < shipCount; i++) {
         // Use seed-based random for tier
-        const tierRand = Math.sin(seed + i * 100) * 10000;
-        const tierVal = tierRand - Math.floor(tierRand);
+        const tierRand = Math.abs(Math.sin(seed + i * 100));
         
         let tier;
-        if (tierVal < 0.30) tier = 'Unregistered';
-        else if (tierVal < 0.55) tier = 'Known';
-        else if (tierVal < 0.75) tier = 'Notorious';
-        else if (tierVal < 0.90) tier = 'Esteemed';
-        else if (tierVal < 0.98) tier = 'Renowned';
+        if (tierRand < 0.30) tier = 'Unregistered';
+        else if (tierRand < 0.55) tier = 'Known';
+        else if (tierRand < 0.75) tier = 'Notorious';
+        else if (tierRand < 0.90) tier = 'Esteemed';
+        else if (tierRand < 0.98) tier = 'Renowned';
         else tier = 'Legendary';
 
         const tierConfig = getTierConfig(tier);
 
         // Use seed for consistent pricing
-        const payRand = Math.sin(seed + i * 200) * 10000;
-        const payVal = payRand - Math.floor(payRand);
+        const payRand = Math.abs(Math.sin(seed + i * 200));
         const [minPay, maxPay] = tierConfig.payRange;
-        const hourlyPay = Math.floor(payVal * (maxPay - minPay + 1)) + minPay;
+        const hourlyPay = Math.floor(payRand * (maxPay - minPay + 1)) + minPay;
 
-        const priceRand = Math.sin(seed + i * 300) * 10000;
-        const priceVal = priceRand - Math.floor(priceRand);
+        const priceRand = Math.abs(Math.sin(seed + i * 300));
         const [min, max] = tierConfig.priceRange;
-        const price = Math.floor(priceVal * (max - min + 1)) + min;
+        const price = Math.floor(priceRand * (max - min + 1)) + min;
 
         // Use seed for consistent naming
-        const nameRand = Math.sin(seed + i * 400) * 10000;
-        const nameVal = Math.floor((nameRand - Math.floor(nameRand)) * 1000);
+        const nameRand = Math.abs(Math.sin(seed + i * 400));
+        const nameVal = Math.floor(nameRand * 1000);
         const names = ['Vanguard', 'Sentinel', 'Pathfinder', 'Explorer', 'Voyager'];
         
         ships.push({
