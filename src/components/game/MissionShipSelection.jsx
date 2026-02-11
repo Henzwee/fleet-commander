@@ -19,23 +19,39 @@ export default function MissionShipSelection({ mission, ships, onConfirm, onCanc
   const canAnyShipHandle = eligibleShips.length > 0;
   
   return (
-    <div className="fixed z-[4] bg-gradient-to-br from-gray-900 to-gray-950 flex flex-col overflow-hidden" style={{
-      top: 'calc(var(--content-pad-top) - 40px)',
-      bottom: 'calc(var(--content-pad-bottom) - 30px)',
-      left: 'var(--content-pad-left)',
-      right: 'var(--content-pad-right)'
+    <div className="fixed z-[4] bg-gradient-to-br from-[#0a1628] to-[#050a14] flex flex-col overflow-hidden" style={{
+      top: 0,
+      bottom: 0,
+      left: 0,
+      right: 0
     }}>
-      <div className="flex-1 flex flex-col px-6 overflow-y-auto" style={{ WebkitOverflowScrolling: 'touch' }}>
-          <div className="mb-6 mt-12">
+      <div className="flex-1 flex flex-col overflow-y-auto" style={{ 
+        WebkitOverflowScrolling: 'touch',
+        paddingTop: 'calc(var(--content-pad-top) + 24px)',
+        paddingBottom: 'calc(var(--content-pad-bottom) + 24px)',
+        paddingLeft: 'calc(var(--content-pad-left) + 12px)',
+        paddingRight: 'calc(var(--content-pad-right) + 12px)'
+      }}>
+          <div className="mb-6">
             <h2 className="text-cyan-400 font-bold text-base">SELECT SHIPS (1-3)</h2>
             <div className="text-xs text-purple-400 mt-1">
               Selected: {selectedShips.length}/3
             </div>
           </div>
           
-          <div className="mb-4 bg-gray-800/50 rounded-lg p-3 border border-cyan-500/30">
-            <div className="text-cyan-100 font-bold text-base mb-1">{mission.description}</div>
-            <div className="text-xs text-gray-400">{mission.tier} and higher • {mission.distance} LY</div>
+          <div className="mb-4 relative">
+            <div className="absolute inset-0 bg-[#2a3a2f] border-2 border-[#5a7a5f]" style={{
+              boxShadow: 'inset 0 0 0 1px #1a2a1f'
+            }}></div>
+            <div className="absolute inset-[4px] bg-[#1a2a1f]" style={{
+              backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,122,95,0.1) 1px, transparent 0)',
+              backgroundSize: '3px 3px',
+              boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.5)'
+            }}></div>
+            <div className="relative p-3">
+              <div className="text-[#a8c5ad] font-bold text-base mb-1">{mission.description}</div>
+              <div className="text-xs text-[#5a9a8f]">{mission.tier} and higher • {mission.distance} LY</div>
+            </div>
           </div>
           
           {!canAnyShipHandle && (
@@ -51,22 +67,28 @@ export default function MissionShipSelection({ mission, ships, onConfirm, onCanc
                 <div
                   key={ship.id}
                   onClick={() => toggleShip(ship)}
-                  className={`bg-gray-800 border-2 rounded-lg p-3 transition-all cursor-pointer ${
-                    isSelected
-                      ? 'border-green-500 bg-green-500/10'
-                      : 'border-gray-600 active:border-green-500/50'
-                  }`}
+                  className="relative cursor-pointer"
                 >
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <div className="text-cyan-100 font-bold text-sm">{ship.name}</div>
-                      <div className="text-xs text-gray-400">{ship.tier} • {ship.maxLY} LY • ${ship.hourlyPay}/h</div>
+                  <div className={`absolute inset-0 bg-[#2a3a2f] border-2 ${isSelected ? 'border-[#5aaa5f]' : 'border-[#5a7a5f]'}`} style={{
+                    boxShadow: 'inset 0 0 0 1px #1a2a1f'
+                  }}></div>
+                  <div className={`absolute inset-[4px] ${isSelected ? 'bg-[#1a3a1f]' : 'bg-[#1a2a1f]'}`} style={{
+                    backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,122,95,0.1) 1px, transparent 0)',
+                    backgroundSize: '3px 3px',
+                    boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.5)'
+                  }}></div>
+                  <div className="relative p-3">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <div className="text-[#a8c5ad] font-bold text-sm">{ship.name}</div>
+                        <div className="text-xs text-[#5a9a8f]">{ship.tier} • {ship.maxLY} LY • ${ship.hourlyPay}/h</div>
+                      </div>
+                      {isSelected ? (
+                        <div className="text-green-400 font-bold">✓</div>
+                      ) : (
+                        <div className="text-green-400 text-xs">READY</div>
+                      )}
                     </div>
-                    {isSelected ? (
-                      <div className="text-green-400 font-bold">✓</div>
-                    ) : (
-                      <div className="text-green-400 text-xs">READY</div>
-                    )}
                   </div>
                 </div>
               );
@@ -75,14 +97,24 @@ export default function MissionShipSelection({ mission, ships, onConfirm, onCanc
             {ineligibleShips.map((ship) => (
               <div
                 key={ship.id}
-                className="bg-gray-800 border-2 border-red-500/30 rounded-lg p-3 opacity-50 cursor-not-allowed"
+                className="relative opacity-50 cursor-not-allowed"
               >
-                <div className="flex items-center justify-between">
-                  <div>
-                    <div className="text-cyan-100 font-bold text-sm">{ship.name}</div>
-                    <div className="text-xs text-gray-400">{ship.tier} • {ship.maxLY} LY</div>
+                <div className="absolute inset-0 bg-[#2a3a2f] border-2 border-[#7a5a5f]" style={{
+                  boxShadow: 'inset 0 0 0 1px #1a2a1f'
+                }}></div>
+                <div className="absolute inset-[4px] bg-[#1a2a1f]" style={{
+                  backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,122,95,0.1) 1px, transparent 0)',
+                  backgroundSize: '3px 3px',
+                  boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.5)'
+                }}></div>
+                <div className="relative p-3">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="text-[#a8c5ad] font-bold text-sm">{ship.name}</div>
+                      <div className="text-xs text-[#5a9a8f]">{ship.tier} • {ship.maxLY} LY</div>
+                    </div>
+                    <div className="text-red-400 text-xs">OUT OF RANGE</div>
                   </div>
-                  <div className="text-red-400 text-xs">OUT OF RANGE</div>
                 </div>
               </div>
             ))}
@@ -90,32 +122,56 @@ export default function MissionShipSelection({ mission, ships, onConfirm, onCanc
             {busyShips.map((ship) => (
               <div
                 key={ship.id}
-                className="bg-gray-800 border-2 border-amber-500/30 rounded-lg p-3 opacity-50 cursor-not-allowed"
+                className="relative opacity-50 cursor-not-allowed"
               >
-                <div className="flex items-center justify-between">
-                  <div>
-                    <div className="text-cyan-100 font-bold text-sm">{ship.name}</div>
-                    <div className="text-xs text-gray-400">{ship.tier} • {ship.maxLY} LY</div>
+                <div className="absolute inset-0 bg-[#2a3a2f] border-2 border-[#7a7a5f]" style={{
+                  boxShadow: 'inset 0 0 0 1px #1a2a1f'
+                }}></div>
+                <div className="absolute inset-[4px] bg-[#1a2a1f]" style={{
+                  backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,122,95,0.1) 1px, transparent 0)',
+                  backgroundSize: '3px 3px',
+                  boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.5)'
+                }}></div>
+                <div className="relative p-3">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="text-[#a8c5ad] font-bold text-sm">{ship.name}</div>
+                      <div className="text-xs text-[#5a9a8f]">{ship.tier} • {ship.maxLY} LY</div>
+                    </div>
+                    <div className="text-amber-400 text-xs">DEPLOYED</div>
                   </div>
-                  <div className="text-amber-400 text-xs">DEPLOYED</div>
                 </div>
               </div>
             ))}
           </div>
           
-          <div className="flex gap-2 mb-8 mt-4 flex-shrink-0">
+          <div className="flex gap-2 mt-4 flex-shrink-0">
             <button
               onClick={onCancel}
-              className="flex-1 bg-gray-700 active:bg-gray-600 border-2 border-gray-600 rounded-lg py-2.5 text-white font-bold text-sm transition-all"
+              className="flex-1 relative py-2.5 font-bold text-sm"
             >
-              BACK
+              <div className="absolute inset-0 bg-[#2a3a2f] border-2 border-[#4a5a4f]" style={{
+                boxShadow: 'inset 0 0 0 1px #1a2a1f'
+              }}></div>
+              <div className="absolute inset-[3px] bg-[#3a4a3f]" style={{
+                backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(74,90,79,0.15) 1px, transparent 0)',
+                backgroundSize: '3px 3px'
+              }}></div>
+              <span className="relative text-[#a8c5ad]">BACK</span>
             </button>
             <button
               onClick={() => onConfirm(selectedShips)}
               disabled={selectedShips.length === 0}
-              className="flex-1 bg-green-600 active:bg-green-700 disabled:bg-gray-600 disabled:cursor-not-allowed border-2 border-green-500 disabled:border-gray-500 rounded-lg py-2.5 text-white font-bold text-sm transition-all"
+              className="flex-1 relative py-2.5 font-bold text-sm disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              CONFIRM ({selectedShips.length} SHIP{selectedShips.length !== 1 ? 'S' : ''})
+              <div className="absolute inset-0 bg-[#2a3a2f] border-2 border-[#5aaa5f]" style={{
+                boxShadow: 'inset 0 0 0 1px #1a2a1f'
+              }}></div>
+              <div className="absolute inset-[3px] bg-[#3a5a4f]" style={{
+                backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,170,95,0.15) 1px, transparent 0)',
+                backgroundSize: '3px 3px'
+              }}></div>
+              <span className="relative text-[#d0e8d5]">CONFIRM ({selectedShips.length} SHIP{selectedShips.length !== 1 ? 'S' : ''})</span>
             </button>
         </div>
       </div>
