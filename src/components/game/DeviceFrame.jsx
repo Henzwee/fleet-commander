@@ -39,16 +39,14 @@ export default function DeviceFrame({ children }) {
   };
   
   return (
-    <div className="min-h-[100dvh] bg-gradient-to-br from-[#0d1a14] to-[#080f0c] flex items-center justify-center p-2" style={{
-      paddingTop: 'max(0.5rem, calc(0.5rem + env(safe-area-inset-top, 0px)))',
-      paddingBottom: 'max(0.5rem, calc(0.5rem + env(safe-area-inset-bottom, 0px)))'
+    <div className="fixed inset-0 bg-gradient-to-br from-[#0d1a14] to-[#080f0c] flex items-center justify-center overflow-hidden" style={{
+      padding: 'max(0.5rem, calc(0.5rem + env(safe-area-inset-top, 0px))) 0.5rem max(0.5rem, calc(0.5rem + env(safe-area-inset-bottom, 0px))) 0.5rem'
     }}>
       <div 
         className={`app-shell relative ${debugMode ? 'debug' : ''}`}
         style={{
           width: 'min(500px, 98vw)',
-          minHeight: 'min(1000px, 96dvh)',
-          maxHeight: 'min(1000px, 96dvh)',
+          height: 'min(1000px, 96dvh)',
           ...frameVars
         }}
       >
