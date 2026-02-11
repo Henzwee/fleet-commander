@@ -266,7 +266,7 @@ export default function Main() {
         </button>
 
         {/* Active Missions */}
-        <div className="relative flex-1 flex flex-col" style={{ minHeight: '200px' }}>
+        <div className="relative">
           {/* Outer frame */}
           <div className="absolute inset-0 bg-[#2a3a2f] border-2 border-[#5a7a5f]" style={{
             boxShadow: 'inset 0 0 0 1px #1a2a1f, 0 2px 0 #1a2a1f'
@@ -281,11 +281,11 @@ export default function Main() {
             backgroundSize: '4px 4px',
             boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.7)'
           }}>
-            <div className="h-full p-3 flex flex-col min-h-0">
+            <div className="p-3">
               {activeMissions.length === 0 ? (
                 <div className="text-center text-[#3a4a3f] py-8">No active missions</div>
               ) : (
-                <div className="space-y-3 overflow-y-auto">
+                <div className="space-y-3">
                   {activeMissions.map((mission) => {
                     const hasEvent = currentEvent?.missionId === mission.id;
                     const isFailed = mission.isFailed;
