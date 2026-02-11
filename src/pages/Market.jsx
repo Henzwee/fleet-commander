@@ -194,7 +194,7 @@ export default function Market() {
       const shipStock = gameState.marketStock.shipStock;
       const seed = gameState.lastMarketRotationSeed;
 
-      // Generate ships even if sold out (for showing sold out message)
+      // If sold out, show empty (UI will display sold out message)
       if (shipStock <= 0) {
         setMarketItems([]);
         return;
