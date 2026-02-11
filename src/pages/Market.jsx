@@ -173,12 +173,8 @@ export default function Market() {
         return;
       }
       
-      if (!gameState.marketStock) {
-        setMarketItems([]);
-        return;
-      }
-      
-      if ((gameState.marketStock.shipStock === undefined || !gameState.lastMarketRotationSeed) && !isInitializing) {
+      // Initialize shipStock if it's missing
+      if (gameState.marketStock && (gameState.marketStock.shipStock === undefined || !gameState.lastMarketRotationSeed) && !isInitializing) {
         setIsInitializing(true);
         const newStock = { ...gameState.marketStock, shipStock: 5 };
         const seed = gameState.lastMarketRotationSeed || Date.now();
@@ -187,6 +183,12 @@ export default function Market() {
           lastMarketRotationSeed: seed
         });
         setIsInitializing(false);
+        return;
+      }
+
+      // Wait for initialization to complete
+      if (!gameState.marketStock || isInitializing) {
+        setMarketItems([]);
         return;
       }
 
