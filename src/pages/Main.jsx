@@ -161,9 +161,9 @@ export default function Main() {
         />
       )}
 
-      <div className="flex flex-col px-4" style={{ paddingBottom: 'max(140px, calc(140px + env(safe-area-inset-bottom, 0px)))' }}>
+      <div className="flex flex-col px-4" style={{ paddingBottom: 'max(180px, calc(180px + env(safe-area-inset-bottom, 0px)))' }}>
         <ResourceHeader />
-        <div className="space-y-3">
+        <div className="space-y-4">
         {/* Message Console */}
         <div className="relative w-full" style={{ height: '160px', boxSizing: 'border-box' }}>
           {/* Outer frame */}
