@@ -58,7 +58,7 @@ export default function Market() {
       
       return () => unsubscribe();
     }
-  }, [activeTab]);
+  }, [activeTab, gameState?.marketStock?.shipStock, isInitializing]);
   
   useEffect(() => {
     const interval = setInterval(updateResetTimer, 1000);
