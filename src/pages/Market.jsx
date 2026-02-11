@@ -191,9 +191,15 @@ export default function Market() {
       const ships = [];
       const shipCount = shipStock;
 
+      // Seeded random function
+      const seededRandom = (s) => {
+        const x = Math.sin(s) * 10000;
+        return x - Math.floor(x);
+      };
+
       for (let i = 0; i < shipCount; i++) {
         // Use seed-based random for tier
-        const tierRand = Math.abs(Math.sin(seed + i * 100));
+        const tierRand = seededRandom(seed + i * 1.1);
         
         let tier;
         if (tierRand < 0.30) tier = 'Unregistered';
@@ -206,16 +212,16 @@ export default function Market() {
         const tierConfig = getTierConfig(tier);
 
         // Use seed for consistent pricing
-        const payRand = Math.abs(Math.sin(seed + i * 200));
+        const payRand = seededRandom(seed + i * 2.3);
         const [minPay, maxPay] = tierConfig.payRange;
         const hourlyPay = Math.floor(payRand * (maxPay - minPay + 1)) + minPay;
 
-        const priceRand = Math.abs(Math.sin(seed + i * 300));
+        const priceRand = seededRandom(seed + i * 3.7);
         const [min, max] = tierConfig.priceRange;
         const price = Math.floor(priceRand * (max - min + 1)) + min;
 
         // Use seed for consistent naming
-        const nameRand = Math.abs(Math.sin(seed + i * 400));
+        const nameRand = seededRandom(seed + i * 4.9);
         const nameVal = Math.floor(nameRand * 1000);
         const names = ['Vanguard', 'Sentinel', 'Pathfinder', 'Explorer', 'Voyager'];
         
