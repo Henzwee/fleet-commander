@@ -179,7 +179,13 @@ export default function Market() {
 
       // Default values
       const shipStock = gameState.marketStock.shipStock;
-      const seed = gameState.lastMarketRotationSeed;
+      let seed = gameState.lastMarketRotationSeed;
+      
+      // If no seed exists, create one and save it
+      if (!seed) {
+        seed = Date.now();
+        await updateGameState({ lastMarketRotationSeed: seed });
+      }
 
       // If sold out, show empty (UI will display sold out message)
       if (shipStock <= 0) {
