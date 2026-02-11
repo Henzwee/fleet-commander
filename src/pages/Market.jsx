@@ -84,6 +84,8 @@ export default function Market() {
   };
   
   const generateMarketItems = async () => {
+    if (!gameState) return;
+    
     // Clear items first to prevent showing wrong tab's items
     setMarketItems([]);
     
@@ -103,8 +105,10 @@ export default function Market() {
       };
       
       // Initialize or use existing market rotation
-      if (!gameState.marketStock && !isInitializing) {
+      if (!gameState.marketStock) {
+        if (isInitializing) return;
         setIsInitializing(true);
+        
         const allItems = MarketEngine.getAll();
         const allItemIds = allItems.map(item => item.id);
         
@@ -152,34 +156,17 @@ export default function Market() {
     } else if (activeTab === 'ships') {
       // Wait if already initializing
       if (isInitializing) {
-        setMarketItems([]);
         return;
       }
 
-      // Initialize marketStock if it doesn't exist
+      // Initialize marketStock if it doesn't exist (handled in scrap tab initialization)
       if (!gameState.marketStock) {
-        setIsInitializing(true);
-        const allItems = MarketEngine.getAll();
-        const allItemIds = allItems.map(item => item.id);
-        const seed = Date.now();
-        const selectedIds = generateWeightedRotation(allItemIds, [], 6, seed);
-        
-        const newStock = { shipStock: 5 };
-        selectedIds.forEach(itemId => {
-          newStock[itemId] = Math.floor(Math.random() * 5) + 1;
-        });
-        
-        const rotationHistory = updateRotationHistory(selectedIds, []);
-        updateGameState({ 
-          marketStock: newStock,
-          marketRotationHistory: rotationHistory,
-          lastMarketRotationSeed: seed
-        }).finally(() => setIsInitializing(false));
-        return;
+        return; // Will be initialized by scrap tab logic
       }
       
       // Initialize shipStock if it's missing
-      if (gameState.marketStock.shipStock === undefined || !gameState.lastMarketRotationSeed) {
+      if (gameState.marketStock.shipStock === undefined) {
+        if (isInitializing) return;
         setIsInitializing(true);
         const newStock = { ...gameState.marketStock, shipStock: 5 };
         const seed = gameState.lastMarketRotationSeed || Date.now();
