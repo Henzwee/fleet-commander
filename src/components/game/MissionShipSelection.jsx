@@ -19,7 +19,7 @@ export default function MissionShipSelection({ mission, ships, onConfirm, onCanc
   const canAnyShipHandle = eligibleShips.length > 0;
   
   return (
-    <div className="fixed z-[4] bg-gradient-to-br from-[#0a1628] to-[#050a14] flex flex-col overflow-hidden" style={{
+    <div className="fixed z-[4] bg-gradient-to-br from-[#0a1a14] to-[#050f0a] flex flex-col overflow-hidden" style={{
       top: 0,
       bottom: 0,
       left: 0,
