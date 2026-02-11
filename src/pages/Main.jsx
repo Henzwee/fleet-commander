@@ -266,7 +266,7 @@ export default function Main() {
         </button>
 
         {/* Active Missions */}
-        <div className="relative flex-1 flex flex-col min-h-0">
+        <div className="relative flex-1 flex flex-col" style={{ minHeight: '200px' }}>
           {/* Outer frame */}
           <div className="absolute inset-0 bg-[#2a3a2f] border-2 border-[#5a7a5f]" style={{
             boxShadow: 'inset 0 0 0 1px #1a2a1f, 0 2px 0 #1a2a1f'

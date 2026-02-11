@@ -25,8 +25,24 @@ export default function ShipCard({ ship, onClick, showPrice = false }) {
   return (
     <div
       onClick={onClick}
-      className={`bg-gradient-to-b from-[#1a2a1f] to-[#0f1a14] border-2 border-green-800 rounded-lg p-4 cursor-pointer hover:border-green-700 transition-all`}
+      className="relative cursor-pointer"
     >
+      {/* Outer frame */}
+      <div className="absolute inset-0 bg-[#2a3a2f] border-2 border-[#5a7a5f]" style={{
+        boxShadow: 'inset 0 0 0 1px #1a2a1f, 0 2px 0 #1a2a1f'
+      }}></div>
+      {/* Inner frame */}
+      <div className="absolute inset-[6px] bg-[#1f2e24] border border-[#3a4a3f]" style={{
+        boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.5)'
+      }}></div>
+      {/* Content surface with texture */}
+      <div className="absolute inset-[10px] bg-[#0f1a14]" style={{
+        backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,122,95,0.1) 1px, transparent 0)',
+        backgroundSize: '4px 4px',
+        boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.7)'
+      }}></div>
+      
+      <div className="relative p-4">
       {ship.imageUrl && (
         <div className="flex justify-center mb-3">
           <img 
@@ -61,6 +77,7 @@ export default function ShipCard({ ship, onClick, showPrice = false }) {
           <span>{ship.price.toLocaleString()}</span>
         </div>
       )}
+      </div>
     </div>
   );
 }
