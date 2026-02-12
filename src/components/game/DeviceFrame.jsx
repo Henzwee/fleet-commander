@@ -76,7 +76,7 @@ export default function DeviceFrame({ children }) {
           className="frame-layer absolute inset-0 pointer-events-none"
           aria-hidden="true"
           style={{
-            backgroundImage: 'url(https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695af5ca435140b76c0dadc9/de0263044_framebeta4.png)',
+            backgroundImage: 'url(https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695af5ca435140b76c0dadc9/cf678d804_framebeta5.png)',
             backgroundSize: '100% 100%',
             backgroundRepeat: 'no-repeat',
             zIndex: 10
