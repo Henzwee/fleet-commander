@@ -164,85 +164,76 @@ export default function Market() {
         return; // Will be initialized by scrap tab logic
       }
       
-      // Initialize shipStock if it's missing
-      if (gameState.marketStock.shipStock === undefined) {
+      // Helper function to generate ships
+      const generateShips = (seed, count) => {
+        const seededRandom = (seed, index, salt) => {
+          const x = Math.sin(seed * 0.0001 + index * 12.9898 + salt * 78.233) * 43758.5453;
+          return x - Math.floor(x);
+        };
+
+        const ships = [];
+        for (let i = 0; i < count; i++) {
+          const tierRand = seededRandom(seed, i, 1);
+          
+          let tier;
+          if (tierRand < 0.30) tier = 'Unregistered';
+          else if (tierRand < 0.55) tier = 'Known';
+          else if (tierRand < 0.75) tier = 'Notorious';
+          else if (tierRand < 0.90) tier = 'Esteemed';
+          else if (tierRand < 0.98) tier = 'Renowned';
+          else tier = 'Legendary';
+
+          const tierConfig = getTierConfig(tier);
+
+          const payRand = seededRandom(seed, i, 2);
+          const [minPay, maxPay] = tierConfig.payRange;
+          const hourlyPay = minPay + Math.floor(payRand * (maxPay - minPay + 1));
+
+          const priceRand = seededRandom(seed, i, 3);
+          const [min, max] = tierConfig.priceRange;
+          const price = min + Math.floor(priceRand * (max - min + 1));
+
+          const nameRand = seededRandom(seed, i, 4);
+          const nameVal = Math.floor(nameRand * 1000);
+          const names = ['Vanguard', 'Sentinel', 'Pathfinder', 'Explorer', 'Voyager'];
+          
+          ships.push({
+            id: `ship_${seed}_${i}`,
+            name: names[i % names.length] + '-' + nameVal,
+            tier,
+            imageUrl: getRandomShipImage(tier),
+            maxLY: tierConfig.maxLY,
+            price,
+            hourlyPay,
+            icon: '🚀',
+            currency: 'credits'
+          });
+        }
+        return ships;
+      };
+      
+      // Initialize ships if they don't exist
+      if (!gameState.marketStock.ships || gameState.marketStock.ships.length === 0) {
         if (isInitializing) return;
         setIsInitializing(true);
-        const newStock = { ...gameState.marketStock, shipStock: 5 };
+        
         const seed = gameState.lastMarketRotationSeed || Date.now();
-        updateGameState({ 
-          marketStock: newStock,
+        const ships = generateShips(seed, 5);
+        
+        await updateGameState({ 
+          marketStock: {
+            ...gameState.marketStock,
+            ships,
+            shipStock: ships.length
+          },
           lastMarketRotationSeed: seed
-        }).finally(() => setIsInitializing(false));
-        return;
-      }
-
-      // Default values
-      const shipStock = gameState.marketStock.shipStock;
-      let seed = gameState.lastMarketRotationSeed;
-      
-      // If no seed exists, create one and save it
-      if (!seed) {
-        seed = Date.now();
-        await updateGameState({ lastMarketRotationSeed: seed });
-      }
-
-      // If sold out, show empty (UI will display sold out message)
-      if (shipStock <= 0) {
-        setMarketItems([]);
-        return;
-      }
-
-      // Generate ships based on seed for consistency
-      const ships = [];
-      const shipCount = shipStock;
-
-      // Better seeded random function
-      const seededRandom = (seed, index, salt) => {
-        const x = Math.sin(seed * 0.0001 + index * 12.9898 + salt * 78.233) * 43758.5453;
-        return x - Math.floor(x);
-      };
-
-      for (let i = 0; i < shipCount; i++) {
-        // Use seed-based random for tier
-        const tierRand = seededRandom(seed, i, 1);
-        
-        let tier;
-        if (tierRand < 0.30) tier = 'Unregistered';
-        else if (tierRand < 0.55) tier = 'Known';
-        else if (tierRand < 0.75) tier = 'Notorious';
-        else if (tierRand < 0.90) tier = 'Esteemed';
-        else if (tierRand < 0.98) tier = 'Renowned';
-        else tier = 'Legendary';
-
-        const tierConfig = getTierConfig(tier);
-
-        // Use seed for consistent pricing
-        const payRand = seededRandom(seed, i, 2);
-        const [minPay, maxPay] = tierConfig.payRange;
-        const hourlyPay = minPay + Math.floor(payRand * (maxPay - minPay + 1));
-
-        const priceRand = seededRandom(seed, i, 3);
-        const [min, max] = tierConfig.priceRange;
-        const price = min + Math.floor(priceRand * (max - min + 1));
-
-        // Use seed for consistent naming
-        const nameRand = seededRandom(seed, i, 4);
-        const nameVal = Math.floor(nameRand * 1000);
-        const names = ['Vanguard', 'Sentinel', 'Pathfinder', 'Explorer', 'Voyager'];
-        
-        ships.push({
-          name: names[i % names.length] + '-' + nameVal,
-          tier,
-          imageUrl: getRandomShipImage(tier),
-          maxLY: tierConfig.maxLY,
-          price,
-          hourlyPay,
-          icon: '🚀',
-          currency: 'credits'
         });
+        setIsInitializing(false);
+        return;
       }
-      setMarketItems(ships);
+
+      // Display stored ships
+      setMarketItems(gameState.marketStock.ships || []);
     } else if (activeTab === 'fuel') {
       // Fuel for crystals
       const fuelItems = [
@@ -341,8 +332,11 @@ export default function Market() {
         hourlyPay: item.hourlyPay
       });
       
+      // Remove the purchased ship from the stored ships array
       const newStock = { ...gameState.marketStock };
-      newStock.shipStock = (newStock.shipStock || 5) - 1;
+      const remainingShips = (newStock.ships || []).filter(ship => ship.id !== item.id);
+      newStock.ships = remainingShips;
+      newStock.shipStock = remainingShips.length;
 
       await updateGameState({
         credits: gameState.credits - totalCost,
@@ -350,7 +344,7 @@ export default function Market() {
       });
       
       // Check if all ships sold out after this purchase
-      if (newStock.shipStock === 0) {
+      if (remainingShips.length === 0) {
         addMessage('Sold out! Come back later, money bags');
       } else {
         addMessage(`Hired ${item.name} for $${totalCost}`);
@@ -408,7 +402,52 @@ export default function Market() {
                   const stockAmount = Math.floor(Math.random() * 5) + 1; // 1-5 stock
                   newStock[itemId] = stockAmount;
                 });
-                newStock.shipStock = 5; // Reset ship stock
+                
+                // Generate new ships
+                const seededRandom = (seed, index, salt) => {
+                  const x = Math.sin(seed * 0.0001 + index * 12.9898 + salt * 78.233) * 43758.5453;
+                  return x - Math.floor(x);
+                };
+                
+                const newShips = [];
+                for (let i = 0; i < 5; i++) {
+                  const tierRand = seededRandom(seed, i, 1);
+                  let tier;
+                  if (tierRand < 0.30) tier = 'Unregistered';
+                  else if (tierRand < 0.55) tier = 'Known';
+                  else if (tierRand < 0.75) tier = 'Notorious';
+                  else if (tierRand < 0.90) tier = 'Esteemed';
+                  else if (tierRand < 0.98) tier = 'Renowned';
+                  else tier = 'Legendary';
+
+                  const tierConfig = getTierConfig(tier);
+                  const payRand = seededRandom(seed, i, 2);
+                  const [minPay, maxPay] = tierConfig.payRange;
+                  const hourlyPay = minPay + Math.floor(payRand * (maxPay - minPay + 1));
+
+                  const priceRand = seededRandom(seed, i, 3);
+                  const [min, max] = tierConfig.priceRange;
+                  const price = min + Math.floor(priceRand * (max - min + 1));
+
+                  const nameRand = seededRandom(seed, i, 4);
+                  const nameVal = Math.floor(nameRand * 1000);
+                  const names = ['Vanguard', 'Sentinel', 'Pathfinder', 'Explorer', 'Voyager'];
+                  
+                  newShips.push({
+                    id: `ship_${seed}_${i}`,
+                    name: names[i % names.length] + '-' + nameVal,
+                    tier,
+                    imageUrl: getRandomShipImage(tier),
+                    maxLY: tierConfig.maxLY,
+                    price,
+                    hourlyPay,
+                    icon: '🚀',
+                    currency: 'credits'
+                  });
+                }
+                
+                newStock.ships = newShips;
+                newStock.shipStock = newShips.length;
                 
                 // Update rotation history
                 const newRotationHistory = updateRotationHistory(selectedIds, rotationHistory);
