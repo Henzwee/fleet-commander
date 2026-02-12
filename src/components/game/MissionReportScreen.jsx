@@ -15,7 +15,7 @@ export default function MissionReportScreen({ mission, event, onClose, onChoice,
       right: 0,
       zIndex: 5
     }}>
-      <div className="bg-gradient-to-br from-gray-900 to-gray-950 border-2 border-cyan-500 w-full h-full relative overflow-y-auto" style={{
+      <div className="bg-gradient-to-br from-[#0a1a14] to-[#050f0a] border-2 border-[#5a7a5f] w-full h-full relative overflow-y-auto" style={{
         paddingTop: 'calc(var(--content-pad-top) + 24px)',
         paddingBottom: 'calc(var(--content-pad-bottom) + 32px)',
         paddingLeft: 'calc(var(--content-pad-left) + 24px)',
@@ -23,11 +23,11 @@ export default function MissionReportScreen({ mission, event, onClose, onChoice,
         WebkitOverflowScrolling: 'touch'
       }}>
         <div className="flex items-center gap-2 mb-6">
-          <Radio className="w-5 h-5 text-cyan-400 animate-pulse" />
-          <h2 className="text-cyan-400 font-bold text-lg">M.A.N.I. REPORT</h2>
+          <Radio className="w-5 h-5 text-[#5a9a8f] animate-pulse" />
+          <h2 className="text-[#5a9a8f] font-bold text-lg">M.A.N.I. REPORT</h2>
           <button
             onClick={onClose}
-            className="ml-auto text-gray-400 active:text-cyan-400 transition-colors"
+            className="ml-auto text-[#5a6a5f] active:text-[#5a9a8f] transition-colors"
           >
             <X className="w-6 h-6" />
           </button>
@@ -36,25 +36,28 @@ export default function MissionReportScreen({ mission, event, onClose, onChoice,
         {mission.shipImages && mission.shipImages.length > 0 && (
           <div className="grid grid-cols-3 gap-2 mb-4">
             {mission.shipImages.map((imgUrl, idx) => (
-              <img 
-                key={idx}
-                src={imgUrl} 
-                alt={`Ship ${idx + 1}`} 
-                className="w-full h-24 object-contain rounded-lg bg-gray-800/50"
-              />
+              <div key={idx} className="relative">
+                <div className="absolute inset-0 bg-[#2a3a2f] border-2 border-[#3a5a4f]"></div>
+                <div className="absolute inset-[2px] bg-[#1a2a1f]"></div>
+                <img 
+                  src={imgUrl} 
+                  alt={`Ship ${idx + 1}`} 
+                  className="relative w-full h-24 object-contain"
+                />
+              </div>
             ))}
           </div>
         )}
 
         <div className="mb-4">
-          <div className="text-cyan-100 font-bold text-base mb-2">{mission.shipNames || mission.shipName}</div>
-          <div className="text-gray-400 text-xs space-y-1">
+          <div className="text-[#a8c5ad] font-bold text-base mb-2">{mission.shipNames || mission.shipName}</div>
+          <div className="text-[#5a6a5f] text-xs space-y-1">
             <div>Distance: {mission.distance} ly</div>
             <div>Time Remaining: {mission.timeRemaining}</div>
             <div>Parts Reward: {mission.partsReward || 0} parts</div>
             <div>Wages: ${mission.totalWages || 0}</div>
             {mission.encounterResult && (
-              <div className={`font-bold ${mission.encounterResult.includes('-') ? 'text-red-400' : 'text-green-400'}`}>
+              <div className={`font-bold ${mission.encounterResult.includes('-') ? 'text-[#c84444]' : 'text-[#5a9a6f]'}`}>
                 Encounter: {mission.encounterResult}
               </div>
             )}
@@ -62,52 +65,97 @@ export default function MissionReportScreen({ mission, event, onClose, onChoice,
         </div>
 
         {event ? (
-          <div className="bg-amber-900/20 border-2 border-amber-500/50 rounded-lg p-4 mb-4">
-            <div className="text-amber-400 text-sm font-bold mb-2">{event.description}</div>
-            <div className="flex flex-wrap gap-2 mt-3">
-              {event.choices?.map((choice, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => {
-                    onChoice(choice.id);
-                    onClose();
-                  }}
-                  className={`px-4 py-2 rounded border-2 text-xs font-bold tracking-wide transition-all ${
-                    choice.primary
-                      ? 'bg-cyan-500/20 border-cyan-500 text-cyan-400 active:bg-cyan-500/30'
-                      : 'bg-gray-700/50 border-gray-500 text-gray-300 active:bg-gray-600/50'
-                  }`}
-                >
-                  {choice.label}
-                </button>
-              ))}
+          <div className="relative p-4 mb-4">
+            <div className="absolute inset-0 bg-[#3a2a1f] border-2 border-[#7a5a3f]" style={{
+              boxShadow: 'inset 0 0 0 1px #1a1a0f'
+            }}></div>
+            <div className="absolute inset-[3px] bg-[#2a1a0f]" style={{
+              backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(122,90,63,0.1) 1px, transparent 0)',
+              backgroundSize: '3px 3px'
+            }}></div>
+            <div className="relative">
+              <div className="text-amber-400 text-sm font-bold mb-2">{event.description}</div>
+              <div className="flex flex-wrap gap-2 mt-3">
+                {event.choices?.map((choice, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => {
+                      onChoice(choice.id);
+                      onClose();
+                    }}
+                    className="relative px-4 py-2 text-xs font-bold tracking-wide"
+                  >
+                    {choice.primary ? (
+                      <>
+                        <div className="absolute inset-0 bg-[#3a7a4f] border-2 border-[#5a9a6f]" style={{
+                          boxShadow: 'inset 0 1px 0 rgba(90,154,111,0.4)'
+                        }}></div>
+                        <div className="absolute inset-[2px] bg-[#4a8a5f]" style={{
+                          backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,154,111,0.15) 1px, transparent 0)',
+                          backgroundSize: '3px 3px'
+                        }}></div>
+                        <span className="relative text-[#d0e8d5]">{choice.label}</span>
+                      </>
+                    ) : (
+                      <>
+                        <div className="absolute inset-0 bg-[#3a3a3f] border-2 border-[#5a5a5f]" style={{
+                          boxShadow: 'inset 0 1px 0 rgba(90,90,95,0.4)'
+                        }}></div>
+                        <div className="absolute inset-[2px] bg-[#4a4a4f]" style={{
+                          backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,90,95,0.15) 1px, transparent 0)',
+                          backgroundSize: '3px 3px'
+                        }}></div>
+                        <span className="relative text-[#a0a0a5]">{choice.label}</span>
+                      </>
+                    )}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
         ) : mission.isFailed ? (
-          <div className="bg-red-900/20 border-2 border-red-500/50 rounded-lg p-4 mb-4">
-            <div className="text-red-400 text-sm font-bold mb-2">
-              {mission.ships?.some(s => s.status === 'active')
-                ? `${mission.ships.find(s => s.status === 'destroyed')?.shipName} has been compromised. But the Ship Faced handbook says "no ship is ever truly totaled."`
-                : `${mission.shipNames} was unsuccessful in finishing the mission. This will put you behind on your monthly quota.`
-              }
+          <div className="relative p-4 mb-4">
+            <div className="absolute inset-0 bg-[#3a1a1f] border-2 border-[#6a3a3f]" style={{
+              boxShadow: 'inset 0 0 0 1px #1a0a0f'
+            }}></div>
+            <div className="absolute inset-[3px] bg-[#2a0a0f]" style={{
+              backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(106,58,63,0.1) 1px, transparent 0)',
+              backgroundSize: '3px 3px'
+            }}></div>
+            <div className="relative">
+              <div className="text-[#c84444] text-sm font-bold mb-2">
+                {mission.ships?.some(s => s.status === 'active')
+                  ? `${mission.ships.find(s => s.status === 'destroyed')?.shipName} has been compromised. But the Ship Faced handbook says "no ship is ever truly totaled."`
+                  : `${mission.shipNames} was unsuccessful in finishing the mission. This will put you behind on your monthly quota.`
+                }
+              </div>
+              <button
+                onClick={async () => {
+                  await mission.ships?.forEach(async (ship) => {
+                    if (ship.status === 'destroyed') {
+                      await onChoice('tow_back');
+                    }
+                  });
+                  onClose();
+                }}
+                className="relative w-full py-2 font-bold text-xs mt-3"
+              >
+                <div className="absolute inset-0 bg-[#3a3a3f] border-2 border-[#5a5a5f]"></div>
+                <div className="absolute inset-[2px] bg-[#4a4a4f]"></div>
+                <span className="relative text-[#d0d0d5]">TOW BACK</span>
+              </button>
             </div>
-            <button
-              onClick={async () => {
-                await mission.ships?.forEach(async (ship) => {
-                  if (ship.status === 'destroyed') {
-                    await onChoice('tow_back');
-                  }
-                });
-                onClose();
-              }}
-              className="w-full bg-gray-700 active:bg-gray-600 border-2 border-gray-600 rounded-lg py-2 text-white font-bold text-xs transition-all mt-3"
-            >
-              TOW BACK
-            </button>
           </div>
         ) : (
-          <div className="bg-green-900/20 border-2 border-green-500/50 rounded-lg p-4 mb-4">
-            <div className="text-green-400 text-sm">
+          <div className="relative p-4 mb-4">
+            <div className="absolute inset-0 bg-[#1a3a2f] border-2 border-[#3a6a4f]" style={{
+              boxShadow: 'inset 0 0 0 1px #0a1a0f'
+            }}></div>
+            <div className="absolute inset-[3px] bg-[#0a2a1f]" style={{
+              backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(58,106,79,0.1) 1px, transparent 0)',
+              backgroundSize: '3px 3px'
+            }}></div>
+            <div className="relative text-[#5a9a6f] text-sm">
               All systems nominal. Mission proceeding smoothly.
             </div>
           </div>
@@ -120,22 +168,36 @@ export default function MissionReportScreen({ mission, event, onClose, onChoice,
               onClose();
             }}
             disabled={crystals < crystalCost}
-            className="w-full bg-gradient-to-br from-purple-600 to-purple-700 active:from-purple-700 active:to-purple-800 disabled:bg-gray-600 disabled:cursor-not-allowed border-2 border-purple-400 disabled:border-gray-500 rounded-lg py-2 text-white font-bold text-sm transition-all mb-3 flex items-center justify-center gap-2"
+            className="relative w-full py-2 font-bold text-sm mb-3 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
+            <div className="absolute inset-0 bg-[#3a2a4a] border-2 border-[#6a5a7a]" style={{
+              boxShadow: 'inset 0 1px 0 rgba(106,90,122,0.4)'
+            }}></div>
+            <div className="absolute inset-[2px] bg-[#4a3a5a]" style={{
+              backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(106,90,122,0.15) 1px, transparent 0)',
+              backgroundSize: '3px 3px'
+            }}></div>
             <img 
               src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695af5ca435140b76c0dadc9/26d2c74b8_crystal.png" 
               alt="Crystal" 
-              className="w-4 h-4"
+              className="w-4 h-4 relative"
             />
-            <span>SKIP ({crystalCost})</span>
+            <span className="relative text-[#d0d0e8]">SKIP ({crystalCost})</span>
           </button>
         )}
 
         <button
           onClick={onClose}
-          className="w-full bg-gray-700 active:bg-gray-600 border-2 border-gray-600 rounded-lg py-2 text-white font-bold text-sm transition-all"
+          className="relative w-full py-2 font-bold text-sm"
         >
-          CLOSE
+          <div className="absolute inset-0 bg-[#3a3a3f] border-2 border-[#5a5a5f]" style={{
+            boxShadow: 'inset 0 1px 0 rgba(90,90,95,0.4)'
+          }}></div>
+          <div className="absolute inset-[2px] bg-[#4a4a4f]" style={{
+            backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,90,95,0.15) 1px, transparent 0)',
+            backgroundSize: '3px 3px'
+          }}></div>
+          <span className="relative text-[#d0d0d5]">CLOSE</span>
         </button>
       </div>
     </div>
