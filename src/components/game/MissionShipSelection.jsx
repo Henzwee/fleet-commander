@@ -27,10 +27,10 @@ export default function MissionShipSelection({ mission, ships, onConfirm, onCanc
     }}>
       <div className="flex-1 flex flex-col overflow-y-auto" style={{ 
         WebkitOverflowScrolling: 'touch',
-        paddingTop: 'calc(var(--content-pad-top) + 32px)',
+        paddingTop: 'calc(var(--content-pad-top) + 24px)',
         paddingBottom: 'calc(var(--content-pad-bottom) + 24px)',
-        paddingLeft: 'calc(var(--content-pad-left) + var(--safe-x))',
-        paddingRight: 'calc(var(--content-pad-right) + var(--safe-x))'
+        paddingLeft: 'calc(var(--content-pad-left) + 12px)',
+        paddingRight: 'calc(var(--content-pad-right) + 12px)'
       }}>
           <div className="mb-6">
             <h2 className="text-cyan-400 font-bold text-base">SELECT SHIPS (1-3)</h2>

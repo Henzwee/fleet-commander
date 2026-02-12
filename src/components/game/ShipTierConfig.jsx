@@ -2,7 +2,7 @@
 export const SHIP_TIERS = {
   'Unregistered': {
     maxLY: 100,
-    payRange: [100, 300],
+    payRange: [200, 500],
     priceRange: [1000, 2000]
   },
   'Known': {
