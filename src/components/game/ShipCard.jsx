@@ -62,7 +62,7 @@ export default function ShipCard({ ship, onClick, showPrice = false }) {
         {ship.health !== undefined && (
           <div className="flex items-center gap-1">
             <Heart className={`w-4 h-4 ${ship.health < 100 ? 'text-red-400' : 'text-green-400'}`} />
-            <span className="text-xs">{ship.health}%</span>
+            <span className={`text-xs font-bold ${ship.health < 100 ? 'text-[#c84444]' : 'text-[#5a9a6f]'}`}>{ship.health}%</span>
           </div>
         )}
       </div>
