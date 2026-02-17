@@ -65,10 +65,10 @@ export default function FleetManagement() {
   };
   
   const getDamageColor = (health) => {
-    if (health >= 75) return 'text-green-400';
+    if (health >= 75) return 'text-[#5a9a6f]';
     if (health >= 50) return 'text-yellow-400';
     if (health >= 25) return 'text-amber-400';
-    return 'text-red-400';
+    return 'text-[#c84444]';
   };
   
   const handleRepair = async (ship) => {
@@ -131,11 +131,11 @@ export default function FleetManagement() {
   
   const getStatusColor = (status) => {
     switch (status) {
-      case 'idle': return 'text-green-400';
-      case 'active': return 'text-cyan-400';
+      case 'idle': return 'text-[#5a9a6f]';
+      case 'active': return 'text-[#5a9a8f]';
       case 'damaged': return 'text-amber-400';
-      case 'destroyed': return 'text-red-400';
-      default: return 'text-gray-400';
+      case 'destroyed': return 'text-[#c84444]';
+      default: return 'text-[#5a6a5f]';
     }
   };
   
@@ -246,86 +246,119 @@ export default function FleetManagement() {
                             />
                             
                             {selectedShip?.id === ship.id && (
-                              <div className={`bg-gradient-to-br from-gray-900 to-gray-950 rounded-lg p-4 mt-2 ${
-                                ship.health <= 25 ? 'border-2 border-red-500/60' :
-                                ship.health <= 50 ? 'border-2 border-amber-500/60' :
-                                'border-2 border-cyan-500/30'
-                              }`}>
-                                <div className="grid grid-cols-2 gap-3 mb-4 text-xs">
-                                  <div>
-                                    <div className="text-gray-400">Status</div>
-                                    <div className={`font-bold ${getStatusColor(ship.status)}`}>
-                                      {ship.health === 0 ? 'DESTROYED' : ship.status.toUpperCase()}
+                              <div className="relative p-4 mt-2">
+                                <div className={`absolute inset-0 ${
+                                  ship.health <= 25 ? 'bg-[#3a1a1f] border-2 border-[#6a3a3f]' :
+                                  ship.health <= 50 ? 'bg-[#3a2a1f] border-2 border-[#7a5a3f]' :
+                                  'bg-[#1a2a2f] border-2 border-[#3a5a5f]'
+                                }`} style={{
+                                  boxShadow: 'inset 0 0 0 1px #0a1a1f'
+                                }}></div>
+                                <div className={`absolute inset-[4px] ${
+                                  ship.health <= 25 ? 'bg-[#2a0a0f]' :
+                                  ship.health <= 50 ? 'bg-[#2a1a0f]' :
+                                  'bg-[#0a1a1f]'
+                                }`} style={{
+                                  backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(58,90,79,0.1) 1px, transparent 0)',
+                                  backgroundSize: '3px 3px'
+                                }}></div>
+                                <div className="relative">
+                                  <div className="grid grid-cols-2 gap-3 mb-4 text-xs">
+                                    <div>
+                                      <div className="text-[#5a6a5f]">Status</div>
+                                      <div className={`font-bold ${getStatusColor(ship.status)}`}>
+                                        {ship.health === 0 ? 'DESTROYED' : ship.status.toUpperCase()}
+                                      </div>
+                                    </div>
+                                    <div>
+                                      <div className="text-[#5a6a5f]">Hourly Pay</div>
+                                      <div className="text-amber-400 font-bold">${ship.hourlyPay}</div>
+                                    </div>
+                                    <div>
+                                      <div className="text-[#5a6a5f]">Health</div>
+                                      <div className={`font-bold ${getDamageColor(ship.health)}`}>
+                                        {ship.health}%
+                                      </div>
+                                    </div>
+                                    <div>
+                                      <div className="text-[#5a6a5f]">Range</div>
+                                      <div className="text-[#5a9a8f] font-bold">
+                                        {getRange(ship.tier).toLocaleString()} ly
+                                      </div>
                                     </div>
                                   </div>
-                                  <div>
-                                    <div className="text-gray-400">Hourly Pay</div>
-                                    <div className="text-amber-400 font-bold">${ship.hourlyPay}</div>
-                                  </div>
-                                  <div>
-                                    <div className="text-gray-400">Health</div>
-                                    <div className={`font-bold ${getDamageColor(ship.health)}`}>
-                                      {ship.health}%
+                                  
+                                  {ship.damaged && ship.status !== 'active' && ship.requiredParts && ship.requiredParts.length > 0 && (
+                                    <div className="relative mb-3 p-3">
+                                      <div className="absolute inset-0 bg-[#2a3a2f] border-2 border-[#3a5a4f]"></div>
+                                      <div className="absolute inset-[2px] bg-[#1a2a1f]"></div>
+                                      <div className="relative">
+                                        <div className="text-[#5a9a8f] text-xs font-bold mb-2">Required Parts</div>
+                                        <div className="space-y-1">
+                                          {ship.requiredParts.map((part, idx) => {
+                                            const available = (gameState?.parts || {})[part.name] || 0;
+                                            const hasEnough = available >= part.qty;
+                                            return (
+                                              <div key={idx} className="flex items-center gap-2 text-xs">
+                                                {hasEnough ? (
+                                                  <Check className="w-4 h-4 text-[#5a9a6f]" />
+                                                ) : (
+                                                  <X className="w-4 h-4 text-[#c84444]" />
+                                                )}
+                                                <span className={hasEnough ? 'text-[#5a9a6f]' : 'text-[#c84444]'}>
+                                                  {part.name} ({part.qty})
+                                                </span>
+                                              </div>
+                                            );
+                                          })}
+                                        </div>
+                                      </div>
                                     </div>
-                                  </div>
-                                  <div>
-                                    <div className="text-gray-400">Range</div>
-                                    <div className="text-cyan-400 font-bold">
-                                      {getRange(ship.tier).toLocaleString()} ly
-                                    </div>
-                                  </div>
-                                </div>
-                                
-                                {ship.damaged && ship.status !== 'active' && ship.requiredParts && ship.requiredParts.length > 0 && (
-                                  <div className="mb-3 bg-gray-900/50 rounded-lg p-3 border border-cyan-500/30">
-                                    <div className="text-cyan-400 text-xs font-bold mb-2">Required Parts</div>
-                                    <div className="space-y-1">
-                                      {ship.requiredParts.map((part, idx) => {
-                                        const available = (gameState?.parts || {})[part.name] || 0;
-                                        const hasEnough = available >= part.qty;
-                                        return (
-                                          <div key={idx} className="flex items-center gap-2 text-xs">
-                                            {hasEnough ? (
-                                              <Check className="w-4 h-4 text-green-400" />
-                                            ) : (
-                                              <X className="w-4 h-4 text-red-400" />
-                                            )}
-                                            <span className={hasEnough ? 'text-green-400' : 'text-red-400'}>
-                                              {part.name} ({part.qty})
-                                            </span>
-                                          </div>
-                                        );
-                                      })}
-                                    </div>
-                                  </div>
-                                )}
-                                
-                                {ship.health < 100 && ship.status === 'active' && (
-                                  <div className="mb-3 bg-amber-900/30 rounded-lg p-2 border border-amber-500/30">
-                                    <div className="text-amber-400 text-xs text-center">Deployed ships can't be repaired</div>
-                                  </div>
-                                )}
-                                
-                                <div className="grid grid-cols-2 gap-2">
-                                  {ship.health < 100 && (
-                                    <button
-                                      onClick={() => handleRepair(ship)}
-                                      disabled={ship.status === 'active' || !hasParts(ship.requiredParts || [], gameState?.parts || {})}
-                                      className="bg-green-600 border-2 border-green-500 rounded-lg py-2 px-3 text-white font-bold text-xs flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed active:bg-green-700"
-                                    >
-                                      <Wrench className="w-4 h-4" />
-                                      <span>REPAIR</span>
-                                    </button>
                                   )}
                                   
-                                  <button
-                                    onClick={() => handleFire(ship)}
-                                    disabled={ship.status === 'active'}
-                                    className={`bg-red-600 border-2 border-red-500 rounded-lg py-2 px-3 text-white font-bold text-xs flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed ${ship.health < 100 ? '' : 'col-span-2'}`}
-                                  >
-                                    <UserMinus className="w-4 h-4" />
-                                    <span>FIRE</span>
-                                  </button>
+                                  {ship.health < 100 && ship.status === 'active' && (
+                                    <div className="relative mb-3 p-2">
+                                      <div className="absolute inset-0 bg-[#3a2a1f] border-2 border-[#7a5a3f]"></div>
+                                      <div className="absolute inset-[2px] bg-[#2a1a0f]"></div>
+                                      <div className="relative text-amber-400 text-xs text-center">Deployed ships can't be repaired</div>
+                                    </div>
+                                  )}
+                                  
+                                  <div className="grid grid-cols-2 gap-2">
+                                    {ship.health < 100 && (
+                                      <button
+                                        onClick={() => handleRepair(ship)}
+                                        disabled={ship.status === 'active' || !hasParts(ship.requiredParts || [], gameState?.parts || {})}
+                                        className="relative py-2 px-3 font-bold text-xs flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                                      >
+                                        <div className="absolute inset-0 bg-[#3a7a4f] border-2 border-[#5a9a6f]" style={{
+                                          boxShadow: 'inset 0 1px 0 rgba(90,154,111,0.4)'
+                                        }}></div>
+                                        <div className="absolute inset-[2px] bg-[#4a8a5f]" style={{
+                                          backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,154,111,0.15) 1px, transparent 0)',
+                                          backgroundSize: '3px 3px'
+                                        }}></div>
+                                        <Wrench className="w-4 h-4 relative" />
+                                        <span className="relative">REPAIR</span>
+                                      </button>
+                                    )}
+                                    
+                                    <button
+                                      onClick={() => handleFire(ship)}
+                                      disabled={ship.status === 'active'}
+                                      className={`relative py-2 px-3 font-bold text-xs flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed ${ship.health < 100 ? '' : 'col-span-2'}`}
+                                    >
+                                      <div className="absolute inset-0 bg-[#6a3a3f] border-2 border-[#8a4a4f]" style={{
+                                        boxShadow: 'inset 0 1px 0 rgba(138,74,79,0.4)'
+                                      }}></div>
+                                      <div className="absolute inset-[2px] bg-[#7a3a3f]" style={{
+                                        backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(138,74,79,0.15) 1px, transparent 0)',
+                                        backgroundSize: '3px 3px'
+                                      }}></div>
+                                      <UserMinus className="w-4 h-4 relative" />
+                                      <span className="relative">FIRE</span>
+                                    </button>
+                                  </div>
                                 </div>
                               </div>
                             )}
