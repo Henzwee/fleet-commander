@@ -212,14 +212,14 @@ export default function Market() {
         return ships;
       };
       
-      // Initialize ships if they don't exist
-      if (!gameState.marketStock.ships || gameState.marketStock.ships.length === 0) {
+      // Initialize ships if they don't exist (undefined means never initialized, empty array means sold out)
+      if (!gameState.marketStock.ships) {
         if (isInitializing) return;
         setIsInitializing(true);
-        
+
         const seed = gameState.lastMarketRotationSeed || Date.now();
         const ships = generateShips(seed, 5);
-        
+
         await updateGameState({ 
           marketStock: {
             ...gameState.marketStock,
@@ -345,7 +345,7 @@ export default function Market() {
       
       // Check if all ships sold out after this purchase
       if (remainingShips.length === 0) {
-        addMessage('Sold out! Come back later, money bags');
+        addMessage('No more ships for hire. Come back later, money bags.');
       } else {
         addMessage(`Hired ${item.name} for $${totalCost}`);
       }
@@ -564,7 +564,7 @@ export default function Market() {
         </div>
         
         <div className="space-y-3">
-          {activeTab === 'ships' && marketItems.length === 0 && gameState?.marketStock?.shipStock <= 0 && (
+          {activeTab === 'ships' && gameState?.marketStock?.ships?.length === 0 && (
             <div className="relative p-8 text-center">
               <div className="absolute inset-0 bg-[#2a3a2f] border-2 border-[#5a7a5f]" style={{
                 boxShadow: 'inset 0 0 0 1px #1a2a1f'
@@ -575,8 +575,8 @@ export default function Market() {
                 boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.5)'
               }}></div>
               <div className="relative">
-                <div className="text-[#5a9a8f] font-bold text-lg mb-2">SOLD OUT</div>
-                <div className="text-[#3a4a3f] text-sm">Come back later, money bags</div>
+                <div className="text-[#5a9a8f] font-bold text-lg mb-2">NO MORE SHIPS FOR HIRE</div>
+                <div className="text-[#5a6a5f] text-sm">Come back later, money bags.</div>
               </div>
             </div>
           )}
