@@ -167,11 +167,15 @@ export default function Main() {
         {/* Message Console */}
         <div className="relative w-full" style={{ height: '160px', boxSizing: 'border-box' }}>
           {/* Outer frame */}
-          <div className="absolute inset-0 bg-[#2a3a2f] border-2 border-[#5a7a5f]" style={{
+          <div className="absolute inset-0 border-2" style={{
+            backgroundColor: '#2a3a2f',
+            borderColor: 'var(--theme-border)',
             boxShadow: 'inset 0 0 0 1px #1a2a1f, 0 2px 0 #1a2a1f'
           }}></div>
           {/* Inner frame */}
-          <div className="absolute inset-[6px] bg-[#1f2e24] border border-[#3a4a3f]" style={{
+          <div className="absolute inset-[6px] border" style={{
+            backgroundColor: '#1f2e24',
+            borderColor: 'var(--theme-border-dark)',
             boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.5)'
           }}></div>
           {/* Content surface with texture */}
@@ -182,15 +186,16 @@ export default function Main() {
           }}>
             <div 
               ref={messageLogRef}
-              className="h-full overflow-y-auto space-y-2 text-sm text-[#a8c5ad] font-mono p-3"
+              className="h-full overflow-y-auto space-y-2 text-sm font-mono p-3"
+              style={{ color: 'var(--theme-light)' }}
               style={{ scrollBehavior: 'smooth' }}
             >
               {messages.length === 0 ? (
-                <div className="text-[#3a4a3f] italic">System standby...</div>
+                <div className="italic" style={{ color: 'var(--theme-border-dark)' }}>System standby...</div>
               ) : (
                 messages.map((msg, idx) => (
                   <div key={idx} className="flex gap-2">
-                    <span className="text-[#5a9a8f] flex-shrink-0 text-xs">
+                    <span className="flex-shrink-0 text-xs" style={{ color: 'var(--theme-primary)' }}>
                       {new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false })}
                     </span>
                     <span className="break-words">{msg}</span>
@@ -214,16 +219,20 @@ export default function Main() {
             style={{ minWidth: 0 }}
           >
             {/* Outer frame */}
-            <div className="absolute inset-0 bg-[#2a3a2f] border-2 border-[#5a7a5f]" style={{
+            <div className="absolute inset-0 border-2" style={{
+              backgroundColor: '#2a3a2f',
+              borderColor: 'var(--theme-border)',
               boxShadow: 'inset 0 0 0 1px #1a2a1f, 0 2px 0 #1a2a1f'
             }}></div>
             {/* Button surface */}
-            <div className="absolute inset-[4px] bg-[#3a5a4f] border border-[#4a6a5f]" style={{
+            <div className="absolute inset-[4px] border" style={{
+              backgroundColor: 'var(--theme-dark)',
+              borderColor: 'var(--theme-border)',
               boxShadow: 'inset 0 1px 2px rgba(90,154,143,0.3)',
               backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,122,95,0.15) 1px, transparent 0)',
               backgroundSize: '3px 3px'
             }}></div>
-            <span className="relative text-[#d0e8d5]">Ship Market</span>
+            <span className="relative" style={{ color: 'var(--theme-text-bright)' }}>Ship Market</span>
           </button>
 
           <button
@@ -232,16 +241,20 @@ export default function Main() {
             style={{ minWidth: 0 }}
           >
             {/* Outer frame */}
-            <div className="absolute inset-0 bg-[#2a3a2f] border-2 border-[#5a7a5f]" style={{
+            <div className="absolute inset-0 border-2" style={{
+              backgroundColor: '#2a3a2f',
+              borderColor: 'var(--theme-border)',
               boxShadow: 'inset 0 0 0 1px #1a2a1f, 0 2px 0 #1a2a1f'
             }}></div>
             {/* Button surface */}
-            <div className="absolute inset-[4px] bg-[#3a5a4f] border border-[#4a6a5f]" style={{
+            <div className="absolute inset-[4px] border" style={{
+              backgroundColor: 'var(--theme-dark)',
+              borderColor: 'var(--theme-border)',
               boxShadow: 'inset 0 1px 2px rgba(90,154,143,0.3)',
               backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,122,95,0.15) 1px, transparent 0)',
               backgroundSize: '3px 3px'
             }}></div>
-            <span className="relative text-[#d0e8d5]">Manage Fleet</span>
+            <span className="relative" style={{ color: 'var(--theme-text-bright)' }}>Manage Fleet</span>
           </button>
         </div>
 
@@ -251,25 +264,35 @@ export default function Main() {
           className="relative w-full py-6 font-bold text-xl tracking-wider"
         >
           {/* Outer frame */}
-          <div className="absolute inset-0 bg-[#2a3a2f] border-2 border-[#5a7a5f]" style={{
+          <div className="absolute inset-0 border-2" style={{
+            backgroundColor: '#2a3a2f',
+            borderColor: 'var(--theme-border)',
             boxShadow: 'inset 0 0 0 1px #1a2a1f, 0 3px 0 #1a2a1f'
           }}></div>
           {/* Inner frame */}
-          <div className="absolute inset-[4px] bg-[#1f2e24] border border-[#3a4a3f]"></div>
+          <div className="absolute inset-[4px] border" style={{
+            backgroundColor: '#1f2e24',
+            borderColor: 'var(--theme-border-dark)'
+          }}></div>
           {/* Button surface with accent */}
-          <div className="absolute inset-[8px] bg-[#3a5a4f]" style={{
+          <div className="absolute inset-[8px]" style={{
+            backgroundColor: 'var(--theme-dark)',
             boxShadow: 'inset 0 2px 3px rgba(90,154,143,0.4)',
             backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,122,95,0.2) 1px, transparent 0)',
             backgroundSize: '4px 4px'
           }}></div>
-          <span className="relative text-[#d0e8d5]">Available Jobs</span>
+          <span className="relative" style={{ color: 'var(--theme-text-bright)' }}>Available Jobs</span>
         </button>
 
         {/* Active Missions */}
-        <div className="bg-[#2a3a2f] border-2 border-[#5a7a5f] p-[6px]" style={{
+        <div className="border-2 p-[6px]" style={{
+          backgroundColor: '#2a3a2f',
+          borderColor: 'var(--theme-border)',
           boxShadow: 'inset 0 0 0 1px #1a2a1f, 0 2px 0 #1a2a1f'
         }}>
-          <div className="bg-[#1f2e24] border border-[#3a4a3f] p-[4px]" style={{
+          <div className="border p-[4px]" style={{
+            backgroundColor: '#1f2e24',
+            borderColor: 'var(--theme-border-dark)',
             boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.5)'
           }}>
             <div className="bg-[#0f1a14] p-3" style={{
@@ -278,7 +301,7 @@ export default function Main() {
               boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.7)'
             }}>
               {activeMissions.length === 0 ? (
-                <div className="text-center text-[#3a4a3f] py-8">No active missions</div>
+                <div className="text-center py-8" style={{ color: 'var(--theme-border-dark)' }}>No active missions</div>
               ) : (
                 <div className="space-y-3">
                   {activeMissions.map((mission) => {
@@ -295,8 +318,9 @@ export default function Main() {
                             ? 'border-[#c84444] animate-pulse'
                             : hasEvent 
                             ? 'border-[#d89944] animate-pulse' 
-                            : 'border-[#3a5a4f]'
+                            : ''
                         }`} style={{
+                          borderColor: isFailed ? '#c84444' : hasEvent ? '#d89944' : 'var(--theme-border-dark)',
                           boxShadow: 'inset 0 0 0 1px #1a2a1f'
                         }}></div>
                         <div className="absolute inset-[3px] bg-[#1a2a1f]" style={{
@@ -310,10 +334,10 @@ export default function Main() {
                             {mission.shipImage && (
                               <img src={mission.shipImage} alt={mission.shipNames} className="w-10 h-10 object-contain" />
                             )}
-                            <div className="text-[#a8c5ad] font-bold text-sm flex-1">
+                            <div className="font-bold text-sm flex-1" style={{ color: 'var(--theme-light)' }}>
                               {mission.shipNames} - {mission.distance}ly
                               {mission.activeShipCount > 1 && (
-                                <span className="text-[#5a9a8f] text-xs ml-2">({mission.activeShipCount} ships)</span>
+                                <span className="text-xs ml-2" style={{ color: 'var(--theme-primary)' }}>({mission.activeShipCount} ships)</span>
                               )}
                             </div>
                             {mission.isComplete ? (
@@ -363,10 +387,12 @@ export default function Main() {
                                 }}
                                 className="relative px-3 py-1 font-bold text-xs"
                               >
-                                <div className="absolute inset-0 bg-[#3a7a4f] border-2 border-[#5a9a6f]" style={{
+                                <div className="absolute inset-0 border-2" style={{
+                                  backgroundColor: 'var(--theme-dark)',
+                                  borderColor: 'var(--theme-primary)',
                                   boxShadow: 'inset 0 1px 0 rgba(90,154,111,0.4)'
                                 }}></div>
-                                <span className="relative text-[#d0e8d5]">COLLECT</span>
+                                <span className="relative" style={{ color: 'var(--theme-text-bright)' }}>COLLECT</span>
                               </button>
                             ) : mission.isFailed ? (
                               <button
@@ -382,7 +408,7 @@ export default function Main() {
                                 <span className="relative text-[#ffd0d0]">DEBRIEF</span>
                               </button>
                             ) : (
-                              <div className="text-[#5a9a8f] text-xs font-mono">
+                              <div className="text-xs font-mono" style={{ color: 'var(--theme-primary)' }}>
                                 {mission.timeRemaining}
                               </div>
                             )}
