@@ -27,7 +27,7 @@ export default function MissionShipSelection({ mission, ships, onConfirm, onCanc
     }}>
       <div className="flex-1 flex flex-col overflow-y-auto max-w-md mx-auto w-full" style={{ 
         WebkitOverflowScrolling: 'touch',
-        paddingTop: 'calc(var(--content-pad-top) + 24px)',
+        paddingTop: 'calc(var(--content-pad-top) + 48px)',
         paddingBottom: 'calc(var(--content-pad-bottom) + 24px)',
         paddingLeft: 'calc(var(--content-pad-left) + 12px)',
         paddingRight: 'calc(var(--content-pad-right) + 12px)'
