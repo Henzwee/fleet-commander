@@ -377,7 +377,7 @@ export default function Market() {
             boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.5)'
           }}></div>
           <div className="relative flex items-center justify-between">
-            <div className="flex items-center gap-2 text-[#5a9a8f] text-sm">
+            <div className="flex items-center gap-2 text-sm" style={{ color: 'var(--theme-primary)' }}>
               <Clock className="w-4 h-4" />
               <span>Resets: {timeUntilReset}</span>
             </div>
@@ -487,79 +487,58 @@ export default function Market() {
             onClick={() => setActiveTab('scrap')}
             className="relative flex-1 py-3 font-bold text-sm"
           >
-            <div className={`absolute inset-0 border-2 ${
-              activeTab === 'scrap'
-                ? 'bg-[#3a5a4f] border-[#5a7a5f]'
-                : 'bg-[#2a3a2f] border-[#3a4a3f]'
-            }`} style={{
+            <div className={`absolute inset-0 border-2`} style={{
+              backgroundColor: activeTab === 'scrap' ? 'var(--theme-dark)' : '#2a3a2f',
+              borderColor: activeTab === 'scrap' ? 'var(--theme-border)' : 'var(--theme-border-dark)',
               boxShadow: 'inset 0 0 0 1px #1a2a1f'
             }}></div>
-            <div className={`absolute inset-[3px] ${
-              activeTab === 'scrap'
-                ? 'bg-[#3a5a4f]'
-                : 'bg-[#1a2a1f]'
-            }`} style={{
+            <div className={`absolute inset-[3px]`} style={{
+              backgroundColor: activeTab === 'scrap' ? 'var(--theme-dark)' : '#1a2a1f',
               backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,122,95,0.15) 1px, transparent 0)',
               backgroundSize: '3px 3px',
               boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.3)'
             }}></div>
-            <span className={`relative ${
-              activeTab === 'scrap'
-                ? 'text-[#d0e8d5]'
-                : 'text-[#5a6a5f]'
-            }`}>SCRAP</span>
+            <span className="relative" style={{
+              color: activeTab === 'scrap' ? 'var(--theme-text-bright)' : 'var(--theme-text-dim)'
+            }}>SCRAP</span>
           </button>
           <button
             onClick={() => setActiveTab('ships')}
             className="relative flex-1 py-3 font-bold text-sm"
           >
-            <div className={`absolute inset-0 border-2 ${
-              activeTab === 'ships'
-                ? 'bg-[#3a5a4f] border-[#5a7a5f]'
-                : 'bg-[#2a3a2f] border-[#3a4a3f]'
-            }`} style={{
+            <div className="absolute inset-0 border-2" style={{
+              backgroundColor: activeTab === 'ships' ? 'var(--theme-dark)' : '#2a3a2f',
+              borderColor: activeTab === 'ships' ? 'var(--theme-border)' : 'var(--theme-border-dark)',
               boxShadow: 'inset 0 0 0 1px #1a2a1f'
             }}></div>
-            <div className={`absolute inset-[3px] ${
-              activeTab === 'ships'
-                ? 'bg-[#3a5a4f]'
-                : 'bg-[#1a2a1f]'
-            }`} style={{
+            <div className="absolute inset-[3px]" style={{
+              backgroundColor: activeTab === 'ships' ? 'var(--theme-dark)' : '#1a2a1f',
               backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,122,95,0.15) 1px, transparent 0)',
               backgroundSize: '3px 3px',
               boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.3)'
             }}></div>
-            <span className={`relative ${
-              activeTab === 'ships'
-                ? 'text-[#d0e8d5]'
-                : 'text-[#5a6a5f]'
-            }`}>SHIPS</span>
+            <span className="relative" style={{
+              color: activeTab === 'ships' ? 'var(--theme-text-bright)' : 'var(--theme-text-dim)'
+            }}>SHIPS</span>
           </button>
           <button
             onClick={() => setActiveTab('fuel')}
             className="relative flex-1 py-3 font-bold text-sm"
           >
-            <div className={`absolute inset-0 border-2 ${
-              activeTab === 'fuel'
-                ? 'bg-[#3a5a4f] border-[#5a7a5f]'
-                : 'bg-[#2a3a2f] border-[#3a4a3f]'
-            }`} style={{
+            <div className="absolute inset-0 border-2" style={{
+              backgroundColor: activeTab === 'fuel' ? 'var(--theme-dark)' : '#2a3a2f',
+              borderColor: activeTab === 'fuel' ? 'var(--theme-border)' : 'var(--theme-border-dark)',
               boxShadow: 'inset 0 0 0 1px #1a2a1f'
             }}></div>
-            <div className={`absolute inset-[3px] ${
-              activeTab === 'fuel'
-                ? 'bg-[#3a5a4f]'
-                : 'bg-[#1a2a1f]'
-            }`} style={{
+            <div className="absolute inset-[3px]" style={{
+              backgroundColor: activeTab === 'fuel' ? 'var(--theme-dark)' : '#1a2a1f',
               backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,122,95,0.15) 1px, transparent 0)',
               backgroundSize: '3px 3px',
               boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.3)'
             }}></div>
-            <span className={`relative ${
-              activeTab === 'fuel'
-                ? 'text-[#d0e8d5]'
-                : 'text-[#5a6a5f]'
-            }`}>FUEL</span>
+            <span className="relative" style={{
+              color: activeTab === 'fuel' ? 'var(--theme-text-bright)' : 'var(--theme-text-dim)'
+            }}>FUEL</span>
           </button>
         </div>
         
