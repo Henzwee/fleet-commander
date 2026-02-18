@@ -198,7 +198,7 @@ export default function Main() {
                     <span className="flex-shrink-0 text-xs" style={{ color: 'var(--theme-primary)' }}>
                       {new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false })}
                     </span>
-                    <span className="break-words">{msg}</span>
+                    <span className="break-words" style={{ color: 'var(--theme-primary)' }}>{msg}</span>
                   </div>
                 ))
               )}
