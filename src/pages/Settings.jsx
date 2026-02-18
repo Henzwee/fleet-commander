@@ -249,7 +249,7 @@ export default function Settings() {
       
       {/* Theme Purchase Confirmation */}
       {showThemeConfirm && (
-        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 bg-black/90 flex items-center justify-center p-4" style={{ zIndex: 2 }}>
           <div className="relative w-full max-w-sm">
             <div className="absolute inset-0 bg-[#2a3a2f] border-2 border-[#5a7a5f]" style={{
               boxShadow: 'inset 0 0 0 1px #1a2a1f'
