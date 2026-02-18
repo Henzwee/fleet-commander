@@ -554,8 +554,8 @@ export default function Market() {
                 boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.5)'
               }}></div>
               <div className="relative">
-                <div className="text-[#5a9a8f] font-bold text-lg mb-2">NO MORE SHIPS FOR HIRE</div>
-                <div className="text-[#5a6a5f] text-sm">Come back later, money bags.</div>
+                <div className="font-bold text-lg mb-2" style={{ color: 'var(--theme-primary)' }}>NO MORE SHIPS FOR HIRE</div>
+                <div className="text-sm" style={{ color: 'var(--theme-text-dim)' }}>Come back later, money bags.</div>
               </div>
             </div>
           )}
@@ -589,7 +589,7 @@ export default function Market() {
                     <div className="text-3xl">{item.icon}</div>
                   )}
                   <div>
-                    <div className="text-[#a8c5ad] font-bold text-sm">
+                    <div className="font-bold text-sm" style={{ color: 'var(--theme-light)' }}>
                       {item.name}
                       {activeTab === 'scrap' && item.deltaPercent !== 0 && (
                         <span 
@@ -605,10 +605,10 @@ export default function Market() {
                       )}
                     </div>
                     {item.tier && (
-                      <div className="text-xs text-[#5a6a5f]">{item.tier} • {item.maxLY} LY</div>
+                      <div className="text-xs" style={{ color: 'var(--theme-text-dim)' }}>{item.tier} • {item.maxLY} LY</div>
                     )}
                     {activeTab === 'scrap' && item.stock !== undefined && (
-                      <div className={`text-xs ${item.stock === 0 ? 'text-[#c84444]' : 'text-[#5a6a5f]'}`}>
+                      <div className="text-xs" style={{ color: item.stock === 0 ? '#c84444' : 'var(--theme-text-dim)' }}>
                         Stock: {item.stock}
                       </div>
                     )}
@@ -623,14 +623,17 @@ export default function Market() {
                   }
                   className="relative px-6 py-2 font-bold text-sm disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  <div className="absolute inset-0 bg-[#3a7a4f] border-2 border-[#5a9a6f]" style={{
+                  <div className="absolute inset-0 border-2" style={{
+                    backgroundColor: 'var(--theme-dark)',
+                    borderColor: 'var(--theme-primary)',
                     boxShadow: 'inset 0 1px 0 rgba(90,154,111,0.4)'
                   }}></div>
-                  <div className="absolute inset-[2px] bg-[#4a8a5f]" style={{
+                  <div className="absolute inset-[2px]" style={{
+                    backgroundColor: 'var(--theme-dark)',
                     backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,154,111,0.15) 1px, transparent 0)',
                     backgroundSize: '3px 3px'
                   }}></div>
-                  <span className="relative text-[#d0e8d5]">
+                  <span className="relative" style={{ color: 'var(--theme-text-bright)' }}>
                     {(activeTab === 'scrap' && item.stock === 0) ? 'OUT' : (
                       <>
                         {item.currency === 'crystals' ? (
