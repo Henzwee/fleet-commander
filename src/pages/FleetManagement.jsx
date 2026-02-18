@@ -160,7 +160,7 @@ export default function FleetManagement() {
             }}></div>
             <div className="absolute inset-[3px]" style={{
               backgroundColor: activeTab === 'ships' ? 'var(--theme-dark)' : '#1a2a1f',
-              backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,122,95,0.15) 1px, transparent 0)',
+              backgroundImage: 'none',
               backgroundSize: '3px 3px',
               boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.3)'
             }}></div>
@@ -179,7 +179,7 @@ export default function FleetManagement() {
             }}></div>
             <div className="absolute inset-[3px]" style={{
               backgroundColor: activeTab === 'inventory' ? 'var(--theme-dark)' : '#1a2a1f',
-              backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,122,95,0.15) 1px, transparent 0)',
+              backgroundImage: 'none',
               backgroundSize: '3px 3px',
               boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.3)'
             }}></div>
@@ -245,7 +245,7 @@ export default function FleetManagement() {
                                   ship.health <= 50 ? 'bg-[#2a1a0f]' :
                                   'bg-[#0a1a1f]'
                                 }`} style={{
-                                  backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(58,90,79,0.1) 1px, transparent 0)',
+                                  backgroundImage: 'none',
                                   backgroundSize: '3px 3px'
                                 }}></div>
                                 <div className="relative">
@@ -276,7 +276,7 @@ export default function FleetManagement() {
                                   
                                   {ship.damaged && ship.status !== 'active' && ship.requiredParts && ship.requiredParts.length > 0 && (
                                     <div className="relative mb-3 p-3">
-                                      <div className="absolute inset-0 bg-[#2a3a2f] border-2 border-[#3a5a4f]"></div>
+                                      <div className="absolute inset-0 border-2" style={{ backgroundColor: '#2a3a2f', borderColor: 'var(--theme-border-dark)' }}></div>
                                       <div className="absolute inset-[2px] bg-[#1a2a1f]"></div>
                                       <div className="relative">
                                         <div className="text-xs font-bold mb-2" style={{ color: 'var(--theme-primary)' }}>Required Parts</div>
@@ -397,11 +397,12 @@ export default function FleetManagement() {
                       key={partName}
                       className="relative"
                     >
-                      <div className="absolute inset-0 border border-[#3a5a4f]" style={{
+                      <div className="absolute inset-0 border" style={{
+                        borderColor: 'var(--theme-border-dark)',
                         boxShadow: 'inset 0 0 0 1px #1a2a1f'
                       }}></div>
                       <div className="absolute inset-[2px] bg-[#1a2a1f]" style={{
-                        backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(58,90,79,0.15) 1px, transparent 0)',
+                        backgroundImage: 'none',
                         backgroundSize: '3px 3px',
                         boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.4)'
                       }}></div>
