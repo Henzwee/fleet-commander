@@ -251,24 +251,24 @@ export default function FleetManagement() {
                                 <div className="relative">
                                   <div className="grid grid-cols-2 gap-3 mb-4 text-xs">
                                     <div>
-                                      <div className="text-[#5a6a5f]">Status</div>
-                                      <div className={`font-bold ${getStatusColor(ship.status)}`}>
+                                      <div style={{ color: 'var(--theme-text-dim)' }}>Status</div>
+                                      <div className="font-bold" style={{ color: getStatusColor(ship.status) }}>
                                         {ship.health === 0 ? 'DESTROYED' : ship.status.toUpperCase()}
                                       </div>
                                     </div>
                                     <div>
-                                      <div className="text-[#5a6a5f]">Hourly Pay</div>
-                                      <div className="text-amber-400 font-bold">${ship.hourlyPay}</div>
+                                      <div style={{ color: 'var(--theme-text-dim)' }}>Hourly Pay</div>
+                                      <div className="font-bold" style={{ color: '#ffaa00' }}>${ship.hourlyPay}</div>
                                     </div>
                                     <div>
-                                      <div className="text-[#5a6a5f]">Health</div>
-                                      <div className={`font-bold ${getDamageColor(ship.health)}`}>
+                                      <div style={{ color: 'var(--theme-text-dim)' }}>Health</div>
+                                      <div className="font-bold" style={{ color: getDamageColor(ship.health) }}>
                                         {ship.health}%
                                       </div>
                                     </div>
                                     <div>
-                                      <div className="text-[#5a6a5f]">Range</div>
-                                      <div className="text-[#5a9a8f] font-bold">
+                                      <div style={{ color: 'var(--theme-text-dim)' }}>Range</div>
+                                      <div className="font-bold" style={{ color: 'var(--theme-primary)' }}>
                                         {getRange(ship.tier).toLocaleString()} ly
                                       </div>
                                     </div>
@@ -279,7 +279,7 @@ export default function FleetManagement() {
                                       <div className="absolute inset-0 bg-[#2a3a2f] border-2 border-[#3a5a4f]"></div>
                                       <div className="absolute inset-[2px] bg-[#1a2a1f]"></div>
                                       <div className="relative">
-                                        <div className="text-[#5a9a8f] text-xs font-bold mb-2">Required Parts</div>
+                                        <div className="text-xs font-bold mb-2" style={{ color: 'var(--theme-primary)' }}>Required Parts</div>
                                         <div className="space-y-1">
                                           {ship.requiredParts.map((part, idx) => {
                                             const available = (gameState?.parts || {})[part.name] || 0;
@@ -287,11 +287,11 @@ export default function FleetManagement() {
                                             return (
                                               <div key={idx} className="flex items-center gap-2 text-xs">
                                                 {hasEnough ? (
-                                                  <Check className="w-4 h-4 text-[#5a9a6f]" />
+                                                  <Check className="w-4 h-4" style={{ color: 'var(--theme-primary)' }} />
                                                 ) : (
                                                   <X className="w-4 h-4 text-[#c84444]" />
                                                 )}
-                                                <span className={hasEnough ? 'text-[#5a9a6f]' : 'text-[#c84444]'}>
+                                                <span style={{ color: hasEnough ? 'var(--theme-primary)' : '#c84444' }}>
                                                   {part.name} ({part.qty})
                                                 </span>
                                               </div>
@@ -317,10 +317,13 @@ export default function FleetManagement() {
                                         disabled={ship.status === 'active' || !hasParts(ship.requiredParts || [], gameState?.parts || {})}
                                         className="relative py-2 px-3 font-bold text-xs flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                                       >
-                                        <div className="absolute inset-0 bg-[#3a7a4f] border-2 border-[#5a9a6f]" style={{
+                                        <div className="absolute inset-0 border-2" style={{
+                                          backgroundColor: 'var(--theme-dark)',
+                                          borderColor: 'var(--theme-primary)',
                                           boxShadow: 'inset 0 1px 0 rgba(90,154,111,0.4)'
                                         }}></div>
-                                        <div className="absolute inset-[2px] bg-[#4a8a5f]" style={{
+                                        <div className="absolute inset-[2px]" style={{
+                                          backgroundColor: 'var(--theme-dark)',
                                           backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,154,111,0.15) 1px, transparent 0)',
                                           backgroundSize: '3px 3px'
                                         }}></div>
@@ -372,8 +375,8 @@ export default function FleetManagement() {
                 boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.5)'
               }}></div>
               <div className="relative flex items-center justify-between">
-                <div className="text-[#a8c5ad] font-bold">INVENTORY</div>
-                <div className="flex items-center gap-2 text-[#5a6a5f] text-xs">
+                <div className="font-bold" style={{ color: 'var(--theme-light)' }}>INVENTORY</div>
+                <div className="flex items-center gap-2 text-xs" style={{ color: 'var(--theme-text-dim)' }}>
                   <Package className="w-4 h-4" />
                   <span>{totalParts} parts</span>
                 </div>
@@ -404,10 +407,10 @@ export default function FleetManagement() {
                       }}></div>
                       <div className="relative p-3 flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                          <Package className="w-5 h-5 text-[#5a9a8f]" />
-                          <span className="text-[#a8c5ad] text-sm">{partName}</span>
+                          <Package className="w-5 h-5" style={{ color: 'var(--theme-primary)' }} />
+                          <span className="text-sm" style={{ color: 'var(--theme-light)' }}>{partName}</span>
                         </div>
-                        <div className="text-[#5a9a8f] font-bold text-sm">x{qty}</div>
+                        <div className="font-bold text-sm" style={{ color: 'var(--theme-primary)' }}>x{qty}</div>
                       </div>
                     </div>
                   ))}
