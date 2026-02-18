@@ -24,7 +24,7 @@ export default function DecisionPrompt({ event, onChoice }) {
               <button
                 key={idx}
                 onClick={() => onChoice(choice.id)}
-                className={`relative flex-1 px-4 py-2 text-xs font-bold tracking-wide ${
+                className={`relative flex-1 px-4 py-2 text-xs font-bold tracking-wide whitespace-nowrap ${
                   choice.primary ? '' : ''
                 }`}
               >
