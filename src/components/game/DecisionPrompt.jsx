@@ -19,12 +19,12 @@ export default function DecisionPrompt({ event, onChoice }) {
           <div className="text-amber-400 font-bold text-sm mb-2">ALERT: {event.title}</div>
           <div className="text-[#d0c5ad] text-xs mb-3">{event.description}</div>
           
-          <div className="flex flex-wrap gap-2">
+          <div className="flex gap-2">
             {event.choices?.map((choice, idx) => (
               <button
                 key={idx}
                 onClick={() => onChoice(choice.id)}
-                className={`relative px-4 py-2 text-xs font-bold tracking-wide ${
+                className={`relative flex-1 px-4 py-2 text-xs font-bold tracking-wide ${
                   choice.primary ? '' : ''
                 }`}
               >
