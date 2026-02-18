@@ -466,7 +466,9 @@ export default function Main() {
             
             <div className="space-y-4 flex-1">
               <div className="relative p-4">
-                <div className="absolute inset-0 bg-[#2a3a2f] border-2 border-[#5a7a5f]" style={{
+                <div className="absolute inset-0 border-2" style={{
+                  backgroundColor: '#2a3a2f',
+                  borderColor: 'var(--theme-border)',
                   boxShadow: 'inset 0 0 0 1px #1a2a1f'
                 }}></div>
                 <div className="absolute inset-[4px] bg-[#1a2a1f]" style={{
@@ -475,13 +477,15 @@ export default function Main() {
                   boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.5)'
                 }}></div>
                 <div className="relative">
-                  <div className="text-[#d89944] font-bold text-sm mb-2">Credits Earned</div>
-                  <div className="text-[#d0e8d5] text-2xl font-bold">${debriefData.credits}</div>
+                  <div className="font-bold text-sm mb-2" style={{ color: '#d89944' }}>Credits Earned</div>
+                  <div className="text-2xl font-bold" style={{ color: 'var(--theme-text-bright)' }}>${debriefData.credits}</div>
                 </div>
               </div>
               
               <div className="relative p-4">
-                <div className="absolute inset-0 bg-[#2a3a2f] border-2 border-[#5a7a5f]" style={{
+                <div className="absolute inset-0 border-2" style={{
+                  backgroundColor: '#2a3a2f',
+                  borderColor: 'var(--theme-border)',
                   boxShadow: 'inset 0 0 0 1px #1a2a1f'
                 }}></div>
                 <div className="absolute inset-[4px] bg-[#1a2a1f]" style={{
@@ -490,8 +494,8 @@ export default function Main() {
                   boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.5)'
                 }}></div>
                 <div className="relative">
-                  <div className="text-[#5a9a6f] font-bold text-sm mb-2">Parts Collected ({debriefData.parts.length})</div>
-                  <div className="text-[#8aaa9d] text-xs space-y-1">
+                  <div className="font-bold text-sm mb-2" style={{ color: 'var(--theme-primary)' }}>Parts Collected ({debriefData.parts.length})</div>
+                  <div className="text-xs space-y-1" style={{ color: 'var(--theme-light)' }}>
                     {debriefData.parts.map((part, idx) => (
                       <div key={idx}>• {part}</div>
                     ))}
