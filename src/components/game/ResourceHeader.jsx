@@ -12,13 +12,15 @@ export default function ResourceHeader() {
       right: 'var(--content-pad-right)',
       height: 'calc(var(--content-pad-top) + 28px)'
     }}>
-      <div className="flex items-center justify-between gap-3 rounded-full px-4 py-3" style={{
+      <div className="flex items-center justify-between gap-3 rounded-full px-4 py-3 border-2" style={{
         position: 'absolute',
         top: 'calc(var(--content-pad-top) - 10px)',
         left: '50%',
         transform: 'translateX(-50%)',
         width: 'calc(100% - 48px)',
-        maxWidth: '452px'
+        maxWidth: '452px',
+        backgroundColor: 'var(--theme-dark)',
+        borderColor: 'var(--theme-border)'
       }}>
         <div className="flex items-center gap-1.5">
           <DollarSign className="w-4 h-4 text-amber-400" />

@@ -572,7 +572,7 @@ export default function Market() {
                 boxShadow: 'inset 0 0 0 1px #1a2a1f'
               }}></div>
               <div className="absolute inset-[3px] bg-[#1a2a1f]" style={{
-                backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(58,90,79,0.15) 1px, transparent 0)',
+                backgroundImage: 'none',
                 backgroundSize: '3px 3px',
                 boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.4)'
               }}></div>

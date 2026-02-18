@@ -276,7 +276,7 @@ export default function Jobs() {
                   ? 'bg-[#2a3a2f]'
                   : 'bg-[#1a2a1f]'
               }`} style={{
-                backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(58,90,79,0.15) 1px, transparent 0)',
+                backgroundImage: 'none',
                 backgroundSize: '3px 3px',
                 boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.4)'
               }}></div>

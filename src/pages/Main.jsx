@@ -180,7 +180,7 @@ export default function Main() {
           }}></div>
           {/* Content surface with texture */}
           <div className="absolute inset-[10px] bg-[#0f1a14]" style={{
-            backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,122,95,0.1) 1px, transparent 0)',
+            backgroundImage: 'none',
             backgroundSize: '4px 4px',
             boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.7)'
           }}>
@@ -296,7 +296,7 @@ export default function Main() {
             boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.5)'
           }}>
             <div className="bg-[#0f1a14] p-3" style={{
-              backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,122,95,0.1) 1px, transparent 0)',
+              backgroundImage: 'none',
               backgroundSize: '4px 4px',
               boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.7)'
             }}>
@@ -324,7 +324,7 @@ export default function Main() {
                           boxShadow: 'inset 0 0 0 1px #1a2a1f'
                         }}></div>
                         <div className="absolute inset-[3px] bg-[#1a2a1f]" style={{
-                          backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(58,90,79,0.15) 1px, transparent 0)',
+                          backgroundImage: 'none',
                           backgroundSize: '3px 3px',
                           boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.4)'
                         }}></div>
