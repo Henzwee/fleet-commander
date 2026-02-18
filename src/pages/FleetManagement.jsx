@@ -65,10 +65,10 @@ export default function FleetManagement() {
   };
   
   const getDamageColor = (health) => {
-    if (health >= 75) return 'text-[#5a9a6f]';
-    if (health >= 50) return 'text-yellow-400';
-    if (health >= 25) return 'text-amber-400';
-    return 'text-[#c84444]';
+    if (health >= 75) return 'var(--theme-primary)';
+    if (health >= 50) return '#ffaa00';
+    if (health >= 25) return '#ffaa00';
+    return '#c84444';
   };
   
   const handleRepair = async (ship) => {
@@ -131,11 +131,11 @@ export default function FleetManagement() {
   
   const getStatusColor = (status) => {
     switch (status) {
-      case 'idle': return 'text-[#5a9a6f]';
-      case 'active': return 'text-[#5a9a8f]';
-      case 'damaged': return 'text-amber-400';
-      case 'destroyed': return 'text-[#c84444]';
-      default: return 'text-[#5a6a5f]';
+      case 'idle': return 'var(--theme-primary)';
+      case 'active': return 'var(--theme-primary)';
+      case 'damaged': return '#ffaa00';
+      case 'destroyed': return '#c84444';
+      default: return 'var(--theme-text-dim)';
     }
   };
   
@@ -153,53 +153,39 @@ export default function FleetManagement() {
             onClick={() => handleTabChange('ships')}
             className="relative flex-1 py-3 font-bold text-sm"
           >
-            <div className={`absolute inset-0 border-2 ${
-              activeTab === 'ships'
-                ? 'bg-[#3a5a4f] border-[#5a7a5f]'
-                : 'bg-[#2a3a2f] border-[#3a4a3f]'
-            }`} style={{
+            <div className="absolute inset-0 border-2" style={{
+              backgroundColor: activeTab === 'ships' ? 'var(--theme-dark)' : '#2a3a2f',
+              borderColor: activeTab === 'ships' ? 'var(--theme-border)' : 'var(--theme-border-dark)',
               boxShadow: 'inset 0 0 0 1px #1a2a1f'
             }}></div>
-            <div className={`absolute inset-[3px] ${
-              activeTab === 'ships'
-                ? 'bg-[#3a5a4f]'
-                : 'bg-[#1a2a1f]'
-            }`} style={{
+            <div className="absolute inset-[3px]" style={{
+              backgroundColor: activeTab === 'ships' ? 'var(--theme-dark)' : '#1a2a1f',
               backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,122,95,0.15) 1px, transparent 0)',
               backgroundSize: '3px 3px',
               boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.3)'
             }}></div>
-            <span className={`relative ${
-              activeTab === 'ships'
-                ? 'text-[#d0e8d5]'
-                : 'text-[#5a6a5f]'
-            }`}>SHIPS</span>
+            <span className="relative" style={{
+              color: activeTab === 'ships' ? 'var(--theme-text-bright)' : 'var(--theme-text-dim)'
+            }}>SHIPS</span>
           </button>
           <button
             onClick={() => handleTabChange('inventory')}
             className="relative flex-1 py-3 font-bold text-sm"
           >
-            <div className={`absolute inset-0 border-2 ${
-              activeTab === 'inventory'
-                ? 'bg-[#3a5a4f] border-[#5a7a5f]'
-                : 'bg-[#2a3a2f] border-[#3a4a3f]'
-            }`} style={{
+            <div className="absolute inset-0 border-2" style={{
+              backgroundColor: activeTab === 'inventory' ? 'var(--theme-dark)' : '#2a3a2f',
+              borderColor: activeTab === 'inventory' ? 'var(--theme-border)' : 'var(--theme-border-dark)',
               boxShadow: 'inset 0 0 0 1px #1a2a1f'
             }}></div>
-            <div className={`absolute inset-[3px] ${
-              activeTab === 'inventory'
-                ? 'bg-[#3a5a4f]'
-                : 'bg-[#1a2a1f]'
-            }`} style={{
+            <div className="absolute inset-[3px]" style={{
+              backgroundColor: activeTab === 'inventory' ? 'var(--theme-dark)' : '#1a2a1f',
               backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,122,95,0.15) 1px, transparent 0)',
               backgroundSize: '3px 3px',
               boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.3)'
             }}></div>
-            <span className={`relative ${
-              activeTab === 'inventory'
-                ? 'text-[#d0e8d5]'
-                : 'text-[#5a6a5f]'
-            }`}>INVENTORY</span>
+            <span className="relative" style={{
+              color: activeTab === 'inventory' ? 'var(--theme-text-bright)' : 'var(--theme-text-dim)'
+            }}>INVENTORY</span>
           </button>
         </div>
         
@@ -216,8 +202,8 @@ export default function FleetManagement() {
                 boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.5)'
               }}></div>
               <div className="relative flex items-center justify-between">
-                <div className="text-[#a8c5ad] font-bold">YOUR FLEET</div>
-                <div className="flex items-center gap-2 text-[#5a6a5f] text-xs">
+                <div className="font-bold" style={{ color: 'var(--theme-light)' }}>YOUR FLEET</div>
+                <div className="flex items-center gap-2 text-xs" style={{ color: 'var(--theme-text-dim)' }}>
                   <Package className="w-4 h-4" />
                   <span>{totalParts} parts</span>
                 </div>
@@ -236,7 +222,7 @@ export default function FleetManagement() {
                   
                   return (
                     <div key={tier} className="mb-6">
-                      <div className="text-[#a8c5ad] font-bold text-sm mb-3 uppercase">{tier}</div>
+                      <div className="font-bold text-sm mb-3 uppercase" style={{ color: 'var(--theme-light)' }}>{tier}</div>
                       <div className="grid grid-cols-1 gap-3">
                         {tierShips.map((ship) => (
                           <div key={ship.id}>
