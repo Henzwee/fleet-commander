@@ -13,12 +13,14 @@ export default function ShipPurchaseDialog({ ship, onConfirm, onCancel }) {
     }}>
       <div className="flex-1 flex flex-col px-6 py-4 relative">
         <div className="mb-6 mt-6">
-          <h2 className="text-[#5a9a8f] font-bold text-base">CONFIRM PURCHASE</h2>
+          <h2 className="font-bold text-base" style={{ color: 'var(--theme-primary)' }}>CONFIRM PURCHASE</h2>
         </div>
 
         {ship.imageUrl && (
           <div className="relative mb-3">
-            <div className="absolute inset-0 bg-[#2a3a2f] border-2 border-[#5a7a5f]" style={{
+            <div className="absolute inset-0 border-2" style={{
+              backgroundColor: '#2a3a2f',
+              borderColor: 'var(--theme-border)',
               boxShadow: 'inset 0 0 0 1px #1a2a1f'
             }}></div>
             <div className="absolute inset-[4px] bg-[#1a2a1f]" style={{
@@ -34,10 +36,12 @@ export default function ShipPurchaseDialog({ ship, onConfirm, onCancel }) {
         )}
 
         <div className="space-y-2 mb-8 flex-1">
-          <div className="text-[#a8c5ad] font-bold text-base">{ship.name}</div>
+          <div className="font-bold text-base" style={{ color: 'var(--theme-light)' }}>{ship.name}</div>
           
           <div className="relative p-2.5">
-            <div className="absolute inset-0 bg-[#2a3a2f] border-2 border-[#3a5a4f]" style={{
+            <div className="absolute inset-0 border-2" style={{
+              backgroundColor: '#2a3a2f',
+              borderColor: 'var(--theme-border-dark)',
               boxShadow: 'inset 0 0 0 1px #1a2a1f'
             }}></div>
             <div className="absolute inset-[3px] bg-[#1a2a1f]" style={{
@@ -46,20 +50,20 @@ export default function ShipPurchaseDialog({ ship, onConfirm, onCancel }) {
             }}></div>
             <div className="relative space-y-1.5">
               <div className="flex justify-between text-xs">
-                <span className="text-[#5a6a5f]">Tier:</span>
-                <span className="text-[#5a9a8f] font-bold">{ship.tier}</span>
+                <span style={{ color: 'var(--theme-text-dim)' }}>Tier:</span>
+                <span className="font-bold" style={{ color: 'var(--theme-primary)' }}>{ship.tier}</span>
               </div>
               <div className="flex justify-between text-xs">
-                <span className="text-[#5a6a5f]">Max Range:</span>
-                <span className="text-[#5a9a8f] font-bold">{ship.maxLY} LY</span>
+                <span style={{ color: 'var(--theme-text-dim)' }}>Max Range:</span>
+                <span className="font-bold" style={{ color: 'var(--theme-primary)' }}>{ship.maxLY} LY</span>
               </div>
               <div className="flex justify-between text-xs">
-                <span className="text-[#5a6a5f]">Hourly Pay:</span>
+                <span style={{ color: 'var(--theme-text-dim)' }}>Hourly Pay:</span>
                 <span className="text-amber-400 font-bold">${ship.hourlyPay}/hr</span>
               </div>
               <div className="flex justify-between text-xs">
-                <span className="text-[#5a6a5f]">Price:</span>
-                <span className="text-[#5a9a6f] font-bold">${ship.price}</span>
+                <span style={{ color: 'var(--theme-text-dim)' }}>Price:</span>
+                <span className="font-bold" style={{ color: 'var(--theme-primary)' }}>${ship.price}</span>
               </div>
             </div>
           </div>
@@ -83,14 +87,17 @@ export default function ShipPurchaseDialog({ ship, onConfirm, onCancel }) {
             onClick={() => onConfirm(1)}
             className="relative flex-1 py-2.5 font-bold text-sm"
           >
-            <div className="absolute inset-0 bg-[#3a7a4f] border-2 border-[#5a9a6f]" style={{
+            <div className="absolute inset-0 border-2" style={{
+              backgroundColor: 'var(--theme-dark)',
+              borderColor: 'var(--theme-primary)',
               boxShadow: 'inset 0 1px 0 rgba(90,154,111,0.4)'
             }}></div>
-            <div className="absolute inset-[2px] bg-[#4a8a5f]" style={{
+            <div className="absolute inset-[2px]" style={{
+              backgroundColor: 'var(--theme-dark)',
               backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,154,111,0.15) 1px, transparent 0)',
               backgroundSize: '3px 3px'
             }}></div>
-            <span className="relative text-[#d0e8d5]">BUY ${ship.price}</span>
+            <span className="relative" style={{ color: 'var(--theme-text-bright)' }}>BUY ${ship.price}</span>
           </button>
         </div>
       </div>

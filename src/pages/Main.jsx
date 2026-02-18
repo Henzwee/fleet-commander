@@ -521,15 +521,18 @@ export default function Main() {
               onClick={() => setDebriefData(null)}
               className="relative w-full py-2 font-bold text-sm mt-4"
             >
-              <div className="absolute inset-0 bg-[#2a3a2f] border-2 border-[#4a5a4f]" style={{
+              <div className="absolute inset-0 border-2" style={{
+                backgroundColor: '#2a3a2f',
+                borderColor: 'var(--theme-border-dark)',
                 boxShadow: 'inset 0 0 0 1px #1a2a1f'
               }}></div>
-              <div className="absolute inset-[3px] bg-[#3a4a3f]" style={{
+              <div className="absolute inset-[3px]" style={{
+                backgroundColor: '#3a4a3f',
                 backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(74,90,79,0.15) 1px, transparent 0)',
                 backgroundSize: '3px 3px',
                 boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.3)'
               }}></div>
-              <span className="relative text-[#a8c5ad]">CLOSE</span>
+              <span className="relative" style={{ color: 'var(--theme-light)' }}>CLOSE</span>
             </button>
           </div>
         </div>
