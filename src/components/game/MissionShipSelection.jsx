@@ -114,8 +114,8 @@ export default function MissionShipSelection({ mission, ships, onConfirm, onCanc
                 <div className="relative p-3">
                   <div className="flex items-center justify-between">
                     <div>
-                      <div className="text-[#a8c5ad] font-bold text-sm">{ship.name}</div>
-                      <div className="text-xs text-[#5a9a8f]">{ship.tier} • {ship.maxLY} LY</div>
+                      <div className="font-bold text-sm" style={{ color: 'var(--theme-light)' }}>{ship.name}</div>
+                      <div className="text-xs" style={{ color: 'var(--theme-primary)' }}>{ship.tier} • {ship.maxLY} LY</div>
                     </div>
                     <div className="text-red-400 text-xs">OUT OF RANGE</div>
                   </div>
@@ -139,8 +139,8 @@ export default function MissionShipSelection({ mission, ships, onConfirm, onCanc
                 <div className="relative p-3">
                   <div className="flex items-center justify-between">
                     <div>
-                      <div className="text-[#a8c5ad] font-bold text-sm">{ship.name}</div>
-                      <div className="text-xs text-[#5a9a8f]">{ship.tier} • {ship.maxLY} LY</div>
+                      <div className="font-bold text-sm" style={{ color: 'var(--theme-light)' }}>{ship.name}</div>
+                      <div className="text-xs" style={{ color: 'var(--theme-primary)' }}>{ship.tier} • {ship.maxLY} LY</div>
                     </div>
                     <div className="text-amber-400 text-xs">DEPLOYED</div>
                   </div>
