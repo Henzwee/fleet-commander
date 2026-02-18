@@ -15,7 +15,8 @@ export default function MissionReportScreen({ mission, event, onClose, onChoice,
       right: 0,
       zIndex: 5
     }}>
-      <div className="bg-gradient-to-br from-[#0a1a14] to-[#050f0a] border-2 border-[#5a7a5f] w-full h-full relative overflow-y-auto" style={{
+      <div className="bg-gradient-to-br from-[#0a1a14] to-[#050f0a] border-2 w-full h-full relative overflow-y-auto" style={{
+        borderColor: 'var(--theme-border)',
         paddingTop: 'calc(var(--content-pad-top) + 24px)',
         paddingBottom: 'calc(var(--content-pad-bottom) + 32px)',
         paddingLeft: 'calc(var(--content-pad-left) + 24px)',
@@ -23,11 +24,15 @@ export default function MissionReportScreen({ mission, event, onClose, onChoice,
         WebkitOverflowScrolling: 'touch'
       }}>
         <div className="flex items-center gap-2 mb-6">
-          <Radio className="w-5 h-5 text-[#5a9a8f] animate-pulse" />
-          <h2 className="text-[#5a9a8f] font-bold text-lg">M.A.N.I. REPORT</h2>
+          <Radio className="w-5 h-5 animate-pulse" style={{ color: 'var(--theme-primary)' }} />
+          <h2 className="font-bold text-lg" style={{ color: 'var(--theme-primary)' }}>M.A.N.I. REPORT</h2>
           <button
             onClick={onClose}
-            className="ml-auto text-[#5a6a5f] active:text-[#5a9a8f] transition-colors"
+            className="ml-auto transition-colors"
+            style={{ color: 'var(--theme-text-dim)' }}
+            onMouseDown={(e) => e.currentTarget.style.color = 'var(--theme-primary)'}
+            onMouseUp={(e) => e.currentTarget.style.color = 'var(--theme-text-dim)'}
+            onMouseLeave={(e) => e.currentTarget.style.color = 'var(--theme-text-dim)'}
           >
             <X className="w-6 h-6" />
           </button>
@@ -37,7 +42,7 @@ export default function MissionReportScreen({ mission, event, onClose, onChoice,
           <div className="grid grid-cols-3 gap-2 mb-4">
             {mission.shipImages.map((imgUrl, idx) => (
               <div key={idx} className="relative">
-                <div className="absolute inset-0 bg-[#2a3a2f] border-2 border-[#3a5a4f]"></div>
+                <div className="absolute inset-0 border-2" style={{ backgroundColor: '#2a3a2f', borderColor: 'var(--theme-border-dark)' }}></div>
                 <div className="absolute inset-[2px] bg-[#1a2a1f]"></div>
                 <img 
                   src={imgUrl} 
@@ -50,14 +55,14 @@ export default function MissionReportScreen({ mission, event, onClose, onChoice,
         )}
 
         <div className="mb-4">
-          <div className="text-[#a8c5ad] font-bold text-base mb-2">{mission.shipNames || mission.shipName}</div>
-          <div className="text-[#5a6a5f] text-xs space-y-1">
+          <div className="font-bold text-base mb-2" style={{ color: 'var(--theme-light)' }}>{mission.shipNames || mission.shipName}</div>
+          <div className="text-xs space-y-1" style={{ color: 'var(--theme-text-dim)' }}>
             <div>Distance: {mission.distance} ly</div>
             <div>Time Remaining: {mission.timeRemaining}</div>
             <div>Parts Reward: {mission.partsReward || 0} parts</div>
             <div>Wages: ${mission.totalWages || 0}</div>
             {mission.encounterResult && (
-              <div className={`font-bold ${mission.encounterResult.includes('-') ? 'text-[#c84444]' : 'text-[#5a9a6f]'}`}>
+              <div className="font-bold" style={{ color: mission.encounterResult.includes('-') ? '#c84444' : 'var(--theme-primary)' }}>
                 Encounter: {mission.encounterResult}
               </div>
             )}
@@ -87,14 +92,17 @@ export default function MissionReportScreen({ mission, event, onClose, onChoice,
                   >
                     {choice.primary ? (
                       <>
-                        <div className="absolute inset-0 bg-[#3a7a4f] border-2 border-[#5a9a6f]" style={{
+                        <div className="absolute inset-0 border-2" style={{
+                          backgroundColor: 'var(--theme-dark)',
+                          borderColor: 'var(--theme-primary)',
                           boxShadow: 'inset 0 1px 0 rgba(90,154,111,0.4)'
                         }}></div>
-                        <div className="absolute inset-[2px] bg-[#4a8a5f]" style={{
+                        <div className="absolute inset-[2px]" style={{
+                          backgroundColor: 'var(--theme-dark)',
                           backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,154,111,0.15) 1px, transparent 0)',
                           backgroundSize: '3px 3px'
                         }}></div>
-                        <span className="relative text-[#d0e8d5]">{choice.label}</span>
+                        <span className="relative" style={{ color: 'var(--theme-text-bright)' }}>{choice.label}</span>
                       </>
                     ) : (
                       <>
@@ -155,7 +163,7 @@ export default function MissionReportScreen({ mission, event, onClose, onChoice,
               backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(58,106,79,0.1) 1px, transparent 0)',
               backgroundSize: '3px 3px'
             }}></div>
-            <div className="relative text-[#5a9a6f] text-sm">
+            <div className="relative text-sm" style={{ color: 'var(--theme-primary)' }}>
               All systems nominal. Mission proceeding smoothly.
             </div>
           </div>
