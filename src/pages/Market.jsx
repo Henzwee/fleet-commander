@@ -15,6 +15,7 @@ import { SHIP_TIERS, getTierConfig } from '../components/game/ShipTierConfig';
 export default function Market() {
   const { gameState, addShip, updateGameState, addMessage, rollShipTier } = useGame();
   const [activeTab, setActiveTab] = useState('scrap');
+  const [processingPayment, setProcessingPayment] = useState(false);
   const [marketItems, setMarketItems] = useState([]);
   const [timeUntilReset, setTimeUntilReset] = useState('');
   const [purchaseDialog, setPurchaseDialog] = useState(null);
@@ -275,6 +276,17 @@ export default function Market() {
         }
       ];
       setMarketItems(fuelItems);
+    } else if (activeTab === 'crystals') {
+      const crystalPackages = [
+        { id: 'crystal_099', name: '100 Crystals', price: 0.99, crystalAmount: 100, icon: '💎' },
+        { id: 'crystal_299', name: '350 Crystals', price: 2.99, crystalAmount: 350, icon: '💎' },
+        { id: 'crystal_499', name: '650 Crystals', price: 4.99, crystalAmount: 650, icon: '💎' },
+        { id: 'crystal_999', name: '1400 Crystals', price: 9.99, crystalAmount: 1400, icon: '💎' },
+        { id: 'crystal_1999', name: '3000 Crystals', price: 19.99, crystalAmount: 3000, icon: '💎' },
+        { id: 'crystal_4999', name: '8000 Crystals', price: 49.99, crystalAmount: 8000, icon: '💎' },
+        { id: 'crystal_9999', name: '17000 Crystals', price: 99.99, crystalAmount: 17000, icon: '💎' }
+      ];
+      setMarketItems(crystalPackages);
     }
   };
   
@@ -356,6 +368,36 @@ export default function Market() {
       });
       
       addMessage(`Purchased ${item.fuelAmount * quantity} fuel for ◆${totalCost}`);
+    } else if (activeTab === 'crystals') {
+      // Real money purchase - redirect to Stripe checkout
+      setProcessingPayment(true);
+      try {
+        const response = await fetch('https://api.stripe.com/v1/checkout/sessions', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${import.meta.env.VITE_STRIPE_SECRET_KEY}`,
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          body: new URLSearchParams({
+            'payment_method_types[]': 'card',
+            'line_items[0][price_data][currency]': 'usd',
+            'line_items[0][price_data][product_data][name]': item.name,
+            'line_items[0][price_data][unit_amount]': Math.round(item.price * 100),
+            'line_items[0][quantity]': '1',
+            'mode': 'payment',
+            'success_url': window.location.origin + '/success?crystals=' + item.crystalAmount,
+            'cancel_url': window.location.origin + '/Market'
+          })
+        });
+        
+        const session = await response.json();
+        window.location.href = session.url;
+      } catch (error) {
+        console.error('Payment error:', error);
+        addMessage('Payment failed. Please try again.');
+        setProcessingPayment(false);
+      }
+      return;
     }
     
     setPurchaseDialog(null);
@@ -482,10 +524,10 @@ export default function Market() {
           </div>
         </div>
         
-        <div className="flex gap-2 mb-4">
+        <div className="grid grid-cols-2 gap-2 mb-4">
           <button
             onClick={() => setActiveTab('scrap')}
-            className="relative flex-1 py-3 font-bold text-sm"
+            className="relative py-3 font-bold text-sm"
           >
             <div className={`absolute inset-0 border-2 ${
               activeTab === 'scrap'
@@ -511,7 +553,7 @@ export default function Market() {
           </button>
           <button
             onClick={() => setActiveTab('ships')}
-            className="relative flex-1 py-3 font-bold text-sm"
+            className="relative py-3 font-bold text-sm"
           >
             <div className={`absolute inset-0 border-2 ${
               activeTab === 'ships'
@@ -537,7 +579,7 @@ export default function Market() {
           </button>
           <button
             onClick={() => setActiveTab('fuel')}
-            className="relative flex-1 py-3 font-bold text-sm"
+            className="relative py-3 font-bold text-sm"
           >
             <div className={`absolute inset-0 border-2 ${
               activeTab === 'fuel'
@@ -560,6 +602,32 @@ export default function Market() {
                 ? 'text-[#d0e8d5]'
                 : 'text-[#5a6a5f]'
             }`}>FUEL</span>
+          </button>
+          <button
+            onClick={() => setActiveTab('crystals')}
+            className="relative py-3 font-bold text-sm"
+          >
+            <div className={`absolute inset-0 border-2 ${
+              activeTab === 'crystals'
+                ? 'bg-[#3a5a4f] border-[#5a7a5f]'
+                : 'bg-[#2a3a2f] border-[#3a4a3f]'
+            }`} style={{
+              boxShadow: 'inset 0 0 0 1px #1a2a1f'
+            }}></div>
+            <div className={`absolute inset-[3px] ${
+              activeTab === 'crystals'
+                ? 'bg-[#3a5a4f]'
+                : 'bg-[#1a2a1f]'
+            }`} style={{
+              backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,122,95,0.15) 1px, transparent 0)',
+              backgroundSize: '3px 3px',
+              boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.3)'
+            }}></div>
+            <span className={`relative ${
+              activeTab === 'crystals'
+                ? 'text-[#d0e8d5]'
+                : 'text-[#5a6a5f]'
+            }`}>CRYSTALS</span>
           </button>
         </div>
         
@@ -639,8 +707,10 @@ export default function Market() {
                 <button
                   onClick={() => handleBuyClick(item)}
                   disabled={
-                    (item.currency === 'crystals' ? gameState?.crystals < item.price : gameState?.credits < item.price) ||
-                    (activeTab === 'scrap' && item.stock === 0)
+                    (activeTab === 'crystals' ? false : 
+                      (item.currency === 'crystals' ? gameState?.crystals < item.price : gameState?.credits < item.price)) ||
+                    (activeTab === 'scrap' && item.stock === 0) ||
+                    processingPayment
                   }
                   className="relative px-6 py-2 font-bold text-sm disabled:opacity-50 disabled:cursor-not-allowed"
                 >
@@ -654,14 +724,20 @@ export default function Market() {
                   <span className="relative text-[#d0e8d5]">
                     {(activeTab === 'scrap' && item.stock === 0) ? 'OUT' : (
                       <>
-                        {item.currency === 'crystals' ? (
-                          <img 
-                            src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695af5ca435140b76c0dadc9/26d2c74b8_crystal.png" 
-                            alt="Crystal" 
-                            className="w-4 h-4 inline-block"
-                          />
-                        ) : '$'}
-                        {item.price}
+                        {activeTab === 'crystals' ? (
+                          `$${item.price.toFixed(2)}`
+                        ) : item.currency === 'crystals' ? (
+                          <>
+                            <img 
+                              src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695af5ca435140b76c0dadc9/26d2c74b8_crystal.png" 
+                              alt="Crystal" 
+                              className="w-4 h-4 inline-block"
+                            />
+                            {item.price}
+                          </>
+                        ) : (
+                          `$${item.price}`
+                        )}
                       </>
                     )}
                   </span>
@@ -679,12 +755,58 @@ export default function Market() {
           />
         )}
 
-        {purchaseDialog && activeTab !== 'ships' && (
+        {purchaseDialog && activeTab !== 'ships' && activeTab !== 'crystals' && (
           <PurchaseConfirmDialog
             item={purchaseDialog}
             onConfirm={handleConfirmPurchase}
             onCancel={() => setPurchaseDialog(null)}
           />
+        )}
+        
+        {purchaseDialog && activeTab === 'crystals' && (
+          <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50" onClick={() => setPurchaseDialog(null)}>
+            <div className="relative bg-[#1a2a1f] border-4 border-[#3a5a4f] p-6 max-w-sm w-full mx-4" onClick={(e) => e.stopPropagation()}>
+              <div className="text-center mb-4">
+                <div className="text-2xl mb-2">💎</div>
+                <h3 className="text-cyan-400 font-bold text-lg mb-2">{purchaseDialog.name}</h3>
+                <p className="text-gray-400 text-sm mb-4">
+                  You'll be redirected to Stripe to complete your purchase.
+                </p>
+              </div>
+              
+              <div className="flex gap-2">
+                <button
+                  onClick={() => setPurchaseDialog(null)}
+                  className="flex-1 relative py-2 font-bold text-sm"
+                >
+                  <div className="absolute inset-0 bg-[#3a3a3f] border-2 border-[#5a5a5f]" style={{
+                    boxShadow: 'inset 0 1px 0 rgba(90,90,95,0.4)'
+                  }}></div>
+                  <div className="absolute inset-[2px] bg-[#4a4a4f]" style={{
+                    backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,90,95,0.15) 1px, transparent 0)',
+                    backgroundSize: '3px 3px'
+                  }}></div>
+                  <span className="relative text-[#a0a0a5]">CANCEL</span>
+                </button>
+                <button
+                  onClick={() => handleConfirmPurchase(1)}
+                  disabled={processingPayment}
+                  className="flex-1 relative py-2 font-bold text-sm disabled:opacity-50"
+                >
+                  <div className="absolute inset-0 bg-[#3a7a4f] border-2 border-[#5a9a6f]" style={{
+                    boxShadow: 'inset 0 1px 0 rgba(90,154,111,0.4)'
+                  }}></div>
+                  <div className="absolute inset-[2px] bg-[#4a8a5f]" style={{
+                    backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,154,111,0.15) 1px, transparent 0)',
+                    backgroundSize: '3px 3px'
+                  }}></div>
+                  <span className="relative text-[#d0e8d5]">
+                    {processingPayment ? 'PROCESSING...' : `BUY $${purchaseDialog.price.toFixed(2)}`}
+                  </span>
+                </button>
+              </div>
+            </div>
+          </div>
         )}
         </div>
       </div>
