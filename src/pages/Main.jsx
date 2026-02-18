@@ -306,9 +306,10 @@ export default function Main() {
                         }}></div>
                         
                         <div className="relative p-4">
-                          <div className="flex items-center gap-3" onClick={() => setSelectedMission(mission)}>
+                          {/* Ship names section - full width */}
+                          <div className="flex items-center gap-3 mb-3" onClick={() => setSelectedMission(mission)}>
                             {mission.shipImage && (
-                              <img src={mission.shipImage} alt={mission.shipNames} className="w-10 h-10 object-contain" />
+                              <img src={mission.shipImage} alt={mission.shipNames} className="w-10 h-10 object-contain flex-shrink-0" />
                             )}
                             <div className="text-[#a8c5ad] font-bold text-sm flex-1">
                               {mission.shipNames} - {mission.distance}ly
@@ -316,75 +317,103 @@ export default function Main() {
                                 <span className="text-[#5a9a8f] text-xs ml-2">({mission.activeShipCount} ships)</span>
                               )}
                             </div>
+                          </div>
+
+                          {/* Time and action button section */}
+                          <div className="flex items-center justify-between gap-3">
                             {mission.isComplete ? (
-                              <button
-                                onClick={async (e) => {
-                                  e.stopPropagation();
+                              <>
+                                <div className="text-[#5a9a6f] font-bold text-xs">
+                                  Completed!
+                                </div>
+                                <button
+                                  onClick={async (e) => {
+                                    e.stopPropagation();
 
-                                  // Calculate total wages from all active ships
-                                  const activeShips = mission.ships?.filter(s => s.status === 'active') || [];
-                                  const totalWages = activeShips.reduce((sum, ship) => {
-                                    return sum + (ship.hourlyPay * mission.duration);
-                                  }, 0);
+                                    // Calculate total wages from all active ships
+                                    const activeShips = mission.ships?.filter(s => s.status === 'active') || [];
+                                    const totalWages = activeShips.reduce((sum, ship) => {
+                                      return sum + (ship.hourlyPay * mission.duration);
+                                    }, 0);
 
-                                  // Award parts reward
-                                  const partsReward = mission.partsReward || 0;
-                                  const newParts = { ...gameState.parts };
-                                  const earnedParts = [];
+                                    // Award parts reward
+                                    const partsReward = mission.partsReward || 0;
+                                    const newParts = { ...gameState.parts };
+                                    const earnedParts = [];
 
-                                  // Generate random parts
-                                  const partsList = [
-                                    'Box of tangled wire', 'Rusty screws', 'Cracked glass',
-                                    'Wire splice', 'Stripped bolts', 'Reformed evil AI',
-                                    'Outdated map', 'Mostly stable antimatter', 'Expired food rations',
-                                    'Sci-fi looking panel'
-                                  ];
+                                    // Generate random parts
+                                    const partsList = [
+                                      'Box of tangled wire', 'Rusty screws', 'Cracked glass',
+                                      'Wire splice', 'Stripped bolts', 'Reformed evil AI',
+                                      'Outdated map', 'Mostly stable antimatter', 'Expired food rations',
+                                      'Sci-fi looking panel'
+                                    ];
 
-                                  for (let i = 0; i < partsReward; i++) {
-                                    const randomPart = partsList[Math.floor(Math.random() * partsList.length)];
-                                    newParts[randomPart] = (newParts[randomPart] || 0) + 1;
-                                    earnedParts.push(randomPart);
-                                  }
+                                    for (let i = 0; i < partsReward; i++) {
+                                      const randomPart = partsList[Math.floor(Math.random() * partsList.length)];
+                                      newParts[randomPart] = (newParts[randomPart] || 0) + 1;
+                                      earnedParts.push(randomPart);
+                                    }
 
-                                  // Show debrief
-                                  setDebriefData({
-                                    credits: totalWages,
-                                    parts: earnedParts,
-                                    crystals: 0
-                                  });
+                                    // Show debrief
+                                    setDebriefData({
+                                      credits: totalWages,
+                                      parts: earnedParts,
+                                      crystals: 0
+                                    });
 
-                                  await base44.entities.Mission.delete(mission.id);
-                                  await updateGameState({ 
-                                    credits: gameState.credits + totalWages,
-                                    parts: newParts
-                                  });
+                                    await base44.entities.Mission.delete(mission.id);
+                                    await updateGameState({ 
+                                      credits: gameState.credits + totalWages,
+                                      parts: newParts
+                                    });
 
-                                  loadActiveMissions();
-                                }}
-                                className="relative px-3 py-1 font-bold text-xs"
-                              >
-                                <div className="absolute inset-0 bg-[#3a7a4f] border-2 border-[#5a9a6f]" style={{
-                                  boxShadow: 'inset 0 1px 0 rgba(90,154,111,0.4)'
-                                }}></div>
-                                <span className="relative text-[#d0e8d5]">COLLECT</span>
-                              </button>
+                                    loadActiveMissions();
+                                  }}
+                                  className="relative px-3 py-1 font-bold text-xs"
+                                >
+                                  <div className="absolute inset-0 bg-[#3a7a4f] border-2 border-[#5a9a6f]" style={{
+                                    boxShadow: 'inset 0 1px 0 rgba(90,154,111,0.4)'
+                                  }}></div>
+                                  <span className="relative text-[#d0e8d5]">DEBRIEF</span>
+                                </button>
+                              </>
                             ) : mission.isFailed ? (
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  setSelectedMission(mission);
-                                }}
-                                className="relative px-3 py-1 font-bold text-xs animate-pulse"
-                              >
-                                <div className="absolute inset-0 bg-[#8a3a3a] border-2 border-[#c84444]" style={{
-                                  boxShadow: 'inset 0 1px 0 rgba(200,68,68,0.4)'
-                                }}></div>
-                                <span className="relative text-[#ffd0d0]">DEBRIEF</span>
-                              </button>
+                              <>
+                                <div className="text-[#c84444] font-bold text-xs animate-pulse">
+                                  Mission Failed
+                                </div>
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setSelectedMission(mission);
+                                  }}
+                                  className="relative px-3 py-1 font-bold text-xs animate-pulse"
+                                >
+                                  <div className="absolute inset-0 bg-[#8a3a3a] border-2 border-[#c84444]" style={{
+                                    boxShadow: 'inset 0 1px 0 rgba(200,68,68,0.4)'
+                                  }}></div>
+                                  <span className="relative text-[#ffd0d0]">DEBRIEF</span>
+                                </button>
+                              </>
                             ) : (
-                              <div className="text-[#5a9a8f] text-xs font-mono">
-                                {mission.timeRemaining}
-                              </div>
+                              <>
+                                <div className="text-[#5a9a8f] text-xs font-mono">
+                                  {mission.timeRemaining}
+                                </div>
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setTimeSkipMission(mission);
+                                  }}
+                                  className="relative px-3 py-1 font-bold text-xs"
+                                >
+                                  <div className="absolute inset-0 bg-[#3a2a4a] border-2 border-[#6a5a7a]" style={{
+                                    boxShadow: 'inset 0 1px 0 rgba(106,90,122,0.4)'
+                                  }}></div>
+                                  <span className="relative text-[#d0d0e8]">SKIP</span>
+                                </button>
+                              </>
                             )}
                           </div>
                         </div>
