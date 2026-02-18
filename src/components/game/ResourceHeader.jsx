@@ -21,7 +21,7 @@ export default function ResourceHeader() {
         maxWidth: '452px'
       }}>
         <div className="flex items-center gap-1.5">
-          <DollarSign className="w-4 h-4 text-amber-400" />
+          <span className="text-amber-400 font-bold text-base leading-none">₵</span>
           <span className="text-amber-400 font-bold text-sm">
             {gameState?.credits?.toLocaleString() || 0}
           </span>

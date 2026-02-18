@@ -727,7 +727,7 @@ export default function GameProvider({ children }) {
               status: anyActive ? 'active' : 'failed'
             });
             
-            addMessage(`${ship?.name} recalled safely. Earned $${hourlyWage} (${hoursWorked}h).`);
+            addMessage(`${ship?.name} recalled safely. Earned ₵${hourlyWage} (${hoursWorked}h).`);
           }
           
           await updateShip(currentEvent.shipId, { status: 'idle' });
@@ -797,8 +797,8 @@ export default function GameProvider({ children }) {
             const mission = await base44.entities.Mission.filter({ id: currentEvent.missionId });
             if (mission[0]) {
               const resultText = bonusCrystals > 0 
-                ? `+${bonusParts} parts, +$${bonusCredits}, +${bonusCrystals} crystals`
-                : `+${bonusParts} parts, +$${bonusCredits}`;
+                  ? `+${bonusParts} parts, +₵${bonusCredits}, +${bonusCrystals} crystals`
+                  : `+${bonusParts} parts, +₵${bonusCredits}`;
               await base44.entities.Mission.update(currentEvent.missionId, {
                 encounterResult: resultText
               });
@@ -890,7 +890,7 @@ export default function GameProvider({ children }) {
             const mission = await base44.entities.Mission.filter({ id: currentEvent.missionId });
             if (mission[0]) {
               await base44.entities.Mission.update(currentEvent.missionId, {
-                encounterResult: `+${bonusParts} parts, +$${bonusCredits} (hostile victory)`
+                encounterResult: `+${bonusParts} parts, +₵${bonusCredits} (hostile victory)`
               });
             }
 
@@ -936,7 +936,7 @@ export default function GameProvider({ children }) {
             const lostWages = Math.floor((activeShip?.hourlyPay || 0) * mission[0].duration * 0.5);
 
             await base44.entities.Mission.update(currentEvent.missionId, {
-              encounterResult: `-$${lostWages} (surrendered)`
+              encounterResult: `-₵${lostWages} (surrendered)`
             });
 
             // Reduce wages for this ship only
@@ -977,11 +977,11 @@ export default function GameProvider({ children }) {
             const mission = await base44.entities.Mission.filter({ id: currentEvent.missionId });
             if (mission[0]) {
               await base44.entities.Mission.update(currentEvent.missionId, {
-                encounterResult: `+$${bonusCredits} (planet claim)`
+                encounterResult: `+₵${bonusCredits} (planet claim)`
               });
             }
 
-            addMessage(`${shipName} successfully claimed the planet and received $${bonusCredits} reward!`);
+            addMessage(`${shipName} successfully claimed the planet and received ₵${bonusCredits} reward!`);
           } else {
             // Failure - pirate hideout, 50% damage
             const newHealth = Math.max(0, ship.health - 50);

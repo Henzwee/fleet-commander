@@ -359,7 +359,7 @@ export default function Market() {
       if (remainingShips.length === 0) {
         addMessage('No more ships for hire. Come back later, money bags.');
       } else {
-        addMessage(`Hired ${item.name} for $${totalCost}`);
+        addMessage(`Hired ${item.name} for ₵${totalCost}`);
       }
     } else if (activeTab === 'fuel') {
       await updateGameState({
@@ -736,7 +736,7 @@ export default function Market() {
                             {item.price}
                           </>
                         ) : (
-                          `$${item.price}`
+                          `₵${item.price}`
                         )}
                       </>
                     )}
