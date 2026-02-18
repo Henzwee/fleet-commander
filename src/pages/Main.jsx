@@ -479,7 +479,7 @@ export default function Main() {
                 }}></div>
                 <div className="relative">
                   <div className="text-[#d89944] font-bold text-sm mb-2">Credits Earned</div>
-                  <div className="text-[#d0e8d5] text-2xl font-bold">${debriefData.credits}</div>
+                  <div className="text-[#d0e8d5] text-2xl font-bold">₵{debriefData.credits}</div>
                 </div>
               </div>
               

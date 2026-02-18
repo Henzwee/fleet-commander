@@ -272,7 +272,7 @@ export default function FleetManagement() {
                                     </div>
                                     <div>
                                       <div className="text-[#5a6a5f]">Hourly Pay</div>
-                                      <div className="text-amber-400 font-bold">${ship.hourlyPay}</div>
+                                      <div className="text-amber-400 font-bold">₵{ship.hourlyPay}</div>
                                     </div>
                                     <div>
                                       <div className="text-[#5a6a5f]">Health</div>
