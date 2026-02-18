@@ -193,11 +193,13 @@ export default function FleetManagement() {
         {activeTab === 'ships' && (
           <section id="fleetShipsPanel">
             <div className="relative p-4 mb-4">
-              <div className="absolute inset-0 bg-[#2a3a2f] border-2 border-[#5a7a5f]" style={{
+              <div className="absolute inset-0 border-2" style={{
+                backgroundColor: '#2a3a2f',
+                borderColor: 'var(--theme-border)',
                 boxShadow: 'inset 0 0 0 1px #1a2a1f'
               }}></div>
               <div className="absolute inset-[4px] bg-[#1a2a1f]" style={{
-                backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,122,95,0.1) 1px, transparent 0)',
+                backgroundImage: 'none',
                 backgroundSize: '3px 3px',
                 boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.5)'
               }}></div>
@@ -366,11 +368,13 @@ export default function FleetManagement() {
         {activeTab === 'inventory' && (
           <section id="fleetInventoryPanel">
             <div className="relative p-4 mb-4">
-              <div className="absolute inset-0 bg-[#2a3a2f] border-2 border-[#5a7a5f]" style={{
+              <div className="absolute inset-0 border-2" style={{
+                backgroundColor: '#2a3a2f',
+                borderColor: 'var(--theme-border)',
                 boxShadow: 'inset 0 0 0 1px #1a2a1f'
               }}></div>
               <div className="absolute inset-[4px] bg-[#1a2a1f]" style={{
-                backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,122,95,0.1) 1px, transparent 0)',
+                backgroundImage: 'none',
                 backgroundSize: '3px 3px',
                 boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.5)'
               }}></div>
