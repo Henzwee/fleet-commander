@@ -151,7 +151,7 @@ export default function Settings() {
         <div className="flex-1 overflow-y-auto" style={{ paddingLeft: '0', paddingRight: '0', paddingTop: '70px', paddingBottom: '24px' }}>
           {/* Themes Section */}
           <div className="mb-6">
-            <h2 className="text-xl font-bold text-[#a8c5ad] mb-3 flex items-center gap-2">
+            <h2 className="text-xl font-bold mb-3 flex items-center gap-2" style={{ color: 'var(--theme-light)' }}>
               <Palette className="w-5 h-5" />
               THEMES
             </h2>
@@ -167,9 +167,8 @@ export default function Settings() {
                     onClick={() => handleThemeClick(theme)}
                     className="relative p-4 text-left"
                   >
-                    <div className={`absolute inset-0 border-2 ${
-                      isActive ? 'border-[#5a9a8f]' : 'border-[#3a4a3f]'
-                    }`} style={{
+                    <div className="absolute inset-0 border-2" style={{
+                      borderColor: isActive ? 'var(--theme-primary)' : 'var(--theme-border-dark)',
                       boxShadow: 'inset 0 0 0 1px #1a2a1f'
                     }}></div>
                     <div className="absolute inset-[3px] bg-[#1a2a1f]" style={{
@@ -182,10 +181,10 @@ export default function Settings() {
                           className="w-6 h-6 rounded border-2 border-[#5a6a5f]"
                           style={{ backgroundColor: theme.color }}
                         ></div>
-                        <span className="text-[#a8c5ad] font-bold text-sm">{theme.name}</span>
+                        <span className="font-bold text-sm" style={{ color: 'var(--theme-light)' }}>{theme.name}</span>
                       </div>
                       {isActive && (
-                        <div className="text-[#5a9a8f] text-xs">ACTIVE</div>
+                        <div className="text-xs" style={{ color: 'var(--theme-primary)' }}>ACTIVE</div>
                       )}
                       {!isPurchased && (
                         <div className="flex items-center gap-1 text-xs text-purple-400">
@@ -204,7 +203,7 @@ export default function Settings() {
             </div>
           </div>
           
-          <h1 className="text-2xl font-bold text-[#a8c5ad] mb-4">SHIP TIER STATS</h1>
+          <h1 className="text-2xl font-bold mb-4" style={{ color: 'var(--theme-light)' }}>SHIP TIER STATS</h1>
           
           <div className="space-y-4">
             {TIER_ORDER.map((tier) => {
@@ -303,7 +302,7 @@ export default function Settings() {
               backgroundSize: '3px 3px'
             }}></div>
             <div className="relative p-6">
-              <h3 className="text-[#a8c5ad] font-bold text-lg mb-4">Purchase {showThemeConfirm.name} Theme?</h3>
+              <h3 className="font-bold text-lg mb-4" style={{ color: 'var(--theme-light)' }}>Purchase {showThemeConfirm.name} Theme?</h3>
               
               <div className="flex items-center gap-2 mb-6 text-purple-400">
                 <span>Cost:</span>
@@ -320,18 +319,18 @@ export default function Settings() {
                   onClick={() => setShowThemeConfirm(null)}
                   className="relative flex-1 py-3 font-bold text-sm"
                 >
-                  <div className="absolute inset-0 bg-[#2a3a2f] border-2 border-[#3a4a3f]"></div>
+                  <div className="absolute inset-0 border-2" style={{ backgroundColor: '#2a3a2f', borderColor: 'var(--theme-border-dark)' }}></div>
                   <div className="absolute inset-[2px] bg-[#1a2a1f]"></div>
-                  <span className="relative text-[#5a6a5f]">CANCEL</span>
+                  <span className="relative" style={{ color: 'var(--theme-text-dim)' }}>CANCEL</span>
                 </button>
                 <button
                   onClick={() => handlePurchaseTheme(showThemeConfirm)}
                   disabled={gameState?.crystals < showThemeConfirm.cost}
                   className="relative flex-1 py-3 font-bold text-sm disabled:opacity-50"
                 >
-                  <div className="absolute inset-0 bg-[#3a7a4f] border-2 border-[#5a9a6f]"></div>
-                  <div className="absolute inset-[2px] bg-[#4a8a5f]"></div>
-                  <span className="relative text-[#d0e8d5]">BUY</span>
+                  <div className="absolute inset-0 border-2" style={{ backgroundColor: 'var(--theme-dark)', borderColor: 'var(--theme-primary)' }}></div>
+                  <div className="absolute inset-[2px]" style={{ backgroundColor: 'var(--theme-dark)' }}></div>
+                  <span className="relative" style={{ color: 'var(--theme-text-bright)' }}>BUY</span>
                 </button>
               </div>
             </div>
