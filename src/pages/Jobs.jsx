@@ -73,7 +73,7 @@ export default function Jobs() {
         distance: 50,
         duration: 2,
         partsReward: 0,
-        crystalReward: 10,
+        crystalReward: 5,
         fuelCost: 5,
         description: 'Ship Face Incentive Mission',
         tier: 'Unregistered',

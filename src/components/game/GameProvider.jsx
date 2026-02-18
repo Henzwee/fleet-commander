@@ -637,7 +637,7 @@ export default function GameProvider({ children }) {
     const totalWages = activeShips.reduce((sum, ship) => {
       return sum + (ship.hourlyPay * mission.duration);
     }, 0);
-    
+
     // Award parts reward
     const partsReward = mission.partsReward || 0;
     const crystalReward = mission.crystalReward || 0;
@@ -656,6 +656,12 @@ export default function GameProvider({ children }) {
       newParts[randomPart] = (newParts[randomPart] || 0) + 1;
     }
 
+    // 5% chance for 1-3 bonus crystals on regular missions (not Friday missions)
+    let bonusCrystals = 0;
+    if (!mission.isFridayMission && Math.random() < 0.05) {
+      bonusCrystals = Math.floor(Math.random() * 3) + 1;
+    }
+
     const newFuel = gameState.fuel + fuelReward;
     const updates = { 
       credits: gameState.credits + totalWages, 
@@ -663,8 +669,8 @@ export default function GameProvider({ children }) {
       parts: newParts 
     };
 
-    if (crystalReward > 0) {
-      updates.crystals = gameState.crystals + crystalReward;
+    if (crystalReward > 0 || bonusCrystals > 0) {
+      updates.crystals = gameState.crystals + crystalReward + bonusCrystals;
     }
 
     await updateGameState(updates);
@@ -673,6 +679,10 @@ export default function GameProvider({ children }) {
 
     if (mission.isFridayMission) {
       addMessage(`Friday mission completed! ${shipNames} earned ${crystalReward} crystals.`);
+    } else if (bonusCrystals > 0 && fuelReward > 0) {
+      addMessage(`Mission completed! ${shipNames} earned $${totalWages} wages, ${partsReward} parts, ${fuelReward} fuel, and ${bonusCrystals} crystals!`);
+    } else if (bonusCrystals > 0) {
+      addMessage(`Mission completed! ${shipNames} earned $${totalWages} wages, ${partsReward} parts, and ${bonusCrystals} crystals!`);
     } else if (fuelReward > 0) {
       addMessage(`Mission completed! ${shipNames} earned $${totalWages} wages, ${partsReward} parts, and ${fuelReward} fuel.`);
     } else {
@@ -762,10 +772,19 @@ export default function GameProvider({ children }) {
               newParts[randomPart] = (newParts[randomPart] || 0) + 1;
             }
 
-            await updateGameState({ 
+            // 10% chance for 1-3 crystals
+            const bonusCrystals = Math.random() < 0.10 ? Math.floor(Math.random() * 3) + 1 : 0;
+
+            const updates = { 
               credits: gameState.credits + bonusCredits,
               parts: newParts
-            });
+            };
+
+            if (bonusCrystals > 0) {
+              updates.crystals = gameState.crystals + bonusCrystals;
+            }
+
+            await updateGameState(updates);
 
             // Pick one of two success messages
             const successMessage = Math.random() < 0.5
@@ -777,8 +796,11 @@ export default function GameProvider({ children }) {
             // Store result on mission for display
             const mission = await base44.entities.Mission.filter({ id: currentEvent.missionId });
             if (mission[0]) {
+              const resultText = bonusCrystals > 0 
+                ? `+${bonusParts} parts, +$${bonusCredits}, +${bonusCrystals} crystals`
+                : `+${bonusParts} parts, +$${bonusCredits}`;
               await base44.entities.Mission.update(currentEvent.missionId, {
-                encounterResult: `+${bonusParts} parts, +$${bonusCredits}`
+                encounterResult: resultText
               });
             }
           } else {
