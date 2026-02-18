@@ -54,17 +54,61 @@ export default function Settings() {
   
   const applyTheme = (themeId) => {
     const themeColors = {
-      green: { primary: '#5a9a8f', light: '#a8c5ad', dark: '#3a5a4f' },
-      orange: { primary: '#d89944', light: '#f0c890', dark: '#8a5a24' },
-      red: { primary: '#c84444', light: '#e88888', dark: '#8a2424' },
-      purple: { primary: '#b89acf', light: '#d8bae0', dark: '#7a5a8f' },
-      blue: { primary: '#5a8acf', light: '#a0c0e8', dark: '#3a5a8f' }
+      green: { 
+        primary: '#5a9a8f', 
+        light: '#a8c5ad', 
+        dark: '#3a5a4f',
+        border: '#5a7a5f',
+        borderDark: '#3a4a3f',
+        textDim: '#5a6a5f',
+        textBright: '#d0e8d5'
+      },
+      orange: { 
+        primary: '#d89944', 
+        light: '#f0c890', 
+        dark: '#8a5a24',
+        border: '#d89944',
+        borderDark: '#6a4a1f',
+        textDim: '#8a6a4f',
+        textBright: '#f0d8b5'
+      },
+      red: { 
+        primary: '#c84444', 
+        light: '#e88888', 
+        dark: '#8a2424',
+        border: '#c84444',
+        borderDark: '#6a2a2f',
+        textDim: '#8a5a5f',
+        textBright: '#e8b8b8'
+      },
+      purple: { 
+        primary: '#b89acf', 
+        light: '#d8bae0', 
+        dark: '#7a5a8f',
+        border: '#b89acf',
+        borderDark: '#5a3a6f',
+        textDim: '#8a7a9f',
+        textBright: '#d8c8e8'
+      },
+      blue: { 
+        primary: '#5a8acf', 
+        light: '#a0c0e8', 
+        dark: '#3a5a8f',
+        border: '#5a8acf',
+        borderDark: '#3a4a6f',
+        textDim: '#6a7a9f',
+        textBright: '#c8d8e8'
+      }
     };
     
     const colors = themeColors[themeId];
     document.documentElement.style.setProperty('--theme-primary', colors.primary);
     document.documentElement.style.setProperty('--theme-light', colors.light);
     document.documentElement.style.setProperty('--theme-dark', colors.dark);
+    document.documentElement.style.setProperty('--theme-border', colors.border);
+    document.documentElement.style.setProperty('--theme-border-dark', colors.borderDark);
+    document.documentElement.style.setProperty('--theme-text-dim', colors.textDim);
+    document.documentElement.style.setProperty('--theme-text-bright', colors.textBright);
   };
   
   React.useEffect(() => {
@@ -249,7 +293,7 @@ export default function Settings() {
       
       {/* Theme Purchase Confirmation */}
       {showThemeConfirm && (
-        <div className="fixed inset-0 bg-black/90 flex items-center justify-center p-4" style={{ zIndex: 2 }}>
+        <div className="fixed inset-0 bg-black/90 flex items-center justify-center" style={{ zIndex: 2, padding: 'var(--safe-x)' }}>
           <div className="relative w-full max-w-sm">
             <div className="absolute inset-0 bg-[#2a3a2f] border-2 border-[#5a7a5f]" style={{
               boxShadow: 'inset 0 0 0 1px #1a2a1f'
