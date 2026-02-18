@@ -124,7 +124,17 @@ export default function Jobs() {
       const missionsForTier = i === playerTierIndex ? 4 : 3;
       
       for (let j = 0; j < missionsForTier; j++) {
-        const distance = Math.floor(Math.random() * (tierMaxLY - tierMinLY)) + tierMinLY;
+        const rawDistance = Math.floor(Math.random() * (tierMaxLY - tierMinLY)) + tierMinLY;
+        const distance = Math.round(rawDistance / 5) * 5; // Round to nearest 5
+        
+        // Calculate duration based on distance brackets with gradual increase
+        let duration;
+        if (distance <= 100) duration = Math.floor(Math.random() * 2) + 1; // 1-2h
+        else if (distance <= 200) duration = Math.floor(Math.random() * 2) + 2; // 2-3h
+        else if (distance <= 300) duration = Math.floor(Math.random() * 2) + 3; // 3-4h
+        else if (distance <= 500) duration = Math.floor(Math.random() * 3) + 4; // 4-6h
+        else if (distance <= 750) duration = Math.floor(Math.random() * 4) + 6; // 6-9h
+        else duration = Math.floor(Math.random() * 4) + 9; // 9-12h
         
         // Calculate parts reward based on tier
         const tierPartsMap = {
@@ -141,7 +151,7 @@ export default function Jobs() {
         missions.push({
           id: `mission_${tier}_${j}`,
           distance,
-          duration: Math.floor(distance / 500) + 1,
+          duration,
           partsReward,
           fuelCost: Math.floor(distance / 100) || 1,
           description: descriptions[Math.floor(Math.random() * descriptions.length)],
@@ -160,7 +170,17 @@ export default function Jobs() {
       const numAspirational = playerTierIndex < TIER_ORDER.length - 2 ? 2 : 1;
       
       for (let i = 0; i < numAspirational; i++) {
-        const distance = Math.floor(Math.random() * (tierMaxLY - tierMinLY)) + tierMinLY;
+        const rawDistance = Math.floor(Math.random() * (tierMaxLY - tierMinLY)) + tierMinLY;
+        const distance = Math.round(rawDistance / 5) * 5; // Round to nearest 5
+        
+        // Calculate duration based on distance brackets with gradual increase
+        let duration;
+        if (distance <= 100) duration = Math.floor(Math.random() * 2) + 1; // 1-2h
+        else if (distance <= 200) duration = Math.floor(Math.random() * 2) + 2; // 2-3h
+        else if (distance <= 300) duration = Math.floor(Math.random() * 2) + 3; // 3-4h
+        else if (distance <= 500) duration = Math.floor(Math.random() * 3) + 4; // 4-6h
+        else if (distance <= 750) duration = Math.floor(Math.random() * 4) + 6; // 6-9h
+        else duration = Math.floor(Math.random() * 4) + 9; // 9-12h
         
         // Calculate parts reward based on tier
         const tierPartsMap = {
@@ -177,7 +197,7 @@ export default function Jobs() {
         missions.push({
           id: `mission_aspirational_${i}`,
           distance,
-          duration: Math.floor(distance / 500) + 1,
+          duration,
           partsReward,
           fuelCost: Math.floor(distance / 100),
           description: descriptions[Math.floor(Math.random() * descriptions.length)],
