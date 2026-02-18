@@ -221,16 +221,16 @@ export default function Main() {
           >
             {/* Outer frame */}
             <div className="absolute inset-0 border-2" style={{
-              backgroundColor: '#2a3a2f',
+              backgroundColor: 'var(--theme-dark)',
               borderColor: 'var(--theme-border)',
-              boxShadow: 'inset 0 0 0 1px #1a2a1f, 0 2px 0 #1a2a1f'
+              boxShadow: 'inset 0 0 0 1px rgba(0,0,0,0.3), 0 2px 0 rgba(0,0,0,0.3)'
             }}></div>
             {/* Button surface */}
             <div className="absolute inset-[4px] border" style={{
               backgroundColor: 'var(--theme-dark)',
               borderColor: 'var(--theme-border)',
-              boxShadow: 'inset 0 1px 2px rgba(90,154,143,0.3)',
-              backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,122,95,0.15) 1px, transparent 0)',
+              boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.3)',
+              backgroundImage: 'none',
               backgroundSize: '3px 3px'
             }}></div>
             <span className="relative" style={{ color: 'var(--theme-text-bright)' }}>Ship Market</span>
@@ -243,16 +243,16 @@ export default function Main() {
           >
             {/* Outer frame */}
             <div className="absolute inset-0 border-2" style={{
-              backgroundColor: '#2a3a2f',
+              backgroundColor: 'var(--theme-dark)',
               borderColor: 'var(--theme-border)',
-              boxShadow: 'inset 0 0 0 1px #1a2a1f, 0 2px 0 #1a2a1f'
+              boxShadow: 'inset 0 0 0 1px rgba(0,0,0,0.3), 0 2px 0 rgba(0,0,0,0.3)'
             }}></div>
             {/* Button surface */}
             <div className="absolute inset-[4px] border" style={{
               backgroundColor: 'var(--theme-dark)',
               borderColor: 'var(--theme-border)',
-              boxShadow: 'inset 0 1px 2px rgba(90,154,143,0.3)',
-              backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,122,95,0.15) 1px, transparent 0)',
+              boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.3)',
+              backgroundImage: 'none',
               backgroundSize: '3px 3px'
             }}></div>
             <span className="relative" style={{ color: 'var(--theme-text-bright)' }}>Manage Fleet</span>
@@ -470,12 +470,13 @@ export default function Main() {
             <div className="space-y-4 flex-1">
               <div className="relative p-4">
                 <div className="absolute inset-0 border-2" style={{
-                  backgroundColor: '#2a3a2f',
+                  backgroundColor: 'var(--theme-dark)',
                   borderColor: 'var(--theme-border)',
-                  boxShadow: 'inset 0 0 0 1px #1a2a1f'
+                  boxShadow: 'inset 0 0 0 1px rgba(0,0,0,0.3)'
                 }}></div>
-                <div className="absolute inset-[4px] bg-[#1a2a1f]" style={{
-                  backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,122,95,0.1) 1px, transparent 0)',
+                <div className="absolute inset-[4px]" style={{
+                  backgroundColor: 'var(--theme-dark)',
+                  backgroundImage: 'none',
                   backgroundSize: '3px 3px',
                   boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.5)'
                 }}></div>
@@ -487,12 +488,13 @@ export default function Main() {
               
               <div className="relative p-4">
                 <div className="absolute inset-0 border-2" style={{
-                  backgroundColor: '#2a3a2f',
+                  backgroundColor: 'var(--theme-dark)',
                   borderColor: 'var(--theme-border)',
-                  boxShadow: 'inset 0 0 0 1px #1a2a1f'
+                  boxShadow: 'inset 0 0 0 1px rgba(0,0,0,0.3)'
                 }}></div>
-                <div className="absolute inset-[4px] bg-[#1a2a1f]" style={{
-                  backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,122,95,0.1) 1px, transparent 0)',
+                <div className="absolute inset-[4px]" style={{
+                  backgroundColor: 'var(--theme-dark)',
+                  backgroundImage: 'none',
                   backgroundSize: '3px 3px',
                   boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.5)'
                 }}></div>
