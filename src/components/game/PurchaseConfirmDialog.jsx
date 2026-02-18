@@ -29,12 +29,12 @@ export default function PurchaseConfirmDialog({ item, onConfirm, onCancel }) {
     }}>
       <div className="flex-1 flex flex-col px-6 py-4">
         <div className="mb-6 mt-12">
-          <h3 className="font-bold text-base" style={{ color: 'var(--theme-primary)' }}>CONFIRM PURCHASE</h3>
+          <h3 className="text-[#5a9a8f] font-bold text-base">CONFIRM PURCHASE</h3>
         </div>
         
         <div className="flex-1 flex flex-col justify-center">
-          <div className="text-base mb-1 font-bold" style={{ color: 'var(--theme-light)' }}>{item.name}</div>
-          <div className="text-xs mb-4" style={{ color: 'var(--theme-text-dim)' }}>
+          <div className="text-[#a8c5ad] text-base mb-1 font-bold">{item.name}</div>
+          <div className="text-[#5a6a5f] text-xs mb-4">
             Stock Available: {item.stock}
           </div>
           
@@ -44,12 +44,12 @@ export default function PurchaseConfirmDialog({ item, onConfirm, onCancel }) {
               disabled={quantity <= 1}
               className="relative w-10 h-10 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
             >
-              <div className="absolute inset-0 border-2" style={{ backgroundColor: '#2a3a2f', borderColor: 'var(--theme-border-dark)' }}></div>
+              <div className="absolute inset-0 bg-[#2a3a2f] border-2 border-[#3a5a4f]"></div>
               <div className="absolute inset-[2px] bg-[#1a2a1f]"></div>
-              <Minus className="w-4 h-4 relative" style={{ color: 'var(--theme-text-dim)' }} />
+              <Minus className="w-4 h-4 text-[#5a6a5f] relative" />
             </button>
             
-            <div className="text-2xl font-bold w-16 text-center" style={{ color: 'var(--theme-text-bright)' }}>
+            <div className="text-[#d0e8d5] text-2xl font-bold w-16 text-center">
               {quantity}
             </div>
             
@@ -58,14 +58,14 @@ export default function PurchaseConfirmDialog({ item, onConfirm, onCancel }) {
               disabled={quantity >= maxQuantity}
               className="relative w-10 h-10 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
             >
-              <div className="absolute inset-0 border-2" style={{ backgroundColor: '#2a3a2f', borderColor: 'var(--theme-border-dark)' }}></div>
+              <div className="absolute inset-0 bg-[#2a3a2f] border-2 border-[#3a5a4f]"></div>
               <div className="absolute inset-[2px] bg-[#1a2a1f]"></div>
-              <Plus className="w-4 h-4 relative" style={{ color: 'var(--theme-text-dim)' }} />
+              <Plus className="w-4 h-4 text-[#5a6a5f] relative" />
             </button>
           </div>
           
           <div className="text-center mb-8">
-            <div className="text-xs mb-1" style={{ color: 'var(--theme-text-dim)' }}>Total Cost</div>
+            <div className="text-[#5a6a5f] text-xs mb-1">Total Cost</div>
             <div className={`text-2xl font-bold ${currency === 'crystals' ? 'text-[#b89acf]' : 'text-amber-400'}`}>
               {currency === 'crystals' ? '◆' : '$'}{totalCost.toLocaleString()}
             </div>
@@ -90,17 +90,14 @@ export default function PurchaseConfirmDialog({ item, onConfirm, onCancel }) {
             onClick={() => onConfirm(quantity)}
             className="relative py-2.5 font-bold text-sm"
           >
-            <div className="absolute inset-0 border-2" style={{
-              backgroundColor: 'var(--theme-dark)',
-              borderColor: 'var(--theme-primary)',
+            <div className="absolute inset-0 bg-[#3a7a4f] border-2 border-[#5a9a6f]" style={{
               boxShadow: 'inset 0 1px 0 rgba(90,154,111,0.4)'
             }}></div>
-            <div className="absolute inset-[2px]" style={{
-              backgroundColor: 'var(--theme-dark)',
+            <div className="absolute inset-[2px] bg-[#4a8a5f]" style={{
               backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,154,111,0.15) 1px, transparent 0)',
               backgroundSize: '3px 3px'
             }}></div>
-            <span className="relative" style={{ color: 'var(--theme-text-bright)' }}>CONFIRM</span>
+            <span className="relative text-[#d0e8d5]">CONFIRM</span>
           </button>
         </div>
       </div>

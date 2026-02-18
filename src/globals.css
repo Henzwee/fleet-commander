@@ -14,14 +14,6 @@
   --text-primary: #e0f4ff;
   --text-secondary: #8fb4c9;
   --ui-font: 'VT323', monospace;
-
-  --theme-primary: #5a9a8f;
-  --theme-light: #a8c5ad;
-  --theme-dark: #3a5a4f;
-  --theme-border: #5a7a5f;
-  --theme-border-dark: #3a4a3f;
-  --theme-text-dim: #5a6a5f;
-  --theme-text-bright: #d0e8d5;
 }
 
 * {

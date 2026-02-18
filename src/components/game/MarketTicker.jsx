@@ -126,14 +126,10 @@ export default function MarketTicker() {
     return (
       <div className="w-full">
         <div className="relative w-full" style={{ height: '64px' }}>
-          <div className="absolute inset-0 border-2" style={{
-            backgroundColor: '#2a3a2f',
-            borderColor: 'var(--theme-border)',
+          <div className="absolute inset-0 bg-[#2a3a2f] border-2 border-[#5a7a5f]" style={{
             boxShadow: 'inset 0 0 0 1px #1a2a1f, 0 2px 0 #1a2a1f'
           }}></div>
-          <div className="absolute inset-[6px] border" style={{
-            backgroundColor: '#1f2e24',
-            borderColor: 'var(--theme-border-dark)',
+          <div className="absolute inset-[6px] bg-[#1f2e24] border border-[#3a4a3f]" style={{
             boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.5)'
           }}></div>
           <div className="absolute inset-[10px] bg-[#0f1a14]" style={{
@@ -142,7 +138,7 @@ export default function MarketTicker() {
             boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.7)'
           }}>
             <div className="h-full flex items-center justify-center px-4">
-              <div className="font-bold text-sm" style={{ color: 'var(--theme-border-dark)' }}>
+              <div className="text-[#3a4a3f] font-bold text-sm">
                 Market idle — awaiting inventory
               </div>
             </div>
@@ -158,14 +154,10 @@ export default function MarketTicker() {
   return (
     <div className="w-full">
       <div className="relative w-full" style={{ height: '64px' }}>
-        <div className="absolute inset-0 border-2" style={{
-          backgroundColor: '#2a3a2f',
-          borderColor: 'var(--theme-border)',
+        <div className="absolute inset-0 bg-[#2a3a2f] border-2 border-[#5a7a5f]" style={{
           boxShadow: 'inset 0 0 0 1px #1a2a1f, 0 2px 0 #1a2a1f'
         }}></div>
-        <div className="absolute inset-[6px] border" style={{
-          backgroundColor: '#1f2e24',
-          borderColor: 'var(--theme-border-dark)',
+        <div className="absolute inset-[6px] bg-[#1f2e24] border border-[#3a4a3f]" style={{
           boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.5)'
         }}></div>
         <div className="absolute inset-[10px] bg-[#0f1a14] overflow-hidden" style={{
@@ -188,14 +180,15 @@ export default function MarketTicker() {
                 onClick={() => navigate(createPageUrl('Market'))}
                 className="flex-shrink-0 cursor-pointer"
               >
-                <div className="font-bold text-sm whitespace-nowrap" style={{ color: 'var(--theme-light)' }}>
+                <div className="text-[#a8c5ad] font-bold text-sm whitespace-nowrap">
                   {item.name}
                   {item.deltaPercent !== 0 && (
                     <span 
-                      className="ml-2"
-                      style={{
-                        color: item.deltaPercent > 0 ? '#c84444' : 'var(--theme-primary)'
-                      }}
+                      className={`ml-2 ${
+                        item.deltaPercent > 0 
+                          ? 'text-[#c84444]' 
+                          : 'text-[#5a9a6f]'
+                      }`}
                     >
                       {item.deltaPercent > 0 ? '+' : ''}
                       {item.deltaPercent}%

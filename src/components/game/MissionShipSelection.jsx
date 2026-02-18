@@ -40,9 +40,7 @@ export default function MissionShipSelection({ mission, ships, onConfirm, onCanc
           </div>
           
           <div className="mb-4 relative">
-            <div className="absolute inset-0 border-2" style={{
-              backgroundColor: '#2a3a2f',
-              borderColor: 'var(--theme-border)',
+            <div className="absolute inset-0 bg-[#2a3a2f] border-2 border-[#5a7a5f]" style={{
               boxShadow: 'inset 0 0 0 1px #1a2a1f'
             }}></div>
             <div className="absolute inset-[4px] bg-[#1a2a1f]" style={{
@@ -51,8 +49,8 @@ export default function MissionShipSelection({ mission, ships, onConfirm, onCanc
               boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.5)'
             }}></div>
             <div className="relative p-3">
-              <div className="font-bold text-base mb-1" style={{ color: 'var(--theme-light)' }}>{mission.description}</div>
-              <div className="text-xs" style={{ color: 'var(--theme-primary)' }}>{mission.tier} and higher • {mission.distance} LY</div>
+              <div className="text-[#a8c5ad] font-bold text-base mb-1">{mission.description}</div>
+              <div className="text-xs text-[#5a9a8f]">{mission.tier} and higher • {mission.distance} LY</div>
             </div>
           </div>
           
@@ -71,9 +69,7 @@ export default function MissionShipSelection({ mission, ships, onConfirm, onCanc
                   onClick={() => toggleShip(ship)}
                   className="relative cursor-pointer"
                 >
-                  <div className="absolute inset-0 border-2" style={{
-                    backgroundColor: '#2a3a2f',
-                    borderColor: isSelected ? 'var(--theme-primary)' : 'var(--theme-border)',
+                  <div className={`absolute inset-0 bg-[#2a3a2f] border-2 ${isSelected ? 'border-[#5aaa5f]' : 'border-[#5a7a5f]'}`} style={{
                     boxShadow: 'inset 0 0 0 1px #1a2a1f'
                   }}></div>
                   <div className={`absolute inset-[4px] ${isSelected ? 'bg-[#1a3a1f]' : 'bg-[#1a2a1f]'}`} style={{
@@ -84,13 +80,13 @@ export default function MissionShipSelection({ mission, ships, onConfirm, onCanc
                   <div className="relative p-3">
                     <div className="flex items-center justify-between">
                       <div>
-                        <div className="font-bold text-sm" style={{ color: 'var(--theme-light)' }}>{ship.name}</div>
-                        <div className="text-xs" style={{ color: 'var(--theme-primary)' }}>{ship.tier} • {ship.maxLY} LY • ${ship.hourlyPay}/h</div>
+                        <div className="text-[#a8c5ad] font-bold text-sm">{ship.name}</div>
+                        <div className="text-xs text-[#5a9a8f]">{ship.tier} • {ship.maxLY} LY • ${ship.hourlyPay}/h</div>
                       </div>
                       {isSelected ? (
-                        <div className="font-bold" style={{ color: 'var(--theme-primary)' }}>✓</div>
+                        <div className="text-green-400 font-bold">✓</div>
                       ) : (
-                        <div className="text-xs" style={{ color: 'var(--theme-primary)' }}>READY</div>
+                        <div className="text-green-400 text-xs">READY</div>
                       )}
                     </div>
                   </div>
@@ -114,8 +110,8 @@ export default function MissionShipSelection({ mission, ships, onConfirm, onCanc
                 <div className="relative p-3">
                   <div className="flex items-center justify-between">
                     <div>
-                      <div className="font-bold text-sm" style={{ color: 'var(--theme-light)' }}>{ship.name}</div>
-                      <div className="text-xs" style={{ color: 'var(--theme-primary)' }}>{ship.tier} • {ship.maxLY} LY</div>
+                      <div className="text-[#a8c5ad] font-bold text-sm">{ship.name}</div>
+                      <div className="text-xs text-[#5a9a8f]">{ship.tier} • {ship.maxLY} LY</div>
                     </div>
                     <div className="text-red-400 text-xs">OUT OF RANGE</div>
                   </div>
@@ -139,8 +135,8 @@ export default function MissionShipSelection({ mission, ships, onConfirm, onCanc
                 <div className="relative p-3">
                   <div className="flex items-center justify-between">
                     <div>
-                      <div className="font-bold text-sm" style={{ color: 'var(--theme-light)' }}>{ship.name}</div>
-                      <div className="text-xs" style={{ color: 'var(--theme-primary)' }}>{ship.tier} • {ship.maxLY} LY</div>
+                      <div className="text-[#a8c5ad] font-bold text-sm">{ship.name}</div>
+                      <div className="text-xs text-[#5a9a8f]">{ship.tier} • {ship.maxLY} LY</div>
                     </div>
                     <div className="text-amber-400 text-xs">DEPLOYED</div>
                   </div>
@@ -154,33 +150,28 @@ export default function MissionShipSelection({ mission, ships, onConfirm, onCanc
               onClick={onCancel}
               className="flex-1 relative py-2.5 font-bold text-sm"
             >
-              <div className="absolute inset-0 border-2" style={{
-                backgroundColor: '#2a3a2f',
-                borderColor: 'var(--theme-border-dark)',
+              <div className="absolute inset-0 bg-[#2a3a2f] border-2 border-[#4a5a4f]" style={{
                 boxShadow: 'inset 0 0 0 1px #1a2a1f'
               }}></div>
               <div className="absolute inset-[3px] bg-[#3a4a3f]" style={{
                 backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(74,90,79,0.15) 1px, transparent 0)',
                 backgroundSize: '3px 3px'
               }}></div>
-              <span className="relative" style={{ color: 'var(--theme-light)' }}>BACK</span>
+              <span className="relative text-[#a8c5ad]">BACK</span>
             </button>
             <button
               onClick={() => onConfirm(selectedShips)}
               disabled={selectedShips.length === 0}
               className="flex-1 relative py-2.5 font-bold text-sm disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <div className="absolute inset-0 border-2" style={{
-                backgroundColor: '#2a3a2f',
-                borderColor: 'var(--theme-primary)',
+              <div className="absolute inset-0 bg-[#2a3a2f] border-2 border-[#5aaa5f]" style={{
                 boxShadow: 'inset 0 0 0 1px #1a2a1f'
               }}></div>
-              <div className="absolute inset-[3px]" style={{
-                backgroundColor: 'var(--theme-dark)',
+              <div className="absolute inset-[3px] bg-[#3a5a4f]" style={{
                 backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,170,95,0.15) 1px, transparent 0)',
                 backgroundSize: '3px 3px'
               }}></div>
-              <span className="relative" style={{ color: 'var(--theme-text-bright)' }}>CONFIRM ({selectedShips.length} SHIP{selectedShips.length !== 1 ? 'S' : ''})</span>
+              <span className="relative text-[#d0e8d5]">CONFIRM ({selectedShips.length} SHIP{selectedShips.length !== 1 ? 'S' : ''})</span>
             </button>
         </div>
       </div>

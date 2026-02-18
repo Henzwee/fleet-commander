@@ -65,10 +65,10 @@ export default function FleetManagement() {
   };
   
   const getDamageColor = (health) => {
-    if (health >= 75) return 'var(--theme-primary)';
-    if (health >= 50) return '#ffaa00';
-    if (health >= 25) return '#ffaa00';
-    return '#c84444';
+    if (health >= 75) return 'text-[#5a9a6f]';
+    if (health >= 50) return 'text-yellow-400';
+    if (health >= 25) return 'text-amber-400';
+    return 'text-[#c84444]';
   };
   
   const handleRepair = async (ship) => {
@@ -131,11 +131,11 @@ export default function FleetManagement() {
   
   const getStatusColor = (status) => {
     switch (status) {
-      case 'idle': return 'var(--theme-primary)';
-      case 'active': return 'var(--theme-primary)';
-      case 'damaged': return '#ffaa00';
-      case 'destroyed': return '#c84444';
-      default: return 'var(--theme-text-dim)';
+      case 'idle': return 'text-[#5a9a6f]';
+      case 'active': return 'text-[#5a9a8f]';
+      case 'damaged': return 'text-amber-400';
+      case 'destroyed': return 'text-[#c84444]';
+      default: return 'text-[#5a6a5f]';
     }
   };
   
@@ -153,39 +153,53 @@ export default function FleetManagement() {
             onClick={() => handleTabChange('ships')}
             className="relative flex-1 py-3 font-bold text-sm"
           >
-            <div className="absolute inset-0 border-2" style={{
-              backgroundColor: activeTab === 'ships' ? 'var(--theme-dark)' : '#2a3a2f',
-              borderColor: activeTab === 'ships' ? 'var(--theme-border)' : 'var(--theme-border-dark)',
+            <div className={`absolute inset-0 border-2 ${
+              activeTab === 'ships'
+                ? 'bg-[#3a5a4f] border-[#5a7a5f]'
+                : 'bg-[#2a3a2f] border-[#3a4a3f]'
+            }`} style={{
               boxShadow: 'inset 0 0 0 1px #1a2a1f'
             }}></div>
-            <div className="absolute inset-[3px]" style={{
-              backgroundColor: activeTab === 'ships' ? 'var(--theme-dark)' : '#1a2a1f',
-              backgroundImage: 'none',
+            <div className={`absolute inset-[3px] ${
+              activeTab === 'ships'
+                ? 'bg-[#3a5a4f]'
+                : 'bg-[#1a2a1f]'
+            }`} style={{
+              backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,122,95,0.15) 1px, transparent 0)',
               backgroundSize: '3px 3px',
               boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.3)'
             }}></div>
-            <span className="relative" style={{
-              color: activeTab === 'ships' ? 'var(--theme-text-bright)' : 'var(--theme-text-dim)'
-            }}>SHIPS</span>
+            <span className={`relative ${
+              activeTab === 'ships'
+                ? 'text-[#d0e8d5]'
+                : 'text-[#5a6a5f]'
+            }`}>SHIPS</span>
           </button>
           <button
             onClick={() => handleTabChange('inventory')}
             className="relative flex-1 py-3 font-bold text-sm"
           >
-            <div className="absolute inset-0 border-2" style={{
-              backgroundColor: activeTab === 'inventory' ? 'var(--theme-dark)' : '#2a3a2f',
-              borderColor: activeTab === 'inventory' ? 'var(--theme-border)' : 'var(--theme-border-dark)',
+            <div className={`absolute inset-0 border-2 ${
+              activeTab === 'inventory'
+                ? 'bg-[#3a5a4f] border-[#5a7a5f]'
+                : 'bg-[#2a3a2f] border-[#3a4a3f]'
+            }`} style={{
               boxShadow: 'inset 0 0 0 1px #1a2a1f'
             }}></div>
-            <div className="absolute inset-[3px]" style={{
-              backgroundColor: activeTab === 'inventory' ? 'var(--theme-dark)' : '#1a2a1f',
-              backgroundImage: 'none',
+            <div className={`absolute inset-[3px] ${
+              activeTab === 'inventory'
+                ? 'bg-[#3a5a4f]'
+                : 'bg-[#1a2a1f]'
+            }`} style={{
+              backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,122,95,0.15) 1px, transparent 0)',
               backgroundSize: '3px 3px',
               boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.3)'
             }}></div>
-            <span className="relative" style={{
-              color: activeTab === 'inventory' ? 'var(--theme-text-bright)' : 'var(--theme-text-dim)'
-            }}>INVENTORY</span>
+            <span className={`relative ${
+              activeTab === 'inventory'
+                ? 'text-[#d0e8d5]'
+                : 'text-[#5a6a5f]'
+            }`}>INVENTORY</span>
           </button>
         </div>
         
@@ -193,19 +207,17 @@ export default function FleetManagement() {
         {activeTab === 'ships' && (
           <section id="fleetShipsPanel">
             <div className="relative p-4 mb-4">
-              <div className="absolute inset-0 border-2" style={{
-                backgroundColor: '#2a3a2f',
-                borderColor: 'var(--theme-border)',
+              <div className="absolute inset-0 bg-[#2a3a2f] border-2 border-[#5a7a5f]" style={{
                 boxShadow: 'inset 0 0 0 1px #1a2a1f'
               }}></div>
               <div className="absolute inset-[4px] bg-[#1a2a1f]" style={{
-                backgroundImage: 'none',
+                backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,122,95,0.1) 1px, transparent 0)',
                 backgroundSize: '3px 3px',
                 boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.5)'
               }}></div>
               <div className="relative flex items-center justify-between">
-                <div className="font-bold" style={{ color: 'var(--theme-light)' }}>YOUR FLEET</div>
-                <div className="flex items-center gap-2 text-xs" style={{ color: 'var(--theme-text-dim)' }}>
+                <div className="text-[#a8c5ad] font-bold">YOUR FLEET</div>
+                <div className="flex items-center gap-2 text-[#5a6a5f] text-xs">
                   <Package className="w-4 h-4" />
                   <span>{totalParts} parts</span>
                 </div>
@@ -224,7 +236,7 @@ export default function FleetManagement() {
                   
                   return (
                     <div key={tier} className="mb-6">
-                      <div className="font-bold text-sm mb-3 uppercase" style={{ color: 'var(--theme-light)' }}>{tier}</div>
+                      <div className="text-[#a8c5ad] font-bold text-sm mb-3 uppercase">{tier}</div>
                       <div className="grid grid-cols-1 gap-3">
                         {tierShips.map((ship) => (
                           <div key={ship.id}>
@@ -247,30 +259,30 @@ export default function FleetManagement() {
                                   ship.health <= 50 ? 'bg-[#2a1a0f]' :
                                   'bg-[#0a1a1f]'
                                 }`} style={{
-                                  backgroundImage: 'none',
+                                  backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(58,90,79,0.1) 1px, transparent 0)',
                                   backgroundSize: '3px 3px'
                                 }}></div>
                                 <div className="relative">
                                   <div className="grid grid-cols-2 gap-3 mb-4 text-xs">
                                     <div>
-                                      <div style={{ color: 'var(--theme-text-dim)' }}>Status</div>
-                                      <div className="font-bold" style={{ color: getStatusColor(ship.status) }}>
+                                      <div className="text-[#5a6a5f]">Status</div>
+                                      <div className={`font-bold ${getStatusColor(ship.status)}`}>
                                         {ship.health === 0 ? 'DESTROYED' : ship.status.toUpperCase()}
                                       </div>
                                     </div>
                                     <div>
-                                      <div style={{ color: 'var(--theme-text-dim)' }}>Hourly Pay</div>
-                                      <div className="font-bold" style={{ color: '#ffaa00' }}>${ship.hourlyPay}</div>
+                                      <div className="text-[#5a6a5f]">Hourly Pay</div>
+                                      <div className="text-amber-400 font-bold">${ship.hourlyPay}</div>
                                     </div>
                                     <div>
-                                      <div style={{ color: 'var(--theme-text-dim)' }}>Health</div>
-                                      <div className="font-bold" style={{ color: getDamageColor(ship.health) }}>
+                                      <div className="text-[#5a6a5f]">Health</div>
+                                      <div className={`font-bold ${getDamageColor(ship.health)}`}>
                                         {ship.health}%
                                       </div>
                                     </div>
                                     <div>
-                                      <div style={{ color: 'var(--theme-text-dim)' }}>Range</div>
-                                      <div className="font-bold" style={{ color: 'var(--theme-primary)' }}>
+                                      <div className="text-[#5a6a5f]">Range</div>
+                                      <div className="text-[#5a9a8f] font-bold">
                                         {getRange(ship.tier).toLocaleString()} ly
                                       </div>
                                     </div>
@@ -278,10 +290,10 @@ export default function FleetManagement() {
                                   
                                   {ship.damaged && ship.status !== 'active' && ship.requiredParts && ship.requiredParts.length > 0 && (
                                     <div className="relative mb-3 p-3">
-                                      <div className="absolute inset-0 border-2" style={{ backgroundColor: '#2a3a2f', borderColor: 'var(--theme-border-dark)' }}></div>
+                                      <div className="absolute inset-0 bg-[#2a3a2f] border-2 border-[#3a5a4f]"></div>
                                       <div className="absolute inset-[2px] bg-[#1a2a1f]"></div>
                                       <div className="relative">
-                                        <div className="text-xs font-bold mb-2" style={{ color: 'var(--theme-primary)' }}>Required Parts</div>
+                                        <div className="text-[#5a9a8f] text-xs font-bold mb-2">Required Parts</div>
                                         <div className="space-y-1">
                                           {ship.requiredParts.map((part, idx) => {
                                             const available = (gameState?.parts || {})[part.name] || 0;
@@ -289,11 +301,11 @@ export default function FleetManagement() {
                                             return (
                                               <div key={idx} className="flex items-center gap-2 text-xs">
                                                 {hasEnough ? (
-                                                  <Check className="w-4 h-4" style={{ color: 'var(--theme-primary)' }} />
+                                                  <Check className="w-4 h-4 text-[#5a9a6f]" />
                                                 ) : (
                                                   <X className="w-4 h-4 text-[#c84444]" />
                                                 )}
-                                                <span style={{ color: hasEnough ? 'var(--theme-primary)' : '#c84444' }}>
+                                                <span className={hasEnough ? 'text-[#5a9a6f]' : 'text-[#c84444]'}>
                                                   {part.name} ({part.qty})
                                                 </span>
                                               </div>
@@ -319,13 +331,10 @@ export default function FleetManagement() {
                                         disabled={ship.status === 'active' || !hasParts(ship.requiredParts || [], gameState?.parts || {})}
                                         className="relative py-2 px-3 font-bold text-xs flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                                       >
-                                        <div className="absolute inset-0 border-2" style={{
-                                          backgroundColor: 'var(--theme-dark)',
-                                          borderColor: 'var(--theme-primary)',
+                                        <div className="absolute inset-0 bg-[#3a7a4f] border-2 border-[#5a9a6f]" style={{
                                           boxShadow: 'inset 0 1px 0 rgba(90,154,111,0.4)'
                                         }}></div>
-                                        <div className="absolute inset-[2px]" style={{
-                                          backgroundColor: 'var(--theme-dark)',
+                                        <div className="absolute inset-[2px] bg-[#4a8a5f]" style={{
                                           backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,154,111,0.15) 1px, transparent 0)',
                                           backgroundSize: '3px 3px'
                                         }}></div>
@@ -368,19 +377,17 @@ export default function FleetManagement() {
         {activeTab === 'inventory' && (
           <section id="fleetInventoryPanel">
             <div className="relative p-4 mb-4">
-              <div className="absolute inset-0 border-2" style={{
-                backgroundColor: '#2a3a2f',
-                borderColor: 'var(--theme-border)',
+              <div className="absolute inset-0 bg-[#2a3a2f] border-2 border-[#5a7a5f]" style={{
                 boxShadow: 'inset 0 0 0 1px #1a2a1f'
               }}></div>
               <div className="absolute inset-[4px] bg-[#1a2a1f]" style={{
-                backgroundImage: 'none',
+                backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,122,95,0.1) 1px, transparent 0)',
                 backgroundSize: '3px 3px',
                 boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.5)'
               }}></div>
               <div className="relative flex items-center justify-between">
-                <div className="font-bold" style={{ color: 'var(--theme-light)' }}>INVENTORY</div>
-                <div className="flex items-center gap-2 text-xs" style={{ color: 'var(--theme-text-dim)' }}>
+                <div className="text-[#a8c5ad] font-bold">INVENTORY</div>
+                <div className="flex items-center gap-2 text-[#5a6a5f] text-xs">
                   <Package className="w-4 h-4" />
                   <span>{totalParts} parts</span>
                 </div>
@@ -401,21 +408,20 @@ export default function FleetManagement() {
                       key={partName}
                       className="relative"
                     >
-                      <div className="absolute inset-0 border" style={{
-                        borderColor: 'var(--theme-border-dark)',
+                      <div className="absolute inset-0 border border-[#3a5a4f]" style={{
                         boxShadow: 'inset 0 0 0 1px #1a2a1f'
                       }}></div>
                       <div className="absolute inset-[2px] bg-[#1a2a1f]" style={{
-                        backgroundImage: 'none',
+                        backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(58,90,79,0.15) 1px, transparent 0)',
                         backgroundSize: '3px 3px',
                         boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.4)'
                       }}></div>
                       <div className="relative p-3 flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                          <Package className="w-5 h-5" style={{ color: 'var(--theme-primary)' }} />
-                          <span className="text-sm" style={{ color: 'var(--theme-light)' }}>{partName}</span>
+                          <Package className="w-5 h-5 text-[#5a9a8f]" />
+                          <span className="text-[#a8c5ad] text-sm">{partName}</span>
                         </div>
-                        <div className="font-bold text-sm" style={{ color: 'var(--theme-primary)' }}>x{qty}</div>
+                        <div className="text-[#5a9a8f] font-bold text-sm">x{qty}</div>
                       </div>
                     </div>
                   ))}

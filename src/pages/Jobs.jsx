@@ -240,9 +240,7 @@ export default function Jobs() {
         <ResourceHeader />
         <div className="flex-1 overflow-y-auto" style={{ paddingLeft: '0', paddingRight: '0', paddingTop: '70px', paddingBottom: '24px' }}>
         <div className="relative p-4 mb-4">
-          <div className="absolute inset-0 border-2" style={{
-            backgroundColor: '#2a3a2f',
-            borderColor: 'var(--theme-border)',
+          <div className="absolute inset-0 bg-[#2a3a2f] border-2 border-[#5a7a5f]" style={{
             boxShadow: 'inset 0 0 0 1px #1a2a1f'
           }}></div>
           <div className="absolute inset-[4px] bg-[#1a2a1f]" style={{
@@ -251,8 +249,8 @@ export default function Jobs() {
             boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.5)'
           }}></div>
           <div className="relative flex items-center justify-between">
-            <div className="font-bold" style={{ color: 'var(--theme-light)' }}>AVAILABLE MISSIONS</div>
-            <div className="flex items-center gap-2" style={{ color: 'var(--theme-primary)' }}>
+            <div className="text-[#a8c5ad] font-bold">AVAILABLE MISSIONS</div>
+            <div className="flex items-center gap-2 text-[#5a9a8f]">
               <Fuel className="w-4 h-4" />
               <span className="font-bold">{gameState?.fuel} fuel</span>
             </div>
@@ -267,8 +265,11 @@ export default function Jobs() {
               onClick={() => setSelectedMission(mission)}
               className="relative cursor-pointer"
             >
-              <div className="absolute inset-0 border-2" style={{
-                borderColor: selectedMission?.id === mission.id ? 'var(--theme-primary)' : 'var(--theme-border-dark)',
+              <div className={`absolute inset-0 border-2 ${
+                selectedMission?.id === mission.id
+                  ? 'border-[#5a9a6f]'
+                  : 'border-[#3a5a4f]'
+              }`} style={{
                 boxShadow: 'inset 0 0 0 1px #1a2a1f'
               }}></div>
               <div className={`absolute inset-[3px] ${
@@ -276,23 +277,23 @@ export default function Jobs() {
                   ? 'bg-[#2a3a2f]'
                   : 'bg-[#1a2a1f]'
               }`} style={{
-                backgroundImage: 'none',
+                backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(58,90,79,0.15) 1px, transparent 0)',
                 backgroundSize: '3px 3px',
                 boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.4)'
               }}></div>
               <div className="relative p-4">
                 <div className="flex items-center justify-between mb-2">
-                  <div className="font-bold" style={{ color: 'var(--theme-light)' }}>{mission.description}</div>
+                  <div className="text-[#a8c5ad] font-bold">{mission.description}</div>
                 </div>
                 
-                <div className="text-xs mb-2" style={{ color: 'var(--theme-text-dim)' }}>{mission.tier} and higher</div>
+                <div className="text-xs text-[#5a6a5f] mb-2">{mission.tier} and higher</div>
                 
                 <div className="grid grid-cols-2 gap-2 text-xs">
-                  <div className="flex items-center gap-1" style={{ color: 'var(--theme-primary)' }}>
+                  <div className="flex items-center gap-1 text-[#5a9a8f]">
                     <MapPin className="w-3 h-3" />
                     <span>{mission.distance} ly</span>
                   </div>
-                  <div className="flex items-center gap-1" style={{ color: 'var(--theme-primary)' }}>
+                  <div className="flex items-center gap-1 text-[#5a9a8f]">
                     <Clock className="w-3 h-3" />
                     <span>{mission.duration}h</span>
                   </div>
@@ -313,7 +314,7 @@ export default function Jobs() {
                       </>
                     )}
                   </div>
-                  <div className="flex items-center gap-1" style={{ color: 'var(--theme-primary)' }}>
+                  <div className="flex items-center gap-1 text-[#5a9a8f]">
                     <Fuel className="w-3 h-3" />
                     <span>{mission.fuelCost} fuel</span>
                   </div>
