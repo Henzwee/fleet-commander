@@ -81,7 +81,7 @@ export default function MissionShipSelection({ mission, ships, onConfirm, onCanc
                     <div className="flex items-center justify-between">
                       <div>
                         <div className="text-[#a8c5ad] font-bold text-sm">{ship.name}</div>
-                        <div className="text-xs text-[#5a9a8f]">{ship.tier} • {ship.maxLY} LY • ${ship.hourlyPay}/h</div>
+                        <div className="text-xs text-[#5a9a8f]">{ship.tier} • {ship.maxLY} LY • ₵{ship.hourlyPay}/h</div>
                       </div>
                       {isSelected ? (
                         <div className="text-green-400 font-bold">✓</div>

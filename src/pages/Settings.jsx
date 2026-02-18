@@ -83,7 +83,7 @@ export default function Settings() {
                         <div>
                           <div className="text-[#5a6a5f]">Hourly Wage</div>
                           <div className="text-[#a8c5ad] font-bold">
-                            ${config.payRange[0]} - ${config.payRange[1]}
+                            ₵{config.payRange[0]} - ₵{config.payRange[1]}
                           </div>
                         </div>
                         
@@ -111,7 +111,7 @@ export default function Settings() {
                         <div>
                           <div className="text-[#5a6a5f]">Market Price</div>
                           <div className="text-[#d89944] font-bold">
-                            ${config.priceRange[0]} - ${config.priceRange[1]}
+                            ₵{config.priceRange[0]} - ₵{config.priceRange[1]}
                           </div>
                         </div>
                       </div>
