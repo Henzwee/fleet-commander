@@ -168,18 +168,19 @@ export default function Main() {
         <div className="relative w-full" style={{ height: '160px', boxSizing: 'border-box' }}>
           {/* Outer frame */}
           <div className="absolute inset-0 border-2" style={{
-            backgroundColor: '#2a3a2f',
+            backgroundColor: 'var(--theme-dark)',
             borderColor: 'var(--theme-border)',
-            boxShadow: 'inset 0 0 0 1px #1a2a1f, 0 2px 0 #1a2a1f'
+            boxShadow: 'inset 0 0 0 1px rgba(0,0,0,0.3), 0 2px 0 rgba(0,0,0,0.3)'
           }}></div>
           {/* Inner frame */}
           <div className="absolute inset-[6px] border" style={{
-            backgroundColor: '#1f2e24',
+            backgroundColor: 'var(--theme-dark)',
             borderColor: 'var(--theme-border-dark)',
             boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.5)'
           }}></div>
           {/* Content surface with texture */}
-          <div className="absolute inset-[10px] bg-[#0f1a14]" style={{
+          <div className="absolute inset-[10px]" style={{
+            backgroundColor: 'var(--theme-dark)',
             backgroundImage: 'none',
             backgroundSize: '4px 4px',
             boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.7)'
@@ -265,20 +266,20 @@ export default function Main() {
         >
           {/* Outer frame */}
           <div className="absolute inset-0 border-2" style={{
-            backgroundColor: '#2a3a2f',
+            backgroundColor: 'var(--theme-dark)',
             borderColor: 'var(--theme-border)',
-            boxShadow: 'inset 0 0 0 1px #1a2a1f, 0 3px 0 #1a2a1f'
+            boxShadow: 'inset 0 0 0 1px rgba(0,0,0,0.3), 0 3px 0 rgba(0,0,0,0.3)'
           }}></div>
           {/* Inner frame */}
           <div className="absolute inset-[4px] border" style={{
-            backgroundColor: '#1f2e24',
+            backgroundColor: 'var(--theme-dark)',
             borderColor: 'var(--theme-border-dark)'
           }}></div>
           {/* Button surface with accent */}
           <div className="absolute inset-[8px]" style={{
             backgroundColor: 'var(--theme-dark)',
-            boxShadow: 'inset 0 2px 3px rgba(90,154,143,0.4)',
-            backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,122,95,0.2) 1px, transparent 0)',
+            boxShadow: 'inset 0 2px 3px rgba(0,0,0,0.4)',
+            backgroundImage: 'none',
             backgroundSize: '4px 4px'
           }}></div>
           <span className="relative" style={{ color: 'var(--theme-text-bright)' }}>Available Jobs</span>
@@ -286,16 +287,17 @@ export default function Main() {
 
         {/* Active Missions */}
         <div className="border-2 p-[6px]" style={{
-          backgroundColor: '#2a3a2f',
+          backgroundColor: 'var(--theme-dark)',
           borderColor: 'var(--theme-border)',
-          boxShadow: 'inset 0 0 0 1px #1a2a1f, 0 2px 0 #1a2a1f'
+          boxShadow: 'inset 0 0 0 1px rgba(0,0,0,0.3), 0 2px 0 rgba(0,0,0,0.3)'
         }}>
           <div className="border p-[4px]" style={{
-            backgroundColor: '#1f2e24',
+            backgroundColor: 'var(--theme-dark)',
             borderColor: 'var(--theme-border-dark)',
             boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.5)'
           }}>
-            <div className="bg-[#0f1a14] p-3" style={{
+            <div className="p-3" style={{
+              backgroundColor: 'var(--theme-dark)',
               backgroundImage: 'none',
               backgroundSize: '4px 4px',
               boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.7)'
@@ -321,9 +323,10 @@ export default function Main() {
                             : ''
                         }`} style={{
                           borderColor: isFailed ? '#c84444' : hasEvent ? '#d89944' : 'var(--theme-border-dark)',
-                          boxShadow: 'inset 0 0 0 1px #1a2a1f'
+                          boxShadow: 'inset 0 0 0 1px rgba(0,0,0,0.3)'
                         }}></div>
-                        <div className="absolute inset-[3px] bg-[#1a2a1f]" style={{
+                        <div className="absolute inset-[3px]" style={{
+                          backgroundColor: 'var(--theme-dark)',
                           backgroundImage: 'none',
                           backgroundSize: '3px 3px',
                           boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.4)'
@@ -526,13 +529,13 @@ export default function Main() {
               className="relative w-full py-2 font-bold text-sm mt-4"
             >
               <div className="absolute inset-0 border-2" style={{
-                backgroundColor: '#2a3a2f',
+                backgroundColor: 'var(--theme-dark)',
                 borderColor: 'var(--theme-border-dark)',
-                boxShadow: 'inset 0 0 0 1px #1a2a1f'
+                boxShadow: 'inset 0 0 0 1px rgba(0,0,0,0.3)'
               }}></div>
               <div className="absolute inset-[3px]" style={{
-                backgroundColor: '#3a4a3f',
-                backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(74,90,79,0.15) 1px, transparent 0)',
+                backgroundColor: 'var(--theme-dark)',
+                backgroundImage: 'none',
                 backgroundSize: '3px 3px',
                 boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.3)'
               }}></div>
