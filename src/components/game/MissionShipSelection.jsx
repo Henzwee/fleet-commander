@@ -29,8 +29,8 @@ export default function MissionShipSelection({ mission, ships, onConfirm, onCanc
         WebkitOverflowScrolling: 'touch',
         paddingTop: 'calc(var(--content-pad-top) + 48px)',
         paddingBottom: 'calc(var(--content-pad-bottom) + 24px)',
-        paddingLeft: 'calc(var(--content-pad-left) + 12px)',
-        paddingRight: 'calc(var(--content-pad-right) + 12px)'
+        paddingLeft: 'calc(var(--content-pad-left) + 24px)',
+        paddingRight: 'calc(var(--content-pad-right) + 24px)'
       }}>
           <div className="mb-6">
             <h2 className="text-cyan-400 font-bold text-base">SELECT SHIPS (1-3)</h2>
