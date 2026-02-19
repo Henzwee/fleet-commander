@@ -818,7 +818,7 @@ export default function GameProvider({ children }) {
                     await updateShip(missionShip.shipId, {
                       health: newHealth,
                       damaged: newHealth < 100,
-                      status: newHealth === 0 ? 'destroyed' : 'damaged'
+                      status: newHealth === 0 ? 'destroyed' : 'active'
                     });
                     
                     if (newHealth === 0) {
@@ -919,7 +919,7 @@ export default function GameProvider({ children }) {
                     await updateShip(missionShip.shipId, {
                       health: newHealth,
                       damaged: newHealth < 100,
-                      status: newHealth === 0 ? 'destroyed' : 'damaged'
+                      status: newHealth === 0 ? 'destroyed' : 'active'
                     });
                     
                     if (newHealth === 0) {
@@ -1016,7 +1016,7 @@ export default function GameProvider({ children }) {
                     await updateShip(missionShip.shipId, {
                       health: newHealth,
                       damaged: newHealth < 100,
-                      status: newHealth === 0 ? 'destroyed' : 'damaged'
+                      status: newHealth === 0 ? 'destroyed' : 'active'
                     });
                     
                     if (newHealth === 0) {
