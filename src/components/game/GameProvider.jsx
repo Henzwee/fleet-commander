@@ -845,8 +845,8 @@ export default function GameProvider({ children }) {
 
             // Pick one of two failure messages
             const failureMessage = Math.random() < 0.5
-              ? `${shipName} made it to the signal's origin. Unfortunately they were greatly outnumbered by pirates. They managed to escape, but not without taking heavy damage.`
-              : `${shipName} made it too the distress signal, but it turned out to be a trap. They managed to escape but not without taking heavy damage. They're getting back to the task at hand now and are hoping this doesn't get brought up again.`;
+              ? `${shipName} made it to the signal's origin. Unfortunately they were greatly outnumbered by pirates. They managed to escape, but not without taking heavy damage. (-50% health)`
+              : `${shipName} made it too the distress signal, but it turned out to be a trap. They managed to escape but not without taking heavy damage. They're getting back to the task at hand now and are hoping this doesn't get brought up again. (-50% health)`;
 
             addMessage(failureMessage);
           }
@@ -944,7 +944,7 @@ export default function GameProvider({ children }) {
               });
             }
 
-            addMessage(`It was a resilient effort, but you were no match for the hostile fleet. You managed to escape, but not without paying the price.`);
+            addMessage(`It was a resilient effort, but you were no match for the hostile fleet. You managed to escape, but not without paying the price. (-50% health)`);
           }
         } else {
           // Surrender - lose 50% of mission reward
@@ -1041,7 +1041,7 @@ export default function GameProvider({ children }) {
               });
             }
 
-            addMessage(`The planet turned out to be a secret hideout for a gang of pirates. They quickly swarmed your fleet and overwhelmed their defenses. They managed to escape before total annihilation.`);
+            addMessage(`The planet turned out to be a secret hideout for a gang of pirates. They quickly swarmed your fleet and overwhelmed their defenses. They managed to escape before total annihilation. (-50% health)`);
           }
         } else {
           addMessage('Planet discovery ignored. Ship continuing mission.');
