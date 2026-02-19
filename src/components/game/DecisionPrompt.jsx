@@ -41,14 +41,14 @@ export default function DecisionPrompt({ event, onChoice }) {
                   </>
                 ) : (
                   <>
-                    <div className="absolute inset-0 bg-[#3a3a3f] border-2 border-[#5a5a5f]" style={{
-                      boxShadow: 'inset 0 1px 0 rgba(90,90,95,0.4)'
+                    <div className="absolute inset-0 bg-[#8a5a3a] border-2 border-[#aa7a5a]" style={{
+                      boxShadow: 'inset 0 1px 0 rgba(170,122,90,0.4)'
                     }}></div>
-                    <div className="absolute inset-[2px] bg-[#4a4a4f]" style={{
-                      backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,90,95,0.15) 1px, transparent 0)',
+                    <div className="absolute inset-[2px] bg-[#9a6a4a]" style={{
+                      backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(170,122,90,0.15) 1px, transparent 0)',
                       backgroundSize: '3px 3px'
                     }}></div>
-                    <span className="relative text-[#a0a0a5]">{choice.label}</span>
+                    <span className="relative text-[#d0e8d5]">{choice.label}</span>
                   </>
                 )}
               </button>
