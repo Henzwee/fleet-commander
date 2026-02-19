@@ -276,17 +276,24 @@ export default function Market() {
         }
       ];
       setMarketItems(fuelItems);
-    } else if (activeTab === 'crystals') {
-      const crystalPackages = [
-        { id: 'crystal_099', name: '100 Crystals', price: 0.99, crystalAmount: 100, icon: '💎' },
-        { id: 'crystal_299', name: '350 Crystals', price: 2.99, crystalAmount: 350, icon: '💎' },
-        { id: 'crystal_499', name: '650 Crystals', price: 4.99, crystalAmount: 650, icon: '💎' },
-        { id: 'crystal_999', name: '1400 Crystals', price: 9.99, crystalAmount: 1400, icon: '💎' },
-        { id: 'crystal_1999', name: '3000 Crystals', price: 19.99, crystalAmount: 3000, icon: '💎' },
-        { id: 'crystal_4999', name: '8000 Crystals', price: 49.99, crystalAmount: 8000, icon: '💎' },
-        { id: 'crystal_9999', name: '17000 Crystals', price: 99.99, crystalAmount: 17000, icon: '💎' }
+    } else if (activeTab === 'currencies') {
+      const currencyPackages = [
+        // Crystal packages (real money)
+        { id: 'crystal_099', name: '100 Crystals', price: 0.99, crystalAmount: 100, icon: '💎', category: 'crystal' },
+        { id: 'crystal_299', name: '350 Crystals', price: 2.99, crystalAmount: 350, icon: '💎', category: 'crystal' },
+        { id: 'crystal_499', name: '650 Crystals', price: 4.99, crystalAmount: 650, icon: '💎', category: 'crystal' },
+        { id: 'crystal_999', name: '1400 Crystals', price: 9.99, crystalAmount: 1400, icon: '💎', category: 'crystal' },
+        { id: 'crystal_1999', name: '3000 Crystals', price: 19.99, crystalAmount: 3000, icon: '💎', category: 'crystal' },
+        { id: 'crystal_4999', name: '8000 Crystals', price: 49.99, crystalAmount: 8000, icon: '💎', category: 'crystal' },
+        { id: 'crystal_9999', name: '17000 Crystals', price: 99.99, crystalAmount: 17000, icon: '💎', category: 'crystal' },
+        // Credit packages (crystals for credits)
+        { id: 'credits_500', name: '500 Credits', price: 5, creditAmount: 500, icon: '₵', currency: 'crystals', category: 'credits' },
+        { id: 'credits_1200', name: '1,200 Credits', price: 10, creditAmount: 1200, icon: '₵', currency: 'crystals', category: 'credits' },
+        { id: 'credits_2500', name: '2,500 Credits', price: 20, creditAmount: 2500, icon: '₵', currency: 'crystals', category: 'credits' },
+        { id: 'credits_6000', name: '6,000 Credits', price: 45, creditAmount: 6000, icon: '₵', currency: 'crystals', category: 'credits' },
+        { id: 'credits_15000', name: '15,000 Credits', price: 100, creditAmount: 15000, icon: '₵', currency: 'crystals', category: 'credits' }
       ];
-      setMarketItems(crystalPackages);
+      setMarketItems(currencyPackages);
     }
   };
   
@@ -368,7 +375,15 @@ export default function Market() {
       });
       
       addMessage(`Purchased ${item.fuelAmount * quantity} fuel for ◆${totalCost}`);
-    } else if (activeTab === 'crystals') {
+    } else if (activeTab === 'currencies' && item.category === 'credits') {
+      // Buy credits with crystals
+      await updateGameState({
+        credits: gameState.credits + (item.creditAmount * quantity),
+        crystals: gameState.crystals - totalCost
+      });
+      
+      addMessage(`Purchased ₵${item.creditAmount * quantity} for ${totalCost} crystals`);
+    } else if (activeTab === 'currencies' && item.category === 'crystal') {
       // Real money purchase - redirect to Stripe checkout
       setProcessingPayment(true);
       try {
@@ -604,18 +619,18 @@ export default function Market() {
             }`}>FUEL</span>
           </button>
           <button
-            onClick={() => setActiveTab('crystals')}
+            onClick={() => setActiveTab('currencies')}
             className="relative py-3 font-bold text-sm"
           >
             <div className={`absolute inset-0 border-2 ${
-              activeTab === 'crystals'
+              activeTab === 'currencies'
                 ? 'bg-[#3a5a4f] border-[#5a7a5f]'
                 : 'bg-[#2a3a2f] border-[#3a4a3f]'
             }`} style={{
               boxShadow: 'inset 0 0 0 1px #1a2a1f'
             }}></div>
             <div className={`absolute inset-[3px] ${
-              activeTab === 'crystals'
+              activeTab === 'currencies'
                 ? 'bg-[#3a5a4f]'
                 : 'bg-[#1a2a1f]'
             }`} style={{
@@ -624,10 +639,10 @@ export default function Market() {
               boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.3)'
             }}></div>
             <span className={`relative ${
-              activeTab === 'crystals'
+              activeTab === 'currencies'
                 ? 'text-[#d0e8d5]'
                 : 'text-[#5a6a5f]'
-            }`}>CRYSTALS</span>
+            }`}>CURRENCIES</span>
           </button>
         </div>
         
@@ -707,7 +722,7 @@ export default function Market() {
                 <button
                   onClick={() => handleBuyClick(item)}
                   disabled={
-                    (activeTab === 'crystals' ? false : 
+                    (activeTab === 'currencies' && item.category === 'crystal' ? false : 
                       (item.currency === 'crystals' ? gameState?.crystals < item.price : gameState?.credits < item.price)) ||
                     (activeTab === 'scrap' && item.stock === 0) ||
                     processingPayment
@@ -724,7 +739,7 @@ export default function Market() {
                   <span className="relative text-[#d0e8d5]">
                     {(activeTab === 'scrap' && item.stock === 0) ? 'OUT' : (
                       <>
-                        {activeTab === 'crystals' ? (
+                        {(activeTab === 'currencies' && item.category === 'crystal') ? (
                           `$${item.price.toFixed(2)}`
                         ) : item.currency === 'crystals' ? (
                           <>
@@ -755,7 +770,15 @@ export default function Market() {
           />
         )}
 
-        {purchaseDialog && activeTab !== 'ships' && activeTab !== 'crystals' && (
+        {purchaseDialog && activeTab !== 'ships' && activeTab !== 'currencies' && (
+          <PurchaseConfirmDialog
+            item={purchaseDialog}
+            onConfirm={handleConfirmPurchase}
+            onCancel={() => setPurchaseDialog(null)}
+          />
+        )}
+
+        {purchaseDialog && activeTab === 'currencies' && purchaseDialog.category === 'credits' && (
           <PurchaseConfirmDialog
             item={purchaseDialog}
             onConfirm={handleConfirmPurchase}
@@ -763,7 +786,7 @@ export default function Market() {
           />
         )}
         
-        {purchaseDialog && activeTab === 'crystals' && (
+        {purchaseDialog && activeTab === 'currencies' && purchaseDialog.category === 'crystal' && (
           <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50" onClick={() => setPurchaseDialog(null)}>
             <div className="relative bg-[#1a2a1f] border-4 border-[#3a5a4f] p-6 max-w-sm w-full mx-4" onClick={(e) => e.stopPropagation()}>
               <div className="text-center mb-4">
