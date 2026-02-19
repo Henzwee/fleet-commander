@@ -804,35 +804,43 @@ export default function GameProvider({ children }) {
               });
             }
           } else {
-            // Failure - ship takes 50% damage
-            const newHealth = Math.max(0, ship.health - 50);
-            await updateShip(currentEvent.shipId, {
-              health: newHealth,
-              damaged: newHealth < 100,
-              status: newHealth === 0 ? 'destroyed' : 'damaged'
-            });
-
-            // Update mission ship status if destroyed
-            if (newHealth === 0) {
-              const mission = await base44.entities.Mission.filter({ id: currentEvent.missionId });
-              if (mission[0]) {
-                const updatedShips = mission[0].ships.map(s => 
-                  s.shipId === currentEvent.shipId ? { ...s, status: 'destroyed' } : s
-                );
-                const anyActive = updatedShips.some(s => s.status === 'active');
-                await base44.entities.Mission.update(currentEvent.missionId, {
-                  ships: updatedShips,
-                  status: anyActive ? 'active' : 'failed',
-                  encounterResult: `-50% damage (DESTROYED)`
-                });
+            // Failure - ALL ships on mission take 50% damage
+            const mission = await base44.entities.Mission.filter({ id: currentEvent.missionId });
+            if (mission[0]) {
+              const updatedShips = [];
+              let anyDestroyed = false;
+              
+              for (const missionShip of mission[0].ships) {
+                if (missionShip.status === 'active') {
+                  const activeShip = currentShips.find(s => s.id === missionShip.shipId);
+                  if (activeShip) {
+                    const newHealth = Math.max(0, activeShip.health - 50);
+                    await updateShip(missionShip.shipId, {
+                      health: newHealth,
+                      damaged: newHealth < 100,
+                      status: newHealth === 0 ? 'destroyed' : 'damaged'
+                    });
+                    
+                    if (newHealth === 0) {
+                      anyDestroyed = true;
+                      updatedShips.push({ ...missionShip, status: 'destroyed' });
+                    } else {
+                      updatedShips.push(missionShip);
+                    }
+                  } else {
+                    updatedShips.push(missionShip);
+                  }
+                } else {
+                  updatedShips.push(missionShip);
+                }
               }
-            } else {
-              const mission = await base44.entities.Mission.filter({ id: currentEvent.missionId });
-              if (mission[0]) {
-                await base44.entities.Mission.update(currentEvent.missionId, {
-                  encounterResult: `-50% damage`
-                });
-              }
+              
+              const anyActive = updatedShips.some(s => s.status === 'active');
+              await base44.entities.Mission.update(currentEvent.missionId, {
+                ships: updatedShips,
+                status: anyActive ? 'active' : 'failed',
+                encounterResult: anyDestroyed ? `-50% damage (DESTROYED)` : `-50% damage`
+              });
             }
 
             // Pick one of two failure messages
@@ -896,34 +904,44 @@ export default function GameProvider({ children }) {
 
             addMessage(`After some fancy flying, and lack of concern for the crew, the hostiles were defeated.`);
           } else {
-            // Failure - 50% damage
-            const newHealth = Math.max(0, ship.health - 50);
-            await updateShip(currentEvent.shipId, {
-              health: newHealth,
-              damaged: newHealth < 100,
-              status: newHealth === 0 ? 'destroyed' : 'damaged'
-            });
-
-            if (newHealth === 0) {
-              const mission = await base44.entities.Mission.filter({ id: currentEvent.missionId });
-              if (mission[0]) {
-                const updatedShips = mission[0].ships.map(s => 
-                  s.shipId === currentEvent.shipId ? { ...s, status: 'destroyed' } : s
-                );
-                const anyActive = updatedShips.some(s => s.status === 'active');
-                await base44.entities.Mission.update(currentEvent.missionId, {
-                  ships: updatedShips,
-                  status: anyActive ? 'active' : 'failed',
-                  encounterResult: `-50% damage (DESTROYED - hostile fleet)`
-                });
+            // Failure - ALL ships on mission take 50% damage
+            const currentShips = queryClient.getQueryData(['ships', 'inventory']) || [];
+            const mission = await base44.entities.Mission.filter({ id: currentEvent.missionId });
+            if (mission[0]) {
+              const updatedShips = [];
+              let anyDestroyed = false;
+              
+              for (const missionShip of mission[0].ships) {
+                if (missionShip.status === 'active') {
+                  const activeShip = currentShips.find(s => s.id === missionShip.shipId);
+                  if (activeShip) {
+                    const newHealth = Math.max(0, activeShip.health - 50);
+                    await updateShip(missionShip.shipId, {
+                      health: newHealth,
+                      damaged: newHealth < 100,
+                      status: newHealth === 0 ? 'destroyed' : 'damaged'
+                    });
+                    
+                    if (newHealth === 0) {
+                      anyDestroyed = true;
+                      updatedShips.push({ ...missionShip, status: 'destroyed' });
+                    } else {
+                      updatedShips.push(missionShip);
+                    }
+                  } else {
+                    updatedShips.push(missionShip);
+                  }
+                } else {
+                  updatedShips.push(missionShip);
+                }
               }
-            } else {
-              const mission = await base44.entities.Mission.filter({ id: currentEvent.missionId });
-              if (mission[0]) {
-                await base44.entities.Mission.update(currentEvent.missionId, {
-                  encounterResult: `-50% damage (hostile fleet)`
-                });
-              }
+              
+              const anyActive = updatedShips.some(s => s.status === 'active');
+              await base44.entities.Mission.update(currentEvent.missionId, {
+                ships: updatedShips,
+                status: anyActive ? 'active' : 'failed',
+                encounterResult: anyDestroyed ? `-50% damage (DESTROYED - hostile fleet)` : `-50% damage (hostile fleet)`
+              });
             }
 
             addMessage(`It was a resilient effort, but you were no match for the hostile fleet. You managed to escape, but not without paying the price.`);
@@ -983,34 +1001,44 @@ export default function GameProvider({ children }) {
 
             addMessage(`${shipName} successfully claimed the planet and received ₵${bonusCredits} reward!`);
           } else {
-            // Failure - pirate hideout, 50% damage
-            const newHealth = Math.max(0, ship.health - 50);
-            await updateShip(currentEvent.shipId, {
-              health: newHealth,
-              damaged: newHealth < 100,
-              status: newHealth === 0 ? 'destroyed' : 'damaged'
-            });
-
-            if (newHealth === 0) {
-              const mission = await base44.entities.Mission.filter({ id: currentEvent.missionId });
-              if (mission[0]) {
-                const updatedShips = mission[0].ships.map(s => 
-                  s.shipId === currentEvent.shipId ? { ...s, status: 'destroyed' } : s
-                );
-                const anyActive = updatedShips.some(s => s.status === 'active');
-                await base44.entities.Mission.update(currentEvent.missionId, {
-                  ships: updatedShips,
-                  status: anyActive ? 'active' : 'failed',
-                  encounterResult: `-50% damage (DESTROYED - pirate hideout)`
-                });
+            // Failure - pirate hideout, ALL ships on mission take 50% damage
+            const currentShips = queryClient.getQueryData(['ships', 'inventory']) || [];
+            const mission = await base44.entities.Mission.filter({ id: currentEvent.missionId });
+            if (mission[0]) {
+              const updatedShips = [];
+              let anyDestroyed = false;
+              
+              for (const missionShip of mission[0].ships) {
+                if (missionShip.status === 'active') {
+                  const activeShip = currentShips.find(s => s.id === missionShip.shipId);
+                  if (activeShip) {
+                    const newHealth = Math.max(0, activeShip.health - 50);
+                    await updateShip(missionShip.shipId, {
+                      health: newHealth,
+                      damaged: newHealth < 100,
+                      status: newHealth === 0 ? 'destroyed' : 'damaged'
+                    });
+                    
+                    if (newHealth === 0) {
+                      anyDestroyed = true;
+                      updatedShips.push({ ...missionShip, status: 'destroyed' });
+                    } else {
+                      updatedShips.push(missionShip);
+                    }
+                  } else {
+                    updatedShips.push(missionShip);
+                  }
+                } else {
+                  updatedShips.push(missionShip);
+                }
               }
-            } else {
-              const mission = await base44.entities.Mission.filter({ id: currentEvent.missionId });
-              if (mission[0]) {
-                await base44.entities.Mission.update(currentEvent.missionId, {
-                  encounterResult: `-50% damage (pirate hideout)`
-                });
-              }
+              
+              const anyActive = updatedShips.some(s => s.status === 'active');
+              await base44.entities.Mission.update(currentEvent.missionId, {
+                ships: updatedShips,
+                status: anyActive ? 'active' : 'failed',
+                encounterResult: anyDestroyed ? `-50% damage (DESTROYED - pirate hideout)` : `-50% damage (pirate hideout)`
+              });
             }
 
             addMessage(`The planet turned out to be a secret hideout for a gang of pirates. They quickly swarmed your fleet and overwhelmed their defenses. They managed to escape before total annihilation.`);
