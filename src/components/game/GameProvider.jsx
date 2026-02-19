@@ -406,12 +406,12 @@ export default function GameProvider({ children }) {
             intensity: 2
           });
         } else {
-          // Take damage
+          // Take damage but keep status as active (still on mission)
           console.log('[INVENTORY] Ship damaged:', ship.name);
           await updateShip(ship.id, { 
             damaged: true,
             health: newHealth,
-            status: 'damaged'
+            status: 'active'
           });
           
           // Random damage messages
@@ -1089,7 +1089,7 @@ export default function GameProvider({ children }) {
             await updateShip(ship.id, {
               health: newHealth,
               damaged: newHealth < 100,
-              status: newHealth === 0 ? 'destroyed' : 'damaged'
+              status: newHealth === 0 ? 'destroyed' : 'active'
             });
 
             if (newHealth === 0) {
