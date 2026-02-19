@@ -218,8 +218,7 @@ export default function FleetManagement() {
               <div className="relative flex items-center justify-between">
                 <div className="text-[#a8c5ad] font-bold">YOUR FLEET</div>
                 <div className="flex items-center gap-2 text-[#5a6a5f] text-xs">
-                  <Package className="w-4 h-4" />
-                  <span>{totalParts} parts</span>
+                  <span>🚀 {ships.length} ships</span>
                 </div>
               </div>
             </div>
