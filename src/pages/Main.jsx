@@ -408,10 +408,10 @@ export default function Main() {
                                   }}
                                   className="relative px-3 py-1 font-bold text-xs"
                                 >
-                                  <div className="absolute inset-0 bg-[#3a2a4a] border-2 border-[#6a5a7a]" style={{
-                                    boxShadow: 'inset 0 1px 0 rgba(106,90,122,0.4)'
+                                  <div className="absolute inset-0 bg-[#5a3a6a] border-2 border-[#b89acf]" style={{
+                                   boxShadow: 'inset 0 1px 0 rgba(184,154,207,0.4)'
                                   }}></div>
-                                  <span className="relative text-[#d0d0e8]">SKIP</span>
+                                  <span className="relative text-[#e8d0ff]">SKIP</span>
                                 </button>
                               </>
                             )}

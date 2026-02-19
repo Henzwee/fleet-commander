@@ -98,14 +98,14 @@ export default function CrystalTimeSkip({ mission, onConfirm, onCancel, crystals
               disabled={!canAfford}
               className={`${isTutorial ? 'flex-1' : 'flex-1'} relative py-3 font-bold text-sm disabled:opacity-50 disabled:cursor-not-allowed`}
             >
-              <div className="absolute inset-0 bg-[#3a2a4a] border-2 border-[#6a5a7a]" style={{
-                boxShadow: 'inset 0 1px 0 rgba(106,90,122,0.4)'
+              <div className="absolute inset-0 bg-[#5a3a6a] border-2 border-[#b89acf]" style={{
+                boxShadow: 'inset 0 1px 0 rgba(184,154,207,0.4)'
               }}></div>
-              <div className="absolute inset-[2px] bg-[#4a3a5a]" style={{
-                backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(106,90,122,0.15) 1px, transparent 0)',
+              <div className="absolute inset-[2px] bg-[#6a4a7a]" style={{
+                backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(184,154,207,0.15) 1px, transparent 0)',
                 backgroundSize: '3px 3px'
               }}></div>
-              <span className="relative text-[#d0d0e8]">BOOST</span>
+              <span className="relative text-[#e8d0ff]">BOOST</span>
             </button>
           </div>
         </div>

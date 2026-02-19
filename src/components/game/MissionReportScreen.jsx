@@ -98,14 +98,14 @@ export default function MissionReportScreen({ mission, event, onClose, onChoice,
                       </>
                     ) : (
                       <>
-                        <div className="absolute inset-0 bg-[#3a3a3f] border-2 border-[#5a5a5f]" style={{
-                          boxShadow: 'inset 0 1px 0 rgba(90,90,95,0.4)'
+                        <div className="absolute inset-0 bg-[#5a3a1f] border-2 border-[#d89944]" style={{
+                          boxShadow: 'inset 0 1px 0 rgba(216,153,68,0.4)'
                         }}></div>
-                        <div className="absolute inset-[2px] bg-[#4a4a4f]" style={{
-                          backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,90,95,0.15) 1px, transparent 0)',
+                        <div className="absolute inset-[2px] bg-[#6a4a2f]" style={{
+                          backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(216,153,68,0.15) 1px, transparent 0)',
                           backgroundSize: '3px 3px'
                         }}></div>
-                        <span className="relative text-[#a0a0a5]">{choice.label}</span>
+                        <span className="relative text-[#ffc870]">{choice.label}</span>
                       </>
                     )}
                   </button>
@@ -170,11 +170,11 @@ export default function MissionReportScreen({ mission, event, onClose, onChoice,
             disabled={crystals < crystalCost}
             className="relative w-full py-2 font-bold text-sm mb-3 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <div className="absolute inset-0 bg-[#3a2a4a] border-2 border-[#6a5a7a]" style={{
-              boxShadow: 'inset 0 1px 0 rgba(106,90,122,0.4)'
+            <div className="absolute inset-0 bg-[#5a3a6a] border-2 border-[#b89acf]" style={{
+              boxShadow: 'inset 0 1px 0 rgba(184,154,207,0.4)'
             }}></div>
-            <div className="absolute inset-[2px] bg-[#4a3a5a]" style={{
-              backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(106,90,122,0.15) 1px, transparent 0)',
+            <div className="absolute inset-[2px] bg-[#6a4a7a]" style={{
+              backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(184,154,207,0.15) 1px, transparent 0)',
               backgroundSize: '3px 3px'
             }}></div>
             <img 
@@ -182,7 +182,7 @@ export default function MissionReportScreen({ mission, event, onClose, onChoice,
               alt="Crystal" 
               className="w-4 h-4 relative"
             />
-            <span className="relative text-[#d0d0e8]">SKIP ({crystalCost})</span>
+            <span className="relative text-[#e8d0ff]">SKIP ({crystalCost})</span>
           </button>
         )}
 
