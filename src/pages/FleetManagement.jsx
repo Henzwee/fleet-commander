@@ -146,6 +146,35 @@ export default function FleetManagement() {
     <DeviceFrame title="FLEET">
       <div className="flex flex-col h-full overflow-hidden" style={{ maxWidth: '100%', paddingLeft: 'var(--safe-x)', paddingRight: 'var(--safe-x)', boxSizing: 'border-box' }}>
         <ResourceHeader />
+        
+        {/* Fleet Count and Upgrade */}
+        <div className="relative p-3 mb-4">
+          <div className="absolute inset-0 bg-[#2a3a2f] border-2 border-[#5a7a5f]" style={{
+            boxShadow: 'inset 0 0 0 1px #1a2a1f'
+          }}></div>
+          <div className="absolute inset-[4px] bg-[#1a2a1f]" style={{
+            backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,122,95,0.1) 1px, transparent 0)',
+            backgroundSize: '3px 3px'
+          }}></div>
+          <div className="relative flex items-center justify-between">
+            <div className="text-[#d0e8d5] font-bold text-sm">
+              {ships.length}/{gameState?.maxShips || 10} ships
+            </div>
+            <button
+              onClick={() => setShowUpgradePopup(true)}
+              className="relative px-3 py-1 font-bold text-xs"
+            >
+              <div className="absolute inset-0 bg-[#3a5a4f] border-2 border-[#5a7a5f]" style={{
+                boxShadow: 'inset 0 1px 0 rgba(90,122,95,0.4)'
+              }}></div>
+              <div className="absolute inset-[2px] bg-[#4a6a5f]" style={{
+                backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,122,95,0.15) 1px, transparent 0)',
+                backgroundSize: '3px 3px'
+              }}></div>
+              <span className="relative text-[#d0e8d5]">UPGRADE HANGAR</span>
+            </button>
+          </div>
+        </div>
         <div className="flex-1 overflow-y-auto" style={{ paddingLeft: '0', paddingRight: '0', paddingTop: '70px', paddingBottom: '24px' }}>
         {/* Tab Switcher */}
         <div className="flex gap-2 mb-4">
@@ -430,6 +459,92 @@ export default function FleetManagement() {
         )}
       </div>
       </div>
+      
+      {/* Hangar Upgrade Popup */}
+      {showUpgradePopup && (
+        <div className="fixed bg-black/80 flex items-center justify-center" style={{
+          top: 0,
+          bottom: 0,
+          left: 0,
+          right: 0,
+          zIndex: 5
+        }}>
+          <div className="bg-gradient-to-br from-[#0a1a14] to-[#050f0a] border-2 border-[#5a7a5f] w-full h-full relative flex flex-col overflow-y-auto" style={{
+            paddingTop: 'calc(var(--content-pad-top) + 24px)',
+            paddingBottom: 'calc(var(--content-pad-bottom) + 32px)',
+            paddingLeft: 'calc(var(--content-pad-left) + 24px)',
+            paddingRight: 'calc(var(--content-pad-right) + 24px)',
+            WebkitOverflowScrolling: 'touch'
+          }}>
+            <h2 className="text-[#d0e8d5] font-bold text-lg mb-6">UPGRADE HANGAR</h2>
+            
+            <div className="space-y-4 flex-1">
+              <div className="relative p-4">
+                <div className="absolute inset-0 bg-[#2a3a2f] border-2 border-[#5a7a5f]" style={{
+                  boxShadow: 'inset 0 0 0 1px #1a2a1f'
+                }}></div>
+                <div className="absolute inset-[4px] bg-[#1a2a1f]" style={{
+                  backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,122,95,0.1) 1px, transparent 0)',
+                  backgroundSize: '3px 3px'
+                }}></div>
+                <div className="relative text-[#a8c5ad] text-sm space-y-2">
+                  <div>Current Capacity: {gameState?.maxShips || 10} ships</div>
+                  <div>New Capacity: {(gameState?.maxShips || 10) + 10} ships</div>
+                  <div className="text-[#d89944] font-bold text-base mt-3">
+                    Cost: ₵{((gameState?.hangarUpgrades || 0) + 1) * 10000}
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div className="flex gap-3 mt-4">
+              <button
+                onClick={() => setShowUpgradePopup(false)}
+                className="relative flex-1 py-2 font-bold text-sm"
+              >
+                <div className="absolute inset-0 bg-[#2a3a2f] border-2 border-[#4a5a4f]" style={{
+                  boxShadow: 'inset 0 0 0 1px #1a2a1f'
+                }}></div>
+                <div className="absolute inset-[3px] bg-[#3a4a3f]" style={{
+                  backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(74,90,79,0.15) 1px, transparent 0)',
+                  backgroundSize: '3px 3px'
+                }}></div>
+                <span className="relative text-[#a8c5ad]">CANCEL</span>
+              </button>
+              
+              <button
+                onClick={async () => {
+                  const upgradeCost = ((gameState?.hangarUpgrades || 0) + 1) * 10000;
+                  if ((gameState?.credits || 0) < upgradeCost) {
+                    displayMessage('Not enough credits!');
+                    setShowUpgradePopup(false);
+                    return;
+                  }
+                  
+                  await updateGameState({
+                    credits: gameState.credits - upgradeCost,
+                    hangarUpgrades: (gameState?.hangarUpgrades || 0) + 1,
+                    maxShips: (gameState?.maxShips || 10) + 10
+                  });
+                  
+                  displayMessage(`Hangar upgraded! Capacity increased to ${(gameState?.maxShips || 10) + 10} ships.`);
+                  setShowUpgradePopup(false);
+                }}
+                className="relative flex-1 py-2 font-bold text-sm"
+              >
+                <div className="absolute inset-0 bg-[#3a7a4f] border-2 border-[#5a9a6f]" style={{
+                  boxShadow: 'inset 0 1px 0 rgba(90,154,111,0.4)'
+                }}></div>
+                <div className="absolute inset-[2px] bg-[#4a8a5f]" style={{
+                  backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,154,111,0.15) 1px, transparent 0)',
+                  backgroundSize: '3px 3px'
+                }}></div>
+                <span className="relative text-[#d0e8d5]">CONFIRM</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </DeviceFrame>
   );
 }
