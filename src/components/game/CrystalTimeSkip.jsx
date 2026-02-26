@@ -3,6 +3,7 @@ import { Zap, Clock } from 'lucide-react';
 import InsufficientFundsToast from './InsufficientFundsToast';
 
 export default function CrystalTimeSkip({ mission, onConfirm, onCancel, crystals, isTutorial = false }) {
+  const [insufficientTrigger, setInsufficientTrigger] = React.useState(0);
   // Use timeRemainingMinutes which is in minutes, not the formatted string
   const timeInMinutes = Number(mission.timeRemainingMinutes) || 0;
   const hoursRemaining = Math.max(1, Math.ceil(timeInMinutes / 60));
