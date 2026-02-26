@@ -219,25 +219,22 @@ export default function FleetManagement() {
                 boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.5)'
               }}></div>
               <div className="relative flex items-center justify-between">
-                <div className="text-[#a8c5ad] font-bold">YOUR FLEET</div>
-                <div className="flex items-center gap-3">
-                  <div className="text-[#d0e8d5] text-sm font-bold">
-                    {ships.length}/{gameState?.maxShips || 10} ships
-                  </div>
-                  <button
-                    onClick={() => setShowHangarUpgradePopup(true)}
-                    className="relative px-3 py-1 font-bold text-xs"
-                  >
-                    <div className="absolute inset-0 bg-[#3a5a4f] border-2 border-[#5a7a5f]" style={{
-                      boxShadow: 'inset 0 1px 0 rgba(90,122,95,0.4)'
-                    }}></div>
-                    <div className="absolute inset-[2px] bg-[#4a6a5f]" style={{
-                      backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,122,95,0.15) 1px, transparent 0)',
-                      backgroundSize: '3px 3px'
-                    }}></div>
-                    <span className="relative text-[#d0e8d5]">UPGRADE HANGAR</span>
-                  </button>
+                <div className="text-[#d0e8d5] text-sm font-bold">
+                  {ships.length}/{gameState?.maxShips || 10} ships
                 </div>
+                <button
+                  onClick={() => setShowHangarUpgradePopup(true)}
+                  className="relative px-3 py-1 font-bold text-xs"
+                >
+                  <div className="absolute inset-0 bg-[#3a5a4f] border-2 border-[#5a7a5f]" style={{
+                    boxShadow: 'inset 0 1px 0 rgba(90,122,95,0.4)'
+                  }}></div>
+                  <div className="absolute inset-[2px] bg-[#4a6a5f]" style={{
+                    backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,122,95,0.15) 1px, transparent 0)',
+                    backgroundSize: '3px 3px'
+                  }}></div>
+                  <span className="relative text-[#d0e8d5]">UPGRADE HANGAR</span>
+                </button>
               </div>
             </div>
             
@@ -403,25 +400,22 @@ export default function FleetManagement() {
                 boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.5)'
               }}></div>
               <div className="relative flex items-center justify-between">
-                <div className="text-[#a8c5ad] font-bold">INVENTORY</div>
-                <div className="flex items-center gap-3">
-                  <div className="text-[#d0e8d5] text-sm font-bold">
-                    {totalParts}/{gameState?.maxParts || 100} parts
-                  </div>
-                  <button
-                    onClick={() => setShowStorageUpgradePopup(true)}
-                    className="relative px-3 py-1 font-bold text-xs"
-                  >
-                    <div className="absolute inset-0 bg-[#3a5a4f] border-2 border-[#5a7a5f]" style={{
-                      boxShadow: 'inset 0 1px 0 rgba(90,122,95,0.4)'
-                    }}></div>
-                    <div className="absolute inset-[2px] bg-[#4a6a5f]" style={{
-                      backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,122,95,0.15) 1px, transparent 0)',
-                      backgroundSize: '3px 3px'
-                    }}></div>
-                    <span className="relative text-[#d0e8d5]">UPGRADE STORAGE</span>
-                  </button>
+                <div className="text-[#d0e8d5] text-sm font-bold">
+                  {totalParts}/{gameState?.maxParts || 100} parts
                 </div>
+                <button
+                  onClick={() => setShowStorageUpgradePopup(true)}
+                  className="relative px-3 py-1 font-bold text-xs"
+                >
+                  <div className="absolute inset-0 bg-[#3a5a4f] border-2 border-[#5a7a5f]" style={{
+                    boxShadow: 'inset 0 1px 0 rgba(90,122,95,0.4)'
+                  }}></div>
+                  <div className="absolute inset-[2px] bg-[#4a6a5f]" style={{
+                    backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,122,95,0.15) 1px, transparent 0)',
+                    backgroundSize: '3px 3px'
+                  }}></div>
+                  <span className="relative text-[#d0e8d5]">UPGRADE STORAGE</span>
+                </button>
               </div>
             </div>
             
