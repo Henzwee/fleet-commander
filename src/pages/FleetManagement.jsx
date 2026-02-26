@@ -571,10 +571,10 @@ export default function FleetManagement() {
                   backgroundSize: '3px 3px'
                 }}></div>
                 <div className="relative text-[#a8c5ad] text-sm space-y-2">
-                  <div>Current Capacity: {gameState?.maxParts || 100} parts</div>
-                  <div>New Capacity: {(gameState?.maxParts || 100) + 20} parts</div>
+                  <div>Current Capacity: {gameState?.maxParts || 40} parts</div>
+                  <div>New Capacity: {(gameState?.maxParts || 40) + 20} parts</div>
                   <div className="text-[#d89944] font-bold text-base mt-3">
-                    Cost: ₵{((gameState?.storageUpgrades || 0) + 1) * 10000}
+                    Cost: ₵{((gameState?.storageUpgrades || 0) + 1) * 5000}
                   </div>
                 </div>
               </div>
@@ -597,7 +597,7 @@ export default function FleetManagement() {
               
               <button
                 onClick={async () => {
-                  const upgradeCost = ((gameState?.storageUpgrades || 0) + 1) * 10000;
+                  const upgradeCost = ((gameState?.storageUpgrades || 0) + 1) * 5000;
                   if ((gameState?.credits || 0) < upgradeCost) {
                     addMessage('Not enough credits!');
                     setShowStorageUpgradePopup(false);
@@ -607,10 +607,10 @@ export default function FleetManagement() {
                   await updateGameState({
                     credits: gameState.credits - upgradeCost,
                     storageUpgrades: (gameState?.storageUpgrades || 0) + 1,
-                    maxParts: (gameState?.maxParts || 100) + 20
+                    maxParts: (gameState?.maxParts || 40) + 20
                   });
                   
-                  addMessage(`Storage upgraded! Capacity increased to ${(gameState?.maxParts || 100) + 20} parts.`);
+                  addMessage(`Storage upgraded! Capacity increased to ${(gameState?.maxParts || 40) + 20} parts.`);
                   setShowStorageUpgradePopup(false);
                 }}
                 className="relative flex-1 py-2 font-bold text-sm"
