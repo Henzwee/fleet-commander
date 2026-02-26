@@ -217,7 +217,7 @@ export default function Jobs() {
     if (!selectedMission || !selectedShips || selectedShips.length === 0) return;
     
     if (gameState.fuel < selectedMission.fuelCost) {
-      addMessage('Insufficient fuel!');
+      setInsufficientFundsTrigger(t => t + 1);
       return;
     }
     
