@@ -443,7 +443,7 @@ export default function Market() {
             <button
               onClick={async () => {
                 if (!gameState || gameState.crystals < 10) {
-                  addMessage('Need 10 crystals to reset market!');
+                  setInsufficientFundsTrigger(t => t + 1);
                   return;
                 }
                 
@@ -835,6 +835,7 @@ export default function Market() {
         )}
         </div>
       </div>
+      <InsufficientFundsToast trigger={insufficientFundsTrigger} />
     </DeviceFrame>
   );
 }
