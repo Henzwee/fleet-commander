@@ -1,5 +1,6 @@
 import React from 'react';
 import { Zap, Clock } from 'lucide-react';
+import InsufficientFundsToast from './InsufficientFundsToast';
 
 export default function CrystalTimeSkip({ mission, onConfirm, onCancel, crystals, isTutorial = false }) {
   // Use timeRemainingMinutes which is in minutes, not the formatted string
