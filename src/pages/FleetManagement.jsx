@@ -18,6 +18,7 @@ export default function FleetManagement() {
   const [activeTab, setActiveTab] = useState(() => {
     return localStorage.getItem('fleet_tab_v1') || 'ships';
   });
+  const [showUpgradePopup, setShowUpgradePopup] = useState(false);
   
   // Generate required parts for damaged ships on mount
   useEffect(() => {
@@ -516,7 +517,7 @@ export default function FleetManagement() {
                 onClick={async () => {
                   const upgradeCost = ((gameState?.hangarUpgrades || 0) + 1) * 10000;
                   if ((gameState?.credits || 0) < upgradeCost) {
-                    displayMessage('Not enough credits!');
+                    addMessage('Not enough credits!');
                     setShowUpgradePopup(false);
                     return;
                   }
@@ -527,7 +528,7 @@ export default function FleetManagement() {
                     maxShips: (gameState?.maxShips || 10) + 10
                   });
                   
-                  displayMessage(`Hangar upgraded! Capacity increased to ${(gameState?.maxShips || 10) + 10} ships.`);
+                  addMessage(`Hangar upgraded! Capacity increased to ${(gameState?.maxShips || 10) + 10} ships.`);
                   setShowUpgradePopup(false);
                 }}
                 className="relative flex-1 py-2 font-bold text-sm"
