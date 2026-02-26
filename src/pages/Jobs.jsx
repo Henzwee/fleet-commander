@@ -381,6 +381,7 @@ export default function Jobs() {
         )}
         </div>
       </div>
+      <InsufficientFundsToast trigger={insufficientFundsTrigger} message="INSUFFICIENT FUEL" />
     </DeviceFrame>
   );
 }
