@@ -9,30 +9,33 @@ export default function CrystalTimeSkip({ mission, onConfirm, onCancel, crystals
   const canAfford = crystals >= crystalCost;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90">
-      <div 
-        className="relative bg-gradient-to-br from-[#0a1a14] to-[#050f0a] shadow-2xl"
-        style={{
-          width: 'min(420px, 90vw)',
-          padding: '32px'
-        }}
-      >
-        <div className="absolute inset-0 border-4 border-[#6a5a7a]" style={{
-          boxShadow: 'inset 0 0 0 2px #1a2a1f'
-        }}></div>
-        <div className="relative">
+    <div className="fixed bg-black/80 flex items-center justify-center" style={{
+      top: 0,
+      bottom: 0,
+      left: 0,
+      right: 0,
+      zIndex: 5
+    }}>
+      <div className="bg-gradient-to-br from-[#0a1a14] to-[#050f0a] border-2 border-[#5a7a5f] w-full h-full relative flex flex-col overflow-y-auto" style={{
+        paddingTop: 'calc(var(--content-pad-top) + 24px)',
+        paddingBottom: 'calc(var(--content-pad-bottom) + 32px)',
+        paddingLeft: 'calc(var(--content-pad-left) + 24px)',
+        paddingRight: 'calc(var(--content-pad-right) + 24px)',
+        WebkitOverflowScrolling: 'touch'
+      }}>
+        <div className="relative flex-1 flex flex-col">
           <div className="mb-6">
-            <div className="text-[#b89acf] font-bold text-xl mb-2">HYPERDRIVE BOOST</div>
-            <div className="text-xs text-[#6a5a7a]">Accelerate mission using crystals</div>
+            <div className="text-[#d0e8d5] font-bold text-lg">HYPERDRIVE BOOST</div>
+            <div className="text-sm text-[#8fb4c9] mt-1">Accelerate mission using crystals</div>
           </div>
 
-          <div className="mb-6 space-y-4">
+          <div className="space-y-4 flex-1">
             <div className="relative p-4">
-              <div className="absolute inset-0 bg-[#2a3a2f] border-2 border-[#3a5a4f]" style={{
+              <div className="absolute inset-0 bg-[#2a3a2f] border-2 border-[#5a7a5f]" style={{
                 boxShadow: 'inset 0 0 0 1px #1a2a1f'
               }}></div>
-              <div className="absolute inset-[3px] bg-[#1a2a1f]" style={{
-                backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(58,90,79,0.15) 1px, transparent 0)',
+              <div className="absolute inset-[4px] bg-[#1a2a1f]" style={{
+                backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,122,95,0.1) 1px, transparent 0)',
                 backgroundSize: '3px 3px'
               }}></div>
               <div className="relative">
@@ -77,26 +80,26 @@ export default function CrystalTimeSkip({ mission, onConfirm, onCancel, crystals
             )}
           </div>
 
-          <div className="flex gap-3">
+          <div className="flex gap-3 mt-4">
             {!isTutorial && (
               <button
                 onClick={onCancel}
-                className="relative flex-1 py-3 font-bold text-sm"
+                className="relative flex-1 py-2 font-bold text-sm"
               >
-                <div className="absolute inset-0 bg-[#3a3a3f] border-2 border-[#5a5a5f]" style={{
-                  boxShadow: 'inset 0 1px 0 rgba(90,90,95,0.4)'
+                <div className="absolute inset-0 bg-[#2a3a2f] border-2 border-[#4a5a4f]" style={{
+                  boxShadow: 'inset 0 0 0 1px #1a2a1f'
                 }}></div>
-                <div className="absolute inset-[2px] bg-[#4a4a4f]" style={{
-                  backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,90,95,0.15) 1px, transparent 0)',
+                <div className="absolute inset-[3px] bg-[#3a4a3f]" style={{
+                  backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(74,90,79,0.15) 1px, transparent 0)',
                   backgroundSize: '3px 3px'
                 }}></div>
-                <span className="relative text-[#d0d0d5]">CANCEL</span>
+                <span className="relative text-[#a8c5ad]">CANCEL</span>
               </button>
             )}
             <button
               onClick={onConfirm}
               disabled={!canAfford}
-              className={`${isTutorial ? 'flex-1' : 'flex-1'} relative py-3 font-bold text-sm disabled:opacity-50 disabled:cursor-not-allowed`}
+              className={`${isTutorial ? 'flex-1' : 'flex-1'} relative py-2 font-bold text-sm disabled:opacity-50 disabled:cursor-not-allowed`}
             >
               <div className="absolute inset-0 bg-[#5a3a6a] border-2 border-[#b89acf]" style={{
                 boxShadow: 'inset 0 1px 0 rgba(184,154,207,0.4)'
