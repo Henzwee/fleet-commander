@@ -17,6 +17,7 @@ export default function Jobs() {
   const [availableMissions, setAvailableMissions] = useState([]);
   const [selectedMission, setSelectedMission] = useState(null);
   const [selectedShip, setSelectedShip] = useState(null);
+  const [insufficientFundsTrigger, setInsufficientFundsTrigger] = useState(0);
   
   // Get all hired ships (not just idle ones)
   const allHiredShips = allShips.filter(ship => ship.isHired);
