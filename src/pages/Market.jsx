@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import InsufficientFundsToast from '../components/game/InsufficientFundsToast';
 import { base44 } from '@/api/base44Client';
 import { useGame } from '../components/game/GameProvider';
 
@@ -20,6 +21,7 @@ export default function Market() {
   const [timeUntilReset, setTimeUntilReset] = useState('');
   const [purchaseDialog, setPurchaseDialog] = useState(null);
   const [isInitializing, setIsInitializing] = useState(false);
+  const [insufficientFundsTrigger, setInsufficientFundsTrigger] = useState(0);
   
   useEffect(() => {
     if (gameState) {

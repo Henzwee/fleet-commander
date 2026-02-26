@@ -21,6 +21,7 @@ export default function FleetManagement() {
   });
   const [showHangarUpgradePopup, setShowHangarUpgradePopup] = useState(false);
   const [showStorageUpgradePopup, setShowStorageUpgradePopup] = useState(false);
+  const [insufficientFundsTrigger, setInsufficientFundsTrigger] = useState(0);
   
   // Generate required parts for damaged ships on mount
   useEffect(() => {
