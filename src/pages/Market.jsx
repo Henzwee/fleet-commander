@@ -311,13 +311,13 @@ export default function Market() {
     // Check currency
     if (currency === 'crystals') {
       if (gameState.crystals < totalCost) {
-        addMessage('Insufficient crystals!');
+        setInsufficientFundsTrigger(t => t + 1);
         setPurchaseDialog(null);
         return;
       }
     } else {
       if (gameState.credits < totalCost) {
-        addMessage('Insufficient credits!');
+        setInsufficientFundsTrigger(t => t + 1);
         setPurchaseDialog(null);
         return;
       }

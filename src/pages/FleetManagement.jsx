@@ -630,6 +630,7 @@ export default function FleetManagement() {
           </div>
         </div>
       )}
+      <InsufficientFundsToast trigger={insufficientFundsTrigger} />
     </DeviceFrame>
   );
 }
