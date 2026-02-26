@@ -515,7 +515,7 @@ export default function FleetManagement() {
                 onClick={async () => {
                   const upgradeCost = ((gameState?.hangarUpgrades || 0) + 1) * 10000;
                   if ((gameState?.credits || 0) < upgradeCost) {
-                    addMessage('Not enough credits!');
+                    setInsufficientFundsTrigger(t => t + 1);
                     setShowHangarUpgradePopup(false);
                     return;
                   }
@@ -601,7 +601,7 @@ export default function FleetManagement() {
                 onClick={async () => {
                   const upgradeCost = ((gameState?.storageUpgrades || 0) + 1) * 5000;
                   if ((gameState?.credits || 0) < upgradeCost) {
-                    addMessage('Not enough credits!');
+                    setInsufficientFundsTrigger(t => t + 1);
                     setShowStorageUpgradePopup(false);
                     return;
                   }
