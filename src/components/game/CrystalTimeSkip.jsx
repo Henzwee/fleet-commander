@@ -99,8 +99,14 @@ export default function CrystalTimeSkip({ mission, onConfirm, onCancel, crystals
               </button>
             )}
             <button
-              onClick={onConfirm}
-              disabled={!canAfford}
+              onClick={() => {
+                if (!canAfford && !isTutorial) {
+                  setInsufficientTrigger(t => t + 1);
+                  return;
+                }
+                onConfirm();
+              }}
+              disabled={false}
               className={`${isTutorial ? 'flex-1' : 'flex-1'} relative py-2 font-bold text-sm disabled:opacity-50 disabled:cursor-not-allowed`}
             >
               <div className="absolute inset-0 bg-[#5a3a6a] border-2 border-[#b89acf]" style={{
