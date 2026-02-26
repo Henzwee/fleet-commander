@@ -10,6 +10,7 @@ import ShipCard from '../components/game/ShipCard';
 import { Heart, Wrench, UserMinus, Package, Check, X } from 'lucide-react';
 import { getRequiredPartCountFromDamage, generateRequiredParts, hasParts, consumeParts } from '../components/game/PartsCatalog';
 import { getMaxLYForTier } from '../components/game/ShipTierConfig';
+import InsufficientFundsToast from '../components/game/InsufficientFundsToast';
 
 export default function FleetManagement() {
   const { gameState, ships, updateShip, removeShip, updateGameState, addMessage, refreshShips } = useGame();
