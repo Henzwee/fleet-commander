@@ -121,6 +121,7 @@ export default function CrystalTimeSkip({ mission, onConfirm, onCancel, crystals
           </div>
         </div>
       </div>
+      <InsufficientFundsToast trigger={insufficientTrigger} message="INSUFFICIENT CRYSTALS" />
     </div>
   );
 }
