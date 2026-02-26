@@ -456,7 +456,7 @@ export default function Main() {
           right: 0,
           zIndex: 5
         }}>
-          <div className="bg-gradient-to-br from-gray-900 to-gray-950 border-2 border-cyan-500 w-full h-full relative flex flex-col overflow-y-auto" style={{
+          <div className="bg-gradient-to-br from-[#0a1a14] to-[#050f0a] border-2 border-[#5a7a5f] w-full h-full relative flex flex-col overflow-y-auto" style={{
             paddingTop: 'calc(var(--content-pad-top) + 24px)',
             paddingBottom: 'calc(var(--content-pad-bottom) + 32px)',
             paddingLeft: 'calc(var(--content-pad-left) + 24px)',
@@ -464,7 +464,7 @@ export default function Main() {
             WebkitOverflowScrolling: 'touch'
           }}>
             <div className="flex items-center gap-2 mb-6">
-              <h2 className="text-cyan-400 font-bold text-lg">MISSION DEBRIEF</h2>
+              <h2 className="text-[#d0e8d5] font-bold text-lg">MISSION DEBRIEF</h2>
             </div>
             
             <div className="space-y-4 flex-1">
