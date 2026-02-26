@@ -10,7 +10,6 @@ import ShipCard from '../components/game/ShipCard';
 import { Heart, Wrench, UserMinus, Package, Check, X } from 'lucide-react';
 import { getRequiredPartCountFromDamage, generateRequiredParts, hasParts, consumeParts } from '../components/game/PartsCatalog';
 import { getMaxLYForTier } from '../components/game/ShipTierConfig';
-import InsufficientFundsToast from '../components/game/InsufficientFundsToast';
 
 export default function FleetManagement() {
   const { gameState, ships, updateShip, removeShip, updateGameState, addMessage, refreshShips } = useGame();
@@ -21,7 +20,6 @@ export default function FleetManagement() {
   });
   const [showHangarUpgradePopup, setShowHangarUpgradePopup] = useState(false);
   const [showStorageUpgradePopup, setShowStorageUpgradePopup] = useState(false);
-  const [insufficientFundsTrigger, setInsufficientFundsTrigger] = useState(0);
   
   // Generate required parts for damaged ships on mount
   useEffect(() => {
@@ -515,7 +513,7 @@ export default function FleetManagement() {
                 onClick={async () => {
                   const upgradeCost = ((gameState?.hangarUpgrades || 0) + 1) * 10000;
                   if ((gameState?.credits || 0) < upgradeCost) {
-                    setInsufficientFundsTrigger(t => t + 1);
+                    addMessage('Not enough credits!');
                     setShowHangarUpgradePopup(false);
                     return;
                   }
@@ -601,7 +599,7 @@ export default function FleetManagement() {
                 onClick={async () => {
                   const upgradeCost = ((gameState?.storageUpgrades || 0) + 1) * 5000;
                   if ((gameState?.credits || 0) < upgradeCost) {
-                    setInsufficientFundsTrigger(t => t + 1);
+                    addMessage('Not enough credits!');
                     setShowStorageUpgradePopup(false);
                     return;
                   }
@@ -630,7 +628,6 @@ export default function FleetManagement() {
           </div>
         </div>
       )}
-      <InsufficientFundsToast trigger={insufficientFundsTrigger} />
     </DeviceFrame>
   );
 }

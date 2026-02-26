@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import InsufficientFundsToast from '../components/game/InsufficientFundsToast';
 import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '../utils';
 import { base44 } from '@/api/base44Client';
@@ -17,7 +16,6 @@ export default function Jobs() {
   const [availableMissions, setAvailableMissions] = useState([]);
   const [selectedMission, setSelectedMission] = useState(null);
   const [selectedShip, setSelectedShip] = useState(null);
-  const [insufficientFundsTrigger, setInsufficientFundsTrigger] = useState(0);
   
   // Get all hired ships (not just idle ones)
   const allHiredShips = allShips.filter(ship => ship.isHired);
@@ -217,7 +215,7 @@ export default function Jobs() {
     if (!selectedMission || !selectedShips || selectedShips.length === 0) return;
     
     if (gameState.fuel < selectedMission.fuelCost) {
-      setInsufficientFundsTrigger(t => t + 1);
+      addMessage('Insufficient fuel!');
       return;
     }
     
@@ -381,7 +379,6 @@ export default function Jobs() {
         )}
         </div>
       </div>
-      <InsufficientFundsToast trigger={insufficientFundsTrigger} message="INSUFFICIENT FUEL" />
     </DeviceFrame>
   );
 }

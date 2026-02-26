@@ -1,9 +1,7 @@
 import React from 'react';
 import { Zap, Clock } from 'lucide-react';
-import InsufficientFundsToast from './InsufficientFundsToast';
 
 export default function CrystalTimeSkip({ mission, onConfirm, onCancel, crystals, isTutorial = false }) {
-  const [insufficientTrigger, setInsufficientTrigger] = React.useState(0);
   // Use timeRemainingMinutes which is in minutes, not the formatted string
   const timeInMinutes = Number(mission.timeRemainingMinutes) || 0;
   const hoursRemaining = Math.max(1, Math.ceil(timeInMinutes / 60));
@@ -99,14 +97,8 @@ export default function CrystalTimeSkip({ mission, onConfirm, onCancel, crystals
               </button>
             )}
             <button
-              onClick={() => {
-                if (!canAfford && !isTutorial) {
-                  setInsufficientTrigger(t => t + 1);
-                  return;
-                }
-                onConfirm();
-              }}
-              disabled={false}
+              onClick={onConfirm}
+              disabled={!canAfford}
               className={`${isTutorial ? 'flex-1' : 'flex-1'} relative py-2 font-bold text-sm disabled:opacity-50 disabled:cursor-not-allowed`}
             >
               <div className="absolute inset-0 bg-[#5a3a6a] border-2 border-[#b89acf]" style={{
@@ -121,7 +113,6 @@ export default function CrystalTimeSkip({ mission, onConfirm, onCancel, crystals
           </div>
         </div>
       </div>
-      <InsufficientFundsToast trigger={insufficientTrigger} message="INSUFFICIENT CRYSTALS" />
     </div>
   );
 }

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import InsufficientFundsToast from '../components/game/InsufficientFundsToast';
 import { base44 } from '@/api/base44Client';
 import { useGame } from '../components/game/GameProvider';
 
@@ -21,7 +20,6 @@ export default function Market() {
   const [timeUntilReset, setTimeUntilReset] = useState('');
   const [purchaseDialog, setPurchaseDialog] = useState(null);
   const [isInitializing, setIsInitializing] = useState(false);
-  const [insufficientFundsTrigger, setInsufficientFundsTrigger] = useState(0);
   
   useEffect(() => {
     if (gameState) {
@@ -311,13 +309,13 @@ export default function Market() {
     // Check currency
     if (currency === 'crystals') {
       if (gameState.crystals < totalCost) {
-        setInsufficientFundsTrigger(t => t + 1);
+        addMessage('Insufficient crystals!');
         setPurchaseDialog(null);
         return;
       }
     } else {
       if (gameState.credits < totalCost) {
-        setInsufficientFundsTrigger(t => t + 1);
+        addMessage('Insufficient credits!');
         setPurchaseDialog(null);
         return;
       }
@@ -443,7 +441,7 @@ export default function Market() {
             <button
               onClick={async () => {
                 if (!gameState || gameState.crystals < 10) {
-                  setInsufficientFundsTrigger(t => t + 1);
+                  addMessage('Need 10 crystals to reset market!');
                   return;
                 }
                 
@@ -835,7 +833,6 @@ export default function Market() {
         )}
         </div>
       </div>
-      <InsufficientFundsToast trigger={insufficientFundsTrigger} />
     </DeviceFrame>
   );
 }
