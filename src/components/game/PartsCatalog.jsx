@@ -5,6 +5,7 @@ export const PART_IMAGES = {
   'Wire splice': 'https://media.base44.com/images/public/695af5ca435140b76c0dadc9/34ff766a3_gumignorethis.png',
   'Outdated map': 'https://media.base44.com/images/public/695af5ca435140b76c0dadc9/f19984bec_Outdatedmap.png',
   'Reformed evil AI': 'https://media.base44.com/images/public/695af5ca435140b76c0dadc9/3712adcfe_ReformedevilAI.png',
+  'Rusty screws': 'https://media.base44.com/images/public/695af5ca435140b76c0dadc9/2b3d1f339_Rustyscrews.png',
 };
 
 export const ALL_PARTS = [
