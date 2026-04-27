@@ -11,6 +11,7 @@ import { MarketEngine } from '../components/game/MarketEngine';
 import { getRandomShipImage } from '../components/game/ShipImages';
 import { generateWeightedRotation, updateRotationHistory } from '../components/game/MarketRotation';
 import { SHIP_TIERS, getTierConfig } from '../components/game/ShipTierConfig';
+import { PART_IMAGES } from '../components/game/PartsCatalog';
 
 export default function Market() {
   const { gameState, addShip, updateGameState, addMessage, rollShipTier } = useGame();
@@ -146,7 +147,8 @@ export default function Market() {
             name: item.name,
             price: item.currentPrice,
             deltaPercent: item.deltaPercent,
-            icon: iconMap[item.name] || '📦',
+            imageUrl: PART_IMAGES[item.name] || null,
+        icon: iconMap[item.name] || '📦',
             stock: gameState.marketStock[itemId],
             currency: 'credits'
           };

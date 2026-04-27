@@ -8,7 +8,7 @@ import DeviceFrame from '../components/game/DeviceFrame';
 import ResourceHeader from '../components/game/ResourceHeader';
 import ShipCard from '../components/game/ShipCard';
 import { Heart, Wrench, UserMinus, Package, Check, X } from 'lucide-react';
-import { getRequiredPartCountFromDamage, generateRequiredParts, hasParts, consumeParts } from '../components/game/PartsCatalog';
+import { getRequiredPartCountFromDamage, generateRequiredParts, hasParts, consumeParts, PART_IMAGES } from '../components/game/PartsCatalog';
 import { getMaxLYForTier } from '../components/game/ShipTierConfig';
 
 export default function FleetManagement() {
@@ -443,7 +443,11 @@ export default function FleetManagement() {
                       }}></div>
                       <div className="relative p-3 flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                          <Package className="w-5 h-5 text-[#5a9a8f]" />
+                          {PART_IMAGES[partName] ? (
+                            <img src={PART_IMAGES[partName]} alt={partName} className="w-8 h-8 object-contain" style={{ imageRendering: 'pixelated' }} />
+                          ) : (
+                            <Package className="w-5 h-5 text-[#5a9a8f]" />
+                          )}
                           <span className="text-[#a8c5ad] text-sm">{partName}</span>
                         </div>
                         <div className="text-[#5a9a8f] font-bold text-sm">x{qty}</div>

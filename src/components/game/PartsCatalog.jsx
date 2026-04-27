@@ -1,4 +1,8 @@
 // Ship part catalog
+export const PART_IMAGES = {
+  'Expired food rations': 'https://media.base44.com/images/public/695af5ca435140b76c0dadc9/236cb9259_Expiredfoodrations.png',
+};
+
 export const ALL_PARTS = [
   'Box of tangled wire',
   'Reformed evil AI',
