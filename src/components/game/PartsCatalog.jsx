@@ -7,6 +7,7 @@ export const PART_IMAGES = {
   'Reformed evil AI': 'https://media.base44.com/images/public/695af5ca435140b76c0dadc9/3712adcfe_ReformedevilAI.png',
   'Rusty screws': 'https://media.base44.com/images/public/695af5ca435140b76c0dadc9/2b3d1f339_Rustyscrews.png',
   'Sci-fi looking panel': 'https://media.base44.com/images/public/695af5ca435140b76c0dadc9/a3aaf5333_Sci-filookingpanel.png',
+  'Stripped bolts': 'https://media.base44.com/images/public/695af5ca435140b76c0dadc9/43497e047_Strippedbolts.png',
 };
 
 export const ALL_PARTS = [
