@@ -2,6 +2,7 @@
 export const PART_IMAGES = {
   'Expired food rations': 'https://media.base44.com/images/public/695af5ca435140b76c0dadc9/236cb9259_Expiredfoodrations.png',
   'Mostly stable antimatter': 'https://media.base44.com/images/public/695af5ca435140b76c0dadc9/6fa536896_Mostlystableantimatter.png',
+  'Wire splice': 'https://media.base44.com/images/public/695af5ca435140b76c0dadc9/34ff766a3_gumignorethis.png',
 };
 
 export const ALL_PARTS = [
