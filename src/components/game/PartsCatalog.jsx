@@ -9,6 +9,7 @@ export const PART_IMAGES = {
   'Sci-fi looking panel': 'https://media.base44.com/images/public/695af5ca435140b76c0dadc9/a3aaf5333_Sci-filookingpanel.png',
   'Stripped bolts': 'https://media.base44.com/images/public/695af5ca435140b76c0dadc9/43497e047_Strippedbolts.png',
   'Box of tangled wire': 'https://media.base44.com/images/public/695af5ca435140b76c0dadc9/edeb60e23_Boxoftangledwire.png',
+  'Cracked glass': 'https://media.base44.com/images/public/695af5ca435140b76c0dadc9/193b5ab22_props11.png',
 };
 
 export const ALL_PARTS = [
