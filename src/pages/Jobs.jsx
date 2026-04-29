@@ -16,6 +16,7 @@ export default function Jobs() {
   const [availableMissions, setAvailableMissions] = useState([]);
   const [selectedMission, setSelectedMission] = useState(null);
   const [selectedShip, setSelectedShip] = useState(null);
+  const [isDeploying, setIsDeploying] = useState(false);
   
   // Get all hired ships (not just idle ones)
   const allHiredShips = allShips.filter(ship => ship.isHired);
@@ -213,12 +214,23 @@ export default function Jobs() {
   
   const handleConfirmShip = async (selectedShips) => {
     if (!selectedMission || !selectedShips || selectedShips.length === 0) return;
-    
+    if (isDeploying) return;
+
     if (gameState.fuel < selectedMission.fuelCost) {
       addMessage('Insufficient fuel!');
       return;
     }
-    
+
+    // Check if any selected ships are already active (double-tap guard)
+    const alreadyActive = selectedShips.some(ship => ship.status === 'active');
+    if (alreadyActive) {
+      addMessage('One or more ships are already deployed!');
+      setSelectedMission(null);
+      return;
+    }
+
+    setIsDeploying(true);
+    try {
     // Create mission with multiple ships
     await base44.entities.Mission.create({
       ships: selectedShips.map(ship => ({
@@ -252,6 +264,9 @@ export default function Jobs() {
     
     // Reset selection
     setSelectedMission(null);
+    } finally {
+      setIsDeploying(false);
+    }
   };
   
   return (

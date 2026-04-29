@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 export default function MissionShipSelection({ mission, ships, onConfirm, onCancel }) {
   const [selectedShips, setSelectedShips] = useState([]);
+  const [isConfirming, setIsConfirming] = useState(false);
   
   if (!mission) return null;
   
@@ -160,8 +161,12 @@ export default function MissionShipSelection({ mission, ships, onConfirm, onCanc
               <span className="relative text-[#a8c5ad]">BACK</span>
             </button>
             <button
-              onClick={() => onConfirm(selectedShips)}
-              disabled={selectedShips.length === 0}
+              onClick={() => {
+                if (isConfirming) return;
+                setIsConfirming(true);
+                onConfirm(selectedShips);
+              }}
+              disabled={selectedShips.length === 0 || isConfirming}
               className="flex-1 relative py-2.5 font-bold text-sm disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <div className="absolute inset-0 bg-[#2a3a2f] border-2 border-[#5aaa5f]" style={{
@@ -171,7 +176,7 @@ export default function MissionShipSelection({ mission, ships, onConfirm, onCanc
                 backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(90,170,95,0.15) 1px, transparent 0)',
                 backgroundSize: '3px 3px'
               }}></div>
-              <span className="relative text-[#d0e8d5]">CONFIRM ({selectedShips.length} SHIP{selectedShips.length !== 1 ? 'S' : ''})</span>
+              <span className="relative text-[#d0e8d5]">{isConfirming ? 'DEPLOYING...' : `CONFIRM (${selectedShips.length} SHIP${selectedShips.length !== 1 ? 'S' : ''})`}</span>
             </button>
         </div>
       </div>
