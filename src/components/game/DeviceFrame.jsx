@@ -6,6 +6,14 @@ export default function DeviceFrame({ children }) {
   const navigate = useNavigate();
   const location = useLocation();
   const [debugMode, setDebugMode] = React.useState(false);
+  const mainRef = React.useRef(null);
+
+  // Reset scroll to top whenever the route changes
+  React.useEffect(() => {
+    if (mainRef.current) {
+      mainRef.current.scrollTop = 0;
+    }
+  }, [location.pathname]);
   
   React.useEffect(() => {
     const handleKeyPress = (e) => {
@@ -52,7 +60,8 @@ export default function DeviceFrame({ children }) {
       >
         {/* Main app content underneath */}
         <main 
-          className="app-content absolute inset-0 overflow-y-auto overflow-x-hidden bg-gradient-to-br from-[#0a1a14] to-[#050f0a]"
+          ref={mainRef}
+        className="app-content absolute inset-0 overflow-y-auto overflow-x-hidden bg-gradient-to-br from-[#0a1a14] to-[#050f0a]"
           style={{
             WebkitOverflowScrolling: 'touch'
           }}
