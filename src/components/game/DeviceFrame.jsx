@@ -8,11 +8,22 @@ export default function DeviceFrame({ children }) {
   const [debugMode, setDebugMode] = React.useState(false);
   const mainRef = React.useRef(null);
 
-  // Reset scroll to top whenever the route changes
+  // Reset scroll to top whenever the route changes - use multiple timings to be sure
   React.useEffect(() => {
-    if (mainRef.current) {
-      mainRef.current.scrollTop = 0;
-    }
+    const reset = () => {
+      if (mainRef.current) {
+        mainRef.current.scrollTop = 0;
+      }
+    };
+    reset();
+    const t1 = setTimeout(reset, 50);
+    const t2 = setTimeout(reset, 200);
+    const t3 = setTimeout(reset, 500);
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+      clearTimeout(t3);
+    };
   }, [location.pathname]);
 
   // Also expose a way for children to trigger a scroll reset after content loads

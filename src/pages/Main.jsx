@@ -22,7 +22,7 @@ export default function Main() {
   const [debriefData, setDebriefData] = useState(null);
   const messageLogRef = React.useRef(null);
 
-  // Reset scroll to top when loading completes
+  // Reset scroll when loading completes
   useEffect(() => {
     if (!loading) {
       window.dispatchEvent(new Event('resetScroll'));
