@@ -22,10 +22,14 @@ export default function Main() {
   const [debriefData, setDebriefData] = useState(null);
   const messageLogRef = React.useRef(null);
 
-  // Reset scroll when loading completes
+  // Reset outer scroll when loading completes — fire after message log scroll settles
   useEffect(() => {
     if (!loading) {
-      window.dispatchEvent(new Event('resetScroll'));
+      // Delay long enough for the message log auto-scroll to finish first
+      const t = setTimeout(() => {
+        window.dispatchEvent(new Event('resetScroll'));
+      }, 100);
+      return () => clearTimeout(t);
     }
   }, [loading]);
 
@@ -45,14 +49,12 @@ export default function Main() {
   }, [gameState]);
 
   useEffect(() => {
-    // Auto-scroll to bottom when messages change
-    if (messageLogRef.current) {
-      const el = messageLogRef.current;
-      const isNearBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 50;
-      if (isNearBottom || el.scrollTop === 0) {
-        el.scrollTop = el.scrollHeight;
-      }
-    }
+    // Auto-scroll message log to bottom - use requestAnimationFrame to avoid layout thrash
+    const el = messageLogRef.current;
+    if (!el) return;
+    requestAnimationFrame(() => {
+      el.scrollTop = el.scrollHeight;
+    });
   }, [messages]);
 
   const loadActiveMissions = async () => {
@@ -188,7 +190,7 @@ export default function Main() {
             <div 
               ref={messageLogRef}
               className="h-full overflow-y-auto space-y-2 text-sm text-[#a8c5ad] font-mono p-3"
-              style={{ scrollBehavior: 'smooth' }}
+              style={{ scrollBehavior: 'smooth', overscrollBehavior: 'contain' }}
             >
               {messages.length === 0 ? (
                 <div className="text-[#3a4a3f] italic">System standby...</div>
