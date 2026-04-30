@@ -22,7 +22,12 @@ export default function Main() {
   const [debriefData, setDebriefData] = useState(null);
   const messageLogRef = React.useRef(null);
 
-  // Tutorial redirect disabled - allow direct access to main page
+  // Reset scroll to top when loading completes
+  useEffect(() => {
+    if (!loading) {
+      window.dispatchEvent(new Event('resetScroll'));
+    }
+  }, [loading]);
 
   useEffect(() => {
     if (gameState) {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 
@@ -14,6 +14,17 @@ export default function DeviceFrame({ children }) {
       mainRef.current.scrollTop = 0;
     }
   }, [location.pathname]);
+
+  // Also expose a way for children to trigger a scroll reset after content loads
+  React.useEffect(() => {
+    const handler = () => {
+      if (mainRef.current) {
+        mainRef.current.scrollTop = 0;
+      }
+    };
+    window.addEventListener('resetScroll', handler);
+    return () => window.removeEventListener('resetScroll', handler);
+  }, []);
   
   React.useEffect(() => {
     const handleKeyPress = (e) => {
