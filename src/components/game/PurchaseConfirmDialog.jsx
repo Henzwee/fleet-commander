@@ -34,6 +34,18 @@ export default function PurchaseConfirmDialog({ item, onConfirm, onCancel }) {
         
         <div className="flex-1 flex flex-col justify-center">
           <div className="text-[#a8c5ad] text-base mb-1 font-bold">{item.name}</div>
+          
+          {item.imageUrl && (
+            <div className="flex justify-center my-4">
+              <img
+                src={item.imageUrl}
+                alt={item.name}
+                className="w-28 h-28 object-contain"
+                style={{ imageRendering: 'pixelated' }}
+              />
+            </div>
+          )}
+          
           <div className="text-[#5a6a5f] text-xs mb-4">
             Stock Available: {item.stock}
           </div>
