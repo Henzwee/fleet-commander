@@ -26,7 +26,7 @@ export const SHIP_TIERS = {
     priceRange: [20000, 30000]
   },
   'Legendary': {
-    maxLY: 100000,
+    maxLY: 20000,
     payRange: [1000, 2000],
     priceRange: [40000, 60000]
   }
