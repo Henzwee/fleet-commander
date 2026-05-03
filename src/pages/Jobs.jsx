@@ -154,7 +154,7 @@ export default function Jobs() {
           distance,
           duration,
           partsReward,
-          fuelCost: Math.floor(distance / 100) || 1,
+          fuelCost: Math.min(170, Math.max(1, Math.floor(distance / 100))),
           description: descriptions[Math.floor(Math.random() * descriptions.length)],
           tier,
           requiredLY: distance
@@ -200,7 +200,7 @@ export default function Jobs() {
           distance,
           duration,
           partsReward,
-          fuelCost: Math.floor(distance / 100),
+          fuelCost: Math.min(170, Math.max(1, Math.floor(distance / 100))),
           description: descriptions[Math.floor(Math.random() * descriptions.length)],
           tier: nextTier,
           requiredLY: distance,
