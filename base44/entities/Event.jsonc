@@ -1,0 +1,49 @@
+{
+  "name": "Event",
+  "type": "object",
+  "properties": {
+    "missionId": {
+      "type": "string",
+      "description": "Related mission ID"
+    },
+    "shipId": {
+      "type": "string",
+      "description": "Related ship ID"
+    },
+    "eventType": {
+      "type": "string",
+      "enum": [
+        "distress_signal",
+        "damage",
+        "scavenge",
+        "completion",
+        "planet_discovery",
+        "hostile_fleet"
+      ],
+      "description": "Type of event"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "resolved",
+        "expired"
+      ],
+      "default": "pending",
+      "description": "Event status"
+    },
+    "expiresAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When event expires"
+    },
+    "data": {
+      "type": "object",
+      "description": "Additional event data",
+      "additionalProperties": true
+    }
+  },
+  "required": [
+    "eventType"
+  ]
+}

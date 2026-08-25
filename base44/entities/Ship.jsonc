@@ -1,0 +1,80 @@
+{
+  "name": "Ship",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Ship name"
+    },
+    "tier": {
+      "type": "string",
+      "enum": [
+        "Unregistered",
+        "Known",
+        "Notorious",
+        "Esteemed",
+        "Renowned",
+        "Legendary"
+      ],
+      "description": "Ship class tier"
+    },
+    "imageUrl": {
+      "type": "string",
+      "description": "Ship image URL"
+    },
+    "maxLY": {
+      "type": "number",
+      "description": "Maximum lightyear range"
+    },
+    "health": {
+      "type": "number",
+      "default": 100,
+      "description": "Current health percentage"
+    },
+    "damaged": {
+      "type": "boolean",
+      "default": false,
+      "description": "Is ship damaged"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "idle",
+        "active",
+        "damaged",
+        "destroyed"
+      ],
+      "default": "idle",
+      "description": "Current ship status"
+    },
+    "isHired": {
+      "type": "boolean",
+      "default": true,
+      "description": "Is ship in player fleet"
+    },
+    "hourlyPay": {
+      "type": "number",
+      "description": "Hourly pay for this ship"
+    },
+    "requiredParts": {
+      "type": "array",
+      "description": "Parts required for repair",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "qty": {
+            "type": "number"
+          }
+        }
+      },
+      "default": []
+    }
+  },
+  "required": [
+    "name",
+    "tier"
+  ]
+}

@@ -1,0 +1,77 @@
+{
+  "name": "GameState",
+  "type": "object",
+  "properties": {
+    "credits": {
+      "type": "number",
+      "default": 5000,
+      "description": "Player credits"
+    },
+    "crystals": {
+      "type": "number",
+      "default": 50,
+      "description": "Player crystals for special purchases"
+    },
+    "fuel": {
+      "type": "number",
+      "default": 100,
+      "description": "Available fuel"
+    },
+    "parts": {
+      "type": "object",
+      "description": "Inventory of parts",
+      "additionalProperties": true
+    },
+    "tutorialCompleted": {
+      "type": "boolean",
+      "default": false,
+      "description": "Has player completed tutorial"
+    },
+    "lastFuelRefill": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Last daily fuel refill"
+    },
+    "lastMarketReset": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Last market reset time"
+    },
+    "autoResolve": {
+      "type": "boolean",
+      "default": false,
+      "description": "Auto-resolve low priority events"
+    },
+    "highestTier": {
+      "type": "string",
+      "default": "Unregistered",
+      "description": "Highest tier ship owned"
+    },
+    "marketStock": {
+      "type": "object",
+      "description": "Current market stock levels",
+      "additionalProperties": true
+    },
+    "hangarUpgrades": {
+      "type": "number",
+      "default": 0,
+      "description": "Number of hangar upgrades purchased"
+    },
+    "maxShips": {
+      "type": "number",
+      "default": 10,
+      "description": "Maximum ships allowed in fleet"
+    },
+    "storageUpgrades": {
+      "type": "number",
+      "default": 0,
+      "description": "Number of parts storage upgrades purchased"
+    },
+    "maxParts": {
+      "type": "number",
+      "default": 40,
+      "description": "Maximum parts allowed in storage"
+    }
+  },
+  "required": []
+}
