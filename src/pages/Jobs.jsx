@@ -9,7 +9,8 @@ import ResourceHeader from '../components/game/ResourceHeader';
 import { MapPin, Clock, Zap, Fuel } from 'lucide-react';
 import { SHIP_TIERS, TIER_ORDER, getTierConfig, getMaxLYForTier } from '../components/game/ShipTierConfig';
 import MissionShipSelection from '../components/game/MissionShipSelection';
-import { useToast } from '@/components/ui/use-toast';
+import FrameNotification from '../components/game/FrameNotification';
+import { AnimatePresence } from 'framer-motion';
 
 export default function Jobs() {
   const { gameState, ships: allShips, updateShip, addMessage, updateGameState } = useGame();
@@ -18,7 +19,11 @@ export default function Jobs() {
   const [selectedMission, setSelectedMission] = useState(null);
   const [selectedShip, setSelectedShip] = useState(null);
   const [isDeploying, setIsDeploying] = useState(false);
-  const { toast } = useToast();
+  const [notification, setNotification] = useState(null);
+
+  const showNotification = (message, type = 'error') => {
+    setNotification({ message, type, id: Date.now() });
+  };
   
   // Get all hired ships (not just idle ones)
   const allHiredShips = allShips.filter(ship => ship.isHired);
@@ -220,7 +225,7 @@ export default function Jobs() {
 
     if (gameState.fuel < selectedMission.fuelCost) {
       addMessage('Insufficient fuel!');
-      toast({ title: 'DEPLOY FAILED', description: 'Not enough fuel for this mission.', variant: 'destructive' });
+      showNotification('NOT ENOUGH FUEL', 'error');
       return;
     }
 
@@ -228,7 +233,7 @@ export default function Jobs() {
     const alreadyActive = selectedShips.some(ship => ship.status === 'active');
     if (alreadyActive) {
       addMessage('One or more ships are already deployed!');
-      toast({ title: 'DEPLOY FAILED', description: 'One or more selected ships are already deployed.', variant: 'destructive' });
+      showNotification('SHIPS ALREADY DEPLOYED', 'error');
       setSelectedMission(null);
       return;
     }
@@ -265,13 +270,13 @@ export default function Jobs() {
     });
     
     addMessage(`${selectedShips.length} ship${selectedShips.length > 1 ? 's' : ''} deployed on mission!`);
-    toast({ title: 'DEPLOYED', description: `${selectedShips.length} ship${selectedShips.length > 1 ? 's' : ''} sent on mission.` });
+    showNotification('SHIPS DEPLOYED', 'success');
     
     // Reset selection
     setSelectedMission(null);
     } catch (error) {
       console.error('Deploy failed:', error);
-      toast({ title: 'DEPLOY FAILED', description: error?.message || 'Something went wrong.', variant: 'destructive' });
+      showNotification('DEPLOY FAILED', 'error');
     } finally {
       setIsDeploying(false);
     }
@@ -401,6 +406,16 @@ export default function Jobs() {
           </div>
         )}
         </div>
+        <AnimatePresence>
+          {notification && (
+            <FrameNotification
+              key={notification.id}
+              message={notification.message}
+              type={notification.type}
+              onDismiss={() => setNotification(null)}
+            />
+          )}
+        </AnimatePresence>
       </div>
     </DeviceFrame>
   );
