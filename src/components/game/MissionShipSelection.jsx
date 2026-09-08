@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
 
 export default function MissionShipSelection({ mission, ships, onConfirm, onCancel }) {
   const [selectedShips, setSelectedShips] = useState([]);
@@ -19,8 +20,8 @@ export default function MissionShipSelection({ mission, ships, onConfirm, onCanc
   };
   const canAnyShipHandle = eligibleShips.length > 0;
   
-  return (
-    <div className="fixed z-[4] bg-gradient-to-br from-[#0a1a14] to-[#050f0a] flex flex-col overflow-hidden" style={{
+  return createPortal(
+    <div className="fixed z-[100] bg-gradient-to-br from-[#0a1a14] to-[#050f0a] flex flex-col overflow-hidden" style={{
       top: 0,
       bottom: 0,
       left: 0,
@@ -28,10 +29,10 @@ export default function MissionShipSelection({ mission, ships, onConfirm, onCanc
     }}>
       <div className="flex-1 flex flex-col overflow-y-auto max-w-md mx-auto w-full" style={{ 
         WebkitOverflowScrolling: 'touch',
-        paddingTop: 'calc(var(--content-pad-top) + 48px)',
-        paddingBottom: 'calc(var(--content-pad-bottom) + 24px)',
-        paddingLeft: 'calc(var(--content-pad-left) + 24px)',
-        paddingRight: 'calc(var(--content-pad-right) + 24px)'
+        paddingTop: '143px',
+        paddingBottom: '139px',
+        paddingLeft: '46px',
+        paddingRight: '46px'
       }}>
           <div className="mb-6">
             <h2 className="text-cyan-400 font-bold text-base">SELECT SHIPS (1-3)</h2>
@@ -161,10 +162,14 @@ export default function MissionShipSelection({ mission, ships, onConfirm, onCanc
               <span className="relative text-[#a8c5ad]">BACK</span>
             </button>
             <button
-              onClick={() => {
+              onClick={async () => {
                 if (isConfirming) return;
                 setIsConfirming(true);
-                onConfirm(selectedShips);
+                try {
+                  await onConfirm(selectedShips);
+                } finally {
+                  setIsConfirming(false);
+                }
               }}
               disabled={selectedShips.length === 0 || isConfirming}
               className="flex-1 relative py-2.5 font-bold text-sm disabled:opacity-50 disabled:cursor-not-allowed"
@@ -180,6 +185,7 @@ export default function MissionShipSelection({ mission, ships, onConfirm, onCanc
             </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
