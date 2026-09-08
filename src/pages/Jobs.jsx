@@ -9,6 +9,7 @@ import ResourceHeader from '../components/game/ResourceHeader';
 import { MapPin, Clock, Zap, Fuel } from 'lucide-react';
 import { SHIP_TIERS, TIER_ORDER, getTierConfig, getMaxLYForTier } from '../components/game/ShipTierConfig';
 import MissionShipSelection from '../components/game/MissionShipSelection';
+import { useToast } from '@/components/ui/use-toast';
 
 export default function Jobs() {
   const { gameState, ships: allShips, updateShip, addMessage, updateGameState } = useGame();
@@ -17,6 +18,7 @@ export default function Jobs() {
   const [selectedMission, setSelectedMission] = useState(null);
   const [selectedShip, setSelectedShip] = useState(null);
   const [isDeploying, setIsDeploying] = useState(false);
+  const { toast } = useToast();
   
   // Get all hired ships (not just idle ones)
   const allHiredShips = allShips.filter(ship => ship.isHired);
@@ -218,6 +220,7 @@ export default function Jobs() {
 
     if (gameState.fuel < selectedMission.fuelCost) {
       addMessage('Insufficient fuel!');
+      toast({ title: 'DEPLOY FAILED', description: 'Not enough fuel for this mission.', variant: 'destructive' });
       return;
     }
 
@@ -225,6 +228,7 @@ export default function Jobs() {
     const alreadyActive = selectedShips.some(ship => ship.status === 'active');
     if (alreadyActive) {
       addMessage('One or more ships are already deployed!');
+      toast({ title: 'DEPLOY FAILED', description: 'One or more selected ships are already deployed.', variant: 'destructive' });
       setSelectedMission(null);
       return;
     }
@@ -261,9 +265,13 @@ export default function Jobs() {
     });
     
     addMessage(`${selectedShips.length} ship${selectedShips.length > 1 ? 's' : ''} deployed on mission!`);
+    toast({ title: 'DEPLOYED', description: `${selectedShips.length} ship${selectedShips.length > 1 ? 's' : ''} sent on mission.` });
     
     // Reset selection
     setSelectedMission(null);
+    } catch (error) {
+      console.error('Deploy failed:', error);
+      toast({ title: 'DEPLOY FAILED', description: error?.message || 'Something went wrong.', variant: 'destructive' });
     } finally {
       setIsDeploying(false);
     }

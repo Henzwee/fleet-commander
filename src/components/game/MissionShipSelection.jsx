@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { createPortal } from 'react-dom';
 
 export default function MissionShipSelection({ mission, ships, onConfirm, onCancel }) {
   const [selectedShips, setSelectedShips] = useState([]);
@@ -20,8 +19,8 @@ export default function MissionShipSelection({ mission, ships, onConfirm, onCanc
   };
   const canAnyShipHandle = eligibleShips.length > 0;
   
-  return createPortal(
-    <div className="fixed z-[100] bg-gradient-to-br from-[#0a1a14] to-[#050f0a] flex flex-col overflow-hidden" style={{
+  return (
+    <div className="fixed z-[4] bg-gradient-to-br from-[#0a1a14] to-[#050f0a] flex flex-col overflow-hidden" style={{
       top: 0,
       bottom: 0,
       left: 0,
@@ -185,7 +184,6 @@ export default function MissionShipSelection({ mission, ships, onConfirm, onCanc
             </button>
         </div>
       </div>
-    </div>,
-    document.body
+    </div>
   );
 }
